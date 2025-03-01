@@ -1,0 +1,98 @@
+<ng-container *ngIf="!currentUser">
+  <div class="container">
+    <div class="headerBtns">
+      <div class="backButton" (click)="goBack()">
+        <svg class="icon-back">
+          <g transform="translate(4 4)">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M5.60948 8.00016L10.4716 3.13813L9.52879 2.19531L4.19527 7.52874C4.07024 7.65377 4 7.82334 4 8.00015C4 8.17696 4.07024 8.34653 4.19526 8.47156L9.5287 13.805L10.4715 12.8622L5.60948 8.00016Z">
+            </path>
+          </g>
+        </svg>
+        <span>Назад</span>
+      </div>
+    </div>
+    <form [formGroup]="signInForm" novalidate (keydown)="handleKeyDown($event)" autocomplete="off" id="formSignIn">
+      <h1>Вход</h1>
+      <div class="inputGroup">
+        <app-custom-input label="Электронная почта" type="email" formControlName="username" placeholder=""
+          [required]="true">
+        </app-custom-input>
+
+        <app-custom-input label="Пароль" type="password" formControlName="password" placeholder="" [required]="true"
+          [minlength]="6">
+        </app-custom-input>
+      </div>
+      <div class="buttonGroup">
+        <app-custom-button [backgroundColor]="'#8e9aaf'" [hoverColor]="'#7b889f'" [textColor]="'#ffffff'"
+          (buttonClick)="onSignIn()">
+          Войти
+        </app-custom-button>
+        <app-pop-up-entry [type]="'authorization'"></app-pop-up-entry>
+      </div>
+    </form>
+  </div>
+</ng-container>
+
+<ng-container *ngIf="currentUser">
+  <div class="containerUser">
+
+    <div class="headerBtns">
+      <div class="backButton" (click)="goBack()">
+        <svg class="icon-back">
+          <g transform="translate(4 4)">
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M5.60948 8.00016L10.4716 3.13813L9.52879 2.19531L4.19527 7.52874C4.07024 7.65377 4 7.82334 4 8.00015C4 8.17696 4.07024 8.34653 4.19526 8.47156L9.5287 13.805L10.4715 12.8622L5.60948 8.00016Z">
+            </path>
+          </g>
+        </svg>
+        <span>Назад</span>
+      </div>
+
+      <a class="menu" (click)="toggleMenu()">
+        <svg id="Flat" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+          <path
+            d="M138,192a10,10,0,1,1-10-10A10.01114,10.01114,0,0,1,138,192ZM128,74a10,10,0,1,0-10-10A10.01114,10.01114,0,0,0,128,74Zm0,44a10,10,0,1,0,10,10A10.01114,10.01114,0,0,0,128,118Z" />
+        </svg>
+      </a>
+    </div>
+    <div *ngIf="isMenuVisible" class="dropdownMenu">
+      <button (click)="hideProfile()">Скрыть профиль</button>
+    </div>
+    <div class="userInfo">
+      <svg class="avatar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 150 150">
+        <defs>
+          <clipPath id="circular-border">
+            <circle cx="75" cy="75" r="70" />
+          </clipPath>
+          <clipPath id="avoid-antialiasing-bugs">
+            <rect width="100%" height="100%" />
+          </clipPath>
+        </defs>
+        <circle cx="75" cy="75" r="70" fill="#D3D3D3" clip-path="url(#avoid-antialiasing-bugs)" />
+        <circle cx="75" cy="50" r="30" fill="white" />
+        <circle cx="75" cy="120" r="50" fill="white" clip-path="url(#circular-border)" />
+      </svg>
+      <div id="dataUser">
+        <span class="userName" *ngIf="dataCurrentUser.userName">{{dataCurrentUser.userName}}</span>
+        <span class="email" *ngIf="dataCurrentUser.email">{{dataCurrentUser.email}}</span>        
+      </div>
+
+    </div>
+    <form [formGroup]="signInForm" novalidate (keydown)="handleKeyDown($event)" autocomplete="off"
+      id="selectUserSignIn">
+      <div class="inputGroup">
+        <app-custom-input label="Пароль" type="password" formControlName="password" placeholder="" [required]="true"
+          [minlength]="6">
+        </app-custom-input>
+      </div>
+      <div class="buttonGroup">
+        <app-custom-button [backgroundColor]="'#8e9aaf'" [hoverColor]="'#7b889f'" [textColor]="'#ffffff'"
+          (buttonClick)="onSignIn()" style="width: 100%;">
+          Войти
+        </app-custom-button>
+        <app-pop-up-entry [type]="'authorization'"></app-pop-up-entry>
+      </div>
+    </form>
+  </div>
+</ng-container>

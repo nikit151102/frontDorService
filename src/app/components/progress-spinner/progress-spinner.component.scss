@@ -1,0 +1,30 @@
+.my-custom-spinner .p-progress-spinner-circle {
+    stroke: #3498db;
+    /* Жестко зафиксированный цвет */
+}
+
+:root {
+    --p-progress-spinner-color: unset;
+}
+
+
+:host {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.226);
+    /* Полупрозрачный чёрный фон */
+    z-index: 1000;
+    /* Высокий слой, чтобы быть поверх остальных элементов */
+}
+
+.p-progress-spinner {
+    width: 50px;
+    /* Размер спиннера */
+    height: 50px;
+}
