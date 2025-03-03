@@ -1,0 +1,392 @@
+/* Общие стили */
+.container {
+    max-width: 100%;
+    margin: 0 auto;
+    font-family: 'Inter', sans-serif;
+}
+
+/* Основной стиль списка */
+.list {
+    border-collapse: collapse;
+    margin-top: 20px;
+    height: calc(100vh - 240px);
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 0px 4px 10px rgb(0 0 0 / 0%);
+    background: #fff;
+    border-radius: 25px;
+}
+
+/* Заголовок таблицы */
+.list-header {
+    display: flex;
+    font-weight: 600;
+    background-color: #ffffff;
+    color: #000000;
+    padding: 12px;
+    border-radius: 8px 8px 0 0;
+    border-bottom: 2px solid #d3d3d3;
+}
+
+/* Элементы заголовка */
+.list-header-item {
+    flex: 1;
+    padding: 12px;
+    text-align: left;
+    font-size: 15px;
+}
+
+/* Элементы списка */
+.list-item {
+    display: flex;
+    padding: 12px;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #ddd;
+    transition: background-color 0.3s ease;
+}
+
+/* Чередование цветов строк */
+.list-item:nth-child(odd) {
+    background-color: #f9f9f9;
+}
+
+.list-item:hover {
+    background-color: #f1f7ff9c;
+}
+
+/* Ячейки списка */
+.list-item-cell {
+    flex: 1;
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Действия */
+.list-item-actions {
+    display: flex;
+    gap: 10px;
+}
+
+/* Кнопки действий */
+.list-item-actions .btn {
+    font-size: 13px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: 0.3s ease;
+}
+
+.btn-warning {
+    background-color: #ffc1078f;
+    border: none;
+    color: #ffffff;
+}
+
+.btn-warning:hover {
+    background-color: #e0a800;
+}
+
+.btn-danger {
+    background-color: #dc354594;
+    border: none;
+    color: white;
+}
+
+.btn-danger:hover {
+    background-color: #c82333;
+}
+
+/* Совпадение ширины колонок заголовка и строк */
+.list-header,
+.list-item {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    align-items: center;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1050;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal.open {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 1000px;
+    width: 100%;
+    position: relative;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.close-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #999;
+}
+
+.close-btn:hover {
+    color: #333;
+}
+
+
+/* Стили для формы */
+.form-group-container {
+    display: grid;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.two-columns {
+    grid-template-columns: 1fr 1fr;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-size: 14px;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+input:focus {
+    border-color: #007bff;
+}
+
+button {
+    margin-top: 15px;
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+
+@media (max-width: 768px) {
+    .form-group-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 0 20px;
+    }
+}
+
+
+
+
+.dropdown-container {
+    position: relative;
+    width: 100%;
+    max-width: 300px;
+}
+
+.dropdown-input {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-input-field {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 500;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+.dropdown-input-field:hover {
+    border-color: #007bff;
+}
+
+.dropdown-list {
+    position: absolute;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    max-height: 250px;
+    overflow-y: auto;
+    z-index: 10;
+    width: 100%;
+    margin-top: 4px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transform: translateY(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.dropdown-list.ng-trigger {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    padding: 12px;
+    font-size: 14px;
+    font-weight: 400;
+    cursor: pointer;
+    transition: background-color 0.3s ease, padding 0.3s ease;
+    border-bottom: 1px solid #f1f1f1;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f1f1;
+    padding-left: 16px;
+}
+
+.dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.selected-item {
+    margin-top: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+}
+
+.phoneLabel {
+    display: none;
+}
+
+
+@media (max-width: 1024px) {
+    .phoneLabel {
+        display: flex;
+        font-size: 15px
+    }
+
+    .list-header {
+        display: none;
+    }
+
+    .modal-content {
+        max-width: 80%;
+    }
+
+    .list-item {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 20px;
+        background: #fff; 
+        border-radius: 20px;
+    }
+
+    .list-header-item,
+    .list-item-cell {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        width: 100%;
+    }
+
+    .list-item-actions {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .list {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .list-item-actions .btn {
+        border-radius: 16px;
+    }
+
+}
+
+@media (max-width: 768px) {
+    .form-group-container {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 0 20px;
+    }
+
+    .list-header,
+    .list-item {
+        flex-direction: column;
+    }
+
+
+    button {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+    }
+
+    .btn {
+        font-size: 14px;
+        padding: 10px;
+        width: 100%;
+    }
+}
+
+.dropdown-list {
+    bottom: auto;
+    top: 100%;
+}
+
+.dropdown-list.above {
+    bottom: 100%;
+    top: auto;
+}

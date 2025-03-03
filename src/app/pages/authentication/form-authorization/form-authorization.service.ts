@@ -12,11 +12,8 @@ export class FormAuthorizationService {
 
   signIn(formData: {
     UserName: string;
-    TgId?: string;
-    Email: string;
     Password: string;
   }): Observable<any> {
-    console.log('apiUrl', environment.apiUrl)
     return this.http.post(`${environment.apiUrl}/auth/authentication`, formData);
   }
 

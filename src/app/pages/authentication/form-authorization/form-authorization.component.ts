@@ -2,17 +2,19 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { FormsModule } from '@angular/forms';
+import { CustomButtonComponent } from '../../../ui-kit/custom-button/custom-button.component';
 import { FormAuthorizationService } from './form-authorization.service';
 import { Router } from '@angular/router';
 import { TokenService } from '../../../services/token.service';
 import { ToastService } from '../../../services/toast.service';
 import { CookieConsentService } from '../../../services/cookie-consent.service';
+import { CustomInputComponent } from '../../../ui-kit/custom-input/custom-input.component';
 import { ProgressSpinnerService } from '../../../components/progress-spinner/progress-spinner.service';
 
 @Component({
   selector: 'app-form-authorization',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomButtonComponent, CustomInputComponent],
   templateUrl: './form-authorization.component.html',
   styleUrls: ['./form-authorization.component.scss']
 })

@@ -1,32 +1,3 @@
 <div class="content">
-  <div class="container" [ngClass]="{ 'right-panel-active': isRightPanelActive }" id="container">
-    <div class="form-container sign-up-container" *ngIf="isRightPanelActive">
-      <app-form-registration></app-form-registration>
-      <div class="additional-btns">
-        <p>У вас уже есть аккаунт?</p><a (click)="togglePanel(false)">Войти</a>
-      </div>
-    </div>
-    <div class="form-container sign-in-container" *ngIf="!isRightPanelActive">
-      <app-form-authorization (visibleBtns)="onVisibleBtnsChange($event)"></app-form-authorization>
-      <div class="additional-btns" *ngIf="visibleBtns">
-        <p>У вас нет учетной записи?</p><a (click)="togglePanel(true)">Зарегистрироваться</a>
-      </div>
-    </div>
-    <div class="overlay-container">
-      <div class="overlay">
-        <div class="overlay-panel overlay-right">
-          <h1>С возвращением!</h1>
-          <p>Для продолжения работы с нами введите свои логин и пароль, чтобы авторизоваться в системе.</p>
-          <button class="ghost" (click)="togglePanel(true)">Регистрация</button>
-        </div>
-        <div class="overlay-panel overlay-left">
-          <h1>Добро пожаловать!</h1>
-          <p>Пожалуйста, введите свои данные для регистрации, чтобы открыть доступ к вашим личным возможностям.</p>
-          <button class="ghost" (click)="togglePanel(false)">Войти</button>
-        </div>
-      </div>
-    </div>
-  </div>
+  <app-form-authorization (visibleBtns)="onVisibleBtnsChange($event)"></app-form-authorization>
 </div>
-
-<app-pop-up-confirm-email></app-pop-up-confirm-email>

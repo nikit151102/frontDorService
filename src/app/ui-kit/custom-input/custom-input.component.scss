@@ -1,0 +1,44 @@
+.group {
+    position: relative;
+}
+
+input {
+    font-size: 18px;
+    padding: 10px 10px 10px 5px;
+    display: block;
+    width: 100%;
+    border: none;
+    border: 1px solid #bdbdbd;
+    background: transparent;
+    border-radius: 20px;
+}
+
+input:focus {
+    outline: none;
+}
+
+label {
+    color: #999;
+    font-size: 18px;
+    font-weight: normal;
+    position: absolute;
+    pointer-events: none;
+    left: 15px;
+    top: 10px;
+    transition: 0.2s ease all;
+}
+
+label.active {
+    top: -20px;
+    font-size: 14px;
+    color: #5264AE;
+}
+
+.error {
+    color: red;
+    font-size: 12px;
+}
+
+.error small {
+    display: block;
+}

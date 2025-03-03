@@ -1,0 +1,13 @@
+<div class="tooltip-container" 
+     (mouseenter)="showTooltip()" 
+     (mouseleave)="hideTooltip()">
+  
+  <button class="help-icon" (click)="toggleTooltip()">
+    <span class="help-icon-text">?</span>
+  </button>
+
+  <div class="tooltip" *ngIf="isTooltipVisible">
+    {{ text }}
+  </div>
+
+</div>

@@ -1,0 +1,31 @@
+<p-table #dt [value]="data" [paginator]="true" [rows]="10" [scrollable]="true" scrollHeight="500px">
+    <ng-template pTemplate="header">
+        <tr>
+            <th *ngFor="let col of currentConfig?.tableColumns">{{ col.label }}</th>
+            <th>Действия</th>
+        </tr>
+    </ng-template>
+    
+    <ng-template pTemplate="body" let-rowData>
+        <tr>
+            <td *ngFor="let col of currentConfig?.tableColumns">{{ rowData[col.field] }}</td>
+            <td>
+                <button pButton label="Изменить" (click)="openEditModal(rowData.id)"></button>
+                <button pButton label="Подробнее" (click)="viewDetails(rowData)"></button>
+                <button pButton label="Удалить" (click)="deleteRecord(rowData.id)"></button>
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <tr>
+            <td *ngFor="let fixCol of columnBottomFix">
+                {{ getFixedColumnValue(fixCol.variable) }}
+            </td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<app-modal-form *ngIf="isModalOpen" [id]="selectRecordId" (close)="closeModal()"></app-modal-form>
