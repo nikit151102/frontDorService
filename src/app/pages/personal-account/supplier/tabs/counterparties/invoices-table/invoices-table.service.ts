@@ -42,7 +42,7 @@ export class InvoiceService {
 
   getInvoicesByIdCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoicesByPartner/${id}`, {
           headers: new HttpHeaders({
             'Accept': 'application/json',
             'Authorization': `Bearer ${token}`
