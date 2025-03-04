@@ -23,9 +23,10 @@ export class ReferenceBookComponent implements OnInit {
   modalData: any = {}; // Данные для модального окна
   columnBottomFix: any
 
+
   constructor(
     private route: ActivatedRoute,
-    private referenceBookService: ReferenceBookService,
+    public referenceBookService: ReferenceBookService,
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
   ) { }
@@ -37,6 +38,7 @@ export class ReferenceBookComponent implements OnInit {
 
       if (this.currentConfig) {
         this.formFields = this.currentConfig.formFields;
+        this.referenceBookService.setConfigsData(this.currentConfig);
       }
       this.referenceBookService.loadData();
     });

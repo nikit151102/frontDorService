@@ -14,10 +14,19 @@ export class ReferenceBookService {
   tableColumns: any;
   columnBottomFix: any;
   formFields: any;
+  counterparties_endpoints: any;
 
   constructor(private http: HttpClient,
     private toastService: ToastService,) { }
 
+
+  setConfigsData(conf: any) {
+    this.endpoints = conf.endpoints;
+    this.tableColumns = conf.tableColumns;
+    this.columnBottomFix = conf.columnBottomFix;
+    this.formFields = conf.formFields;
+    this.counterparties_endpoints = conf.counterparties;
+  }
 
   getHeader() {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -74,7 +83,7 @@ export class ReferenceBookService {
 
 
 
-  
+
 
   // Получаем данные записи
   setDetailsRecord(id: string): void {
@@ -85,24 +94,24 @@ export class ReferenceBookService {
       (error) => {
         const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
         this.toastService.showError('Ошибка', errorMessage);
-        return ;
+        return;
       }
     );
   }
 
-    // Получаем данные записи
-    addDetailsRecord(values: any): void {
-      this.functionNewRecord(this.endpoints.createItem, values).subscribe(
-        (response) => {
-          return response.data;
-        },
-        (error) => {
-          const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-          this.toastService.showError('Ошибка', errorMessage);
-          return ;
-        }
-      );
-    }
+  // Получаем данные записи
+  addDetailsRecord(values: any): void {
+    this.functionNewRecord(this.endpoints.createItem, values).subscribe(
+      (response) => {
+        return response.data;
+      },
+      (error) => {
+        const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
+        this.toastService.showError('Ошибка', errorMessage);
+        return;
+      }
+    );
+  }
 
   // Обновление записи
   updateDetailsRecord(id: string, updatedRecord: any): void {

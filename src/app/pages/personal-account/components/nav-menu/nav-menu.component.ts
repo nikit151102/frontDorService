@@ -1,46 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { MenuItem } from 'primeng/api';
-import { MenubarModule } from 'primeng/menubar';
+import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+
+interface CustomMenuItem {
+  label: string;
+  commandName?: string;
+}
 
 @Component({
   selector: 'app-nav-menu',
   standalone: true,
-  imports: [CommonModule, MenubarModule],
+  imports: [CommonModule],
   templateUrl: './nav-menu.component.html',
-  styleUrl: './nav-menu.component.scss'
+  styleUrls: ['./nav-menu.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavMenuComponent {
-  items: MenuItem[] | undefined;
+  @Input() items: CustomMenuItem[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute,
-    private router: Router
-  ) {
-
-  }
-
-  ngOnInit() {
-    this.items = [
-      {
-        label: 'Контрагенты',
-        command: () => this.execute('194253')
-      },
-      {
-        label: 'Сервисы',
-        command: () => this.execute('194253')
-      },
-      {
-        label: 'Нал',
-        command: () => this.execute('')
-      },
-      {
-        label: 'Документы',
-        command: () => this.execute('194253')
-      }
-    ]
-  }
-
+  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
   execute(commandName: string) {
     this.activatedRoute.paramMap.subscribe(params => {

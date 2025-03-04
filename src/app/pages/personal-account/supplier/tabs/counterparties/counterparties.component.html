@@ -1,0 +1,8 @@
+<div class="container">
+    <!-- Левое меню -->
+    <app-counterparties-list (selectCounterparty)="onSelectCounterparty($event)"></app-counterparties-list>
+  
+    <!-- Правая часть -->
+    <app-invoices-table *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"></app-invoices-table>
+  </div>
+  

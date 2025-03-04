@@ -1,6 +1,13 @@
 export const referenceConfig = [
     {
         typeId: '194253',
+        counterparties:{
+            getAllItems: '',
+            getByIdItem: '',
+            createItem: '',
+            updateItem: '',
+            deleteItem: '',
+        },
         endpoints: {
             getAllItems: '',
             getByIdItem: '',

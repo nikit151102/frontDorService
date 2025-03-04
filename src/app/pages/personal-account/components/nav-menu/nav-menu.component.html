@@ -1,1 +1,7 @@
-<p-menubar [model]="items" />
+<nav class="nav-menu">
+    <ul>
+        <li *ngFor="let item of items">
+            <button (click)="execute(item.commandName || '')">{{ item.label }}</button>
+        </li>
+    </ul>
+</nav>

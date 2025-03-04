@@ -103,21 +103,15 @@ export class FormAuthorizationComponent implements OnInit {
 
     if (this.signInForm.valid) {
 
-      if (!this.cookieConsentService.hasConsented()) {
-        this.cookieConsentService.revokeConsent();
-        this.toastService.showWarn('Предупреждение', 'Вы должны согласиться на использование cookie');
-        this.cookieConsentService.openConsent()
-        return;
-      }
 
       this.progressSpinnerService.show();
 
       const formData = this.signInForm.value;
 
       const Data = {
-        UserName: formData.username,
-        Email: formData.username,
-        Password: formData.password,
+        userName: formData.username,
+        password: formData.password,
+        email: ""
       };
 
       this.AuthorizationService.signIn(Data).subscribe(

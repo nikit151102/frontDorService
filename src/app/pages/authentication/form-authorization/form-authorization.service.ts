@@ -10,10 +10,7 @@ export class FormAuthorizationService {
 
   constructor(private http: HttpClient) { }
 
-  signIn(formData: {
-    UserName: string;
-    Password: string;
-  }): Observable<any> {
+  signIn(formData: any): Observable<any> {
     return this.http.post(`${environment.apiUrl}/auth/authentication`, formData);
   }
 

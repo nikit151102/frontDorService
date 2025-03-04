@@ -5,7 +5,7 @@ export const routes: Routes = [
         path: '', loadChildren: () => import('./pages/authentication/authentication.module').then(m => m.AuthenticationModule)
     },
     {
-        path: ':id', loadChildren: () => import('./pages/personal-account/personal-account.module').then(m => m.PersonalAccountModule)
+        path: ':id', loadChildren: () => import('./pages/personal-account/supplier/supplier.module').then(m => m.SupplierModule)
     },
 
 ];
