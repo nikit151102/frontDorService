@@ -99,7 +99,7 @@ export class InvoicesTableComponent implements OnInit {
   }
 
   loadInvoices() {
-    this.invoiceService.getInvoices().subscribe(
+    this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
       (invoices) => {
         this.invoices = invoices.data;
       },
