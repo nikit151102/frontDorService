@@ -10,6 +10,7 @@ import { ToastService } from '../../../services/toast.service';
 import { CookieConsentService } from '../../../services/cookie-consent.service';
 import { CustomInputComponent } from '../../../ui-kit/custom-input/custom-input.component';
 import { ProgressSpinnerService } from '../../../components/progress-spinner/progress-spinner.service';
+import { CurrentUserService } from '../../../services/current-user.service';
 
 @Component({
   selector: 'app-form-authorization',
@@ -33,7 +34,8 @@ export class FormAuthorizationComponent implements OnInit {
     private tokenService: TokenService,
     private progressSpinnerService: ProgressSpinnerService,
     private toastService: ToastService,
-    private cookieConsentService: CookieConsentService
+    private cookieConsentService: CookieConsentService,
+    private currentUserService:CurrentUserService
   ) {
     this.signInForm = this.fb.group({
       username: ['', Validators.required],
@@ -119,8 +121,15 @@ export class FormAuthorizationComponent implements OnInit {
           if (response.data) {
             this.tokenService.setToken(response.data.token);
             this.progressSpinnerService.hide(); 
-            this.router.navigate([`/${response.data.id}`]);
             localStorage.setItem('VXNlcklk', response.data.id);
+
+            this.currentUserService.getDataUser().subscribe((value: any)=>{
+              if(value.data){
+                this.currentUserService.saveUser(value.data);
+                if(value.data.roles[0]?.name === 'Снабженец') this.router.navigate([`/supplier/${response.data.id}`]);
+                if(value.data.roles[0]?.name === 'Механик') this.router.navigate([`/mechanic/${response.data.id}`]);
+              }
+            })
           }
         },
         (error) => {

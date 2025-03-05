@@ -17,6 +17,7 @@ interface CustomMenuItem {
 })
 export class NavMenuComponent {
   @Input() items: CustomMenuItem[] = [];
+  @Input() role: string = '';
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
@@ -24,7 +25,7 @@ export class NavMenuComponent {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.router.navigate([`${id}/${commandName}`]);
+        this.router.navigate([`${this.role}/${id}/${commandName}`]);
       }
     });
   }

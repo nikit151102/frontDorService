@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -53,7 +53,7 @@ interface DocInvoice {
   styleUrl: './invoices-table.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class InvoicesTableComponent implements OnInit {
+export class InvoicesTableComponent implements OnInit, OnChanges{
   @Input() counterpartyId!: any;
 
   invoices: any[] = [];
@@ -94,9 +94,19 @@ export class InvoicesTableComponent implements OnInit {
     private messageService: MessageService
   ) {}
 
-  ngOnInit() {
-    this.loadInvoices(); 
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['counterpartyId']) {
+      const currentCounterpartyId = changes['counterpartyId'].currentValue;
+      const previousCounterpartyId = changes['counterpartyId'].previousValue;
+      if (currentCounterpartyId !== previousCounterpartyId) {
+        console.log('Counterparty ID изменился:', currentCounterpartyId);
+        this.loadInvoices(); 
+        this.selectedInvoice = null;
+      }
+    }
   }
+  
+  ngOnInit() {}
 
   loadInvoices() {
     this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
@@ -105,7 +115,6 @@ export class InvoicesTableComponent implements OnInit {
       },
       (error) => {
         this.invoices = []
-        console.error('Error loading invoices', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Ошибка',
@@ -238,4 +247,9 @@ export class InvoicesTableComponent implements OnInit {
 
   }
 
+
+  onDialogClose() {
+    this.selectedInvoice = null;
+  }
+  
 }

@@ -1,8 +1,8 @@
 .nav-menu {
-    background: #007ad9;
-    padding: 10px;
+    background: #f4f4f9; 
+    padding: 12px;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
 }
 
 ul {
@@ -10,7 +10,7 @@ ul {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 10px;
+    gap: 15px; 
 }
 
 li {
@@ -18,17 +18,22 @@ li {
 }
 
 button {
-    background: white;
-    border: none;
-    padding: 10px 15px;
+    background: #ffffff; 
+    border: 1px solid #d1d1d1; 
+    padding: 10px 18px;
     border-radius: 5px;
-    font-weight: bold;
-    color: #007ad9;
+    font-weight: 600;
+    color: #5c6bc0; 
     cursor: pointer;
-    transition: 0.3s;
+    transition: background-color 0.3s, color 0.3s; 
+}
 
-    &:hover {
-        background: #005f9e;
-        color: white;
-    }
+button:hover {
+    background: #e0e0e0; 
+    color: #3f4e9f; 
+}
+
+button:focus {
+    outline: none;
+    border-color: #5c6bc0; 
 }

@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environment';
-import { UserData, UserUpdateRequest } from '../interfaces/user';
-import { Response } from '../interfaces/common'
 import { ToastService } from './toast.service';
 import { Router } from '@angular/router';
 
@@ -84,14 +82,14 @@ export class CurrentUserService {
 
 getDataUser(){
   return this.http
-  .get<Response<UserData>>(`${environment.apiUrl}/api/Profile`, {
+  .get<any>(`${environment.apiUrl}/api/Profile`, {
     headers: this.getAuthHeaders(),
   })
 }
   // Получение данных пользователя
-  getUserData(): Observable<Response<UserData>> {
+  getUserData(): Observable<any> {
     return this.http
-      .get<Response<UserData>>(`${environment.apiUrl}/api/Profile`, {
+      .get<any>(`${environment.apiUrl}/api/Profile`, {
         headers: this.getAuthHeaders(),
       })
       .pipe(
@@ -110,7 +108,7 @@ getDataUser(){
   }
  
   // Обновление данных пользователя
-  updateUserData(user: UserUpdateRequest): Observable<any> {
+  updateUserData(user: any): Observable<any> {
     return this.http
       .put<any>(`${environment.apiUrl}/api/Profile`, user, {
         headers: this.getAuthHeaders(),

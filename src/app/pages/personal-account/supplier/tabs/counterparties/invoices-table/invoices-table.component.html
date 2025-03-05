@@ -1,4 +1,3 @@
-
 <button pButton label="Создать новый счет" icon="pi pi-plus" (click)="createNewInvoice()"></button>
 
 <p-table [value]="invoices" class="invoice-table">
@@ -19,27 +18,31 @@
     </ng-template>
 </p-table>
 
-<!-- Форма редактирования счета -->
-<p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="false" header="Редактирование счета-фактуры">
-    <div class="form-container">
-        <div class="p-fluid p-formgrid p-grid">
-            <div class="p-field p-col-12">
-                <label for="numberInvoice">Номер счета-фактуры</label>
-                <input id="numberInvoice" [(ngModel)]="selectedInvoice.numberInvoice" pInputText />
-            </div>
-            <div class="p-field p-col-12">
-                <label for="date">Дата</label>
-                <p-calendar id="date" [(ngModel)]="selectedInvoice.date" [showTime]="false"></p-calendar>
-            </div>
-            <!-- <div class="p-field p-col-12">
+
+<ng-container *ngIf="selectedInvoice">
+
+    <!-- Форма редактирования счета -->
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" header="Редактирование счета-фактуры"
+        (onHide)="onDialogClose()">
+        <div class="form-container">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12">
+                    <label for="numberInvoice">Номер счета-фактуры</label>
+                    <input id="numberInvoice" [(ngModel)]="selectedInvoice.numberInvoice" pInputText />
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="date">Дата</label>
+                    <p-calendar id="date" [(ngModel)]="selectedInvoice.date" [showTime]="false"></p-calendar>
+                </div>
+                <!-- <div class="p-field p-col-12">
                 <label for="status">Статус</label>
                 <p-dropdown id="status" [(ngModel)]="selectedInvoice.status" [options]="statuses" optionLabel="label"></p-dropdown>
             </div> -->
-            <div class="p-field p-col-12">
-                <label for="stateNumberCar">Гос. номер автомобиля</label>
-                <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText />
-            </div>
-            <!-- <div class="p-field p-col-12">
+                <div class="p-field p-col-12">
+                    <label for="stateNumberCar">Гос. номер автомобиля</label>
+                    <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText />
+                </div>
+                <!-- <div class="p-field p-col-12">
                 <label for="incomeSum">Приход сумма</label>
                 <p-inputnumber id="incomeSum" [(ngModel)]="selectedInvoice.incomeSum"></p-inputnumber>
             </div>
@@ -47,40 +50,46 @@
                 <label for="expenseSum">Расход сумма</label>
                 <p-inputnumber id="expenseSum" [(ngModel)]="selectedInvoice.expenseSum"></p-inputnumber>
             </div> -->
-            <div class="p-field p-col-12">
-                <label for="type">Тип</label>
-                <p-dropdown id="type" [(ngModel)]="selectedInvoice.type" [options]="types" optionLabel="label"></p-dropdown>
+                <div class="p-field p-col-12">
+                    <label for="type">Тип</label>
+                    <p-dropdown id="type" [(ngModel)]="selectedInvoice.type" [options]="types"
+                        optionLabel="label"></p-dropdown>
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="tax">Налог</label>
+                    <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes"
+                        optionLabel="label"></p-dropdown>
+                </div>
+                <button (click)="addProduct()">Добавить товар/услугу</button>
+                <p-table [value]="selectedInvoice.productList">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Наименование товара</th>
+                            <th>Количество</th>
+                            <th>Сумма</th>
+                            <th>Дата</th>
+                            <th></th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-product let-i="rowIndex">
+                        <tr>
+                            <td><input [(ngModel)]="product.productName" pInputText /></td>
+                            <td><p-inputnumber [(ngModel)]="product.quantity"></p-inputnumber></td>
+                            <td><p-inputnumber [(ngModel)]="product.amount"></p-inputnumber></td>
+                            <td><p-calendar [(ngModel)]="product.date"></p-calendar></td>
+                            <td><button (click)="removeProduct(i)">Удалить</button></td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
             </div>
-            <div class="p-field p-col-12">
-                <label for="tax">Налог</label>
-                <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"></p-dropdown>
-            </div>
-            <p-table [value]="selectedInvoice.productList">
-                <ng-template pTemplate="header">
-                    <tr>
-                        <th>Наименование товара</th>
-                        <th>Количество</th>
-                        <th>Сумма</th>
-                        <th>Дата</th>
-                        <th></th>
-                    </tr>
-                </ng-template>
-                <ng-template pTemplate="body" let-product let-i="rowIndex">
-                    <tr>
-                        <td><input [(ngModel)]="product.productName" pInputText /></td>
-                        <td><p-inputnumber [(ngModel)]="product.quantity"></p-inputnumber></td>
-                        <td><p-inputnumber [(ngModel)]="product.amount"></p-inputnumber></td>
-                        <td><p-calendar [(ngModel)]="product.date"></p-calendar></td>
-                        <td><button (click)="removeProduct(i)">Удалить</button></td>
-                    </tr>
-                </ng-template>
-            </p-table>
-            <button (click)="addProduct()">Добавить товар/услугу</button>
+            <p-footer>
+                <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
+            </p-footer>
         </div>
-        <p-footer>
-            <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
-        </p-footer>
-    </div>
-</p-dialog>
+    </p-dialog>
+
+
+</ng-container>
 
 <p-confirmDialog></p-confirmDialog>

@@ -19,9 +19,9 @@ interface TypeOption {
 
 @Component({
   selector: 'app-counterparties-list',
-  imports: [CommonModule, DialogModule, 
-    FormsModule, ReactiveFormsModule, DropdownModule, 
-    InputTextModule, ButtonModule ],
+  imports: [CommonModule, DialogModule,
+    FormsModule, ReactiveFormsModule, DropdownModule,
+    InputTextModule, ButtonModule],
   standalone: true,
   templateUrl: './counterparties-list.component.html',
   styleUrl: './counterparties-list.component.scss'
@@ -46,7 +46,7 @@ export class CounterpartiesListComponent {
   constructor(
     private counterpartiesService: CounterpartiesService,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadCounterparties();
@@ -81,7 +81,7 @@ export class CounterpartiesListComponent {
     this.selectCounterparty.emit(id);
   }
 
-  openDialog( event: MouseEvent, counterparty?: any) {
+  openDialog(event: MouseEvent, counterparty?: any) {
     event.stopPropagation();
     if (counterparty) {
       this.selectedCounterparty = counterparty;
@@ -100,21 +100,21 @@ export class CounterpartiesListComponent {
       this.counterpartyForm.reset();
     }
     this.display = true;
-    
+
   }
-  
+
   onSubmit() {
     if (this.counterpartyForm.valid) {
-      
+
       const formData = this.counterpartyForm.value;
-  
+
       const { type, ...rest } = formData;
-  
+
       const formDataWithValueType = {
         ...rest,
-        type: type ? type.value : null  
+        type: type ? type.value : null
       };
-  
+
       if (this.selectedCounterparty) {
         this.counterpartiesService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
           (updatedCounterparty) => {
@@ -139,7 +139,7 @@ export class CounterpartiesListComponent {
       }
     }
   }
-  
+
 
   deleteCounterparty(id: string) {
     this.counterpartiesService.deleteCounterparty(id).subscribe(
@@ -155,4 +155,13 @@ export class CounterpartiesListComponent {
     event.stopPropagation();
     this.menuOpenFor = this.menuOpenFor === id ? null : id;
   }
+  
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as Element;
+    if (!target.closest('.counterparty-item') && this.menuOpenFor !== null) {
+      this.menuOpenFor = null;
+    }
+  }
+
 }
