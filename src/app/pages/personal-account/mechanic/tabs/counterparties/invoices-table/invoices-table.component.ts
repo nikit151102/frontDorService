@@ -295,7 +295,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
       stateNumberCar: '',
       tax: 0,
       partnerId: this.counterpartyId,
-      checkPersonId: '032b6da4-249c-49c1-8fe8-f3ab1498a1bd',
+      checkPersonId: '00000000-0000-0000-0000-000000000000',
       productList: []
     };
 
