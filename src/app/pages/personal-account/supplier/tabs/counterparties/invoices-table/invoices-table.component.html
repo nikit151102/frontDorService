@@ -12,16 +12,20 @@
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
             <td *ngFor="let col of columns" class="invoice-cell">
                 <ng-container *ngIf="col.field === 'dateTime'; else normalField">
-                  {{ invoice[col.field] | date: 'dd-MM-yyyy HH:mm' }}
+                    {{ invoice[col.field] | date: 'dd-MM-yyyy HH:mm' }}
                 </ng-container>
                 <ng-template #normalField>
-                  {{ invoice[col.field] }}
+                    {{ invoice[col.field] }}
                 </ng-template>
-              </td>
+            </td>
             <td class="invoice-cell">{{ getStatusLabel(invoice.type) }}</td>
             <td class="actions">
-                <button class="btn-edit" (click)="editInvoice(invoice.id)">✏</button>
-                <button class="btn-delete" (click)="deleteInvoice(invoice.id)">🗑</button>
+                <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
+                    label="Редактировать"></button>
+
+                <button pButton icon="pi pi-trash" class="btn-delete" (click)="deleteInvoice(invoice.id)"
+                    label="Удалить"></button>
+
             </td>
         </tr>
     </ng-template>
@@ -69,7 +73,7 @@
                     <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes"
                         optionLabel="label"></p-dropdown>
                 </div>
-                <button (click)="addProduct()">Добавить товар/услугу</button>
+                <button pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
                 <p-table [value]="selectedInvoice.productList">
                     <ng-template pTemplate="header">
                         <tr>
@@ -84,7 +88,10 @@
                             <td><input [(ngModel)]="product.name" pInputText /></td>
                             <td><p-inputnumber [(ngModel)]="product.quantity"></p-inputnumber></td>
                             <td><p-inputnumber [(ngModel)]="product.amount"></p-inputnumber></td>
-                            <td><button (click)="removeProduct(i)">Удалить</button></td>
+                            <td>
+                                <button pButton icon="pi pi-trash" class="btn-delete" (click)="removeProduct(i)"
+                                    label="Удалить"></button>
+                            </td>
                         </tr>
                     </ng-template>
                 </p-table>
@@ -92,7 +99,8 @@
             </div>
             <p-footer>
                 <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
-                <button pButton label="Отправить на проверку" icon="pi pi-check" (click)="sendingInvoice(selectedInvoice.id)"></button>
+                <button pButton label="Отправить на проверку" icon="pi pi-check"
+                    (click)="sendingInvoice(selectedInvoice.id)"></button>
             </p-footer>
         </div>
     </p-dialog>

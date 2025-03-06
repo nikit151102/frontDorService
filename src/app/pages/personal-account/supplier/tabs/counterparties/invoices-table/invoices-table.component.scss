@@ -3,24 +3,24 @@
     border-collapse: collapse;
     border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05); 
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .invoice-table th {
     text-align: left;
     padding: 12px;
-    background-color: #f4f7fa; 
-    color: #333; 
+    background-color: #f4f7fa;
+    color: #333;
     font-weight: 600;
-    border-bottom: 2px solid #ddd; 
+    border-bottom: 2px solid #ddd;
 }
 
 .invoice-table td {
     padding: 12px;
     text-align: left;
     font-size: 14px;
-    color: #666; 
-    border-bottom: 1px solid #eee; 
+    color: #666;
+    border-bottom: 1px solid #eee;
 }
 
 .invoice-table tr:hover {
@@ -29,7 +29,7 @@
 }
 
 .invoice-table tr.active {
-    background-color: #e0f7fa; 
+    background-color: #e0f7fa;
 }
 
 .actions {
@@ -39,7 +39,7 @@
 
 .btn-edit,
 .btn-delete {
-    background-color: #fff; 
+    background-color: #fff;
     border: none;
     padding: 6px 12px;
     border-radius: 4px;
@@ -49,23 +49,24 @@
 }
 
 .btn-edit {
-    color: #4caf50; 
+    color: #4caf50;
     border: 1px solid #4caf50;
 }
 
 .btn-edit:hover {
-    background-color: #4caf50; 
+    background-color: #4caf50;
     color: white;
-    transform: scale(1.1); 
+    transform: scale(1.1);
 }
 
 .btn-delete {
-    color: #f44336; 
-    border: 1px solid #f44336; 
+    color: #f44336;
+    border: 1px solid #f44336;
 }
 
 .btn-delete:hover {
-    background-color: #f44336; 
+    border: 1px solid #f44336;
+    background-color: #f44336;
     color: white;
     transform: scale(1.1);
 }
@@ -75,19 +76,19 @@
 }
 
 .invoice-row {
-    transition: background-color 0.2s ease; 
+    transition: background-color 0.2s ease;
 }
 
 
 .btn-edit:focus,
 .btn-delete:focus {
     outline: none;
-    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); 
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
 .invoice-table {
     width: 100%;
-    margin-top: 20px; 
+    margin-top: 20px;
 }
 
 .invoice-row {
@@ -95,7 +96,7 @@
 }
 
 .actions button {
-    margin: 0 5px; 
+    margin: 0 5px;
 }
 
 .form-container {
@@ -103,7 +104,9 @@
 }
 
 .p-formgrid .p-field {
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
 }
 
 .product-table td input,
