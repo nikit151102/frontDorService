@@ -171,6 +171,8 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
           tax: taxObj || null,
           dateTime: formattedDate || null
         };
+        delete this.selectedInvoice.expenseSum;
+        delete this.selectedInvoice.incomeSum;
       },
       (error) => {
         console.error('Error fetching invoice details', error);
@@ -303,7 +305,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       stateNumberCar: '',
       tax: 0,
       partnerId: this.counterpartyId,
-      checkPersonId: '032b6da4-249c-49c1-8fe8-f3ab1498a1bd',
+      checkPersonId: '',
       productList: []
     };
 
