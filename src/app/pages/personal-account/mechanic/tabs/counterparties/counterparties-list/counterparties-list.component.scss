@@ -1,0 +1,166 @@
+.counterparties-list {
+    background: #f9f9f9; 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05); 
+}
+
+.add-button {
+    background-color: #5c6bc0; 
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.add-button:hover {
+    background-color: #3f4e9f; 
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background-color: #ffffff; 
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+li:hover {
+    transform: translateX(5px);
+}
+
+li span.active {
+    font-weight: bold;
+    color: #5c6bc0; 
+}
+
+.counterparty-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.actions {
+    position: relative;
+}
+
+.gear-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.gear-btn:hover {
+    color: #5c6bc0; 
+}
+
+.menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 150px;
+}
+
+.menu-item {
+    background: #f9f9f9; 
+    border: none;
+    padding: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+    background-color: #e0e0e0; 
+}
+
+.p-dialog .p-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.p-dialog .p-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333; 
+}
+
+.p-dialog .p-fluid {
+    padding: 20px;
+}
+
+.p-dialog .p-field {
+    margin-bottom: 16px;
+}
+
+.p-dialog .p-field label {
+    font-weight: 600;
+    color: #333; 
+}
+
+.p-inputtext {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 6px;
+    transition: border-color 0.3s;
+}
+
+.p-inputtext:focus {
+    border-color: #5c6bc0;
+}
+
+.p-dropdown {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.p-dropdown:focus {
+    border-color: #5c6bc0; 
+}
+
+.p-button {
+    border-radius: 5px;
+    background-color: #5c6bc0;
+    color: white;
+}
+
+.p-button:focus,
+.p-button:active {
+    background-color: #3f4e9f;
+}
+
+.p-button:hover {
+    background-color: #3f4e9f; 
+}

@@ -20,10 +20,10 @@
             </td>
             <td class="invoice-cell">
                 <span class="status-tag" [ngClass]="getStatusClass(invoice.type)">
-                    {{ getStatusLabel(invoice.type) }}
+                  {{ getStatusLabel(invoice.type) }}
                 </span>
-            </td>
-
+              </td>
+              
             <td class="actions">
                 <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
                     label="Редактировать"></button>
@@ -78,17 +78,11 @@
                     <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes"
                         optionLabel="label"></p-dropdown>
                 </div>
-                <div class="p-field p-col-12">
-                    <label for="tax">Проверяющий</label>
-                    <p-dropdown id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId" [options]="checkers"
-                        optionLabel="fullName" optionValue="id"></p-dropdown>
-
-                </div>
                 <button pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
                 <p-table [value]="selectedInvoice.productList">
                     <ng-template pTemplate="header">
                         <tr>
-                            <th>Наименование товара</th>
+                            <th>Наименование услуги</th>
                             <th>Количество</th>
                             <th>Сумма</th>
                             <th></th>

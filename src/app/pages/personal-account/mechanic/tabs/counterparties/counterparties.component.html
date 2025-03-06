@@ -1,0 +1,8 @@
+<div class="container">
+    <!-- Левое меню -->
+    <app-mechanic-counterparties-list (selectCounterparty)="onSelectCounterparty($event)"></app-mechanic-counterparties-list>
+  
+    <!-- Правая часть -->
+    <app-mechanic-invoices-table *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"></app-mechanic-invoices-table>
+  </div>
+  

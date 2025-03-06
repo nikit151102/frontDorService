@@ -34,7 +34,7 @@ interface DocInvoice {
 }
 
 @Component({
-  selector: 'app-invoices-table',
+  selector: 'app-mechanic-invoices-table',
   imports: [
     CommonModule,
     TableModule,
@@ -53,12 +53,11 @@ interface DocInvoice {
   styleUrl: './invoices-table.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class InvoicesTableComponent implements OnInit, OnChanges {
+export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
 
   invoices: any[] = [];
   selectedInvoice: any;
-  checkers: any;
 
   columns = [
     { field: 'number', header: 'Номер' },
@@ -89,7 +88,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       default: return '';
     }
   }
-
+  
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -128,14 +127,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     }
   }
 
-  ngOnInit() {
-    this.invoiceService.getCheckers().subscribe((values: any) => {
-      this.checkers = values.data;
-      this.checkers.forEach((checker: any) => {
-        checker.fullName = `${checker.firstName} ${checker.lastName} ${checker.patronymic}`;
-      });
-    })
-  }
+  ngOnInit() { }
 
   loadInvoices() {
     console.log('Загрузка счетов для:', this.counterpartyId);

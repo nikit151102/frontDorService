@@ -5,16 +5,16 @@ import { MechanicComponent } from './mechanic.component';
 const routes: Routes = [
   {
     path: '', component: MechanicComponent,
-    // children: [
-    //   { path: '', redirectTo: 'clients', pathMatch: 'full' }, 
-    //   // { path: 'home', component: SupplierHomeComponent },
-    //   {
-    //     path: 'clients', loadChildren: () => import('./tabs/counterparties/counterparties.module').then(m => m.CounterpartiesModule)
-    //   },
-    //   {
-    //     path: 'profile', loadChildren: () => import('../../../components/profile/profile.module').then(m => m.ProfileModule)
-    //   }
-    // ]
+    children: [
+      { path: '', redirectTo: 'services', pathMatch: 'full' }, 
+      // { path: 'home', component: SupplierHomeComponent },
+      {
+        path: 'services', loadChildren: () => import('./tabs/counterparties/counterparties.module').then(m => m.MechanicCounterpartiesModule)
+      },
+      {
+        path: 'profile', loadChildren: () => import('../../../components/profile/profile.module').then(m => m.ProfileModule)
+      }
+    ]
   }
 ];
 
