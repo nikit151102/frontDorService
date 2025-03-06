@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
@@ -11,7 +11,7 @@ import { MessageService } from 'primeng/api';
 import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { InvoiceService } from './invoices-table.service';  
+import { InvoiceService } from './invoices-table.service';
 
 interface Product {
   productName: string;
@@ -53,22 +53,31 @@ interface DocInvoice {
   styleUrl: './invoices-table.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class InvoicesTableComponent implements OnInit, OnChanges{
+export class InvoicesTableComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
 
   invoices: any[] = [];
   selectedInvoice: any;
 
   columns = [
-    { field: 'numberInvoice', header: 'Номер' },
+    { field: 'number', header: 'Номер' },
     { field: 'incomeSum', header: 'Сумма' },
-    { field: 'date', header: 'Дата' }
+    { field: 'dateTime', header: 'Дата' }
   ];
 
   statuses = [
     { label: 'Не проверено', value: 0 },
-    { label: 'Проверен механиком', value: 1 }
+    { label: 'Отправлено на проверку', value: 1 },
+    { label: 'Проверено', value: 2 },
+    { label: 'Отклонено', value: 3 },
+    { label: 'Удалена', value: 4 },
   ];
+
+  getStatusLabel(value: number): string {
+    const status = this.statuses.find(status => status.value === value);
+    return status ? status.label : 'Неизвестный статус';
+  }
+
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -91,8 +100,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
   constructor(
     private invoiceService: InvoiceService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
-  ) {}
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
@@ -100,21 +110,23 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
       const previousCounterpartyId = changes['counterpartyId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
         console.log('Counterparty ID изменился:', currentCounterpartyId);
-        this.loadInvoices(); 
+        this.loadInvoices();
         this.selectedInvoice = null;
       }
     }
   }
-  
-  ngOnInit() {}
+
+  ngOnInit() { }
 
   loadInvoices() {
+    console.log('Загрузка счетов для:', this.counterpartyId);
     this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
       (invoices) => {
+        console.log('Ответ сервера:', invoices);
         this.invoices = invoices.data;
       },
       (error) => {
-        this.invoices = []
+        console.error('Ошибка загрузки счетов:', error);
         this.messageService.add({
           severity: 'error',
           summary: 'Ошибка',
@@ -124,10 +136,22 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
     );
   }
 
+
   editInvoice(id: string) {
     this.invoiceService.getInvoiceById(id).subscribe(
       (invoice) => {
-        this.selectedInvoice = invoice;
+        this.selectedInvoice = invoice.data;
+        const typeObj = this.types.find(t => t.value === invoice.data.type);
+
+        const taxObj = this.taxes.find(t => t.value === invoice.data.tax);
+        const formattedDate = invoice.data.dateTime ? new Date(invoice.data.dateTime) : null;
+
+        this.selectedInvoice = {
+          ...invoice.data,
+          type: typeObj || null,
+          tax: taxObj || null,
+          dateTime: formattedDate || null
+        };
       },
       (error) => {
         console.error('Error fetching invoice details', error);
@@ -143,11 +167,11 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
   saveInvoice() {
     if (this.selectedInvoice) {
       this.selectedInvoice = {
-        ...this.selectedInvoice, 
-        tax: this.selectedInvoice.tax.value, 
-        type: this.selectedInvoice.type.value 
+        ...this.selectedInvoice,
+        tax: this.selectedInvoice.tax.value,
+        type: this.selectedInvoice.type.value
       };
-  
+
       this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
         (invoice) => {
           if (this.selectedInvoice.id) {
@@ -156,15 +180,15 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
               this.invoices[index] = { ...this.selectedInvoice };
             }
           } else {
-            this.invoices.push(invoice);
+            this.invoices.push(invoice.data);
           }
-  
+          this.cdr.detectChanges();
           this.messageService.add({
             severity: 'success',
             summary: 'Успех',
             detail: 'Счет сохранен'
           });
-  
+
           this.selectedInvoice = null;
         },
         (error) => {
@@ -177,14 +201,18 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
         }
       );
     }
+
   }
-  
+
+
 
   deleteInvoice(id: string) {
     this.confirmationService.confirm({
       message: 'Вы уверены, что хотите удалить этот счет-фактуру?',
       header: 'Подтвердите удаление',
       icon: 'pi pi-info-circle',
+      acceptLabel: 'Удалить',
+      rejectLabel: 'Отмена',
       accept: () => {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
@@ -211,13 +239,13 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
 
   addProduct() {
     if (!this.selectedInvoice) {
-      this.createNewInvoice(); // Ensure an invoice is created if it's undefined
+      this.createNewInvoice();
     }
-    
+
     if (!this.selectedInvoice.productList) {
-      this.selectedInvoice.productList = [];  // Ensure productList exists
+      this.selectedInvoice.productList = [];
     }
-  
+
     this.selectedInvoice.productList.push({
       productName: '',
       quantity: 1,
@@ -225,7 +253,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
       date: new Date().toISOString()
     });
   }
-  
+
 
   removeProduct(index: number) {
     if (this.selectedInvoice) {
@@ -233,16 +261,31 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
     }
   }
 
+
+  sendingInvoice(id: string) {
+    this.invoiceService.sendingVerification(id).subscribe((updatedInvoice: any) => {
+      const index = this.invoices.findIndex(invoice => invoice.id === id);
+      if (index !== -1) {
+        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice };
+        this.invoices = [...this.invoices];
+        this.cdr.detectChanges();
+      }
+    }, error => {
+      console.error('Ошибка при отправке на проверку:', error);
+    });
+  }
+
+
   createNewInvoice() {
     this.selectedInvoice = {
-      id: null, 
-      date: new Date().toISOString(), 
-      numberInvoice: '', 
-      status: 0,  
-      stateNumberCar: '', 
-      tax: 0, 
+      dateTime: new Date().toISOString(),
+      number: '',
+      status: 0,
+      stateNumberCar: '',
+      tax: 0,
       partnerId: this.counterpartyId,
-      productList: []  
+      checkPersonId: '032b6da4-249c-49c1-8fe8-f3ab1498a1bd',
+      productList: []
     };
 
   }
@@ -251,5 +294,5 @@ export class InvoicesTableComponent implements OnInit, OnChanges{
   onDialogClose() {
     this.selectedInvoice = null;
   }
-  
+
 }

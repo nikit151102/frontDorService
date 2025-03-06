@@ -66,6 +66,7 @@ export class CounterpartiesListComponent {
 
   initializeForm() {
     this.counterpartyForm = this.fb.group({
+      id:[''],
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
@@ -93,6 +94,7 @@ export class CounterpartiesListComponent {
         ogrn: counterparty.ogrn,
         kpp: counterparty.kpp,
         address: counterparty.address,
+        id: counterparty.id,
         type: this.typeOptions.find(option => option.value === counterparty.type)
       });
     } else {

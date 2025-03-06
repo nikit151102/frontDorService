@@ -1,7 +1,7 @@
 <div class="counterparties-list">
     <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button>
     <ul>
-      <li *ngFor="let counterparty of counterparties">
+      <li *ngFor="let counterparty of counterparties" (click)="select(counterparty.id)">
         <div class="counterparty-item" (click)="select(counterparty.id)">
           <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
           <div class="actions">

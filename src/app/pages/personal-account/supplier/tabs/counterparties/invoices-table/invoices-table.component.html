@@ -4,12 +4,21 @@
     <ng-template pTemplate="header">
         <tr>
             <th *ngFor="let col of columns">{{ col.header }}</th>
+            <th>Статус</th>
             <th>Действия</th>
         </tr>
     </ng-template>
     <ng-template pTemplate="body" let-invoice>
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
-            <td *ngFor="let col of columns" class="invoice-cell">{{ invoice[col.field] }}</td>
+            <td *ngFor="let col of columns" class="invoice-cell">
+                <ng-container *ngIf="col.field === 'dateTime'; else normalField">
+                  {{ invoice[col.field] | date: 'dd-MM-yyyy HH:mm' }}
+                </ng-container>
+                <ng-template #normalField>
+                  {{ invoice[col.field] }}
+                </ng-template>
+              </td>
+            <td class="invoice-cell">{{ getStatusLabel(invoice.type) }}</td>
             <td class="actions">
                 <button class="btn-edit" (click)="editInvoice(invoice.id)">✏</button>
                 <button class="btn-delete" (click)="deleteInvoice(invoice.id)">🗑</button>
@@ -27,12 +36,12 @@
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <div class="p-field p-col-12">
-                    <label for="numberInvoice">Номер счета-фактуры</label>
-                    <input id="numberInvoice" [(ngModel)]="selectedInvoice.numberInvoice" pInputText />
+                    <label for="number">Номер счета-фактуры</label>
+                    <input id="number" [(ngModel)]="selectedInvoice.number" pInputText />
                 </div>
                 <div class="p-field p-col-12">
-                    <label for="date">Дата</label>
-                    <p-calendar id="date" [(ngModel)]="selectedInvoice.date" [showTime]="false"></p-calendar>
+                    <label for="dateTime">Дата</label>
+                    <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false"></p-calendar>
                 </div>
                 <!-- <div class="p-field p-col-12">
                 <label for="status">Статус</label>
@@ -67,16 +76,14 @@
                             <th>Наименование товара</th>
                             <th>Количество</th>
                             <th>Сумма</th>
-                            <th>Дата</th>
                             <th></th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-product let-i="rowIndex">
                         <tr>
-                            <td><input [(ngModel)]="product.productName" pInputText /></td>
+                            <td><input [(ngModel)]="product.name" pInputText /></td>
                             <td><p-inputnumber [(ngModel)]="product.quantity"></p-inputnumber></td>
                             <td><p-inputnumber [(ngModel)]="product.amount"></p-inputnumber></td>
-                            <td><p-calendar [(ngModel)]="product.date"></p-calendar></td>
                             <td><button (click)="removeProduct(i)">Удалить</button></td>
                         </tr>
                     </ng-template>
@@ -85,6 +92,7 @@
             </div>
             <p-footer>
                 <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
+                <button pButton label="Отправить на проверку" icon="pi pi-check" (click)="sendingInvoice(selectedInvoice.id)"></button>
             </p-footer>
         </div>
     </p-dialog>
