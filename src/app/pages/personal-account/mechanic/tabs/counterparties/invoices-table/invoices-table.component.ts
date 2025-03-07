@@ -61,9 +61,11 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
   selectedInvoice: any;
 
   columns = [
-    { field: 'number', header: 'Номер' },
-    { field: 'incomeSum', header: 'Сумма' },
-    { field: 'dateTime', header: 'Дата' }
+    { header: 'Номер', field: 'number' },
+    { header: 'Покупка', field: 'incomeSum' },
+    { header: 'Оплата', field: 'expenseSum' },
+    { header: 'Дата', field: 'dateTime' },
+
   ];
 
   statuses = [
@@ -90,6 +92,24 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
     }
   }
 
+  totalInfo: any;
+
+  totalInfoColumn = [
+    { columnNum: 1, value: 'totalExpenseSum' },
+    { columnNum: 2, value: 'totalIncomeSum' },
+  ]
+
+  getTotalValue(columnIndex: number): any {
+    if (!this.totalInfo) return null;
+
+    const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
+
+    console.log(`columnIndex: ${columnIndex}, найдено:`, column);
+    console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
+
+    return column ? this.totalInfo?.[column.value] ?? 0 : null;
+  }
+
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -102,12 +122,6 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
     { label: 'Расход', value: 1 }
   ];
 
-  productColumns = [
-    { header: 'Покупка', field: 'incomeSum' },
-    { header: 'Оплата', field: 'expenseSum' },
-    { header: 'Дата', field: 'dateTime' },
-    { header: 'Номер', field: 'number' }
-  ];
 
   constructor(
     private invoiceService: InvoiceService,
@@ -135,7 +149,9 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
     this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
       (invoices) => {
         console.log('Ответ сервера:', invoices);
-        this.invoices = invoices.data;
+        this.invoices = invoices.documentMetadata.data;
+        this.totalInfo = invoices.totalInfo;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Ошибка загрузки счетов:', error);
@@ -198,7 +214,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
           tax: this.selectedInvoice.tax.value,
           type: this.selectedInvoice.type.value
         };
-  
+
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             if (this.selectedInvoice.id) {
@@ -215,7 +231,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
               summary: 'Успех',
               detail: 'Счет сохранен'
             });
-  
+
             this.selectedInvoice = null;
           },
           (error) => {

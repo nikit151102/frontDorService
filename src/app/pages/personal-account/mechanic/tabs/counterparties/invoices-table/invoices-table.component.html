@@ -3,11 +3,12 @@
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
         <tr>
-            <th *ngFor="let col of columns">{{ col.header }}</th>
+            <th *ngFor="let col of columns; let i = index">{{ col.header }}</th>
             <th>Статус</th>
             <th>Действия</th>
         </tr>
     </ng-template>
+    
     <ng-template pTemplate="body" let-invoice>
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
             <td *ngFor="let col of columns" class="invoice-cell">
@@ -19,22 +20,36 @@
                 </ng-template>
             </td>
             <td class="invoice-cell">
-                <span class="status-tag" [ngClass]="getStatusClass(invoice.type)">
-                  {{ getStatusLabel(invoice.type) }}
+                <span class="status-tag" [ngClass]="getStatusClass(invoice.status)">
+                    {{ getStatusLabel(invoice.status) }}
                 </span>
-              </td>
-              
+            </td>
             <td class="actions">
                 <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
                     label="Редактировать"></button>
 
                 <button pButton icon="pi pi-trash" class="btn-delete" (click)="deleteInvoice(invoice.id)"
                     label="Удалить"></button>
-
             </td>
         </tr>
     </ng-template>
+
+    <!-- Итоговая строка -->
+    <ng-template pTemplate="footer">
+        <tr>
+            <td *ngFor="let col of columns; let i = index" class="total-cell">
+                <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                    {{ getTotalValue(i) }}
+                </ng-container>
+                <ng-template #emptyCell></ng-template>
+            </td>
+            <td></td> 
+            <td></td> 
+        </tr>
+    </ng-template>
+    
 </p-table>
+
 
 
 <ng-container *ngIf="selectedInvoice">
