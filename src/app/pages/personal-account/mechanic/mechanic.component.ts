@@ -18,7 +18,7 @@ export class MechanicComponent {
     { label: 'Сервисы', commandName: 'services' },
     { label: 'Профиль', commandName: 'profile' },
     // { label: 'Нал', commandName: '' },
-    // { label: 'Документы', commandName: '194253' }
+    { label: 'Документы', commandName: 'documentsVerification' }
   ];
   
 }
