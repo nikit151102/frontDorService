@@ -221,9 +221,10 @@
     color: #101010 !important;
 }
 
-:host ::ng-deep .p-datatable-table {
+:host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
     position: absolute;
 }
+
 
 :host ::ng-deep .p-datatable-tfoot{
     position: sticky;
