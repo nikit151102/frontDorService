@@ -65,7 +65,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   columns = [
     { field: 'number', header: 'Номер' },
     { field: 'expenseSum', header: 'Расход' },
-    { field: 'incomeSum', header: 'Приход' },    
+    { field: 'incomeSum', header: 'Приход' },
     { field: 'dateTime', header: 'Дата' }
   ];
 
@@ -92,26 +92,26 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       default: return '';
     }
   }
-  
+
   totalInfo: any;
 
   totalInfoColumn = [
-    {columnNum: 1, value: 'totalExpenseSum'},
-    {columnNum: 2, value: 'totalIncomeSum'},
+    { columnNum: 1, value: 'totalExpenseSum' },
+    { columnNum: 2, value: 'totalIncomeSum' },
   ]
-  
+
   getTotalValue(columnIndex: number): any {
-    if (!this.totalInfo) return null; 
-  
+    if (!this.totalInfo) return null;
+
     const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
-  
+
     console.log(`columnIndex: ${columnIndex}, найдено:`, column);
     console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
-  
+
     return column ? this.totalInfo?.[column.value] ?? 0 : null;
   }
-  
-  
+
+
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -157,6 +157,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         checker.fullName = `${checker.firstName} ${checker.lastName} ${checker.patronymic}`;
       });
     })
+
   }
 
   loadInvoices() {
@@ -231,7 +232,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
           tax: this.selectedInvoice.tax.value,
           type: this.selectedInvoice.type.value
         };
-  
+
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             if (this.selectedInvoice.id) {
@@ -248,7 +249,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
               summary: 'Успех',
               detail: 'Счет сохранен'
             });
-  
+
             this.selectedInvoice = null;
           },
           (error) => {

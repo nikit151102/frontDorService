@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../../../../environment';
 
 interface Product {
@@ -109,6 +109,48 @@ export class InvoiceService {
 
     return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
   }
+
+
+
+  
+
+
+  private socket!: WebSocket;
+  private messagesSubject = new Subject<any>();
+  messages$ = this.messagesSubject.asObservable();
+
+  connectToWebSocket(): void {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}`;
+    this.socket = new WebSocket(url);
+
+    this.socket.onopen = () => {
+    };
+
+    this.socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        this.messagesSubject.next(data);
+      } catch (e) {
+        console.error('Error parsing WebSocket message:', e);
+      }
+    };
+
+
+    this.socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    this.socket.onclose = () => {
+    };
+  }
+
+  disconnectWebSocket(): void {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+
 
 
 
