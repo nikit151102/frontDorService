@@ -6,7 +6,9 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
-
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 interface Counterparty {
   id: number;
   name: string;
@@ -21,10 +23,11 @@ interface TypeOption {
   selector: 'app-counterparties-list',
   imports: [CommonModule, DialogModule,
     FormsModule, ReactiveFormsModule, DropdownModule,
-    InputTextModule, ButtonModule],
+    InputTextModule, ButtonModule, ConfirmDialogModule],
   standalone: true,
   templateUrl: './counterparties-list.component.html',
-  styleUrl: './counterparties-list.component.scss'
+  styleUrl: './counterparties-list.component.scss',
+   providers: [MessageService]
 })
 export class CounterpartiesListComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
@@ -45,7 +48,8 @@ export class CounterpartiesListComponent {
 
   constructor(
     private counterpartiesService: CounterpartiesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private confirmPopupService: ConfirmPopupService
   ) { }
 
   ngOnInit(): void {
@@ -144,13 +148,21 @@ export class CounterpartiesListComponent {
 
 
   deleteCounterparty(id: string) {
-    this.counterpartiesService.deleteCounterparty(id).subscribe(
-      () => {
-        this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
-        this.loadCounterparties();
-      },
-      (error) => console.error('Ошибка удаления контрагента:', error)
-    );
+    this.confirmPopupService.openConfirmDialog({
+      title: 'Подтверждение удаления',
+      message: 'Вы уверены, что хотите удалить контрагента?',
+      acceptLabel: 'Удалить',
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        this.counterpartiesService.deleteCounterparty(id).subscribe(
+          () => {
+            this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
+            this.loadCounterparties();
+          },
+          (error) => console.error('Ошибка удаления контрагента:', error)
+        );
+      }
+    });
   }
 
   openMenu(id: number, event: MouseEvent) {

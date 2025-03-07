@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceService } from './invoices-table.service';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 
 interface Product {
   productName: string;
@@ -60,9 +61,11 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   selectedInvoice: any;
   checkers: any;
 
+
   columns = [
     { field: 'number', header: 'Номер' },
-    { field: 'incomeSum', header: 'Сумма' },
+    { field: 'expenseSum', header: 'Расход' },
+    { field: 'incomeSum', header: 'Приход' },    
     { field: 'dateTime', header: 'Дата' }
   ];
 
@@ -89,7 +92,26 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       default: return '';
     }
   }
+  
+  totalInfo: any;
 
+  totalInfoColumn = [
+    {columnNum: 1, value: 'totalExpenseSum'},
+    {columnNum: 2, value: 'totalIncomeSum'},
+  ]
+  
+  getTotalValue(columnIndex: number): any {
+    if (!this.totalInfo) return null; 
+  
+    const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
+  
+    console.log(`columnIndex: ${columnIndex}, найдено:`, column);
+    console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
+  
+    return column ? this.totalInfo?.[column.value] ?? 0 : null;
+  }
+  
+  
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -111,7 +133,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
   constructor(
     private invoiceService: InvoiceService,
-    private confirmationService: ConfirmationService,
+    private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -142,7 +164,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
       (invoices) => {
         console.log('Ответ сервера:', invoices);
-        this.invoices = invoices.data;
+        this.invoices = invoices.documentMetadata.data;
+        this.totalInfo = invoices.totalInfo;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Ошибка загрузки счетов:', error);
@@ -186,55 +210,71 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   }
 
   saveInvoice() {
-    if (this.selectedInvoice) {
-      this.selectedInvoice = {
-        ...this.selectedInvoice,
-        tax: this.selectedInvoice.tax.value,
-        type: this.selectedInvoice.type.value
-      };
-
-      this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
-        (invoice) => {
-          if (this.selectedInvoice.id) {
-            const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
-            if (index > -1) {
-              this.invoices[index] = { ...this.selectedInvoice };
-            }
-          } else {
-            this.invoices.push(invoice.data);
-          }
-          this.cdr.detectChanges();
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Успех',
-            detail: 'Счет сохранен'
-          });
-
-          this.selectedInvoice = null;
-        },
-        (error) => {
-          console.error('Error saving invoice', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: 'Не удалось сохранить счет'
-          });
-        }
-      );
+    let titlePopUp = '';
+    let acceptLabel = '';
+    if (this.selectedInvoice && this.selectedInvoice.id) {
+      titlePopUp = 'Вы действительно хотите обновить данные?';
+      acceptLabel = 'Обновить';
+    } else {
+      titlePopUp = 'Вы действительно хотите создать счет-фактуру?';
+      acceptLabel = 'Создать'
     }
+
+    this.confirmPopupService.openConfirmDialog({
+      title: '',
+      message: titlePopUp,
+      acceptLabel: acceptLabel,
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        this.selectedInvoice = {
+          ...this.selectedInvoice,
+          tax: this.selectedInvoice.tax.value,
+          type: this.selectedInvoice.type.value
+        };
+  
+        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+          (invoice) => {
+            if (this.selectedInvoice.id) {
+              const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
+              if (index > -1) {
+                this.invoices[index] = { ...this.selectedInvoice };
+              }
+            } else {
+              this.invoices.push(invoice.data);
+            }
+            this.cdr.detectChanges();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Успех',
+              detail: 'Счет сохранен'
+            });
+  
+            this.selectedInvoice = null;
+          },
+          (error) => {
+            console.error('Error saving invoice', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Ошибка',
+              detail: 'Не удалось сохранить счет'
+            });
+          }
+        );
+      }
+    });
 
   }
 
 
 
   deleteInvoice(id: string) {
-    this.confirmationService.confirm({
-      message: 'Вы уверены, что хотите удалить этот счет-фактуру?',
-      header: 'Подтвердите удаление',
-      icon: 'pi pi-info-circle',
+
+    this.confirmPopupService.openConfirmDialog({
+      title: 'Подтверждение удаления',
+      message: 'Вы уверены, что хотите удалить счет-фактуру?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
-      accept: () => {
+      onAccept: () => {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
             this.invoices = this.invoices.filter((inv) => inv.id !== id);

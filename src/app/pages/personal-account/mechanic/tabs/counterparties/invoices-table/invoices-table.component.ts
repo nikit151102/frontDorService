@@ -12,6 +12,7 @@ import { ConfirmationService } from 'primeng/api';
 import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceService } from './invoices-table.service';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 
 interface Product {
   productName: string;
@@ -88,7 +89,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
       default: return '';
     }
   }
-  
+
 
   taxes = [
     { label: 'Без НДС', value: 0 },
@@ -110,7 +111,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
 
   constructor(
     private invoiceService: InvoiceService,
-    private confirmationService: ConfirmationService,
+    private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef
   ) { }
@@ -176,55 +177,72 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
   }
 
   saveInvoice() {
-    if (this.selectedInvoice) {
-      this.selectedInvoice = {
-        ...this.selectedInvoice,
-        tax: this.selectedInvoice.tax.value,
-        type: this.selectedInvoice.type.value
-      };
-
-      this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
-        (invoice) => {
-          if (this.selectedInvoice.id) {
-            const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
-            if (index > -1) {
-              this.invoices[index] = { ...this.selectedInvoice };
-            }
-          } else {
-            this.invoices.push(invoice.data);
-          }
-          this.cdr.detectChanges();
-          this.messageService.add({
-            severity: 'success',
-            summary: 'Успех',
-            detail: 'Счет сохранен'
-          });
-
-          this.selectedInvoice = null;
-        },
-        (error) => {
-          console.error('Error saving invoice', error);
-          this.messageService.add({
-            severity: 'error',
-            summary: 'Ошибка',
-            detail: 'Не удалось сохранить счет'
-          });
-        }
-      );
+    let titlePopUp = '';
+    let acceptLabel = '';
+    if (this.selectedInvoice && this.selectedInvoice.id) {
+      titlePopUp = 'Вы действительно хотите обновить данные?';
+      acceptLabel = 'Обновить';
+    } else {
+      titlePopUp = 'Вы действительно хотите создать счет-фактуру?';
+      acceptLabel = 'Создать'
     }
+
+    this.confirmPopupService.openConfirmDialog({
+      title: '',
+      message: titlePopUp,
+      acceptLabel: acceptLabel,
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        this.selectedInvoice = {
+          ...this.selectedInvoice,
+          tax: this.selectedInvoice.tax.value,
+          type: this.selectedInvoice.type.value
+        };
+  
+        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+          (invoice) => {
+            if (this.selectedInvoice.id) {
+              const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
+              if (index > -1) {
+                this.invoices[index] = { ...this.selectedInvoice };
+              }
+            } else {
+              this.invoices.push(invoice.data);
+            }
+            this.cdr.detectChanges();
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Успех',
+              detail: 'Счет сохранен'
+            });
+  
+            this.selectedInvoice = null;
+          },
+          (error) => {
+            console.error('Error saving invoice', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Ошибка',
+              detail: 'Не удалось сохранить счет'
+            });
+          }
+        );
+      }
+    });
+
+
 
   }
 
 
 
   deleteInvoice(id: string) {
-    this.confirmationService.confirm({
+    this.confirmPopupService.openConfirmDialog({
+      title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить этот счет-фактуру?',
-      header: 'Подтвердите удаление',
-      icon: 'pi pi-info-circle',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
-      accept: () => {
+      onAccept: () => {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
             this.invoices = this.invoices.filter((inv) => inv.id !== id);

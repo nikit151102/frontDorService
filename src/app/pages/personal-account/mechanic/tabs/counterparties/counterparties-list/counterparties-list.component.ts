@@ -6,6 +6,9 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 
 interface Counterparty {
   id: number;
@@ -21,10 +24,11 @@ interface TypeOption {
   selector: 'app-mechanic-counterparties-list',
   imports: [CommonModule, DialogModule,
     FormsModule, ReactiveFormsModule, DropdownModule,
-    InputTextModule, ButtonModule],
+    InputTextModule, ButtonModule, ConfirmDialogModule],
   standalone: true,
   templateUrl: './counterparties-list.component.html',
-  styleUrl: './counterparties-list.component.scss'
+  styleUrl: './counterparties-list.component.scss',
+  providers: [ConfirmationService, MessageService]
 })
 export class MechanicCounterpartiesListComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
@@ -45,7 +49,8 @@ export class MechanicCounterpartiesListComponent {
 
   constructor(
     private mechaniccounterpartiesService: MechanicCounterpartiesService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private confirmPopupService: ConfirmPopupService
   ) { }
 
   ngOnInit(): void {
@@ -66,7 +71,7 @@ export class MechanicCounterpartiesListComponent {
 
   initializeForm() {
     this.counterpartyForm = this.fb.group({
-      id:[''],
+      id: [''],
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
@@ -144,20 +149,28 @@ export class MechanicCounterpartiesListComponent {
 
 
   deleteCounterparty(id: string) {
-    this.mechaniccounterpartiesService.deleteCounterparty(id).subscribe(
-      () => {
-        this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
-        this.loadCounterparties();
-      },
-      (error) => console.error('Ошибка удаления контрагента:', error)
-    );
+    this.confirmPopupService.openConfirmDialog({
+      title: 'Подтверждение удаления',
+      message: 'Вы уверены, что хотите удалить сервис?',
+      acceptLabel: 'Удалить',
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        this.mechaniccounterpartiesService.deleteCounterparty(id).subscribe(
+          () => {
+            this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
+            this.loadCounterparties();
+          },
+          (error) => console.error('Ошибка удаления контрагента:', error)
+        );
+      }
+    });
   }
 
   openMenu(id: number, event: MouseEvent) {
     event.stopPropagation();
     this.menuOpenFor = this.menuOpenFor === id ? null : id;
   }
-  
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as Element;

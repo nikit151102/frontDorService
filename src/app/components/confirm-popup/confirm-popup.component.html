@@ -1,0 +1,14 @@
+<div class="overlay" *ngIf="visible$ | async">
+    <div class="popup">
+        <div class="popup-header">
+            <span>{{ title }}</span>
+        </div>
+        <div class="popup-body">
+            <p>{{ message }}</p>
+        </div>
+        <div class="popup-footer">
+            <button class="btn reject" (click)="closePopup()">{{ rejectLabel }}</button>
+            <button class="btn accept" (click)="onAccept()">{{ acceptLabel }}</button>
+        </div>
+    </div>
+</div>

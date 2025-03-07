@@ -34,6 +34,7 @@ li {
     justify-content: space-between;
     padding: 12px;
     background-color: #ffffff; 
+    color: #101010;
     margin-bottom: 12px;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); 
@@ -88,6 +89,7 @@ li span.active {
 
 .menu-item {
     background: #f9f9f9; 
+    color: #101010;
     border: none;
     padding: 8px;
     text-align: left;
@@ -98,6 +100,8 @@ li span.active {
 .menu-item:hover {
     background-color: #e0e0e0; 
 }
+
+
 
 .p-dialog .p-footer {
     display: flex;
@@ -132,6 +136,8 @@ li span.active {
     width: 100%;
     margin-top: 6px;
     transition: border-color 0.3s;
+    color: #101010;
+    background: #fff;
 }
 
 .p-inputtext:focus {
@@ -164,3 +170,10 @@ li span.active {
 .p-button:hover {
     background-color: #3f4e9f; 
 }
+
+:host ::ng-deep .p-dialog{
+    color: #101010 !important;
+    background: #fff !important;
+}
+
+
