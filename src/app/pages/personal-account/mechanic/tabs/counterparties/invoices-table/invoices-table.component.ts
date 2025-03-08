@@ -226,6 +226,7 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
               }
             } else {
               this.invoices.push(invoice.data);
+              
             }
             this.cdr.detectChanges();
             this.messageService.add({
