@@ -259,3 +259,8 @@
     background: #eeebffa1;
     color: rgb(0 0 0 / 87%);
 }
+
+:host ::ng-deep .p-ripple {
+    background: #ffffff;
+    color: #101010;
+}

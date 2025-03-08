@@ -198,8 +198,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
-        this.totalInfo = invoice.totalInfo;
-        this.cdr.detectChanges();
+        
       },
       (error) => {
         console.error('Error fetching invoice details', error);

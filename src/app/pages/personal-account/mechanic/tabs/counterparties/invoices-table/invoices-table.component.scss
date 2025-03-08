@@ -188,6 +188,8 @@
 }
 
 
+
+
 .invoice-table {
     background-color: #ffffff !important;
     color: #000000 !important;
@@ -258,4 +260,10 @@
 :host ::ng-deep .p-select-option.p-select-option-selected.p-focus {
     background: #eeebffa1;
     color: rgb(0 0 0 / 87%);
+}
+
+
+:host ::ng-deep .p-ripple {
+    background: #ffffff;
+    color: #101010;
 }

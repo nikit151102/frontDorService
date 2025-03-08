@@ -24,7 +24,7 @@
                     {{ getStatusLabel(invoice.status) }}
                 </span>
             </td>
-            <td class="actions">
+            <td class="actions" style="display: flex;  flex-direction: column;">
                 <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
                     label="Редактировать"></button>
 
@@ -119,6 +119,7 @@
             </div>
             <p-footer>
                 <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
+                <button pButton label="фв" icon="pi pi-check" (click)="onDialogClose()"></button>
                 <!-- <button pButton label="Отправить на проверку" icon="pi pi-check"
                     (click)="sendingInvoice(selectedInvoice.id)"></button> -->
             </p-footer>

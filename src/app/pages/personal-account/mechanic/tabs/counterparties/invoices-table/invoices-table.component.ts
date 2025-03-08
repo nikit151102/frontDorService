@@ -104,9 +104,6 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
 
     const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
 
-    console.log(`columnIndex: ${columnIndex}, найдено:`, column);
-    console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
-
     return column ? this.totalInfo?.[column.value] ?? 0 : null;
   }
 
@@ -180,7 +177,6 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
           tax: taxObj || null,
           dateTime: formattedDate || null
         };
-        this.totalInfo = invoice.totalInfo;
         this.cdr.detectChanges();
       },
       (error) => {
