@@ -93,6 +93,12 @@
     margin-top: 20px;
 }
 
+.actionsBtn{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
 .invoice-row {
     cursor: pointer;
 }
@@ -230,6 +236,12 @@
     position: sticky;
     bottom: 0;
 }
+
+
+
+
+
+
 
 
 :host ::ng-deep .p-select-label {

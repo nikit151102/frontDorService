@@ -198,6 +198,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
+
+        this.totalInfo = invoice.totalInfo;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Error fetching invoice details', error);
@@ -243,7 +246,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
             } else {
               this.invoices.push(invoice.data);
             }
-            this.cdr.detectChanges();
+            
             this.messageService.add({
               severity: 'success',
               summary: 'Успех',
@@ -251,6 +254,8 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
             });
 
             this.selectedInvoice = null;
+            this.totalInfo = invoice.totalInfo;
+            this.cdr.detectChanges();
           },
           (error) => {
             console.error('Error saving invoice', error);
