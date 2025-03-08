@@ -6,7 +6,7 @@ const routes: Routes = [
   {
     path: '', component: DirectorComponent,
     children: [
-      { path: '', redirectTo: 'reference', pathMatch: 'full' }, 
+      { path: '', redirectTo: 'documents', pathMatch: 'full' }, 
       // { path: 'home', component: SupplierHomeComponent },
       {
         path: 'reference', loadChildren: () => import('./tabs/reference/reference.module').then(m => m.ReferenceModule)
