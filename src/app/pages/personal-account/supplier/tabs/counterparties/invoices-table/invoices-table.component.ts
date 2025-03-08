@@ -154,8 +154,12 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     this.invoiceService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
       this.checkers.forEach((checker: any) => {
-        checker.fullName = `${checker.firstName} ${checker.lastName} ${checker.patronymic}`;
+        const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
+        const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
+        
+        checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
       });
+      
     })
 
   }
@@ -198,7 +202,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
-        
+
         this.cdr.detectChanges();
       },
       (error) => {

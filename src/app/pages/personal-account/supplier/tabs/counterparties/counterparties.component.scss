@@ -10,4 +10,6 @@ app-counterparties-list {
 
 app-invoices-table {
     flex-grow: 1;
+    overflow-y: auto;
+    height: 85vh;
 }
