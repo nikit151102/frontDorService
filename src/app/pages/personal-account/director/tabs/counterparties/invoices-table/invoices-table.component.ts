@@ -73,7 +73,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   selectedStatuses: number[] = [2];
   statuses = [
     { label: 'Не проверено', value: 0 },
-    { label: 'Отправлено на проверку', value: 1 },
+    { label: 'На проверке', value: 1 },
     { label: 'Проверено', value: 2 },
     { label: 'Отклонено', value: 3 },
     { label: 'Удалена', value: 4 },
