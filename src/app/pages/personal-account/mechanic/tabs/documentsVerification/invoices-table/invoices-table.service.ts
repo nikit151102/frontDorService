@@ -32,7 +32,7 @@ export class InvoiceService {
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -51,7 +51,7 @@ export class InvoiceService {
   }
   getInvoiceById(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -62,14 +62,14 @@ export class InvoiceService {
   saveInvoice(invoice: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${invoice.id}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, invoice, {
+      return this.http.post<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ export class InvoiceService {
 
   deleteInvoice(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -107,7 +107,7 @@ export class InvoiceService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
+    return this.http.get<void>(`${environment.apiUrl}/api/Mechanic/GetCheckers`, { headers });
   }
 
 
