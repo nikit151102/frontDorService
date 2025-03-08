@@ -130,7 +130,8 @@ export class FormAuthorizationComponent implements OnInit {
                 this.currentUserService.saveUser(value.data);
                 if(value.data.roles[0]?.name === 'Снабженец') this.router.navigate([`/supplier/${response.data.id}`]);
                 if(value.data.roles[0]?.name === 'Механик') this.router.navigate([`/mechanic/${response.data.id}`]);
-              
+                if(value.data.roles[0]?.name === 'Директор') this.router.navigate([`/director/${response.data.id}`]);
+                
                 this.invoiceService.connectToWebSocket();
               }
             })

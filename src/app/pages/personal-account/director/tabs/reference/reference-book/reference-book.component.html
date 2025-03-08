@@ -1,0 +1,88 @@
+<div class="container">
+
+    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)">Создать запись</button>
+
+    <div class="list">
+        <div class="list-header">
+            <div class="list-header-item" *ngFor="let column of currentConfig?.tableColumns">
+                {{ column.label }}
+            </div>
+        </div>
+        <div class="list-item" *ngFor="let item of data">
+            <ng-container *ngFor="let column of currentConfig.tableColumns">
+                <div class="list-item-cell" *ngIf="column.field">
+                    <span class="phoneLabel">{{column.label}} </span>
+                    <span *ngIf="column.field.includes('.')" style="font-size: 14px;">
+                        {{ getNestedValue(item, column.field) }}
+                    </span>
+                    <span *ngIf="!column.field.includes('.')" style="font-size: 14px;">
+                        {{ item[column.field] }}
+                    </span>
+                </div>
+
+            </ng-container>
+            <div class="list-item-actions">
+                <button class="btn btn-warning"
+                    (click)="openEditModal(currentConfig.endpoint,item)">Редактировать</button>
+                <button class="btn btn-danger" (click)="deleteRecord(currentConfig.endpoint,item.id)">Удалить</button>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal" *ngIf="isModalOpen" [ngClass]="{ 'open': isModalOpen }">
+        <div class="modal-content">
+            <span class="close-btn" (click)="closeModal()">×</span>
+            <h2>{{ modalTitle }}</h2>
+
+            <form>
+                <div class="form-group-container" [ngClass]="{'two-columns': formFields.length > 4}">
+                    <div class="form-group" *ngFor="let field of formFields">
+                        <label [for]="field.field">{{ field.label }}:</label>
+                        <input *ngIf="field.type === 'text'" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
+                            name="{{ field.field }}" class="form-control" required type="text" />
+
+                        <input *ngIf="field.type === 'date'" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
+                            name="{{ field.field }}" class="form-control" required type="date" />
+
+                        <input *ngIf="field.type === 'number'" id="{{ field.field }}"
+                            [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
+                            type="number" />
+                    </div>
+                </div>
+
+                <ng-container *ngIf="currentConfig.connectionReference">
+                    <div class="form-group">
+                        <label>{{ currentConfig.connectionReference.label }}:</label>
+                        <div class="dropdown-container" #dropdownContainer>
+
+                            <div class="dropdown-input" (click)="toggleDropdown()">
+                                <input type="text" [value]="getSelectedDisplayValue()" placeholder="Выбрать запись"
+                                    readonly class="dropdown-input-field"  />
+                            </div>
+
+                            <div class="dropdown-list" #dropdown
+                                [ngClass]="{'ng-trigger': dropdownVisible, 'above': dropdownAbove}"
+                                *ngIf="dropdownVisible">
+                                <div class="dropdown-item" *ngFor="let item of connectionReferenceData"
+                                    (click)="selectReference(item)">
+                                    <div *ngFor="let column of connectionReferenceColumns">
+                                        <span *ngIf="!column.field.includes('.')">
+                                            {{ item[column.field] }}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-container>
+
+
+                <button (click)="onSubmit(currentConfig.endpoint)" type="submit" class="btn btn-success">{{ modalAction
+                    }}</button>
+            </form>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+<div class="container">
+    <div class="counterparties-list">
+        <ul>
+            <li *ngFor="let counterparty of references" (click)="select(counterparty.id)">
+                <div class="counterparty-item">
+                    <span [class.active]="counterparty.id === selectedId">
+                        {{ counterparty.label }}
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </div>
+    
+    <app-reference-book [typeId]="selectReference"></app-reference-book>
+</div>

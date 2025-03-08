@@ -6,6 +6,7 @@ interface CustomMenuItem {
   label: string;
   commandName?: string;
 }
+
 @Component({
   selector: 'app-mechanic',
   imports: [RouterOutlet,NavMenuComponent],
