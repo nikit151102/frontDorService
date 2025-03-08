@@ -328,8 +328,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     this.invoiceService.sendingVerification(id,status).subscribe((updatedInvoice: any) => {
       const index = this.invoices.findIndex(invoice => invoice.id === id);
       if (index !== -1) {
-        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice };
+        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
         this.invoices = [...this.invoices];
+        
         this.cdr.detectChanges();
       }
     }, error => {
