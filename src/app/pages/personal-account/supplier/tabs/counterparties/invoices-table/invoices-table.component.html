@@ -1,7 +1,7 @@
 <button pButton label="Создать новый счет" icon="pi pi-plus" (click)="createNewInvoice()"></button>
 
 <p-table [value]="invoices" class="invoice-table">
-    <ng-template pTemplate="header">
+    <ng-template pTemplate="header" >
         <tr>
             <th *ngFor="let col of columns; let i = index">{{ col.header }}</th>
             <th>Статус</th>

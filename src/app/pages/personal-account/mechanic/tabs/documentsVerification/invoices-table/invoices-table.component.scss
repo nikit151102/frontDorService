@@ -247,3 +247,9 @@
     background: #eeebffa1;
     color: rgb(0 0 0 / 87%);
 }
+
+:host ::ng-deep .p-datatable-thead {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
