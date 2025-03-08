@@ -14,9 +14,9 @@ const routes: Routes = [
       // {
       //   path: 'profile', loadChildren: () => import('../../../components/profile/profile.module').then(m => m.ProfileModule)
       // },
-      // {
-      //   path: 'documentsVerification', loadChildren: () => import('./tabs/documentsVerification/counterparties.module').then(m => m.DocumentsVerificationModule)
-      // }
+      {
+        path: 'documents', loadChildren: () => import('./tabs/counterparties/counterparties.module').then(m => m.CounterpartiesModule)
+      }
     ]
   }
 ];

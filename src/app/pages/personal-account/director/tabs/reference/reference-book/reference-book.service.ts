@@ -18,26 +18,26 @@ export class ReferenceBookService {
   }
   // Получение всех записей
   getRecords(endpoint: string): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/api/Director/Entities/${endpoint}`, { headers: this.getHeader() });
+    return this.http.get<any[]>(`${environment.apiUrl}/${endpoint}`, { headers: this.getHeader() });
   }
 
   // Получение конкретной записи по ID
   getRecord(endpoint: string, id: string): Observable<any> {
-    return this.http.get<any>(`${environment.apiUrl}/api/Director/Entities/${endpoint}/${id}`, { headers: this.getHeader() });
+    return this.http.get<any>(`${environment.apiUrl}/${endpoint}/${id}`, { headers: this.getHeader() });
   }
 
   // Создание новой записи
   newRecord(endpoint: string, record: any): Observable<any> {
-    return this.http.post<any>(`${environment.apiUrl}/api/Director/Entities/${endpoint}`, record, { headers: this.getHeader() });
+    return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, record, { headers: this.getHeader() });
   }
 
   // Обновление существующей записи
   updateRecord(endpoint: string, id: number, record: any): Observable<any> {
-    return this.http.put<any>(`${environment.apiUrl}/api/Director/Entities/${endpoint}/${id}`, record, { headers: this.getHeader() });
+    return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${id}`, record, { headers: this.getHeader() });
   }
 
   // Удаление записи
   deleteRecord(endpoint: string, id: number): Observable<any> {
-    return this.http.delete<any>(`${environment.apiUrl}/api/Director/Entities/${endpoint}/${id}`, { headers: this.getHeader() });
+    return this.http.delete<any>(`${environment.apiUrl}/${endpoint}/${id}`, { headers: this.getHeader() });
   }
 }

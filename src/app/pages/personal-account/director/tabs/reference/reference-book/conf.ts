@@ -1,7 +1,7 @@
 export const referenceConfig = [
     {
         typeId: '030521',
-        endpoint: 'Employees',
+        endpoint: 'api/User',
         pageTitle: 'Сотрудники',
         tableColumns: [
             { label: 'Фамилия', field: 'lastName' },
@@ -24,6 +24,7 @@ export const referenceConfig = [
         tableColumns: [
             { label: 'Код', field: 'code' },
             { label: 'Наименование', field: 'name' },
+            { label: 'Короткое наименование', field: 'name' },
             { label: '', field: '' },
         ],
         formFields: [
