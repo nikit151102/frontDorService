@@ -180,6 +180,8 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
           tax: taxObj || null,
           dateTime: formattedDate || null
         };
+        this.totalInfo = invoice.totalInfo;
+        this.cdr.detectChanges();
       },
       (error) => {
         console.error('Error fetching invoice details', error);
@@ -233,6 +235,8 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
             });
 
             this.selectedInvoice = null;
+            this.totalInfo = invoice.totalInfo;
+            this.cdr.detectChanges();
           },
           (error) => {
             console.error('Error saving invoice', error);
