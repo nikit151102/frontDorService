@@ -1,5 +1,15 @@
 <button pButton label="Создать новый счет" icon="pi pi-plus" (click)="createNewInvoice()"></button>
 
+<p-multiSelect 
+    [options]="statuses" 
+    [(ngModel)]="selectedStatuses" 
+    optionLabel="label" 
+    optionValue="value"
+    placeholder="Выберите статусы"
+    (onChange)="loadInvoices()">
+</p-multiSelect>
+
+
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
         <tr>

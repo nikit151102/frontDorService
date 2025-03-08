@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../../../../environment';
 
@@ -40,15 +40,25 @@ export class InvoiceService {
     });
   }
 
-  getInvoicesByIdCounterparty(id: string): Observable<any> {
+  getInvoicesByIdCounterparty(id: string, statuses: number[]): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoicesByPartner/${id}`, {
+  
+    const requestBody = {
+      Partnerd: id,
+      statusList: statuses
+    };
+  
+    return this.http.post<any>(`${environment.apiUrl}/api/Director/DocInvoices`, requestBody, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }),
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      })
     });
   }
+  
+  
+
   getInvoiceById(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {

@@ -13,6 +13,7 @@ import { DialogModule } from 'primeng/dialog';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoiceService } from './invoices-table.service';
 import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 interface Product {
   productName: string;
@@ -47,7 +48,8 @@ interface DocInvoice {
     ConfirmDialogModule,
     DialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MultiSelectModule
   ],
   standalone: true,
   templateUrl: './invoices-table.component.html',
@@ -68,7 +70,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { field: 'incomeSum', header: 'Приход' },
     { field: 'dateTime', header: 'Дата' }
   ];
-
+  selectedStatuses: number[] = [0,1,2,3,4];
   statuses = [
     { label: 'Не проверено', value: 0 },
     { label: 'Отправлено на проверку', value: 1 },
@@ -151,6 +153,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+
     this.invoiceService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
       this.checkers.forEach((checker: any) => {
@@ -161,8 +164,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   }
 
   loadInvoices() {
-    console.log('Загрузка счетов для:', this.counterpartyId);
-    this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
+    console.log('Загрузка счетов для:', this.counterpartyId, 'с выбранными статусами:', this.selectedStatuses);
+
+    this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId, this.selectedStatuses).subscribe(
       (invoices) => {
         console.log('Ответ сервера:', invoices);
         this.invoices = invoices.documentMetadata.data;
@@ -179,6 +183,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       }
     );
   }
+
 
 
   editInvoice(id: string) {
@@ -198,7 +203,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
-        
+
       },
       (error) => {
         console.error('Error fetching invoice details', error);

@@ -4,7 +4,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        // position: absolute;
+    // position: absolute;
 }
 
 .invoice-table th {
@@ -93,7 +93,7 @@
     margin-top: 20px;
 }
 
-.actionsBtn{
+.actionsBtn {
     display: flex;
     flex-direction: row;
     gap: 20px;
@@ -217,12 +217,12 @@
 :host ::ng-deep .p-datatable-thead>tr>th,
 .p-datatable-sort-icon,
 .p-datatable-sort-badge,
-.p-datatable-tbody > tr > td  {
+.p-datatable-tbody>tr>td {
     background: #fff !important;
     color: #101010 !important;
 }
 
-:host ::ng-deep .p-datatable-tbody > tr > td  {
+:host ::ng-deep .p-datatable-tbody>tr>td {
     background: #fff !important;
     color: #101010 !important;
 }
@@ -232,7 +232,7 @@
 }
 
 
-:host ::ng-deep .p-datatable-tfoot{
+:host ::ng-deep .p-datatable-tfoot {
     position: sticky;
     bottom: 0;
 }
@@ -269,4 +269,20 @@
     position: sticky;
     top: 0;
     z-index: 99;
+}
+
+
+:host ::ng-deep .p-multiselect .p-multiselect-overlay {
+    background: #fff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-multiselect {
+    background: #fff;
+    color: #101010;
+}
+
+
+:host ::ng-deep .p-multiselect-label {
+    color: #101010;
 }
