@@ -70,7 +70,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { field: 'incomeSum', header: 'Приход' },
     { field: 'dateTime', header: 'Дата' }
   ];
-  selectedStatuses: number[] = [0,1,2,3,4];
+  selectedStatuses: number[] = [2];
   statuses = [
     { label: 'Не проверено', value: 0 },
     { label: 'Отправлено на проверку', value: 1 },
