@@ -266,8 +266,6 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
   }
 
-
-
   deleteInvoice(id: string) {
 
     this.confirmPopupService.openConfirmDialog({

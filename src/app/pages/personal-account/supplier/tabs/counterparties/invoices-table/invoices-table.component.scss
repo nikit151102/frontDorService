@@ -93,6 +93,12 @@
     margin-top: 20px;
 }
 
+.actionsBtn{
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
 .invoice-row {
     cursor: pointer;
 }
@@ -229,4 +235,27 @@
 :host ::ng-deep .p-datatable-tfoot{
     position: sticky;
     bottom: 0;
+}
+
+
+
+
+
+
+
+
+:host ::ng-deep .p-select-label {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+
+:host ::ng-deep .p-select-list {
+    background: #ffffff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-select-option.p-select-option-selected.p-focus {
+    background: #eeebffa1;
+    color: rgb(0 0 0 / 87%);
 }

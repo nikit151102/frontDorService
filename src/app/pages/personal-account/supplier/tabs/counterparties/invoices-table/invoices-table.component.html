@@ -8,7 +8,7 @@
             <th>Действия</th>
         </tr>
     </ng-template>
-    
+
     <ng-template pTemplate="body" let-invoice>
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
             <td *ngFor="let col of columns" class="invoice-cell">
@@ -24,12 +24,23 @@
                     {{ getStatusLabel(invoice.status) }}
                 </span>
             </td>
-            <td class="actions">
-                <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
-                    label="Редактировать"></button>
+            <td class="actions" style="display: flex;  flex-direction: column;">
 
-                <button pButton icon="pi pi-trash" class="btn-delete" (click)="deleteInvoice(invoice.id)"
-                    label="Удалить"></button>
+                <ng-container *ngIf="invoice.status == 0 || invoice.status == 3">
+                    <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
+                        label="Редактировать">
+                    </button>
+
+                    <button pButton icon="pi pi-trash" class="btn-delete" (click)="deleteInvoice(invoice.id)"
+                        label="Удалить">
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="invoice.status != 0 && invoice.status != 3">
+                    <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
+                        label="Подробнее">
+                    </button>
+                </ng-container>
+
             </td>
         </tr>
     </ng-template>
@@ -43,11 +54,11 @@
                 </ng-container>
                 <ng-template #emptyCell></ng-template>
             </td>
-            <td></td> 
-            <td></td> 
+            <td></td>
+            <td></td>
         </tr>
     </ng-template>
-    
+
 </p-table>
 
 
@@ -99,14 +110,15 @@
                         optionLabel="fullName" optionValue="id"></p-dropdown>
 
                 </div>
-                <button pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
+                <button *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3" pButton icon="pi pi-pencil"
+                    class="btn-edit" (click)="addProduct()" label="Добавить"></button>
                 <p-table [value]="selectedInvoice.productList">
                     <ng-template pTemplate="header">
                         <tr>
                             <th>Наименование товара</th>
                             <th>Количество</th>
                             <th>Сумма</th>
-                            <th></th>
+                            <th *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3"></th>
                         </tr>
                     </ng-template>
                     <ng-template pTemplate="body" let-product let-i="rowIndex">
@@ -114,7 +126,7 @@
                             <td><input [(ngModel)]="product.name" pInputText /></td>
                             <td><p-inputnumber [(ngModel)]="product.quantity"></p-inputnumber></td>
                             <td><p-inputnumber [(ngModel)]="product.amount"></p-inputnumber></td>
-                            <td>
+                            <td *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3">
                                 <button pButton icon="pi pi-trash" class="btn-delete" (click)="removeProduct(i)"
                                     label="Удалить"></button>
                             </td>
@@ -124,9 +136,14 @@
 
             </div>
             <p-footer>
-                <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
-                <button pButton label="Отправить на проверку" icon="pi pi-check"
+                <button *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3" pButton label="Сохранить"
+                    icon="pi pi-check" (click)="saveInvoice()"></button>
+                <button *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3" pButton
+                    label="Отправить на проверку" icon="pi pi-check"
                     (click)="sendingInvoice(selectedInvoice.id)"></button>
+
+                <button *ngIf="selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton label="Закрыть"
+                    (click)="onDialogClose()"></button>
             </p-footer>
         </div>
     </p-dialog>
