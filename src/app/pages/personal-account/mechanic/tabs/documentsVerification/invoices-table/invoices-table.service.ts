@@ -96,7 +96,7 @@ export class InvoiceService {
       'Authorization': `Bearer ${token}`
     });
   
-    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, { type: num}, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, { status: num}, { headers });
   }
 
   getCheckers() {
