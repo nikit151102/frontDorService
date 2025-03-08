@@ -307,19 +307,6 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
   }
 
 
-  sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id).subscribe((updatedInvoice: any) => {
-      const index = this.invoices.findIndex(invoice => invoice.id === id);
-      if (index !== -1) {
-        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice };
-        this.invoices = [...this.invoices];
-        this.cdr.detectChanges();
-      }
-    }, error => {
-      console.error('Ошибка при отправке на проверку:', error);
-    });
-  }
-
 
   createNewInvoice() {
     this.selectedInvoice = {

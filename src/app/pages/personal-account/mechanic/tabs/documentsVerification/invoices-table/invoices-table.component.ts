@@ -324,8 +324,8 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   }
 
 
-  sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id).subscribe((updatedInvoice: any) => {
+  sendingInvoice(id: string, status: number) {
+    this.invoiceService.sendingVerification(id,status).subscribe((updatedInvoice: any) => {
       const index = this.invoices.findIndex(invoice => invoice.id === id);
       if (index !== -1) {
         this.invoices[index] = { ...this.invoices[index], ...updatedInvoice };
@@ -356,5 +356,6 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   onDialogClose() {
     this.selectedInvoice = null;
   }
+  
 
 }

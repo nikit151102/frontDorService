@@ -124,9 +124,10 @@
 
             </div>
             <p-footer>
-                <button pButton label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
-                <button pButton label="Отправить на проверку" icon="pi pi-check"
-                    (click)="sendingInvoice(selectedInvoice.id)"></button>
+                <button pButton label="Отклонить" icon="pi pi-check"
+                    (click)="sendingInvoice(selectedInvoice.id, 3)"></button>
+                <button pButton label="Принять" icon="pi pi-check"
+                    (click)="sendingInvoice(selectedInvoice.id, 2)"></button>
             </p-footer>
         </div>
     </p-dialog>

@@ -88,7 +88,7 @@ export class InvoiceService {
     });
   }
 
-  sendingVerification(id: string): Observable<void> {
+  sendingVerification(id: string, num: number): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
   
     const headers = new HttpHeaders({
@@ -96,7 +96,7 @@ export class InvoiceService {
       'Authorization': `Bearer ${token}`
     });
   
-    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {}, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, { type: num}, { headers });
   }
-  
+
 }

@@ -88,15 +88,15 @@ export class InvoiceService {
     });
   }
 
-  sendingVerification(id: string): Observable<void> {
+  sendingVerification(id: string, num: number): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-
+  
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-
-    return this.http.patch<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {}, { headers });
+  
+    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, { type: num}, { headers });
   }
 
   getCheckers() {
@@ -150,7 +150,6 @@ export class InvoiceService {
       this.socket.close();
     }
   }
-
 
 
 
