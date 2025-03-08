@@ -44,7 +44,7 @@ export class InvoiceService {
     const token = localStorage.getItem('YXV0aFRva2Vu');
   
     const requestBody = {
-      Partnerd: id,
+      partnerId: id,
       statusList: statuses
     };
   
