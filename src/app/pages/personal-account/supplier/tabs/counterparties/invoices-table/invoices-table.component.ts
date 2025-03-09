@@ -70,11 +70,13 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   ];
 
   statuses = [
-    { label: 'Не проверено', value: 0 },
-    { label: 'На проверке', value: 1 },
-    { label: 'Проверено', value: 2 },
-    { label: 'Отклонено', value: 3 },
-    { label: 'Удалена', value: 4 },
+    { label: 'Не отправлено', value: 0 },
+    { label: 'Проверка Механик', value: 1 }, // голубой
+    { label: 'Проверка Директор', value: 2 }, // голубой
+    { label: 'Отклонено Механик', value: 3 }, // красный
+    { label: 'Отклонено Директор', value: 4 }, // красный
+    { label: 'Подписано', value: 5 }, // зеленый
+    { label: 'Удалено', value: 6 } // серый
   ];
 
   getStatusLabel(value: number): string {
@@ -86,12 +88,15 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     switch (statusValue) {
       case 0: return 'status-not-checked';
       case 1: return 'status-sent-for-check';
-      case 2: return 'status-checked';
+      case 2: return 'status-sent-for-check';
       case 3: return 'status-rejected';
-      case 4: return 'status-deleted';
+      case 4: return 'status-rejected';
+      case 5: return 'status-approved';
+      case 6: return 'status-deleted';
       default: return '';
     }
   }
+
 
   totalInfo: any;
 
@@ -119,6 +124,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { label: 'НДС 20%', value: 2 }
   ];
 
+  
   types = [
     { label: 'Приход', value: 0 },
     { label: 'Расход', value: 1 }
@@ -156,10 +162,10 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       this.checkers.forEach((checker: any) => {
         const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
         const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
-        
+
         checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
       });
-      
+
     })
 
   }
@@ -202,6 +208,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
+        if (this.selectedInvoice.productList.length === 0) {
+          this.addProduct();
+        }
 
         this.cdr.detectChanges();
       },
@@ -249,7 +258,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
             } else {
               this.invoices.push(invoice.data);
             }
-            
+
             this.messageService.add({
               severity: 'success',
               summary: 'Успех',
@@ -316,7 +325,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
     this.selectedInvoice.productList.push({
       productName: '',
-      quantity: 1,
+      quantity: 0,
       amount: 0,
       date: new Date().toISOString()
     });
@@ -335,7 +344,7 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       const index = this.invoices.findIndex(invoice => invoice.id === id);
       if (index !== -1) {
         this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
-        console.log('this.invoices[index]',this.invoices[index])
+        console.log('this.invoices[index]', this.invoices[index])
         this.invoices = [...this.invoices];
         this.cdr.detectChanges();
         this.onDialogClose();
@@ -358,6 +367,8 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       productList: []
     };
 
+    this.addProduct();
+
   }
 
 
@@ -365,4 +376,20 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     this.selectedInvoice = null;
   }
 
+  calculatingAmount(): number {
+    if (this.selectedInvoice && this.selectedInvoice.productList.length > 0) {
+      let totalAmount = this.selectedInvoice.productList.reduce((sum: number, product: any) => {
+        return sum + (product.quantity * product.amount);
+      }, 0);
+      return totalAmount
+    } else {
+
+      return 0;
+    }
+  }
+
+
+
 }
+
+

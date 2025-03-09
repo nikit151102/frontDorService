@@ -75,9 +75,9 @@ export class MechanicCounterpartiesListComponent {
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
-      ogrn: ['', Validators.required],
-      kpp: ['', Validators.required],
-      address: ['', Validators.required],
+      ogrn: [''],
+      kpp: [''],
+      address: [''],
       type: [0]
     });
   }

@@ -71,12 +71,15 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { field: 'dateTime', header: 'Дата' }
   ];
   selectedStatuses: number[] = [2];
+
   statuses = [
-    { label: 'Не проверено', value: 0 },
-    { label: 'На проверке', value: 1 },
-    { label: 'Проверено', value: 2 },
-    { label: 'Отклонено', value: 3 },
-    { label: 'Удалена', value: 4 },
+    { label: 'Не отправлено', value: 0 },
+    { label: 'Проверка Механик', value: 1 }, // голубой
+    { label: 'Проверка Директор', value: 2 }, // голубой
+    { label: 'Отклонено Механик', value: 3 }, // красный
+    { label: 'Отклонено Директор', value: 4 }, // красный
+    { label: 'Подписано', value: 5 }, // зеленый
+    { label: 'Удалено', value: 6 } // серый
   ];
 
   getStatusLabel(value: number): string {
@@ -88,9 +91,11 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     switch (statusValue) {
       case 0: return 'status-not-checked';
       case 1: return 'status-sent-for-check';
-      case 2: return 'status-checked';
+      case 2: return 'status-sent-for-check';
       case 3: return 'status-rejected';
-      case 4: return 'status-deleted';
+      case 4: return 'status-rejected';
+      case 5: return 'status-approved';
+      case 6: return 'status-deleted';
       default: return '';
     }
   }
@@ -203,7 +208,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         };
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
-
+        if (this.selectedInvoice.productList.length === 0) {
+          this.addProduct();
+        }
       },
       (error) => {
         console.error('Error fetching invoice details', error);
@@ -355,12 +362,24 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
       checkPersonId: '',
       productList: []
     };
-
+    this.addProduct();
   }
 
 
   onDialogClose() {
     this.selectedInvoice = null;
+  }
+
+  calculatingAmount(): number {
+    if (this.selectedInvoice && this.selectedInvoice.productList.length > 0) {
+      let totalAmount = this.selectedInvoice.productList.reduce((sum: number, product: any) => {
+        return sum + (product.quantity * product.amount);
+      }, 0);
+      return totalAmount
+    } else {
+
+      return 0;
+    }
   }
 
 }

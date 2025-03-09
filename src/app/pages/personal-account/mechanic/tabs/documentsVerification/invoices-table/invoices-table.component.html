@@ -8,7 +8,7 @@
             <th>Действия</th>
         </tr>
     </ng-template>
-    
+
     <ng-template pTemplate="body" let-invoice>
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
             <td *ngFor="let col of columns" class="invoice-cell">
@@ -28,8 +28,6 @@
                 <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
                     label="Подробнее"></button>
 
-                <button pButton icon="pi pi-trash" class="btn-delete" (click)="deleteInvoice(invoice.id)"
-                    label="Удалить"></button>
             </td>
         </tr>
     </ng-template>
@@ -43,11 +41,11 @@
                 </ng-container>
                 <ng-template #emptyCell></ng-template>
             </td>
-            <td></td> 
-            <td></td> 
+            <td></td>
+            <td></td>
         </tr>
     </ng-template>
-    
+
 </p-table>
 
 
@@ -59,23 +57,26 @@
         (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
-                <div class="p-field p-col-12">
-                    <label for="number">Номер счета-фактуры</label>
-                    <input id="number" [(ngModel)]="selectedInvoice.number" pInputText [disabled]="true"/>
-                </div>
-                <div class="p-field p-col-12">
-                    <label for="dateTime">Дата</label>
-                    <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false" [disabled]="true"></p-calendar>
-                </div>
-                <!-- <div class="p-field p-col-12">
+                <div style="display: flex; gap: 15px;">
+                    <div class="p-field p-col-12">
+                        <label for="number">Номер счета-фактуры</label>
+                        <input id="number" [(ngModel)]="selectedInvoice.number" pInputText [disabled]="true" />
+                    </div>
+                    <div class="p-field p-col-12">
+                        <label for="dateTime">Дата</label>
+                        <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false"
+                            [disabled]="true"></p-calendar>
+                    </div>
+                    <!-- <div class="p-field p-col-12">
                 <label for="status">Статус</label>
                 <p-dropdown id="status" [(ngModel)]="selectedInvoice.status" [options]="statuses" optionLabel="label"></p-dropdown>
             </div> -->
-                <div class="p-field p-col-12">
-                    <label for="stateNumberCar">Гос. номер автомобиля</label>
-                    <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText [disabled]="true"/>
-                </div>
-                <!-- <div class="p-field p-col-12">
+                    <div class="p-field p-col-12">
+                        <label for="stateNumberCar">Гос. номер автомобиля</label>
+                        <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText
+                            [disabled]="true" />
+                    </div>
+                    <!-- <div class="p-field p-col-12">
                 <label for="incomeSum">Приход сумма</label>
                 <p-inputnumber id="incomeSum" [(ngModel)]="selectedInvoice.incomeSum"></p-inputnumber>
             </div>
@@ -83,20 +84,22 @@
                 <label for="expenseSum">Расход сумма</label>
                 <p-inputnumber id="expenseSum" [(ngModel)]="selectedInvoice.expenseSum"></p-inputnumber>
             </div> -->
-                <div class="p-field p-col-12">
-                    <label for="type">Тип</label>
-                    <p-dropdown id="type" [(ngModel)]="selectedInvoice.type" [options]="types" [disabled]="true"
-                        optionLabel="label"></p-dropdown>
-                </div>
-                <div class="p-field p-col-12">
-                    <label for="tax">Налог</label>
-                    <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" [disabled]="true"
-                        optionLabel="label"></p-dropdown>
-                </div>
-                <div class="p-field p-col-12">
-                    <label for="tax">Проверяющий</label>
-                    <p-dropdown id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId" [options]="checkers" [disabled]="true"
-                        optionLabel="fullName" optionValue="id"></p-dropdown>
+                    <div class="p-field p-col-12">
+                        <label for="type">Тип</label>
+                        <p-dropdown id="type" [(ngModel)]="selectedInvoice.type" [options]="types" [disabled]="true"
+                            optionLabel="label"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <label for="tax">Налог</label>
+                        <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" [disabled]="true"
+                            optionLabel="label"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12">
+                        <label for="tax">Проверяющий</label>
+                        <p-dropdown id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId" [options]="checkers"
+                            [disabled]="true" optionLabel="fullName" optionValue="id"></p-dropdown>
+
+                    </div>
 
                 </div>
                 <!-- <button pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button> -->
@@ -118,6 +121,16 @@
                                 <button pButton icon="pi pi-trash" class="btn-delete" (click)="removeProduct(i)"
                                     label="Удалить"></button>
                             </td> -->
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="footer">
+                        <tr>
+                            
+                            <td></td>
+                            <td></td>
+                            <td>{{calculatingAmount()}}</td>
+                            <td></td>
                         </tr>
                     </ng-template>
                 </p-table>
