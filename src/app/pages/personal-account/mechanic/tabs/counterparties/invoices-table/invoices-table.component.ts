@@ -95,8 +95,8 @@ export class MechanicInvoicesTableComponent implements OnInit, OnChanges {
   totalInfo: any;
 
   totalInfoColumn = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
+    { columnNum: 2, value: 'totalExpenseSum' },
+    { columnNum: 1, value: 'totalIncomeSum' },
   ]
 
   getTotalValue(columnIndex: number): any {
