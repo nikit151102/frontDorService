@@ -98,11 +98,33 @@
                 <label for="expenseSum">Расход сумма</label>
                 <p-inputnumber id="expenseSum" [(ngModel)]="selectedInvoice.expenseSum"></p-inputnumber>
             </div> -->
-                    <div class="p-field p-col-12">
-                        <label for="type">Тип</label>
-                        <p-dropdown id="type" [(ngModel)]="selectedInvoice.type" [options]="types"
-                            optionLabel="label"></p-dropdown>
-                    </div>
+
+
+
+            <div class="p-field p-col-12">
+                <label for="type">Тип</label>
+                <p-dropdown 
+                    id="type" 
+                    [(ngModel)]="type" 
+                    [options]="types"
+                    optionLabel="label" 
+                    optionValue="value"
+                    (onChange)="onTypeChange()">
+                </p-dropdown>
+            </div>
+            
+            <div class="p-field p-col-12" *ngIf="type === 1">
+                <label for="adjustmentType">Корректировка</label>
+                <p-dropdown 
+                    id="adjustmentType" 
+                    [(ngModel)]="adjustmentType"
+                    [options]="adjustmentOptions" 
+                    optionLabel="label" 
+                    optionValue="value" 
+                    (onChange)="onAdjustmentChange()">
+                </p-dropdown>
+            </div>
+            
 
 
                     <div class="p-field p-col-12">

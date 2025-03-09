@@ -124,11 +124,46 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { label: 'НДС 20%', value: 2 }
   ];
 
-  
-  types = [
+
+adjustmentType: number | null = null;
+type: number | null = null;
+
+adjustmentOptions = [
+    { label: '+', value: 1 }, // Теперь при + отправляется 1
+    { label: '-', value: 2 }  // Теперь при - отправляется 2
+];
+
+types = [
     { label: 'Приход', value: 0 },
-    { label: 'Расход', value: 1 }
-  ];
+    { label: 'Коррекция', value: 1 }
+];
+
+onTypeChange() {
+    if (this.type === 1) {
+        this.adjustmentType = 1; // По умолчанию ставим "+"
+    } else {
+        this.adjustmentType = null;
+        this.selectedInvoice.productList.forEach((product: any) => {
+            product.amount = Math.abs(product.amount); // Всегда положительное значение
+        });
+        this.selectedInvoice.type = 0; // Если "Приход", отправляем 0
+    }
+}
+
+onAdjustmentChange() {
+    if (this.selectedInvoice.productList) {
+        this.selectedInvoice.productList.forEach((product: any) => {
+            product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : 1);
+        });
+
+        // Если "+", то type = 1, если "-", то type = 2
+        this.selectedInvoice.type = this.adjustmentType;
+    }
+}
+
+
+  
+
 
   productColumns = [
     { header: 'Покупка', field: 'incomeSum' },
@@ -206,12 +241,28 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
           tax: taxObj || null,
           dateTime: formattedDate || null
         };
+        this.type = invoice.data.type;
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
         if (this.selectedInvoice.productList.length === 0) {
           this.addProduct();
         }
 
+        if (this.selectedInvoice.productList && this.selectedInvoice.productList.length > 0) {
+          const hasNegative = this.selectedInvoice.productList.some((product: any) => product.amount < 0);
+    
+
+          if (this.type === 0) {
+            this.adjustmentType = null; //  "Приход", 
+            this.type = 0;
+          } else if (this.type === 1) {
+            this.adjustmentType = 1; // "Коррекция" и "+"
+            this.type = 1;
+          } else if (this.type === 2) {
+            this.adjustmentType = 2; // "Коррекция" и "-"
+            this.type = 1;
+          }
+        }
         this.cdr.detectChanges();
       },
       (error) => {
@@ -245,9 +296,9 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
-          type: this.selectedInvoice.type.value
-        };
-
+          type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
+      };
+      
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             if (this.selectedInvoice.id) {
