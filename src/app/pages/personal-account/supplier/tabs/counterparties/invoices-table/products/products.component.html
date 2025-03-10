@@ -1,52 +1,63 @@
-<p-table [value]="products" class="products-table">
+<div style="margin-bottom: 10px;  display: flex;
+    flex-direction: column;
+    width: fit-content;">
+    <label>Выберите столбцы для отображения:</label>
+    <p-multiselect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header" optionValue="field"
+        placeholder="Select Columns" (onChange)="updateColumnVisibility()">
+    </p-multiselect>
+</div>
+
+<p-table [value]="products" class="invoice-table">
     <ng-template pTemplate="header">
         <tr>
-            <!-- Компоненты фильтров и сортировки над заголовком -->
-            <th  *ngFor="let col of columns" class="filter-header">
-                <div style="display: flex; justify-content: space-between;">
-                    <app-search-filter-sort *ngIf="col.type == 'string'"
-                        [filterField]="col.field"
-                        [filterType]="1"
-                        (filterChange)="productsService.onFilterChange($event)"
-                        (sortChange)="productsService.onSortChange($event)">
-                    </app-search-filter-sort>
+            <ng-container *ngFor="let col of columns">
+                <th *ngIf="isColumnVisible(col)" class="filter-header">
+                    <div style="display: flex; justify-content: space-between;">
+                        <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
+                            (filterChange)="productsService.onFilterChange($event)"
+                            (sortChange)="productsService.onSortChange($event)">
+                        </app-search-filter-sort>
 
-                    <app-date-filter  *ngIf="col.type == 'date'"
-                        [filterField]="col.field"
-                        (filterChange)="productsService.onFilterChange($event)"
-                        (sortChange)="productsService.onSortChange($event)">
-                    </app-date-filter>
-                </div>
-            </th>
+                        <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
+                            (filterChange)="productsService.onFilterChange($event)"
+                            (sortChange)="productsService.onSortChange($event)">
+                        </app-date-filter>
+                    </div>
+                </th>
+            </ng-container>
         </tr>
         <tr>
-            <!-- Заголовки таблицы -->
-            <th *ngFor="let col of columns">{{ col.header }}</th>
+            <ng-container *ngFor="let col of columns">
+                <th *ngIf="isColumnVisible(col)">{{ col.header }}</th>
+            </ng-container>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr>
-            <td *ngFor="let col of columns">
-                <ng-container *ngIf="col.field === 'invoiceDate'; else normalField">
-                    {{ product[col.field] | date: 'dd-MM-yyyy' }}
-                </ng-container>
-                <ng-template #normalField>
-                    {{ col.field === 'invoiceStatus' ? getStatusLabel(product[col.field]) : product[col.field] }}
-                </ng-template>
-            </td>
+        <tr  class="invoice-row">
+            <ng-container *ngFor="let col of columns">
+                <td *ngIf="isColumnVisible(col)" class="invoice-cell">
+                    <ng-container *ngIf="col.field === 'invoiceDate'; else normalField">
+                        {{ product[col.field] | date: 'dd-MM-yyyy' }}
+                    </ng-container>
+                    <ng-template #normalField>
+                        {{ col.field === 'invoiceStatus' ? getStatusLabel(product[col.field]) : product[col.field] }}
+                    </ng-template>
+                </td>
+            </ng-container>
         </tr>
     </ng-template>
 
-    <!-- Итоговая строка -->
     <ng-template pTemplate="footer">
         <tr>
-            <td *ngFor="let col of columns; let i = index" class="total-cell">
-                <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
-                    {{ getTotalValue(i) }}
-                </ng-container>
-                <ng-template #emptyCell></ng-template>
-            </td>
+            <ng-container *ngFor="let col of columns; let i = index">
+                <td *ngIf="isColumnVisible(col)" class="total-cell">
+                    <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                        {{ getTotalValue(i) }}
+                    </ng-container>
+                    <ng-template #emptyCell></ng-template>
+                </td>
+            </ng-container>
             <td></td>
             <td></td>
         </tr>

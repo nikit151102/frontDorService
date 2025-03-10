@@ -27,12 +27,13 @@ interface QueryDto {
 })
 export class ProductsService {
 
+  queryData: QueryDto = { filters: [], sorts: [] };
   constructor(private http: HttpClient) { }
 
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/Product/ByPartner/${id}`, {
+    return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/Product/ByPartner/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -41,7 +42,7 @@ export class ProductsService {
   }
 
 
-  queryData: QueryDto = { filters: [], sorts: [] };
+
 
   onFilterChange(filter: FilterDto) {
     if (!this.queryData.filters) this.queryData.filters = [];

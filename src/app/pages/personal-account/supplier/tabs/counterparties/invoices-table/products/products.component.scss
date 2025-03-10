@@ -289,3 +289,20 @@
     top: 0;
     z-index: 99;
 }
+
+
+:host ::ng-deep .p-multiselect-label {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+
+:host ::ng-deep .p-multiselect-list {
+    background: #ffffff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-multiselect-option.p-multiselect-option-multiselect.p-focus {
+    background: #eeebffa1;
+    color: rgb(0 0 0 / 87%);
+}

@@ -1,55 +1,70 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { InvoiceService } from '../invoices-table.service';
+import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
 import { ProductsService } from './products.service';
 import { TableModule } from 'primeng/table';
 import { DateFilterSortComponent } from '../../../../../../../components/fields/date-filter/date-filter.component';
 import { SearchFilterSortComponent } from '../../../../../../../components/fields/search-filter-sort/search-filter-sort.component';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
 
 @Component({
   selector: 'app-products',
   imports: [CommonModule, TableModule,
     SearchFilterSortComponent,
-    DateFilterSortComponent
+    DateFilterSortComponent,
+    FormsModule,
+    MultiSelectModule
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
-export class ProductsComponent implements OnChanges {
+export class ProductsComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
 
   products: any[] = [];
   selectedProduct: any;
 
   columns = [
-    { field: 'purpose', header: 'Назначение', type: 'string'},
-    { field: 'name', header: 'Товар', type: 'string' },
-    { field: 'quantity', header: 'Количество', type: 'string' },
-    { field: 'unit', header: 'Ед.изм', type: 'string' },
-    { field: 'totalPrice', header: 'Сумма', type: 'string' },
-    { field: 'invoiceNumber', header: 'Номер фактуры', type: 'string' },
-    { field: 'invoiceDate', header: 'Дата фактуры', type: 'date' },
-    { field: 'invoiceStatus', header: 'Статус фактуры', type: 'string' }
+    { field: 'purpose', header: 'Назначение', type: 'string', visible: true },
+    { field: 'name', header: 'Товар', type: 'string', visible: true },
+    { field: 'quantity', header: 'Количество', type: 'string', visible: true },
+    { field: 'unit', header: 'Ед.изм', type: 'string', visible: true },
+    { field: 'totalPrice', header: 'Сумма', type: 'string', visible: true },
+    { field: 'invoiceNumber', header: 'Номер фактуры', type: 'string', visible: true },
+    { field: 'invoiceDate', header: 'Дата фактуры', type: 'date', visible: true },
+    { field: 'invoiceStatus', header: 'Статус фактуры', type: 'string', visible: true }
   ];
+
+  selectedColumns: string[] = [];  
+
+  ngOnInit() {
+    this.selectedColumns = this.columns.map(col => col.field);
+    this.updateColumnVisibility(); 
+  }
+
+  updateColumnVisibility() {
+    this.columns.forEach(col => {
+      col.visible = this.selectedColumns.includes(col.field);
+    });
+  }
+
+  isColumnVisible(column: any): boolean {
+    return column.visible;
+  }
 
   totalInfo: any;
 
   totalInfoColumn = [
     { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
-  ]
+    { columnNum: 2, value: 'totalIncomeSum' }
+  ];
 
   getTotalValue(columnIndex: number): any {
     if (!this.totalInfo) return null;
 
     const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
-
-    console.log(`columnIndex: ${columnIndex}, найдено:`, column);
-    console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
-
     return column ? this.totalInfo?.[column.value] ?? 0 : null;
   }
-  
 
   statuses = [
     { label: 'Не отправлено', value: 0 },
