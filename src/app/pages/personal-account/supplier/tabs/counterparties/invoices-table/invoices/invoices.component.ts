@@ -90,9 +90,6 @@ export class InvoicesComponent implements OnInit, OnChanges {
 
     const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
 
-    // console.log(`columnIndex: ${columnIndex}, найдено:`, column);
-    // console.log('totalInfo:', column ? this.totalInfo?.[column.value] ?? 0 : null);
-
     return column ? this.totalInfo?.[column.value] ?? 0 : null;
   }
 
@@ -104,43 +101,52 @@ export class InvoicesComponent implements OnInit, OnChanges {
     { label: 'НДС 20%', value: 2 }
   ];
 
-
   adjustmentType: number | null = null;
   type: number | null = null;
 
   adjustmentOptions = [
-    { label: '+', value: 1 }, // Теперь при + отправляется 1
-    { label: '-', value: 2 }  // Теперь при - отправляется 2
+    { label: '+', value: 1 },
+    { label: '-', value: 2 }
   ];
 
   types = [
-    { label: 'Приход', value: 0 },
-    { label: 'Коррекция', value: 1 }
+    { label: 'Расход', value: 1 },
+    { label: 'Коррекция', value: 0 }
   ];
 
   onTypeChange() {
-    if (this.type === 1) {
-      this.adjustmentType = 1; // По умолчанию ставим "+"
+    if (this.type === 0) {
+      this.adjustmentType = 1;
+      this.onAdjustmentChange()
     } else {
       this.adjustmentType = null;
       this.selectedInvoice.productList.forEach((product: any) => {
-        product.amount = Math.abs(product.amount); // Всегда положительное значение
+        product.amount = Math.abs(product.amount);
       });
-      this.selectedInvoice.type = 0; // Если "Приход", отправляем 0
+      this.selectedInvoice.type = 0;
     }
   }
 
   onAdjustmentChange() {
     if (this.selectedInvoice.productList) {
       this.selectedInvoice.productList.forEach((product: any) => {
-        product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : 1);
+        
+        if (this.type === 0) {
+          product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : -1); 
+        } else {
+          product.amount = Math.abs(product.amount); 
+        }
       });
-
-      // Если "+", то type = 1, если "-", то type = 2
-      this.selectedInvoice.type = this.adjustmentType;
+  
+      // Если "+" то type = 1, если "-" то type = 0
+      if (this.adjustmentType === 1) {
+        this.selectedInvoice.type = 1; // Приход
+      } else if (this.adjustmentType === 2) {
+        this.selectedInvoice.type = 0; // Расход
+      }
     }
   }
-
+  
 
 
 
