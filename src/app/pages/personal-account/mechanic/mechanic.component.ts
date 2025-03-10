@@ -16,10 +16,10 @@ interface CustomMenuItem {
 export class MechanicComponent {
 
   menuItems: CustomMenuItem[] = [
-    { label: 'Сервисы', commandName: 'services' },
     { label: 'Профиль', commandName: 'profile' },
+    { label: 'Сервисы', commandName: 'services' },
+    { label: 'Документы', commandName: 'documentsVerification' },
     // { label: 'Нал', commandName: '' },
-    { label: 'Документы', commandName: 'documentsVerification' }
   ];
   
 }

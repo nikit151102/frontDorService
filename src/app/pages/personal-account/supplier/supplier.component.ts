@@ -17,8 +17,8 @@ interface CustomMenuItem {
 export class SupplierComponent {
 
   menuItems: CustomMenuItem[] = [
-    { label: 'Контрагенты', commandName: 'clients' },
     { label: 'Профиль', commandName: 'profile' },
+    { label: 'Контрагенты', commandName: 'clients' },
     // { label: 'Нал', commandName: '' },
     // { label: 'Документы', commandName: '194253' }
   ];

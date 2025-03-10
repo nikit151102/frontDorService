@@ -18,8 +18,9 @@ interface CustomMenuItem {
 export class DirectorComponent {
 
   menuItems: CustomMenuItem[] = [
-    { label: 'Документы', commandName: 'documents' },
     { label: 'Профиль', commandName: 'profile' },
+    { label: 'Контрагенты', commandName: 'documents' },
+    { label: 'Сервисы', commandName: 'services' },
     { label: 'Справочники', commandName: 'reference' }
   ];
 
