@@ -125,44 +125,44 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
   ];
 
 
-adjustmentType: number | null = null;
-type: number | null = null;
+  adjustmentType: number | null = null;
+  type: number | null = null;
 
-adjustmentOptions = [
+  adjustmentOptions = [
     { label: '+', value: 1 }, // Теперь при + отправляется 1
     { label: '-', value: 2 }  // Теперь при - отправляется 2
-];
+  ];
 
-types = [
+  types = [
     { label: 'Приход', value: 0 },
     { label: 'Коррекция', value: 1 }
-];
+  ];
 
-onTypeChange() {
+  onTypeChange() {
     if (this.type === 1) {
-        this.adjustmentType = 1; // По умолчанию ставим "+"
+      this.adjustmentType = 1; // По умолчанию ставим "+"
     } else {
-        this.adjustmentType = null;
-        this.selectedInvoice.productList.forEach((product: any) => {
-            product.amount = Math.abs(product.amount); // Всегда положительное значение
-        });
-        this.selectedInvoice.type = 0; // Если "Приход", отправляем 0
+      this.adjustmentType = null;
+      this.selectedInvoice.productList.forEach((product: any) => {
+        product.amount = Math.abs(product.amount); // Всегда положительное значение
+      });
+      this.selectedInvoice.type = 0; // Если "Приход", отправляем 0
     }
-}
+  }
 
-onAdjustmentChange() {
+  onAdjustmentChange() {
     if (this.selectedInvoice.productList) {
-        this.selectedInvoice.productList.forEach((product: any) => {
-            product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : 1);
-        });
+      this.selectedInvoice.productList.forEach((product: any) => {
+        product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : 1);
+      });
 
-        // Если "+", то type = 1, если "-", то type = 2
-        this.selectedInvoice.type = this.adjustmentType;
+      // Если "+", то type = 1, если "-", то type = 2
+      this.selectedInvoice.type = this.adjustmentType;
     }
-}
+  }
 
 
-  
+
 
 
   productColumns = [
@@ -250,7 +250,7 @@ onAdjustmentChange() {
 
         if (this.selectedInvoice.productList && this.selectedInvoice.productList.length > 0) {
           const hasNegative = this.selectedInvoice.productList.some((product: any) => product.amount < 0);
-    
+
 
           if (this.type === 0) {
             this.adjustmentType = null; //  "Приход", 
@@ -297,8 +297,8 @@ onAdjustmentChange() {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
-      };
-      
+        };
+
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             if (this.selectedInvoice.id) {

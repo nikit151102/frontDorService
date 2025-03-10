@@ -33,7 +33,7 @@ export class CounterpartiesListComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
 
   counterparties: any = [];
-  selectedId: number | null = null;
+  selectedId: any;
   menuOpenFor: number | null = null;
   display: boolean = false;
   counterpartyForm!: FormGroup;
@@ -61,6 +61,7 @@ export class CounterpartiesListComponent {
     this.counterpartiesService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
+        this.select('00000000-0000-0000-0000-000000000000');
       },
       (error: any) => {
         console.error('Ошибка загрузки контрагентов:', error);
@@ -81,7 +82,7 @@ export class CounterpartiesListComponent {
     });
   }
 
-  select(id: number) {
+  select(id: any) {
     this.selectedId = id;
     this.selectCounterparty.emit(id);
   }
