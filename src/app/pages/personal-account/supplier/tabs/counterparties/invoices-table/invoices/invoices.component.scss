@@ -22,8 +22,16 @@
     font-size: 14px;
     color: #666;
     border-bottom: 1px solid #eee;
-    background: #fff;
 }
+
+.invoice-table tr:nth-child(even) {
+    background-color: #f9f9f9 !important;
+}
+
+.invoice-table tr:nth-child(odd) {
+    background-color: #ffffff !important;
+}
+
 
 .invoice-table tr:hover {
     background-color: #f9f9f9;
@@ -139,6 +147,7 @@
 .invoice-cell {
     font-size: 14px;
     color: #333;
+    border-bottom: 0.1px solid #101010 !important;
 }
 
 .status-tag {
@@ -227,10 +236,7 @@
     color: #101010 !important;
 }
 
-:host ::ng-deep .p-datatable-tbody>tr>td {
-    background: #fff !important;
-    color: #101010 !important;
-}
+
 
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
     position: absolute;
@@ -253,11 +259,6 @@
     bottom: 30px;
 }
 
-:host ::ng-deep p-dialog .p-datatable-tfoot>tr>td {
-    background: #fff;
-    color: #101010;
-
-}
 
 
 

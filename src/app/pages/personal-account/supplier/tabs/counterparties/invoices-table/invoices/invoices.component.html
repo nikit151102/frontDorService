@@ -10,7 +10,7 @@
 
     <ng-template pTemplate="body" let-invoice>
         <tr (dblclick)="editInvoice(invoice.id)" class="invoice-row">
-            <td *ngFor="let col of columns" class="invoice-cell">
+            <td *ngFor="let col of columns" class="invoice-cell" >
                 <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                     {{ invoice[col.field] | date: 'dd-MM-yyyy HH:mm' }}
                 </ng-container>
@@ -24,7 +24,7 @@
                 </span>
             </td>
 
-            <td class="actions" style="display: flex;  flex-direction: column;">
+            <td class="actions invoice-cell" style="display: flex;  flex-direction: column;">
 
                 <ng-container *ngIf="invoice.status == 0 || invoice.status == 3">
                     <button pButton icon="pi pi-pencil" class="btn-edit" (click)="editInvoice(invoice.id)"
