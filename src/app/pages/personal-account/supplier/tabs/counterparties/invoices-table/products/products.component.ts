@@ -81,6 +81,7 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
+      this.productsService.counterpartyId = this.counterpartyId;
       this.productsService.loadProducts();
     }
   }
