@@ -64,7 +64,7 @@ export class ProductsService {
     } else {
       this.queryData.filters.push(filter); // Добавляем новый фильтр
     }
-  
+    this.loadProducts()
     console.log('Обновленные фильтры:', this.queryData.filters);
   }
   
@@ -78,7 +78,7 @@ export class ProductsService {
     } else {
       this.queryData.sorts.push(sort); // Добавляем новую сортировку
     }
-
+    this.loadProducts();
     console.log('Обновленные сортировки:', this.queryData.sorts);
     console.log('Обновленные данные:', this.queryData);
   }
