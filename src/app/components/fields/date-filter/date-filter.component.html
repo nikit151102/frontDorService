@@ -1,0 +1,63 @@
+<div class="date-filter-sort">
+    <!-- Поле для выбора даты -->
+    <div class="date-box">
+        <input type="text" [(ngModel)]="selectedDate" (focus)="toggleFilter()"
+            placeholder="Выберите дату/диапазон..." readonly #dateInput />
+        <button class="filter-btn" (click)="toggleFilter()">▼</button>
+    </div>
+
+    <div *ngIf="isFilterOpen" style="display: flex; gap: 10px;">
+        <!-- Выпадающий список типов фильтра -->
+        <div class="filter-dropdown">
+     <div>
+        <label *ngFor="let filter of ['Равно', 'До даты', 'После даты', 'Между датами']">
+            <input type="radio" [checked]="selectedFilter === filter" (change)="onFilterChange(filter)" />
+            {{ filter }}
+        </label>
+
+     </div>
+
+            <!-- Календарь или календарь для выбора диапазона -->
+            <div class="calendar-container" *ngIf="showCalendar">
+                <ng-container [ngSwitch]="selectedFilter">
+                    <!-- Равно -->
+                    <div *ngSwitchCase="'Равно'">
+                        <input type="date" [(ngModel)]="dateValue" (change)="onDateChange()" #dateInput
+                            (click)="openDatePicker(dateInput)" />
+                    </div>
+
+                    <!-- До даты -->
+                    <div *ngSwitchCase="'До даты'">
+                        <input type="date" [(ngModel)]="dateValue" (change)="onDateChange()" #dateInput
+                            (click)="openDatePicker(dateInput)" />
+                    </div>
+
+                    <!-- После даты -->
+                    <div *ngSwitchCase="'После даты'">
+                        <input type="date" [(ngModel)]="dateValue" (change)="onDateChange()" #dateInput
+                            (click)="openDatePicker(dateInput)" />
+                    </div>
+
+                    <!-- Между датами -->
+                    <div *ngSwitchCase="'Между датами'">
+                        <input type="date" [(ngModel)]="startDate" (change)="onDateChange()" #startDateInput
+                            (click)="openDatePicker(startDateInput)" />
+                        <span>по</span>
+                        <input type="date" [(ngModel)]="endDate" (change)="onDateChange()" #endDateInput
+                            (click)="openDatePicker(endDateInput)" />
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+
+
+
+
+    </div>
+
+
+    <!-- Кнопка сортировки -->
+    <button class="sort-btn" (click)="toggleSort()">
+        {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
+    </button>
+</div>

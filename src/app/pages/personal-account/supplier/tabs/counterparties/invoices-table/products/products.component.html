@@ -1,0 +1,54 @@
+<p-table [value]="products" class="products-table">
+    <ng-template pTemplate="header">
+        <tr>
+            <!-- Компоненты фильтров и сортировки над заголовком -->
+            <th  *ngFor="let col of columns" class="filter-header">
+                <div style="display: flex; justify-content: space-between;">
+                    <app-search-filter-sort *ngIf="col.type == 'string'"
+                        [filterField]="col.field"
+                        [filterType]="1"
+                        (filterChange)="productsService.onFilterChange($event)"
+                        (sortChange)="productsService.onSortChange($event)">
+                    </app-search-filter-sort>
+
+                    <app-date-filter  *ngIf="col.type == 'date'"
+                        [filterField]="col.field"
+                        (filterChange)="productsService.onFilterChange($event)"
+                        (sortChange)="productsService.onSortChange($event)">
+                    </app-date-filter>
+                </div>
+            </th>
+        </tr>
+        <tr>
+            <!-- Заголовки таблицы -->
+            <th *ngFor="let col of columns">{{ col.header }}</th>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="body" let-product>
+        <tr>
+            <td *ngFor="let col of columns">
+                <ng-container *ngIf="col.field === 'invoiceDate'; else normalField">
+                    {{ product[col.field] | date: 'dd-MM-yyyy' }}
+                </ng-container>
+                <ng-template #normalField>
+                    {{ col.field === 'invoiceStatus' ? getStatusLabel(product[col.field]) : product[col.field] }}
+                </ng-template>
+            </td>
+        </tr>
+    </ng-template>
+
+    <!-- Итоговая строка -->
+    <ng-template pTemplate="footer">
+        <tr>
+            <td *ngFor="let col of columns; let i = index" class="total-cell">
+                <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                    {{ getTotalValue(i) }}
+                </ng-container>
+                <ng-template #emptyCell></ng-template>
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </ng-template>
+</p-table>
