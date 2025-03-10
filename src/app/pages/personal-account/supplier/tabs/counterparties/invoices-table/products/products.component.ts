@@ -6,12 +6,14 @@ import { DateFilterSortComponent } from '../../../../../../../components/fields/
 import { SearchFilterSortComponent } from '../../../../../../../components/fields/search-filter-sort/search-filter-sort.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
+import { NumberFilterComponent } from '../../../../../../../components/fields/number-filter/number-filter.component';
 
 @Component({
   selector: 'app-products',
   imports: [CommonModule, TableModule,
     SearchFilterSortComponent,
     DateFilterSortComponent,
+    NumberFilterComponent,
     FormsModule,
     MultiSelectModule
   ],
@@ -21,18 +23,17 @@ import { MultiSelectModule } from 'primeng/multiselect';
 export class ProductsComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
 
-  products: any[] = [];
   selectedProduct: any;
 
   columns = [
-    { field: 'purpose', header: 'Назначение', type: 'string', visible: true },
-    { field: 'name', header: 'Товар', type: 'string', visible: true },
-    { field: 'quantity', header: 'Количество', type: 'string', visible: true },
-    { field: 'unit', header: 'Ед.изм', type: 'string', visible: true },
-    { field: 'totalPrice', header: 'Сумма', type: 'string', visible: true },
-    { field: 'invoiceNumber', header: 'Номер фактуры', type: 'string', visible: true },
-    { field: 'invoiceDate', header: 'Дата фактуры', type: 'date', visible: true },
-    { field: 'invoiceStatus', header: 'Статус фактуры', type: 'string', visible: true }
+    { field: 'productTarget.name', header: 'Назначение', type: 'string', visible: true, width: '300px' },
+    { field: 'name', header: 'Товар', type: 'string', visible: true, width: '300px' },
+    { field: 'quantity', header: 'Количество', type: 'number', visible: true, width: '300px' },
+    { field: 'measurementUnit.shortName', header: 'Ед.изм', type: 'number', visible: true, width: '300px' },
+    { field: 'amount', header: 'Сумма', type: 'number', visible: true, width: '300px' },
+    { field: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '300px' },
+    { field: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '300px' },
+    { field: 'docInvoiceStatus', header: 'Статус фактуры', type: 'string', visible: true, width: '300px' }
   ];
 
   selectedColumns: string[] = [];  
@@ -80,20 +81,11 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
-      this.loadProducts();
+      this.productsService.loadProducts();
     }
   }
 
-  loadProducts() {
-    this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
-      (data) => {
-        this.products = data;
-      },
-      (error) => {
-        console.error('Ошибка загрузки товаров:', error);
-      }
-    );
-  }
+
 
   getStatusLabel(value: number): string {
     return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';

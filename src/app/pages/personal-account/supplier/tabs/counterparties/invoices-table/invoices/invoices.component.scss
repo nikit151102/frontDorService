@@ -25,11 +25,11 @@
 }
 
 .invoice-table tr:nth-child(even) {
-    background-color: #f9f9f9 !important;
+    background-color: #f9f9f9 !important; 
 }
 
 .invoice-table tr:nth-child(odd) {
-    background-color: #ffffff !important;
+    background-color: #ffffff !important; 
 }
 
 
@@ -147,7 +147,7 @@
 .invoice-cell {
     font-size: 14px;
     color: #333;
-    border-bottom: 0.1px solid #101010 !important;
+        border-bottom: 0.1px solid #101010 !important;
 }
 
 .status-tag {

@@ -1,4 +1,4 @@
-.date-filter-sort {
+.number-filter-sort {
     display: flex;
     align-items: center;
     gap: 10px;
@@ -10,14 +10,14 @@
     position: relative;
 }
 
-.date-box {
+.number-box {
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
 }
 
-.date-box input {
+.number-box input {
     width: 100%;
     padding: 12px;
     font-size: 14px;
@@ -29,8 +29,9 @@
     transition: all 0.3s ease;
 }
 
-.date-box input:focus {
+.number-box input:focus {
     border-color: #007BFF;
+    
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
@@ -58,8 +59,7 @@
     position: absolute;
     top: 100%;
     left: 0;
-    // width: 100%;
-    max-width: 325px;
+    width: 280px;
     z-index: 999;
     display: flex;
     flex-direction: row;
@@ -81,13 +81,13 @@
     background-color: #e9ecef;
 }
 
-.calendar-container {
+.number-container {
     display: flex;
     flex-direction: column;
     gap: 12px;
 }
 
-.calendar-container input[type="date"] {
+.number-container input[type="number"] {
     width: 100%;
     padding: 12px;
     font-size: 14px;
@@ -99,12 +99,12 @@
     transition: all 0.3s ease;
 }
 
-.calendar-container input[type="date"]:focus {
+.number-container input[type="number"]:focus {
     border-color: #007BFF;
     box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
 }
 
-.calendar-container span {
+.number-container span {
     font-size: 14px;
     font-weight: bold;
     text-align: center;
@@ -126,13 +126,13 @@
 }
 
 @media (max-width: 600px) {
-    .date-filter-sort {
+    .number-filter-sort {
         padding: 15px;
         margin: 10px;
     }
 
-    .date-box input,
-    .calendar-container input[type="date"],
+    .number-box input,
+    .number-container input[type="number"],
     .sort-btn {
         font-size: 16px;
         padding: 12px;

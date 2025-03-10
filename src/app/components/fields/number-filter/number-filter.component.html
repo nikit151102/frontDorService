@@ -1,0 +1,57 @@
+<div class="number-filter-sort">
+    <!-- Поле для выбора числа -->
+    <div class="number-box">
+        <input type="text" [(ngModel)]="selectedNumber" (focus)="toggleFilter()"
+            placeholder="Выберите число/диапазон..." readonly #numberInput />
+        <button class="filter-btn" (click)="toggleFilter()">▼</button>
+    </div>
+
+    <div *ngIf="isFilterOpen" style="display: flex; gap: 10px;">
+        <!-- Выпадающий список типов фильтра -->
+        <div class="filter-dropdown">
+            <div>
+                <label *ngFor="let filter of ['Равно', 'Меньше', 'Больше', 'Между']">
+                    <input type="radio" [checked]="selectedFilter === filter" (change)="onFilterChange(filter)" />
+                    {{ filter }}
+                </label>
+            </div>
+
+            <!-- Поля для ввода чисел -->
+            <div class="number-container" *ngIf="showNumberInput">
+                <ng-container [ngSwitch]="selectedFilter">
+                    <!-- Равно -->
+                    <div *ngSwitchCase="'Равно'">
+                        <input type="number" [(ngModel)]="numberValue" (change)="onNumberChange()" #numberInput
+                            (click)="openNumberPicker(numberInput)" />
+                    </div>
+
+                    <!-- Меньше -->
+                    <div *ngSwitchCase="'Меньше'">
+                        <input type="number" [(ngModel)]="numberValue" (change)="onNumberChange()" #numberInput
+                            (click)="openNumberPicker(numberInput)" />
+                    </div>
+
+                    <!-- Больше -->
+                    <div *ngSwitchCase="'Больше'">
+                        <input type="number" [(ngModel)]="numberValue" (change)="onNumberChange()" #numberInput
+                            (click)="openNumberPicker(numberInput)" />
+                    </div>
+
+                    <!-- Между -->
+                    <div *ngSwitchCase="'Между'">
+                        <input type="number" [(ngModel)]="startNumber" (change)="onNumberChange()" #startNumberInput
+                            (click)="openNumberPicker(startNumberInput)" />
+                        <span>по</span>
+                        <input type="number" [(ngModel)]="endNumber" (change)="onNumberChange()" #endNumberInput
+                            (click)="openNumberPicker(endNumberInput)" />
+                    </div>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+
+    <!-- Кнопка сортировки -->
+    <button class="sort-btn" (click)="toggleSort()">
+        {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
+    </button>
+</div>

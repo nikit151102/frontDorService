@@ -84,4 +84,17 @@ export class ProductsService {
   }
   
 
+  counterpartyId:any;
+  products:any;
+
+  loadProducts() {
+    this.getProductsByCounterparty(this.counterpartyId).subscribe(
+      (data) => {
+        this.products = data.documentMetadata.data;
+      },
+      (error) => {
+        console.error('Ошибка загрузки товаров:', error);
+      }
+    );
+  }
 }

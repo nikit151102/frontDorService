@@ -6,12 +6,11 @@
         placeholder="Select Columns" (onChange)="updateColumnVisibility()">
     </p-multiselect>
 </div>
-
-<p-table [value]="products" class="invoice-table">
+<p-table [value]="productsService.products" class="invoice-table">
     <ng-template pTemplate="header">
         <tr>
             <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)" class="filter-header">
+                <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width">
                     <div style="display: flex; justify-content: space-between;">
                         <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
                             (filterChange)="productsService.onFilterChange($event)"
@@ -22,21 +21,25 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-date-filter>
+                        <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
+                            (filterChange)="productsService.onFilterChange($event)"
+                            (sortChange)="productsService.onSortChange($event)">
+                        </app-number-filter>
                     </div>
                 </th>
             </ng-container>
         </tr>
         <tr>
             <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)">{{ col.header }}</th>
+                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
             </ng-container>
         </tr>
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr  class="invoice-row">
+        <tr class="invoice-row">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col)" class="invoice-cell">
+                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width">
                     <ng-container *ngIf="col.field === 'invoiceDate'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
@@ -51,7 +54,7 @@
     <ng-template pTemplate="footer">
         <tr>
             <ng-container *ngFor="let col of columns; let i = index">
-                <td *ngIf="isColumnVisible(col)" class="total-cell">
+                <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
                     <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
                         {{ getTotalValue(i) }}
                     </ng-container>

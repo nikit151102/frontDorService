@@ -233,7 +233,8 @@
 }
 
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
-    position: absolute;
+    table-layout: fixed;
+    width: 100%;
 }
 
 
