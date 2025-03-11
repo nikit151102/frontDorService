@@ -62,7 +62,7 @@
                 </td>
             </ng-container>
             <td *ngIf="actions.length > 0">
-                <button *ngFor="let action of actions" (click)="action.action(product)">
+                <button *ngFor="let action of actions"  (click)="action.action(product);">
                     {{ action.label }}
                 </button>
             </td>

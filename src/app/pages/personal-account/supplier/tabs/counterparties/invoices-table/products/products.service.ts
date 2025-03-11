@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../../../../environment';
 
 
@@ -31,7 +31,20 @@ export class ProductsService {
   constructor(private http: HttpClient) { }
 
   endpoint: string = '';
+
+
+  private dataSubject = new BehaviorSubject<any>(null);
+  activData$ = this.dataSubject.asObservable();
+
+  setActiveData(tab: any) {
+    this.dataSubject.next(tab);
+  }
+  getActiveData(tab: any) {
+    this.dataSubject.value;
+  }
+
   
+
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {

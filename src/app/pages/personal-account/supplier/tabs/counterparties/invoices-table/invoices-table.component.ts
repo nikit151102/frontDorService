@@ -34,11 +34,27 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
     { field: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '300px' },
     { field: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '300px' }
   ];
- 
+
   totalInfoColumn = [
     { columnNum: 2, value: 'totalExpenseSum' },
     { columnNum: 4, value: 'totalIncomeSum' }
   ];
+
+
+
+  columnsInvoices = [
+    { field: 'number', header: 'Номер' },
+    { field: 'expenseSum', header: 'Расход' },
+    { field: 'incomeSum', header: 'Приход' },
+    { field: 'dateTime', header: 'Дата' }
+  ];
+ 
+  totalInfoColumnInvoices = [
+    { columnNum: 1, value: 'totalExpenseSum' },
+    { columnNum: 2, value: 'totalIncomeSum' },
+  ]
+
+
 
   productActions = [
     {

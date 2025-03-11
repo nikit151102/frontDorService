@@ -4,13 +4,19 @@
 </div>
 
 <div *ngIf="selectedComponent === 'invoices'">
-    <app-invoices [counterpartyId]="counterpartyId"></app-invoices>
+    <!-- <app-invoices [counterpartyId]="counterpartyId"></app-invoices> -->
+    <app-products [counterpartyId]="counterpartyId" 
+    [columns]="columnsInvoices"
+    [totalInfoColumn]="totalInfoColumnInvoices"
+    [endpoint]="'api/CommercialWork/DocInvoice/ByPartner'"
+    ></app-products>
 </div>
 <div *ngIf="selectedComponent === 'products'">
     <app-products [counterpartyId]="counterpartyId" 
     [columns]="columns"
     [totalInfoColumn]="totalInfoColumn"
     [endpoint]="'api/CommercialWork/Product/ByPartner'"
-    [actions]="productActions"
     ></app-products>
 </div>
+
+

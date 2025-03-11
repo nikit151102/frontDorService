@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, OnInit, EventEmitter, Output } from '@angular/core';
 import { ProductsService } from './products.service';
 import { TableModule } from 'primeng/table';
 import { DateFilterSortComponent } from '../../../../../../../components/fields/date-filter/date-filter.component';
@@ -44,6 +44,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   ngOnInit() {
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
+
   }
 
   updateColumnVisibility() {
@@ -80,4 +81,5 @@ export class ProductsComponent implements OnChanges, OnInit {
   getStatusLabel(value: number): string {
     return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';
   }
+  
 }
