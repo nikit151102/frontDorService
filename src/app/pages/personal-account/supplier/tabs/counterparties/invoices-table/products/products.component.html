@@ -3,7 +3,7 @@
     width: fit-content;">
     <label>Выберите столбцы для отображения:</label>
     <p-multiselect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header" optionValue="field"
-        placeholder="Select Columns" (onChange)="updateColumnVisibility()">
+        placeholder="Выбрать колонки" (onChange)="updateColumnVisibility()" selectedItemsLabel="{0} выбрано">
     </p-multiselect>
 </div>
 <p-table [value]="productsService.products" class="invoice-table">
