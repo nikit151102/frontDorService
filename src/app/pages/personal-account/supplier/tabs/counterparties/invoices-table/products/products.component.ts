@@ -24,29 +24,30 @@ import { UuidSearchFilterSortComponent } from '../../../../../../../components/f
 })
 export class ProductsComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
+  @Input() endpoint: any;
+  @Input() columns: any;
+  @Input() totalInfoColumn: any;
+  @Input() actions: { label: string, action: (product: any) => void }[] = [];
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['counterpartyId']) {
+      this.productsService.counterpartyId = this.counterpartyId;
+      this.productsService.endpoint = this.endpoint;
+      this.productsService.loadProducts();
+    }
+  }
 
   selectedProduct: any;
 
-  columns = [
-    { field: 'productTarget.name', header: 'Назначение', type: 'uuid', visible: true, width: '200px' },
-    { field: 'name', header: 'Товар', type: 'string', visible: true, width: '300px' },
-    { field: 'quantity', header: 'Количество', type: 'number', visible: true, width: '300px' },
-    { field: 'measurementUnit.shortName', header: 'Ед.изм', type: 'number', visible: true, width: '300px' },
-    { field: 'amount', header: 'Сумма', type: 'number', visible: true, width: '300px' },
-    { field: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '300px' },
-    { field: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '300px' },
-    { field: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '300px' }
-  ];
-
-  selectedColumns: string[] = [];  
+  selectedColumns: string[] = [];
 
   ngOnInit() {
-    this.selectedColumns = this.columns.map(col => col.field);
-    this.updateColumnVisibility(); 
+    this.selectedColumns = this.columns.map((col: any) => col.field);
+    this.updateColumnVisibility();
   }
 
   updateColumnVisibility() {
-    this.columns.forEach(col => {
+    this.columns.forEach((col:any) => {
       col.visible = this.selectedColumns.includes(col.field);
     });
   }
@@ -56,15 +57,10 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
 
-  totalInfoColumn = [
-    { columnNum: 2, value: 'totalExpenseSum' },
-    { columnNum: 4, value: 'totalIncomeSum' }
-  ];
-
   getTotalValue(columnIndex: number): any {
     if (!this.productsService.totalInfo) return null;
 
-    const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
+    const column = this.totalInfoColumn.find((col:any) => col.columnNum === columnIndex);
     return column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
   }
 
@@ -78,15 +74,7 @@ export class ProductsComponent implements OnChanges, OnInit {
     { label: 'Удалено', value: 6 }
   ];
 
-  constructor(public productsService: ProductsService) {}
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['counterpartyId']) {
-      this.productsService.counterpartyId = this.counterpartyId;
-      this.productsService.loadProducts();
-    }
-  }
-
+  constructor(public productsService: ProductsService) { }
 
 
   getStatusLabel(value: number): string {

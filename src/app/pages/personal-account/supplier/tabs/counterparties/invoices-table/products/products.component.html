@@ -45,6 +45,7 @@
             <ng-container *ngFor="let col of columns">
                 <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
             </ng-container>
+            <th *ngIf="actions.length > 0">Действия</th>
         </tr>
     </ng-template>
 
@@ -60,6 +61,12 @@
                     </ng-template>
                 </td>
             </ng-container>
+            <td *ngIf="actions.length > 0">
+                <button *ngFor="let action of actions" (click)="action.action(product)">
+                    {{ action.label }}
+                </button>
+            </td>
+            
         </tr>
     </ng-template>
 
