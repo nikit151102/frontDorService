@@ -78,11 +78,11 @@ export class NumberFilterComponent {
 
   getNumberFilterType(): number {
     switch (this.selectedFilter) {
-      case 'Равно': return 1;
-      case 'Меньше': return 2;
-      case 'Больше': return 3;
-      case 'Между': return 4;
-      default: return 1;
+      case 'Равно': return 2;
+      case 'Меньше': return 3;
+      case 'Больше': return 4;
+      case 'Между': return 5;
+      default: return 2;
     }
   }
 

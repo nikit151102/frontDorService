@@ -237,6 +237,14 @@
 }
 
 
+:host ::ng-deep .p-datatable-tfoot>tr>td {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+
+
+
 
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
     position: absolute;
@@ -289,4 +297,65 @@
     position: sticky;
     top: 0;
     z-index: 99;
+}
+
+
+
+
+
+
+
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.invoice-table th {
+    text-align: left;
+    padding: 12px;
+    background-color: #f4f7fa;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+}
+
+.invoice-table td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+}
+
+.invoice-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.invoice-table tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+.invoice-table tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
+
+.invoice-table tfoot td {
+    background: #fff;
+    font-weight: bold;
+}
+
+.invoice-cell {
+    word-wrap: break-word;
+}
+
+.invoice-row {
+    transition: background-color 0.2s ease;
+}
+
+.invoice-row.active {
+    background-color: #e0f7fa;
 }

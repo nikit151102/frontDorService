@@ -54,6 +54,13 @@ export class ProductsService {
       );
     }
   
+     // Удаляем все фильтры с тем же полем и типом из массива, если тип фильтра один из 6, 7, 8, 9
+     if ([2, 3, 4, 5].includes(filter.type)) {
+      this.queryData.filters = this.queryData.filters.filter(
+        f => !(f.field === filter.field && [2, 3, 4, 5].includes(f.type))
+      );
+    }
+
     // Добавляем или обновляем фильтр
     const existingFilter = this.queryData.filters.find(
       f => f.field === filter.field && f.type === filter.type
