@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-invoices-table',
   standalone: true,
-  imports: [CommonModule, InvoicesComponent, ProductsComponent],
+  imports: [CommonModule, ProductsComponent],
   templateUrl: './invoices-table.component.html',
   styleUrls: ['./invoices-table.component.scss']
 })
@@ -43,10 +43,10 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
 
   columnsInvoices = [
-    { field: 'number', header: 'Номер' },
-    { field: 'expenseSum', header: 'Расход' },
-    { field: 'incomeSum', header: 'Приход' },
-    { field: 'dateTime', header: 'Дата' }
+    { field: 'number', header: 'Номер',type: 'string', visible: true, width: '300px' },
+    { field: 'expenseSum', header: 'Расход',type: 'number', visible: true, width: '300px' },
+    { field: 'incomeSum', header: 'Приход',type: 'number', visible: true, width: '300px' },
+    { field: 'dateTime', header: 'Дата',type: 'date', visible: true, width: '300px' }
   ];
  
   totalInfoColumnInvoices = [
