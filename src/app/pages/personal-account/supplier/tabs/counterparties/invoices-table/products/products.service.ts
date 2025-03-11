@@ -93,11 +93,13 @@ export class ProductsService {
 
   counterpartyId:any;
   products:any;
+  totalInfo:any;
 
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(
       (data) => {
         this.products = data.documentMetadata.data;
+        this.totalInfo = data.totalInfo;
       },
       (error) => {
         console.error('Ошибка загрузки товаров:', error);
