@@ -237,11 +237,13 @@
     width: 100%;
 }
 
+:host ::ng-deep .p-datatable{
+    position: absolute;
+}
 
 :host ::ng-deep .p-datatable-tfoot {
     position: sticky;
     bottom: 0;
-    height: 55vh;
 }
 
 
