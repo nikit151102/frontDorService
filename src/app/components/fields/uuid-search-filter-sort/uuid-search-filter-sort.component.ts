@@ -26,7 +26,8 @@ export class UuidSearchFilterSortComponent {
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
   @Input() fieldNames: string[] = []; // Массив полей для отображения в выпадающем списке
-
+  @Input() Field: string = ''; 
+  @Input() enam: any;
   searchTerm: string = '';
   selectedFilters: any[] = [];
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -41,12 +42,14 @@ export class UuidSearchFilterSortComponent {
   constructor(private uuidSearchFilterSortService: UuidSearchFilterSortService) { }
 
   ngOnChanges() {
-    if (this.apiEndpoint && !this.endpointDataLoaded) {
+    if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
       this.loadData();
     }
+    if (this.enam != null) {
+      this.products = this.enam;
+      this.endpointDataLoaded = true;
+    }
   }
-
-
 
   loadData() {
     this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
@@ -67,7 +70,7 @@ export class UuidSearchFilterSortComponent {
 
   onSearchChange() {
     const filterDto: FilterDto = {
-      field: this.filterField,
+      field: this.Field,
       values: this.searchTerm ? [this.searchTerm] : [],
       type: 0
     };
@@ -86,7 +89,7 @@ export class UuidSearchFilterSortComponent {
     }
 
     const filterDto: FilterDto = {
-      field: this.filterField,
+      field: this.Field,
       values: this.selectedFilters,
       type: this.filterType
     };
@@ -99,7 +102,7 @@ export class UuidSearchFilterSortComponent {
       .map(field => (product[field] !== undefined ? product[field] : field)) // Если это поле, берём его значение, иначе оставляем как есть
       .join(' ');
   }
-  
+
 
   // Получаем список уникальных значений для выпадающего списка
   get uniqueFilterValues(): { id: string, text: string }[] {
@@ -118,7 +121,7 @@ export class UuidSearchFilterSortComponent {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
 
     const sortDto: SortDto = {
-      field: this.filterField,
+      field: this.Field,
       sortType: this.sortOrder === 'asc' ? 0 : 1
     };
 
