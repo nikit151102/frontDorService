@@ -35,26 +35,7 @@ export class UuidSearchFilterSortComponent {
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
-  products: any[] = [
-    {
-      "id": "1",
-      "name": "Product 1",
-      "lastName": "Doe",
-      "age": 30
-    },
-    {
-      "id": "2",
-      "name": "Product 2",
-      "lastName": "Smith",
-      "age": 25
-    },
-    {
-      "id": "3",
-      "name": "Product 3",
-      "lastName": "Johnson",
-      "age": 28
-    }
-  ];
+  products: any[] = [];
   endpointDataLoaded = false;
 
   constructor(private uuidSearchFilterSortService: UuidSearchFilterSortService) { }
