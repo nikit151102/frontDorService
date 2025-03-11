@@ -18,7 +18,7 @@ export class ReferenceBookService {
   }
   // Получение всех записей
   getRecords(endpoint: string): Observable<any[]> {
-    return this.http.get<any[]>(`${environment.apiUrl}/${endpoint}`, { headers: this.getHeader() });
+    return this.http.post<any[]>(`${environment.apiUrl}/${endpoint}/Filter`, {filters: [], sorts: []} , { headers: this.getHeader() });
   }
 
   // Получение конкретной записи по ID
