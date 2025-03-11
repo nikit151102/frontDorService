@@ -57,8 +57,8 @@ export class ProductsComponent implements OnChanges, OnInit {
 
 
   totalInfoColumn = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' }
+    { columnNum: 2, value: 'totalExpenseSum' },
+    { columnNum: 4, value: 'totalIncomeSum' }
   ];
 
   getTotalValue(columnIndex: number): any {
