@@ -22,9 +22,7 @@ interface QueryDto {
 
 
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'any' })
 export class ProductsService {
 
   queryData: QueryDto = { filters: [], sorts: [] };

@@ -28,7 +28,8 @@ export class ProductsComponent implements OnChanges, OnInit {
   @Input() columns: any;
   @Input() totalInfoColumn: any;
   @Input() actions: { label: string, action: (product: any) => void }[] = [];
-
+  @Input() actionClick!: { label: string, action: (product: any) => void };
+ 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
       this.productsService.counterpartyId = this.counterpartyId;
