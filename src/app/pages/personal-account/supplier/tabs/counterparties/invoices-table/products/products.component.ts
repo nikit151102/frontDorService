@@ -11,6 +11,7 @@ import { UuidSearchFilterSortComponent } from '../../../../../../../components/f
 
 @Component({
   selector: 'app-products',
+  providers: [ProductsService],
   imports: [CommonModule, TableModule,
     SearchFilterSortComponent,
     DateFilterSortComponent,
