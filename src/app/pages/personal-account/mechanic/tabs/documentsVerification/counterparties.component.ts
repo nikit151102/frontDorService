@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { InvoicesTableComponent } from './invoices-table/invoices-table.component';
 import { CounterpartiesListComponent } from './counterparties-list/counterparties-list.component';
+import { ProductsComponent } from '../../../../../components/products/products.component';
 
 @Component({
   selector: 'app-counterparties',
-  imports: [CommonModule, InvoicesTableComponent, CounterpartiesListComponent],
+  imports: [CommonModule, InvoicesTableComponent, ProductsComponent, CounterpartiesListComponent],
   templateUrl: './counterparties.component.html',
   styleUrl: './counterparties.component.scss'
 })
@@ -15,4 +16,19 @@ export class CounterpartiesComponent {
   onSelectCounterparty(id: number) {
     this.selectedCounterpartyId = id;
   }
+
+  
+  columnsInvoices = [
+    { field: 'number', header: 'Номер',type: 'string', visible: true, width: '300px' },
+    { field: 'expenseSum', header: 'Расход',type: 'number', visible: true, width: '300px' },
+    { field: 'incomeSum', header: 'Приход',type: 'number', visible: true, width: '300px' },
+    { field: 'dateTime', header: 'Дата',type: 'date', visible: true, width: '300px' }
+  ];
+ 
+  totalInfoColumnInvoices = [
+    { columnNum: 1, value: 'totalExpenseSum' },
+    { columnNum: 2, value: 'totalIncomeSum' },
+  ]
+
+
 }
