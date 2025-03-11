@@ -34,7 +34,7 @@ import { InvoiceService } from '../invoices-table.service';
   providers: [ConfirmationService, MessageService]
 })
 export class InvoicesComponent implements OnInit, OnChanges {
-  @Input() counterpartyId!: any;
+  @Input() counterpartyData!: any;
 
 
   invoices: any[] = [];
@@ -75,22 +75,6 @@ export class InvoicesComponent implements OnInit, OnChanges {
       case 6: return 'status-deleted';
       default: return '';
     }
-  }
-
-
-  totalInfo: any;
-
-  totalInfoColumn = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
-  ]
-
-  getTotalValue(columnIndex: number): any {
-    if (!this.totalInfo) return null;
-
-    const column = this.totalInfoColumn.find(col => col.columnNum === columnIndex);
-
-    return column ? this.totalInfo?.[column.value] ?? 0 : null;
   }
 
 
@@ -166,13 +150,11 @@ export class InvoicesComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (changes['counterpartyId']) {
-      const currentCounterpartyId = changes['counterpartyId'].currentValue;
-      const previousCounterpartyId = changes['counterpartyId'].previousValue;
+    if (changes['counterpartyData']) {
+      const currentCounterpartyId = changes['counterpartyData'].currentValue;
+      const previousCounterpartyId = changes['counterpartyData'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-        console.log('Counterparty ID изменился:', currentCounterpartyId);
-        this.loadInvoices();
-        this.selectedInvoice = null;
+        this.selectedInvoice = this.counterpartyData;
       }
     }
   }
@@ -189,26 +171,6 @@ export class InvoicesComponent implements OnInit, OnChanges {
 
     })
 
-  }
-
-  loadInvoices() {
-    console.log('Загрузка счетов для:', this.counterpartyId);
-    this.invoiceService.getInvoicesByIdCounterparty(this.counterpartyId).subscribe(
-      (invoices) => {
-        console.log('Ответ сервера:', invoices);
-        this.invoices = invoices.documentMetadata.data;
-        this.totalInfo = invoices.totalInfo;
-        this.cdr.detectChanges();
-      },
-      (error) => {
-        console.error('Ошибка загрузки счетов:', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Ошибка',
-          detail: 'Не удалось загрузить счета'
-        });
-      }
-    );
   }
 
 
@@ -303,7 +265,6 @@ export class InvoicesComponent implements OnInit, OnChanges {
             });
 
             this.selectedInvoice = null;
-            this.totalInfo = invoice.totalInfo;
             this.cdr.detectChanges();
           },
           (error) => {
@@ -391,7 +352,7 @@ export class InvoicesComponent implements OnInit, OnChanges {
     });
   }
 
-
+  counterpartyId:any
   createNewInvoice() {
     this.selectedInvoice = {
       dateTime: new Date().toISOString(),

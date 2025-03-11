@@ -62,14 +62,14 @@ export class InvoiceService {
   saveInvoice(invoice: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${invoice.id}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, invoice, {
+      return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`

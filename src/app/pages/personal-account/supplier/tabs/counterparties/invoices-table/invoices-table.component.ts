@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InvoicesComponent } from './invoices/invoices.component';
-import { ProductsComponent } from './products/products.component';
+import { ProductsComponent } from '../../../../../../components/products/products.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-invoices-table',
   standalone: true,
-  imports: [CommonModule, ProductsComponent],
+  imports: [CommonModule, ProductsComponent,InvoicesComponent],
   templateUrl: './invoices-table.component.html',
   styleUrls: ['./invoices-table.component.scss']
 })

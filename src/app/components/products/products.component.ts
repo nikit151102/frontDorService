@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, SimpleChanges, OnInit, EventEmitter, Output } from '@angular/core';
 import { ProductsService } from './products.service';
 import { TableModule } from 'primeng/table';
-import { DateFilterSortComponent } from '../../../../../../../components/fields/date-filter/date-filter.component';
-import { SearchFilterSortComponent } from '../../../../../../../components/fields/search-filter-sort/search-filter-sort.component';
+import { DateFilterSortComponent } from '../fields/date-filter/date-filter.component';
+import { SearchFilterSortComponent } from '../fields/search-filter-sort/search-filter-sort.component';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
-import { NumberFilterComponent } from '../../../../../../../components/fields/number-filter/number-filter.component';
-import { UuidSearchFilterSortComponent } from '../../../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
+import { NumberFilterComponent } from '../fields/number-filter/number-filter.component';
+import { UuidSearchFilterSortComponent } from '../fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
 
 @Component({
   selector: 'app-products',

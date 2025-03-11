@@ -1,3 +1,4 @@
+<app-invoices></app-invoices>
 <div class="menu">
     <button class="menu-item" (click)="showComponent('invoices')">Фактуры</button>
     <button class="menu-item" (click)="showComponent('products')">Товары</button>
@@ -9,7 +10,6 @@
     [columns]="columnsInvoices"
     [totalInfoColumn]="totalInfoColumnInvoices"
     [endpoint]="'api/CommercialWork/DocInvoice/ByPartner'"
-    
     ></app-products>
 </div>
 <div *ngIf="selectedComponent === 'products'">
@@ -19,5 +19,3 @@
     [endpoint]="'api/CommercialWork/Product/ByPartner'"
     ></app-products>
 </div>
-
-
