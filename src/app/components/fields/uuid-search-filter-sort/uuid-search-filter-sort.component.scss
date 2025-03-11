@@ -1,0 +1,103 @@
+.search-filter-sort {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    /* Занимает всю доступную ширину */
+    padding: 8px;
+    border-radius: 8px;
+    background: #f9f9f9;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+
+/* Поле поиска */
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+input {
+    width: 15px;
+    padding: 10px 40px 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: all 0.3s ease-in-out;
+    outline: none;
+    background: white;
+}
+
+input:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 4px rgba(0, 123, 255, 0.3);
+}
+
+/* Кнопка фильтрации */
+.filter-btn {
+    position: absolute;
+    right: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    color: #666;
+    transition: color 0.3s ease-in-out;
+}
+
+.filter-btn:hover {
+    color: #007bff;
+}
+
+/* Выпадающий список фильтров */
+.filter-dropdown {
+    position: absolute;
+    align-items: flex-start;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    /* Делаем выпадашку шириной как поле */
+    background: white;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    border: 1px solid #ddd;
+    z-index: 100;
+}
+
+.filter-dropdown label {
+    width: 100%;
+    display: flex;
+    align-items: start;
+    font-size: 14px;
+    color: #333;
+    cursor: pointer;
+}
+
+.filter-dropdown input {
+    margin-right: 8px;
+    cursor: pointer;
+}
+
+/* Кнопка сортировки */
+.sort-btn {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    padding: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    color: #666;
+    transition: all 0.3s ease-in-out;
+    margin-left: 8px;
+}
+
+.sort-btn:hover {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}

@@ -241,6 +241,7 @@
 :host ::ng-deep .p-datatable-tfoot {
     position: sticky;
     bottom: 0;
+    height: 55vh;
 }
 
 
@@ -252,6 +253,7 @@
 :host ::ng-deep p-dialog .p-datatable-tfoot {
     position: sticky;
     bottom: 30px;
+    
 }
 
 :host ::ng-deep p-dialog .p-datatable-tfoot>tr>td {

@@ -7,6 +7,7 @@ import { SearchFilterSortComponent } from '../../../../../../../components/field
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NumberFilterComponent } from '../../../../../../../components/fields/number-filter/number-filter.component';
+import { UuidSearchFilterSortComponent } from '../../../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
 
 @Component({
   selector: 'app-products',
@@ -14,6 +15,7 @@ import { NumberFilterComponent } from '../../../../../../../components/fields/nu
     SearchFilterSortComponent,
     DateFilterSortComponent,
     NumberFilterComponent,
+    UuidSearchFilterSortComponent,
     FormsModule,
     MultiSelectModule
   ],
@@ -26,7 +28,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   selectedProduct: any;
 
   columns = [
-    { field: 'productTarget.name', header: 'Назначение', type: 'string', visible: true, width: '300px' },
+    { field: 'productTarget.name', header: 'Назначение', type: 'uuid', visible: true, width: '200px' },
     { field: 'name', header: 'Товар', type: 'string', visible: true, width: '300px' },
     { field: 'quantity', header: 'Количество', type: 'number', visible: true, width: '300px' },
     { field: 'measurementUnit.shortName', header: 'Ед.изм', type: 'number', visible: true, width: '300px' },

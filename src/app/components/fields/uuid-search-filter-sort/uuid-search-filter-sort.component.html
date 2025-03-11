@@ -1,0 +1,21 @@
+<div class="search-filter-sort">
+    <!-- Поле поиска -->
+    <div class="search-box">
+        <input type="text" [(ngModel)]="searchTerm" (input)="onSearchChange()" placeholder="Поиск..."
+            style="width: 100%;" />
+        <button class="filter-btn" (click)="toggleFilter()">▼</button>
+    </div>
+
+    <!-- Выпадающий список фильтров -->
+    <div class="filter-dropdown" *ngIf="isFilterOpen">
+        <label *ngFor="let item of uniqueFilterValues">
+            <input type="checkbox" [checked]="selectedFilters.includes(item.id)" (change)="onFilterChange(item.text)" />
+            <span>{{ item.text }}</span>
+        </label>
+    </div>
+
+    <!-- Кнопка сортировки -->
+    <button class="sort-btn" (click)="toggleSort()">
+        {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
+    </button>
+</div>

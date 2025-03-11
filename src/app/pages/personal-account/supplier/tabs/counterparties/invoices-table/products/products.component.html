@@ -16,7 +16,6 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-search-filter-sort>
-
                         <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
@@ -25,6 +24,11 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
+                        <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
+                            [fieldNames]="['name', '   -   ','age']"
+                            (filterChange)="productsService.onFilterChange($event)"
+                            (sortChange)="productsService.onSortChange($event)" style="width: 100%;">
+                        </app-uuid-search-filter-sort>
                     </div>
                 </th>
             </ng-container>
