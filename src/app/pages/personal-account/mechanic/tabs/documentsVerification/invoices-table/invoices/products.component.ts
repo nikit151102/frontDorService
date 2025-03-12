@@ -66,23 +66,6 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
-
-    // Adjusting the context menu to pass data correctly
-    this.items = [
-      {
-        label: 'Options',
-        items: [
-          {
-            label: 'Изменить',
-            command: (event) => this.updateInvoice(event)  // Pass the entire event, which includes the invoice data
-          },
-          {
-            label: 'удалить',
-            command: (event) => this.deleteInvoice(event)  // Pass the entire event, which includes the invoice data
-          }
-        ]
-      }
-    ];
   }
 
 
@@ -158,44 +141,16 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     );
   }
 
-  deleteInvoice(invoiceId: any) {
-    this.confirmPopupService.openConfirmDialog({
-      title: 'Подтверждение удаления',
-      message: 'Вы уверены, что хотите удалить счет-фактуру?',
-      acceptLabel: 'Удалить',
-      rejectLabel: 'Отмена',
-      onAccept: () => {
-        this.invoiceService.deleteInvoice(invoiceId).subscribe(
-          () => {
-            this.productService.productsService = this.productService.productsService.filter((inv: any) => inv.id !== invoiceId);
 
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Удалено',
-              detail: 'Счет-фактура удалена'
-            });
-          },
-          (error) => {
-            console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось удалить счет'
-            });
-          }
-        );
-      }
-    });
-  }
 
-  verificationInvoice(invoiceId: any){
+  verificationInvoice(invoiceId: any, status: any){
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение отправки на проверку',
-      message: 'Вы уверены, что хотите отправить фактуру механику?',
+      message: 'Вы уверены, что хотите отправить фактуру директору?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.sendingVerification(invoiceId).subscribe(
+        this.invoiceService.verification(invoiceId,status).subscribe(
           () => {
         
             this.messageService.add({
@@ -234,6 +189,6 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
   
       this.dropdownVisible[productId] = !this.dropdownVisible[productId];
   }
-  
+
 
 }

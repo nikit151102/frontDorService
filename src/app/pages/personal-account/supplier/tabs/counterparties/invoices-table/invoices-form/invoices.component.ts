@@ -37,6 +37,7 @@ import { InvoiceService } from '../invoices-table.service';
 export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyId: any;
+  @Input() isEditInvoice :any;
 
   adjustmentOptions = adjustmentOptions;
   columns = columns;
@@ -46,7 +47,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   invoices: any[] = [];
   selectedInvoice: any;
   checkers: any;
-
+  isEdit:any;
   constructor(
     private invoiceService: InvoiceService,
     private confirmPopupService: ConfirmPopupService,
@@ -71,6 +72,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         }
       }
     }
+    if (changes['isEdit']) {
+      const currentCounterpartyId = changes['isEdit'].currentValue;
+      const previousCounterpartyId = changes['isEdit'].previousValue;
+      if (currentCounterpartyId !== previousCounterpartyId) {
+      this.isEdit = this.isEditInvoice;
+      }
+    }
+    
   }
 
   ngOnInit() {

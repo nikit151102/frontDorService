@@ -8,7 +8,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
+import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
+
 interface Counterparty {
   id: number;
   name: string;

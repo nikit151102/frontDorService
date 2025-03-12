@@ -26,6 +26,11 @@ interface QueryDto {
 export class ProductsService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
+  defaultFilters: FilterDto[]=[{
+    field: 'type',
+    values: [0],
+    type: 1
+  }];
   constructor(private http: HttpClient) { }
 
   endpoint: string = '';
@@ -45,6 +50,8 @@ export class ProductsService {
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
+    this.queryData.filters = this.queryData.filters || [];
+    this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',

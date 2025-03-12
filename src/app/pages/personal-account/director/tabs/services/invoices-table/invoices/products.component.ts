@@ -218,10 +218,8 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
   }
 
   selectInvoiceId: any;
-  isEditInvoice:boolean = false;
-  getInvoiceById(invoiceId: any, isEdit:boolean) {
+  getInvoiceById(invoiceId: any) {
     this.selectInvoiceId = invoiceId;
-    this.isEditInvoice = isEdit;
   }
 
 

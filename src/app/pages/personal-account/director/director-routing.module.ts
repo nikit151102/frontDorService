@@ -11,6 +11,9 @@ const routes: Routes = [
       {
         path: 'reference', loadChildren: () => import('./tabs/reference/reference.module').then(m => m.ReferenceModule)
       },
+      {
+        path: 'services', loadChildren: () => import('./tabs/services/counterparties.module').then(m => m.CounterpartieSservicesModule)
+      },
       // {
       //   path: 'profile', loadChildren: () => import('../../../components/profile/profile.module').then(m => m.ProfileModule)
       // },

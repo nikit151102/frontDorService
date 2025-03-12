@@ -1,4 +1,4 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"></app-invoices-form>
+<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -81,11 +81,11 @@
                                 <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3"
                                     (click)="deleteInvoice(product.id)">Удалить</button>
                                 <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="getInvoiceById(product.id)">Изменить</button>
+                                    (click)="getInvoiceById(product.id, true)">Изменить</button>
                                 <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3"
                                     (click)="verificationInvoice(product.id)">Отправить</button>
                                 <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3"
-                                    (click)="verificationInvoice(product.id)">Подробнее</button>
+                                    (click)="getInvoiceById(product.id, false)">Подробнее</button>
                             </div>
                         </div>
                     </td>

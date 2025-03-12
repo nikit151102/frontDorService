@@ -6,8 +6,8 @@ import { environment } from '../../../../../../../../environment';
 
 interface FilterDto {
   field?: string;
-  values?: any[]; // Используем `any`, так как тип данных может варьироваться
-  type?: any; // 0 - string, 1 - int, 2 - DateTime, 3 - Guid
+  values?: any[];
+  type?: any;
 }
 
 interface SortDto {
@@ -28,7 +28,7 @@ export class ProductsService {
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[]=[{
     field: 'type',
-    values: [0],
+    values: [1],
     type: 1
   }];
   constructor(private http: HttpClient) { }

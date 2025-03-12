@@ -1,0 +1,448 @@
+.invoice-table {
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
+    // position: absolute;
+}
+
+.invoice-table th {
+    text-align: left;
+    padding: 12px;
+    background-color: #f4f7fa;
+    color: #333;
+    font-weight: 600;
+    border-bottom: 2px solid #ddd;
+}
+
+.invoice-table td {
+    padding: 12px;
+    text-align: left;
+    font-size: 14px;
+    color: #666;
+    border-bottom: 1px solid #eee;
+    background: #fff;
+}
+
+.invoice-table tr:hover {
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.invoice-table tr.active {
+    background-color: #e0f7fa;
+}
+
+.actions {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-clear-filter {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  
+  .btn-clear-filter:hover {
+    text-decoration: underline;
+  }
+
+  
+/* Базовые стили для кнопок */
+.btn {
+    background-color: #fff;
+    border: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+/* Кнопка "Изменить" */
+.btn-edit {
+    color: #4caf50;
+    border: 1px solid #4caf50;
+}
+
+.btn-edit:hover {
+    background-color: #4caf50;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Кнопка "Удалить" */
+.btn-delete {
+    color: #f44336;
+    border: 1px solid #f44336;
+}
+
+.btn-delete:hover {
+    background-color: #f44336;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Кнопка "Отправить" */
+.btn-send {
+    color: #1e88e5;
+    border: 1px solid #1e88e5;
+}
+
+.btn-send:hover {
+    background-color: #1e88e5;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Кнопка "Подробнее" */
+.btn-details {
+    color: #ff9800;
+    border: 1px solid #ff9800;
+}
+
+.btn-details:hover {
+    background-color: #ff9800;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Обертка для дропдауна */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Кнопка дропдауна */
+.btn-dropdown {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Стили для скрытого меню */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+/* Показываем меню при активации */
+.dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Кнопки внутри дропдауна */
+.dropdown-menu .btn {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+/* Эффект наведения */
+.dropdown-menu .btn:hover {
+    background: #f0f0f0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Общий стиль ячейки с кнопками */
+.actions-cell {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+
+
+.invoice-cell {
+    word-wrap: break-word;
+}
+
+.invoice-row {
+    transition: background-color 0.2s ease;
+}
+
+
+
+/* Чередование фона строк (зебра) */
+.invoice-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.invoice-table tr:nth-child(odd) {
+    background-color: #ffffff;
+}
+
+
+.btn-edit:focus,
+.btn-delete:focus {
+    outline: none;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.invoice-table {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.actionsBtn {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.invoice-row {
+    cursor: pointer;
+}
+
+.actions button {
+    margin: 0 5px;
+}
+
+.form-container {
+    padding: 20px;
+}
+
+.p-formgrid .p-field {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-table td input,
+.product-table td p-calendar {
+    width: 100%;
+}
+
+
+:host ::ng-deep p-footer {
+    width: 90%;
+    position: fixed;
+    bottom: 0;
+    padding-bottom: 10px;
+    background: #fff;
+    display: flex;
+    flex-direction: row-reverse;
+    gap: 15px;
+}
+
+
+
+.invoice-cell {
+    font-size: 14px;
+    color: #333;
+}
+
+.status-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 8px;
+}
+
+
+/* Статус "Не отправлено" */
+.status-not-checked {
+    background-color: rgba(255, 193, 7, 0.1);
+    /* Полупрозрачный желтый */
+    color: #ffc107;
+}
+
+/* Статус "Проверка (Механик и Директор)" */
+.status-sent-for-check {
+    background-color: rgba(33, 150, 243, 0.1);
+    /* Полупрозрачный синий */
+    color: #2196f3;
+}
+
+/* Статус "Подписано" */
+.status-approved {
+    background-color: rgba(76, 175, 80, 0.1);
+    /* Полупрозрачный зеленый */
+    color: #4caf50;
+}
+
+/* Статус "Отклонено (Механик и Директор)" */
+.status-rejected {
+    background-color: rgba(244, 67, 54, 0.1);
+    /* Полупрозрачный красный */
+    color: #f44336;
+}
+
+/* Статус "Удалено" */
+.status-deleted {
+    background-color: rgba(158, 158, 158, 0.1);
+    /* Полупрозрачный серый */
+    color: #9e9e9e;
+}
+
+
+
+
+.invoice-table {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+}
+
+.invoice-table .invoice-row {
+    background-color: #f9f9f9 !important;
+}
+
+.invoice-table .invoice-cell {
+    color: #333 !important;
+}
+
+
+:host ::ng-deep .p-dialog {
+    background: #fff !important;
+    color: #101010 !important;
+    width: 80% !important;
+    height: 80% !important;
+}
+
+:host ::ng-deep .p-inputtext,
+.p-select,
+.p-table {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+:host ::ng-deep .p-datatable-thead>tr>th,
+.p-datatable-sort-icon,
+.p-datatable-sort-badge,
+.p-datatable-tbody>tr>td {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+:host ::ng-deep .p-datatable-tbody>tr>td {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+:host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
+    // table-layout: fixed;
+    width: calc(100vw - 336px);
+    position: absolute;
+}
+
+:host ::ng-deep .p-datatable{
+    position: absolute;
+}
+
+:host ::ng-deep .p-datatable-tfoot {
+    position: sticky;
+    bottom: 0;
+}
+
+
+:host ::ng-deep p-dialog .p-datatable-table {
+    position: absolute;
+    padding-bottom: 45px;
+}
+
+:host ::ng-deep p-dialog .p-datatable-tfoot {
+    position: sticky;
+    bottom: 30px;
+    
+}
+
+:host ::ng-deep p-dialog .p-datatable-tfoot>tr>td {
+    background: #fff;
+    color: #101010;
+
+}
+
+
+
+
+
+:host ::ng-deep .p-select-label {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+
+:host ::ng-deep .p-select-list {
+    background: #ffffff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-select-option.p-select-option-selected.p-focus {
+    background: #eeebffa1;
+    color: rgb(0 0 0 / 87%);
+}
+
+:host ::ng-deep .p-ripple {
+    background: #ffffff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-datatable-thead {
+    position: sticky;
+    top: 0;
+    z-index: 99;
+}
+
+
+:host ::ng-deep .p-multiselect-label {
+    background: #fff !important;
+    color: #101010 !important;
+}
+
+
+:host ::ng-deep .p-multiselect-list {
+    background: #ffffff;
+    color: #101010;
+}
+
+:host ::ng-deep .p-multiselect-option.p-multiselect-option-multiselect.p-focus {
+    background: #eeebffa1;
+    color: rgb(0 0 0 / 87%);
+}
+
+
+
+
+
+
+
+
+
+

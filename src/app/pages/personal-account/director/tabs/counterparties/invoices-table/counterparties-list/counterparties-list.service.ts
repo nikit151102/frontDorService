@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../../../../environment';
+import { environment } from '../../../../../../../../environment';
 
 interface Counterparty {
   id: number;
@@ -13,12 +13,7 @@ interface Counterparty {
 })
 export class CounterpartiesService {
   private apiUrl = `${environment.apiUrl}/`;
-  queryData: any = { filters: [ {
-      field: "type",
-      values: [
-        1
-      ],
-      type: 1}], sorts: [] }
+  queryData: any = { filters: [], sorts: [] }
   constructor(private http: HttpClient) {}
 
   // Получить всех контрагентов

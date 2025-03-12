@@ -1,26 +1,59 @@
 <div class="counterparties-list">
-  <!-- <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button> -->
+  <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button>
+
   <ul>
     <li (click)="select('00000000-0000-0000-0000-000000000000')">
-      <div class="counterparty-item" (click)="select('00000000-0000-0000-0000-000000000000')">
+      <div class="counterparty-item">
         <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
       </div>
     </li>
-    <li *ngFor="let counterparty of counterparties" (click)="select(counterparty.id)">
-      <div class="counterparty-item" (click)="select(counterparty.id)">
-        <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
-        <!-- <div class="actions">
+
+    <li *ngFor="let counterparty of counterparties"
+      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id)"
+      [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
+      <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
+        <div style="       display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        ">
+          <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
+          <div class="status-tag">
+            <span [ngClass]="{
+            'status-not-checked': counterparty.editStatus === 1,
+            'status-sent-for-check': counterparty.editStatus === 2,
+            'status-approved': counterparty.editStatus === 7,
+            'status-rejected': counterparty.editStatus === 3,
+            'status-deleted': counterparty.editStatus === 6,
+            'status-new-rejected': counterparty.editStatus === 4,  
+            'status-update-rejected': counterparty.editStatus === 5   
+        }" class="status-tag-text">
+              {{ getStatusLabel(counterparty.editStatus) }}
+            </span>
+
+
+          </div>
+        </div>
+        <div class="actions">
           <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
           <div *ngIf="menuOpenFor === counterparty.id" class="menu">
-            <button class="menu-item" (click)="openDialog($event, counterparty)">Изменить</button>
-            <button class="menu-item" (click)="deleteCounterparty(counterparty.id)">Удалить</button>
+            <button class="menu-item" (click)="openDialog($event, counterparty)"
+              [disabled]="!isEditable(counterparty.editStatus)">
+              Изменить
+            </button>
+            <button class="menu-item" (click)="deleteCounterparty(counterparty.id)"
+              [disabled]="!isEditable(counterparty.editStatus)">
+              Удалить
+            </button>
           </div>
-        </div> -->
+        </div>
       </div>
     </li>
   </ul>
 
-  <!-- <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px' }">
+
+
+
+  <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px' }">
     <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header>
     <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
@@ -48,7 +81,7 @@
           <label for="address">Адрес</label>
           <input id="address" type="text" pInputText formControlName="address" />
         </div>
-        <div class="p-field">
+        <!-- <div class="p-field">
               <label for="type">Тип</label>
               <p-dropdown
                 id="type"
@@ -57,7 +90,7 @@
                 optionLabel="label"
                 placeholder="Выберите тип"
               ></p-dropdown>
-            </div> 
+            </div> -->
       </div>
       <p-footer>
         <button type="button" pButton label="Отмена" icon="pi pi-times" (click)="display = false"></button>
@@ -65,6 +98,6 @@
           [disabled]="counterpartyForm.invalid"></button>
       </p-footer>
     </form>
-  </p-dialog> -->
+  </p-dialog>
 
 </div>

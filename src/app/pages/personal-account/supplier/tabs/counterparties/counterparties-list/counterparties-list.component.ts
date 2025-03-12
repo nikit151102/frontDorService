@@ -19,6 +19,20 @@ interface TypeOption {
   value: number;
 }
 
+enum EditStatusEnum {
+  Undefined = 0,
+  New = 1,
+  Updated = 2,
+  Deleted = 3,
+  NewRejected = 4,
+  UpdateRejected = 5,
+  DeleteRejected = 6,
+  Approve = 7,
+  NotActive = 8,
+  Active = 9
+}
+
+
 @Component({
   selector: 'app-counterparties-list',
   imports: [CommonModule, DialogModule,
@@ -179,4 +193,46 @@ export class CounterpartiesListComponent {
     }
   }
 
+  isEditable(status: number): boolean {
+    const editableStatuses = [
+      EditStatusEnum.New,
+      EditStatusEnum.NewRejected,
+      EditStatusEnum.UpdateRejected,
+      EditStatusEnum.DeleteRejected,
+      EditStatusEnum.Active
+    ];
+
+    return editableStatuses.includes(status);
+  }
+
+
+    getStatusLabel(status: number): string {
+      switch (status) {
+        case 1: return 'Новый';
+        case 2: return 'Измененный';
+        case 3: return 'Удален';
+        case 4: return 'Отклонено';
+        case 5: return 'Подтвержден';
+        case 6: return 'Неактивный';
+        default: return 'Неизвестный статус';
+      }
+    }
+  
+    getStatusClass(status: number): string {
+      switch (status) {
+        case 1: return 'new';
+        case 2: return 'updated';
+        case 3: return 'deleted';
+        case 4: return 'rejected';
+        case 5: return 'approved';
+        case 6: return 'not-active';
+        default: return 'unknown';
+      }
+    }
+
+
+    isForbiddenStatus(status: number): boolean {
+      const forbiddenStatuses = [2, 3, 7, 8];
+      return forbiddenStatuses.includes(status);
+    }
 }

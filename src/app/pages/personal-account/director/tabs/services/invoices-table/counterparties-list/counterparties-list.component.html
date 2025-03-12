@@ -9,9 +9,8 @@
     </li>
 
     <li *ngFor="let counterparty of counterparties"
-      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id)"
-      [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
-      <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
+      (click)="select(counterparty.id)">
+      <div class="counterparty-item">
         <div style="       display: flex;
             flex-direction: column;
             align-items: flex-end;

@@ -78,13 +78,11 @@
                             <button class="btn btn-dropdown" style="color: #101010;"
                                 (click)="toggleDropdown(product.id)">⋮</button>
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="deleteInvoice(product.id)">Удалить</button>
-                                <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="getInvoiceById(product.id, true)">Изменить</button>
-                                <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="verificationInvoice(product.id)">Отправить</button>
-                                <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3"
+                                <button class="btn btn-send" *ngIf="product.status == 1"
+                                    (click)="verificationInvoice(product.id, 3)">Отказать</button>
+                                <button class="btn btn-details" *ngIf="product.status == 1"
+                                    (click)="verificationInvoice(product.id, 2)">принять</button>
+                                    <button class="btn btn-details" *ngIf="product.status != 1"
                                     (click)="getInvoiceById(product.id, false)">Подробнее</button>
                             </div>
                         </div>

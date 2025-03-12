@@ -13,13 +13,13 @@ interface Counterparty {
 })
 export class CounterpartiesService {
   private apiUrl = `${environment.apiUrl}/`;
-
+  queryData: any = { filters: [], sorts: [] }
   constructor(private http: HttpClient) {}
 
   // Получить всех контрагентов
   getCounterparties(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<Counterparty[]>(`${this.apiUrl}api/Mechanic/PartnersByType/0`, {
+    return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData  , {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -30,7 +30,7 @@ export class CounterpartiesService {
   // Добавить контрагента
   addCounterparty(counterparty: Counterparty): Observable<Counterparty> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.post<Counterparty>(`${this.apiUrl}api/Supplier/Partners`, counterparty, {
+    return this.http.post<Counterparty>(`${this.apiUrl}api/CommercialWork/Partner`, counterparty, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -41,7 +41,7 @@ export class CounterpartiesService {
   // Удалить контрагента
   deleteCounterparty(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${this.apiUrl}api/Supplier/Partners/${id}`, {
+    return this.http.delete<void>(`${this.apiUrl}api/CommercialWork/Partner/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -52,7 +52,7 @@ export class CounterpartiesService {
   // Редактировать контрагента
   editCounterparty(id: string, updatedCounterparty: Counterparty): Observable<Counterparty> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.put<Counterparty>(`${this.apiUrl}api/Supplier/Partners/${id}`, updatedCounterparty,
+    return this.http.put<Counterparty>(`${this.apiUrl}api/CommercialWork/Partner/${id}`, updatedCounterparty,
       {
       headers: new HttpHeaders({
         'Accept': 'application/json',
