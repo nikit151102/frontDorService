@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
-import { MechanicCounterpartiesService } from './counterparties-list.service';
+import { CounterpartiesService } from './counterparties-list.service';
 import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
@@ -9,7 +9,6 @@ import { ButtonModule } from 'primeng/button';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
-
 interface Counterparty {
   id: number;
   name: string;
@@ -21,16 +20,16 @@ interface TypeOption {
 }
 
 @Component({
-  selector: 'app-mechanic-counterparties-list',
+  selector: 'app-counterparties-list',
   imports: [CommonModule, DialogModule,
     FormsModule, ReactiveFormsModule, DropdownModule,
     InputTextModule, ButtonModule, ConfirmDialogModule],
   standalone: true,
   templateUrl: './counterparties-list.component.html',
   styleUrl: './counterparties-list.component.scss',
-  providers: [ConfirmationService, MessageService]
+   providers: [MessageService]
 })
-export class MechanicCounterpartiesListComponent {
+export class CounterpartiesListComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
 
   counterparties: any = [];
@@ -48,7 +47,7 @@ export class MechanicCounterpartiesListComponent {
   ];
 
   constructor(
-    private mechaniccounterpartiesService: MechanicCounterpartiesService,
+    private counterpartiesService: CounterpartiesService,
     private fb: FormBuilder,
     private confirmPopupService: ConfirmPopupService
   ) { }
@@ -59,7 +58,7 @@ export class MechanicCounterpartiesListComponent {
   }
 
   loadCounterparties() {
-    this.mechaniccounterpartiesService.getCounterparties().subscribe(
+    this.counterpartiesService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
         this.select('00000000-0000-0000-0000-000000000000');
@@ -72,7 +71,7 @@ export class MechanicCounterpartiesListComponent {
 
   initializeForm() {
     this.counterpartyForm = this.fb.group({
-      id: [''],
+      id:[''],
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
@@ -120,11 +119,11 @@ export class MechanicCounterpartiesListComponent {
 
       const formDataWithValueType = {
         ...rest,
-        type: type ? type.value : 1
+        type: type ? type.value : null
       };
 
       if (this.selectedCounterparty) {
-        this.mechaniccounterpartiesService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
+        this.counterpartiesService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
           (updatedCounterparty) => {
             const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
             if (index !== -1) {
@@ -136,7 +135,7 @@ export class MechanicCounterpartiesListComponent {
           (error) => console.error('Ошибка редактирования контрагента:', error)
         );
       } else {
-        this.mechaniccounterpartiesService.addCounterparty(formDataWithValueType).subscribe(
+        this.counterpartiesService.addCounterparty(formDataWithValueType).subscribe(
           (newCounterparty) => {
             this.counterparties.push(newCounterparty);
             this.display = false;
@@ -152,11 +151,11 @@ export class MechanicCounterpartiesListComponent {
   deleteCounterparty(id: string) {
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
-      message: 'Вы уверены, что хотите удалить сервис?',
+      message: 'Вы уверены, что хотите удалить контрагента?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.mechaniccounterpartiesService.deleteCounterparty(id).subscribe(
+        this.counterpartiesService.deleteCounterparty(id).subscribe(
           () => {
             this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
             this.loadCounterparties();
@@ -171,7 +170,7 @@ export class MechanicCounterpartiesListComponent {
     event.stopPropagation();
     this.menuOpenFor = this.menuOpenFor === id ? null : id;
   }
-
+  
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as Element;

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../../../../environment';
 
 interface Product {
@@ -32,7 +32,7 @@ export class InvoiceService {
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ export class InvoiceService {
 
   getInvoicesByIdCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Mechanic/DocInvoicesByPartner/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -51,7 +51,7 @@ export class InvoiceService {
   }
   getInvoiceById(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -62,14 +62,14 @@ export class InvoiceService {
   saveInvoice(invoice: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${invoice.id}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/Mechanic/DocInvoices`, invoice, {
+      return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ export class InvoiceService {
 
   deleteInvoice(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -88,15 +88,70 @@ export class InvoiceService {
     });
   }
 
-  sendingVerification(id: string, num: number): Observable<void> {
+  sendingVerification(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-  
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
-    return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, { type: num}, { headers });
+
+    return this.http.patch<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {}, { headers });
   }
+
+  getCheckers() {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
+  }
+
+
+
+  
+
+
+  private socket!: WebSocket;
+  private messagesSubject = new Subject<any>();
+  messages$ = this.messagesSubject.asObservable();
+
+  connectToWebSocket(): void {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}`;
+    this.socket = new WebSocket(url);
+
+    this.socket.onopen = () => {
+    };
+
+    this.socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        this.messagesSubject.next(data);
+      } catch (e) {
+        console.error('Error parsing WebSocket message:', e);
+      }
+    };
+
+
+    this.socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    this.socket.onclose = () => {
+    };
+  }
+
+  disconnectWebSocket(): void {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+
+
+
 
 }

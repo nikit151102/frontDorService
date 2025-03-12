@@ -1,54 +1,55 @@
 <div class="counterparties-list">
-    <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button>
-    <ul>
-      <li (click)="select('00000000-0000-0000-0000-000000000000')">
-        <div class="counterparty-item" (click)="select('00000000-0000-0000-0000-000000000000')">
-          <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
-        </div>
-      </li>
-      <li *ngFor="let counterparty of counterparties" (click)="select(counterparty.id)">
-        <div class="counterparty-item" (click)="select(counterparty.id)">
-          <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
-          <div class="actions">
-            <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
-            <div *ngIf="menuOpenFor === counterparty.id" class="menu">
-              <button class="menu-item" (click)="openDialog($event, counterparty)">Изменить</button>
-              <button class="menu-item" (click)="deleteCounterparty(counterparty.id)">Удалить</button>
-            </div>
+  <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button>
+  <ul>
+
+    <li (click)="select('00000000-0000-0000-0000-000000000000')">
+      <div class="counterparty-item" (click)="select('00000000-0000-0000-0000-000000000000')">
+        <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
+      </div>
+    </li>
+    <li *ngFor="let counterparty of counterparties" (click)="select(counterparty.id)">
+      <div class="counterparty-item" (click)="select(counterparty.id)">
+        <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
+        <div class="actions">
+          <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
+          <div *ngIf="menuOpenFor === counterparty.id" class="menu">
+            <button class="menu-item" (click)="openDialog($event, counterparty)">Изменить</button>
+            <button class="menu-item" (click)="deleteCounterparty(counterparty.id)">Удалить</button>
           </div>
         </div>
-      </li>
-    </ul>
-  
-    <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px'}">
-        <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header>
-        <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
-          <div class="p-fluid">
-            <div class="p-field">
-              <label for="shortName">Краткое наименование</label>
-              <input id="shortName" type="text" pInputText formControlName="shortName" />
-            </div>
-            <div class="p-field">
-              <label for="fullName">Полное наименование</label>
-              <input id="fullName" type="text" pInputText formControlName="fullName" />
-            </div>
-            <div class="p-field">
-              <label for="inn">ИНН</label>
-              <input id="inn" type="text" pInputText formControlName="inn" />
-            </div>
-            <div class="p-field">
-              <label for="ogrn">ОГРН</label>
-              <input id="ogrn" type="text" pInputText formControlName="ogrn" />
-            </div>
-            <div class="p-field">
-              <label for="kpp">КПП</label>
-              <input id="kpp" type="text" pInputText formControlName="kpp" />
-            </div>
-            <div class="p-field">
-              <label for="address">Адрес</label>
-              <input id="address" type="text" pInputText formControlName="address" />
-            </div>
-            <!-- <div class="p-field">
+      </div>
+    </li>
+  </ul>
+
+  <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px' }">
+    <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header>
+    <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
+      <div class="p-fluid">
+        <div class="p-field">
+          <label for="shortName">Краткое наименование</label>
+          <input id="shortName" type="text" pInputText formControlName="shortName" />
+        </div>
+        <div class="p-field">
+          <label for="fullName">Полное наименование</label>
+          <input id="fullName" type="text" pInputText formControlName="fullName" />
+        </div>
+        <div class="p-field">
+          <label for="inn">ИНН</label>
+          <input id="inn" type="text" pInputText formControlName="inn" />
+        </div>
+        <div class="p-field">
+          <label for="ogrn">ОГРН</label>
+          <input id="ogrn" type="text" pInputText formControlName="ogrn" />
+        </div>
+        <div class="p-field">
+          <label for="kpp">КПП</label>
+          <input id="kpp" type="text" pInputText formControlName="kpp" />
+        </div>
+        <div class="p-field">
+          <label for="address">Адрес</label>
+          <input id="address" type="text" pInputText formControlName="address" />
+        </div>
+        <!-- <div class="p-field">
               <label for="type">Тип</label>
               <p-dropdown
                 id="type"
@@ -58,13 +59,13 @@
                 placeholder="Выберите тип"
               ></p-dropdown>
             </div> -->
-          </div>
-          <p-footer>
-            <button type="button" pButton label="Отмена" icon="pi pi-times" (click)="display = false"></button>
-            <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"></button>
-          </p-footer>
-        </form>
-      </p-dialog>
-      
-  </div>
-  
+      </div>
+      <p-footer>
+        <button type="button" pButton label="Отмена" icon="pi pi-times" (click)="display = false"></button>
+        <button type="submit" pButton label="Сохранить" icon="pi pi-check"
+          [disabled]="counterpartyForm.invalid"></button>
+      </p-footer>
+    </form>
+  </p-dialog>
+
+</div>

@@ -172,6 +172,8 @@ li span.active {
 }
 
 :host ::ng-deep .p-dialog{
-    color: #101010;
-    background: #fff;
+    color: #101010 !important;
+    background: #fff !important;
 }
+
+
