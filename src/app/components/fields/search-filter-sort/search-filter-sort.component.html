@@ -18,3 +18,7 @@
         {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
     </button>
 </div>
+
+<button *ngIf="selectedFilters && selectedFilters.length > 0" class="btn btn-clear-filter" (click)="resetFilter()">
+    Сбросить фильтр
+</button>

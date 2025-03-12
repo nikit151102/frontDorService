@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface FilterDto {
@@ -31,6 +31,8 @@ export class SearchFilterSortComponent {
 
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
+
+  constructor(private elementRef: ElementRef) { }
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
@@ -71,4 +73,24 @@ export class SearchFilterSortComponent {
 
     this.sortChange.emit(sortDto);
   }
+
+
+  resetFilter() {
+    this.selectedFilters = []; // Очищаем выбранные фильтры
+    const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [],
+      type: this.filterType
+    };
+    this.filterChange.emit(filterDto);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isFilterOpen = false;
+    }
+  }
+
 }

@@ -100,3 +100,27 @@ input:focus {
     color: white;
     border-color: #007bff;
 }
+
+
+.btn-reset {
+    background-color: #f0f0f0;
+    border: none;
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+.btn-reset:hover {
+    background-color: #e0e0e0;
+}
+
+
+.btn-clear-filter {
+    padding: 5px;
+    background: transparent;
+    color: #1b506a;
+    font-size: 13px;
+    border: none;
+    margin-top: 10px;
+
+}

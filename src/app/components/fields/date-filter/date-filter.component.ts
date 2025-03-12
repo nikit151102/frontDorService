@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 interface FilterDto {
@@ -35,6 +35,7 @@ export class DateFilterSortComponent {
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
+  constructor(private elementRef: ElementRef){}
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
@@ -104,5 +105,24 @@ export class DateFilterSortComponent {
   openDatePicker(input: HTMLInputElement) {
     input.showPicker();
   }
+
+  resetFilter() {
+    this.selectedFilter = ''; // Сбрасываем выбранный фильтр
+    this.selectedDate = '';    // Сбрасываем выбранную дату
+    this.dateValue = '';       // Сбрасываем значение даты
+    this.startDate = '';       // Сбрасываем начальную дату диапазона
+    this.endDate = '';         // Сбрасываем конечную дату диапазона
+    this.showCalendar = false; // Скрываем календарь
+    this.emitFilterChange();   // Эмитируем изменение фильтра (передаем пустой фильтр)
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isFilterOpen = false;
+    }
+  }
+  
 
 }

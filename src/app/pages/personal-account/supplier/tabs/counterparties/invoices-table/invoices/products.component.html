@@ -17,24 +17,30 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-search-filter-sort>
+
+                        <!-- Аналогичные кнопки для других типов фильтров -->
                         <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-date-filter>
+
                         <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
+        
+
                         <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)" style="width: 100%;">
+                            (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                        <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'"
-                            [enam]="statuses" [Field]="col.field" [filterType]="1"
-                            (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)" style="width: 100%;">
+                 
+                        <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
+                            [Field]="col.field" [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
+                            (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
+                 
                     </div>
                 </th>
 
@@ -50,7 +56,8 @@
     <ng-template pTemplate="body" let-product>
         <tr class="invoice-row">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell" [style.width]="col.width">
+                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+                    [style.width]="col.width">
                     <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
@@ -68,20 +75,25 @@
                 <ng-container *ngIf="col.type === 'actions'">
                     <td class="invoice-cell actions-cell">
                         <div class="dropdown">
-                            <button class="btn btn-dropdown" style="color: #101010;" (click)="toggleDropdown(product.id)">⋮</button>
+                            <button class="btn btn-dropdown" style="color: #101010;"
+                                (click)="toggleDropdown(product.id)">⋮</button>
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3" (click)="deleteInvoice(product.id)">Удалить</button>
-                                <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3" (click)="getInvoiceById(product.id)">Изменить</button>
-                                <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3" (click)="verificationInvoice(product.id)">Отправить</button>
-                                <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3" (click)="verificationInvoice(product.id)">Подробнее</button>
+                                <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="deleteInvoice(product.id)">Удалить</button>
+                                <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="getInvoiceById(product.id)">Изменить</button>
+                                <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="verificationInvoice(product.id)">Отправить</button>
+                                <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3"
+                                    (click)="verificationInvoice(product.id)">Подробнее</button>
                             </div>
                         </div>
                     </td>
                 </ng-container>
-                
+
             </ng-container>
- 
-            
+
+
 
         </tr>
     </ng-template>

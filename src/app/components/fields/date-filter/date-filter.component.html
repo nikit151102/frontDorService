@@ -1,21 +1,22 @@
 <div class="date-filter-sort">
     <!-- Поле для выбора даты -->
     <div class="date-box">
-        <input type="text" [(ngModel)]="selectedDate" (focus)="toggleFilter()"
-            placeholder="Выберите дату/диапазон..." readonly #dateInput />
+        <input type="text" [(ngModel)]="selectedDate" (focus)="toggleFilter()" placeholder="Выберите дату/диапазон..."
+            readonly #dateInput />
         <button class="filter-btn" (click)="toggleFilter()">▼</button>
     </div>
+ 
 
     <div *ngIf="isFilterOpen" style="display: flex; gap: 10px;">
         <!-- Выпадающий список типов фильтра -->
         <div class="filter-dropdown">
-     <div>
-        <label *ngFor="let filter of ['Равно', 'До даты', 'После даты', 'Между датами']">
-            <input type="radio" [checked]="selectedFilter === filter" (change)="onFilterChange(filter)" />
-            {{ filter }}
-        </label>
+            <div>
+                <label *ngFor="let filter of ['Равно', 'До даты', 'После даты', 'Между датами']">
+                    <input type="radio" [checked]="selectedFilter === filter" (change)="onFilterChange(filter)" />
+                    {{ filter }}
+                </label>
 
-     </div>
+            </div>
 
             <!-- Календарь или календарь для выбора диапазона -->
             <div class="calendar-container" *ngIf="showCalendar">
@@ -61,3 +62,7 @@
         {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
     </button>
 </div>
+
+<button *ngIf="selectedFilter" class="btn-clear-filter" (click)="resetFilter()">
+    Сбросить фильтр
+</button>

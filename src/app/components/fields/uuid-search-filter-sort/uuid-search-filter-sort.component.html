@@ -6,6 +6,8 @@
         <button class="filter-btn" (click)="toggleFilter()">▼</button>
     </div>
 
+
+
     <!-- Выпадающий список фильтров -->
     <div class="filter-dropdown" *ngIf="isFilterOpen">
         <label *ngFor="let item of products">
@@ -20,3 +22,7 @@
         {{ sortOrder === 'asc' ? '⬆' : '⬇' }}
     </button>
 </div>
+
+<button *ngIf="selectedFilters && selectedFilters.length > 0" class="btn btn-clear-filter" (click)="resetFilter()">
+    Сбросить фильтр
+</button>

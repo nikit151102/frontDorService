@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 
@@ -36,6 +36,8 @@ export class NumberFilterComponent {
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
+  constructor(private elementRef: ElementRef){}
+  
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
@@ -106,4 +108,24 @@ export class NumberFilterComponent {
     // You can add logic to open number picker if needed
     input.focus();
   }
+
+  resetFilter() {
+    // Сбрасываем все значения фильтра
+    this.selectedFilter = ''; // Сбрасываем выбранный фильтр
+    this.selectedNumber = '';  // Сбрасываем отображаемое число/диапазон
+    this.numberValue = 0;      // Сбрасываем число
+    this.startNumber = 0;      // Сбрасываем начало диапазона
+    this.endNumber = 0;        // Сбрасываем конец диапазона
+    this.showNumberInput = false; // Скрываем поля ввода
+    this.emitFilterChange();   // Эмитируем сброс фильтра
+  }
+
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: MouseEvent) {
+      const clickedInside = this.elementRef.nativeElement.contains(event.target);
+      if (!clickedInside) {
+        this.isFilterOpen = false;
+      }
+    }
+    
 }

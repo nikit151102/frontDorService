@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UuidSearchFilterSortService } from './uuid-search-filter-sort.service';
 
@@ -40,7 +40,9 @@ export class UuidSearchFilterSortComponent {
   products: any[] = [];
   endpointDataLoaded = false;
 
-  constructor(private uuidSearchFilterSortService: UuidSearchFilterSortService) { }
+  constructor(private uuidSearchFilterSortService: UuidSearchFilterSortService,
+    private elementRef: ElementRef
+  ) { }
 
   ngOnChanges() {
     if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
@@ -113,4 +115,22 @@ export class UuidSearchFilterSortComponent {
     // Функция для формирования строки для отображения на основе полей
     return field.split(',').join(' ');
   }
+
+  resetFilter() {
+    this.selectedFilters = []; // Очищаем выбранные фильтры
+    const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [],
+      type: this.filterType
+    };
+    this.filterChange.emit(filterDto); 
+  }
+
+    @HostListener('document:click', ['$event'])
+    onClickOutside(event: MouseEvent) {
+      const clickedInside = this.elementRef.nativeElement.contains(event.target);
+      if (!clickedInside) {
+        this.isFilterOpen = false;
+      }
+    }
 }

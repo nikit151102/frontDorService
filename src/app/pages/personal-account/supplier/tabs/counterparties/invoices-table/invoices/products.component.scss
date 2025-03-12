@@ -40,6 +40,20 @@
     gap: 8px;
 }
 
+.btn-clear-filter {
+    background-color: transparent;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 10px;
+  }
+  
+  .btn-clear-filter:hover {
+    text-decoration: underline;
+  }
+
+  
 /* Базовые стили для кнопок */
 .btn {
     background-color: #fff;
