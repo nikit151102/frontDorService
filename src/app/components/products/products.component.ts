@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NumberFilterComponent } from '../fields/number-filter/number-filter.component';
 import { UuidSearchFilterSortComponent } from '../fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
+import { InvoicesComponent } from '../invoices-form/invoices.component';
 
 @Component({
   selector: 'app-products',
@@ -18,19 +19,21 @@ import { UuidSearchFilterSortComponent } from '../fields/uuid-search-filter-sort
     NumberFilterComponent,
     UuidSearchFilterSortComponent,
     FormsModule,
-    MultiSelectModule
+    MultiSelectModule,
+    InvoicesComponent
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
 })
+
 export class ProductsComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
-  @Input() actions: { label: string, action: (product: any) => void }[] = [];
-  @Input() actionClick!: { label: string, action: (product: any) => void };
- 
+  @Input() actions: { label: string, action: string }[] = []; // изменено на строку (название метода)
+  @Input() productService!: any;
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
       this.productsService.counterpartyId = this.counterpartyId;
@@ -40,7 +43,6 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
   selectedProduct: any;
-
   selectedColumns: string[] = [];
 
   ngOnInit() {
@@ -82,6 +84,16 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   getStatusLabel(value: number): string {
     return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';
+  }
+  
+
+
+  onActionClick(actionName: string, product: any) {
+    if (this.productService && typeof this.productService[actionName] === 'function') {
+      this.productService[actionName](product); 
+    } else {
+      console.error(`Method ${actionName} does not exist on ProductsService`);
+    }
   }
   
 }

@@ -10,8 +10,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
-import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
-import { InvoiceService } from '../invoices-table.service';
+import { ConfirmPopupService } from '../confirm-popup/confirm-popup.service';
+import { InvoiceService } from '../../pages/personal-account/supplier/tabs/counterparties/invoices-table/invoices-table.service';
+import { statuses, taxes, types, adjustmentOptions, columns, productColumns } from './data';
 
 @Component({
   selector: 'app-invoices',
@@ -34,33 +35,56 @@ import { InvoiceService } from '../invoices-table.service';
   providers: [ConfirmationService, MessageService]
 })
 export class InvoicesComponent implements OnInit, OnChanges {
-  @Input() counterpartyData!: any;
+  @Input() invoiceId!: any;
+  @Input() counterpartyId: any;
 
-
+  adjustmentOptions = adjustmentOptions;
+  columns = columns;
+  types = types;
+  taxes = taxes;
+  productColumns = productColumns;
   invoices: any[] = [];
   selectedInvoice: any;
   checkers: any;
 
+  constructor(
+    private invoiceService: InvoiceService,
+    private confirmPopupService: ConfirmPopupService,
+    private messageService: MessageService,
+    private cdr: ChangeDetectorRef
+  ) { }
 
-  columns = [
-    { field: 'number', header: 'Номер' },
-    { field: 'expenseSum', header: 'Расход' },
-    { field: 'incomeSum', header: 'Приход' },
-    { field: 'dateTime', header: 'Дата' }
-  ];
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['counterpartyData']) {
+      const currentCounterpartyId = changes['counterpartyData'].currentValue;
+      const previousCounterpartyId = changes['counterpartyData'].previousValue;
+      if (currentCounterpartyId !== previousCounterpartyId) {
+        this.loadInvoice();
+      }
+    }
+  }
 
-  statuses = [
-    { label: 'Не отправлено', value: 0 },
-    { label: 'Проверка Механик', value: 1 }, // голубой
-    { label: 'Проверка Директор', value: 2 }, // голубой
-    { label: 'Отклонено Механик', value: 3 }, // красный
-    { label: 'Отклонено Директор', value: 4 }, // красный
-    { label: 'Подписано', value: 5 }, // зеленый
-    { label: 'Удалено', value: 6 } // серый
-  ];
+  ngOnInit() {
+    this.invoiceService.getCheckers().subscribe((values: any) => {
+      this.checkers = values.data;
+      this.checkers.forEach((checker: any) => {
+        const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
+        const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
+        checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
+      });
+    })
+  }
+
+  loadInvoice() {
+    this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
+      console.log("selectedInvoice", value.data);
+      this.selectedInvoice = value.data;
+    })
+
+  }
 
   getStatusLabel(value: number): string {
-    const status = this.statuses.find(status => status.value === value);
+    const status = statuses.find(status => status.value === value);
     return status ? status.label : 'Неизвестный статус';
   }
 
@@ -79,24 +103,9 @@ export class InvoicesComponent implements OnInit, OnChanges {
 
 
 
-  taxes = [
-    { label: 'Без НДС', value: 0 },
-    { label: 'НДС 5%', value: 1 },
-    { label: 'НДС 20%', value: 2 }
-  ];
 
   adjustmentType: number | null = null;
   type: number | null = null;
-
-  adjustmentOptions = [
-    { label: '+', value: 1 },
-    { label: '-', value: 2 }
-  ];
-
-  types = [
-    { label: 'Расход', value: 1 },
-    { label: 'Коррекция', value: 0 }
-  ];
 
   onTypeChange() {
     if (this.type === 0) {
@@ -114,14 +123,14 @@ export class InvoicesComponent implements OnInit, OnChanges {
   onAdjustmentChange() {
     if (this.selectedInvoice.productList) {
       this.selectedInvoice.productList.forEach((product: any) => {
-        
+
         if (this.type === 0) {
-          product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : -1); 
+          product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : -1);
         } else {
-          product.amount = Math.abs(product.amount); 
+          product.amount = Math.abs(product.amount);
         }
       });
-  
+
       // Если "+" то type = 1, если "-" то type = 0
       if (this.adjustmentType === 1) {
         this.selectedInvoice.type = 1; // Приход
@@ -130,57 +139,20 @@ export class InvoicesComponent implements OnInit, OnChanges {
       }
     }
   }
-  
 
 
 
 
-  productColumns = [
-    { header: 'Покупка', field: 'incomeSum' },
-    { header: 'Оплата', field: 'expenseSum' },
-    { header: 'Дата', field: 'dateTime' },
-    { header: 'Номер', field: 'number' }
-  ];
 
-  constructor(
-    private invoiceService: InvoiceService,
-    private confirmPopupService: ConfirmPopupService,
-    private messageService: MessageService,
-    private cdr: ChangeDetectorRef
-  ) { }
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['counterpartyData']) {
-      const currentCounterpartyId = changes['counterpartyData'].currentValue;
-      const previousCounterpartyId = changes['counterpartyData'].previousValue;
-      if (currentCounterpartyId !== previousCounterpartyId) {
-        this.selectedInvoice = this.counterpartyData;
-      }
-    }
-  }
-
-  ngOnInit() {
-    this.invoiceService.getCheckers().subscribe((values: any) => {
-      this.checkers = values.data;
-      this.checkers.forEach((checker: any) => {
-        const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
-        const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
-
-        checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
-      });
-
-    })
-
-  }
 
 
   editInvoice(id: string) {
     this.invoiceService.getInvoiceById(id).subscribe(
       (invoice) => {
         this.selectedInvoice = invoice.data;
-        const typeObj = this.types.find(t => t.value === invoice.data.type);
+        const typeObj = types.find(t => t.value === invoice.data.type);
 
-        const taxObj = this.taxes.find(t => t.value === invoice.data.tax);
+        const taxObj = taxes.find(t => t.value === invoice.data.tax);
         const formattedDate = invoice.data.dateTime ? new Date(invoice.data.dateTime) : null;
 
         this.selectedInvoice = {
@@ -352,7 +324,7 @@ export class InvoicesComponent implements OnInit, OnChanges {
     });
   }
 
-  counterpartyId:any
+
   createNewInvoice() {
     this.selectedInvoice = {
       dateTime: new Date().toISOString(),

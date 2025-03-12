@@ -1,3 +1,4 @@
+<app-invoices [counterpartyId]="counterpartyId" [invoiceId]="selectedProduct"></app-invoices>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -62,11 +63,11 @@
                 </td>
             </ng-container>
             <td *ngIf="actions.length > 0">
-                <button *ngFor="let action of actions"  (click)="action.action(product);">
-                    {{ action.label }}
+                <button *ngFor="let action of actions" (click)="onActionClick(action.action, product)">
+                  {{ action.label }}
                 </button>
-            </td>
-            
+              </td>
+              
         </tr>
     </ng-template>
 
