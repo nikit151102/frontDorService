@@ -19,15 +19,16 @@ interface SortDto {
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './uuid-search-filter-sort.component.html',
-  styleUrl: './uuid-search-filter-sort.component.scss'
+  styleUrls: ['./uuid-search-filter-sort.component.scss']
 })
 export class UuidSearchFilterSortComponent {
   @Input() filterField: string = ''; // Название поля для фильтрации
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
-  @Input() fieldNames: string[] = []; // Массив полей для отображения в выпадающем списке
+  @Input() fieldNames: string = ''; // Массив полей для отображения в выпадающем списке
   @Input() Field: string = ''; 
   @Input() enam: any;
+  
   searchTerm: string = '';
   selectedFilters: any[] = [];
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -47,6 +48,7 @@ export class UuidSearchFilterSortComponent {
     }
     if (this.enam != null) {
       this.products = this.enam;
+      console.log('products', this.products);
       this.endpointDataLoaded = true;
     }
   }
@@ -77,45 +79,24 @@ export class UuidSearchFilterSortComponent {
     this.filterChange.emit(filterDto);
   }
 
-  onFilterChange(value: string) {
-    const product = this.products.find(prod => this.formatProduct(prod) === value);
-
-    if (!product) return;
-
-    if (this.selectedFilters.includes(product.id)) {
-      this.selectedFilters = this.selectedFilters.filter(id => id !== product.id);
+  onFilterChange(id: number) {
+    // Проверяем, выбран ли продукт, и добавляем/удаляем его из списка фильтров
+    if (this.selectedFilters.includes(id)) {
+      this.selectedFilters = this.selectedFilters.filter(selectedId => selectedId !== id);
     } else {
-      this.selectedFilters.push(product.id);
+      this.selectedFilters.push(id);
     }
 
+    // Создаем объект фильтра для передачи в родительский компонент
     const filterDto: FilterDto = {
       field: this.Field,
       values: this.selectedFilters,
       type: this.filterType
     };
 
+    // Эмитируем изменение фильтра
     this.filterChange.emit(filterDto);
   }
-
-  formatProduct(product: any): string {
-    return this.fieldNames
-      .map(field => (product[field] !== undefined ? product[field] : field)) // Если это поле, берём его значение, иначе оставляем как есть
-      .join(' ');
-  }
-
-
-  // Получаем список уникальных значений для выпадающего списка
-  get uniqueFilterValues(): { id: string, text: string }[] {
-    const valuesMap = new Map<string, string>();
-
-    this.products.forEach(product => {
-      const text = this.formatProduct(product);
-      valuesMap.set(product.id, text);
-    });
-
-    return Array.from(valuesMap, ([id, text]) => ({ id, text }));
-  }
-
 
   toggleSort() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';

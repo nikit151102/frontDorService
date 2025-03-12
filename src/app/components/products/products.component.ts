@@ -8,7 +8,6 @@ import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NumberFilterComponent } from '../fields/number-filter/number-filter.component';
 import { UuidSearchFilterSortComponent } from '../fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
-import { InvoicesComponent } from '../invoices-form/invoices.component';
 
 @Component({
   selector: 'app-products',
@@ -20,7 +19,7 @@ import { InvoicesComponent } from '../invoices-form/invoices.component';
     UuidSearchFilterSortComponent,
     FormsModule,
     MultiSelectModule,
-    InvoicesComponent
+  
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'

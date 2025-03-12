@@ -32,7 +32,7 @@ export class InvoiceService {
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -42,7 +42,7 @@ export class InvoiceService {
 
   getInvoicesByIdCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoicesByPartner/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -51,7 +51,7 @@ export class InvoiceService {
   }
   getInvoiceById(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ export class InvoiceService {
 
   deleteInvoice(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`

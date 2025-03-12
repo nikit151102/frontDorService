@@ -10,12 +10,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
-import { ConfirmPopupService } from '../confirm-popup/confirm-popup.service';
-import { InvoiceService } from '../../pages/personal-account/supplier/tabs/counterparties/invoices-table/invoices-table.service';
 import { statuses, taxes, types, adjustmentOptions, columns, productColumns } from './data';
+import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
+import { InvoiceService } from '../invoices-table.service';
 
 @Component({
-  selector: 'app-invoices',
+  selector: 'app-invoices-form',
   standalone: true,
   imports: [
     CommonModule,
@@ -34,7 +34,7 @@ import { statuses, taxes, types, adjustmentOptions, columns, productColumns } fr
   styleUrl: './invoices.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class InvoicesComponent implements OnInit, OnChanges {
+export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyId: any;
 
@@ -60,6 +60,15 @@ export class InvoicesComponent implements OnInit, OnChanges {
       const previousCounterpartyId = changes['counterpartyData'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
         this.loadInvoice();
+      }
+    }
+    if (changes['invoiceId']) {
+      const currentCounterpartyId = changes['invoiceId'].currentValue;
+      const previousCounterpartyId = changes['invoiceId'].previousValue;
+      if (currentCounterpartyId !== previousCounterpartyId) {
+        if(this.invoiceId != null){
+          this.loadInvoice();
+        }
       }
     }
   }

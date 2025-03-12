@@ -4,6 +4,7 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    position: relative;
     // position: absolute;
 }
 
@@ -22,16 +23,8 @@
     font-size: 14px;
     color: #666;
     border-bottom: 1px solid #eee;
+    background: #fff;
 }
-
-.invoice-table tr:nth-child(even) {
-    background-color: #f9f9f9 !important; 
-}
-
-.invoice-table tr:nth-child(odd) {
-    background-color: #ffffff !important; 
-}
-
 
 .invoice-table tr:hover {
     background-color: #f9f9f9;
@@ -47,8 +40,8 @@
     gap: 8px;
 }
 
-.btn-edit,
-.btn-delete {
+/* Базовые стили для кнопок */
+.btn {
     background-color: #fff;
     border: none;
     padding: 6px 12px;
@@ -56,8 +49,10 @@
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s;
     font-size: 14px;
+    font-weight: 500;
 }
 
+/* Кнопка "Изменить" */
 .btn-edit {
     color: #4caf50;
     border: 1px solid #4caf50;
@@ -69,17 +64,113 @@
     transform: scale(1.1);
 }
 
+/* Кнопка "Удалить" */
 .btn-delete {
     color: #f44336;
     border: 1px solid #f44336;
 }
 
 .btn-delete:hover {
-    border: 1px solid #f44336;
     background-color: #f44336;
     color: white;
     transform: scale(1.1);
 }
+
+/* Кнопка "Отправить" */
+.btn-send {
+    color: #1e88e5;
+    border: 1px solid #1e88e5;
+}
+
+.btn-send:hover {
+    background-color: #1e88e5;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Кнопка "Подробнее" */
+.btn-details {
+    color: #ff9800;
+    border: 1px solid #ff9800;
+}
+
+.btn-details:hover {
+    background-color: #ff9800;
+    color: white;
+    transform: scale(1.1);
+}
+
+/* Обертка для дропдауна */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+/* Кнопка дропдауна */
+.btn-dropdown {
+    background-color: transparent;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 5px;
+}
+
+/* Стили для скрытого меню */
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background: white;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    min-width: 150px;
+    z-index: 1000;
+}
+
+/* Показываем меню при активации */
+.dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Кнопки внутри дропдауна */
+.dropdown-menu .btn {
+    width: 100%;
+    text-align: left;
+    padding: 8px 12px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background 0.2s;
+}
+
+/* Эффект наведения */
+.dropdown-menu .btn:hover {
+    background: #f0f0f0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Общий стиль ячейки с кнопками */
+.actions-cell {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+
 
 .invoice-cell {
     word-wrap: break-word;
@@ -87,6 +178,17 @@
 
 .invoice-row {
     transition: background-color 0.2s ease;
+}
+
+
+
+/* Чередование фона строк (зебра) */
+.invoice-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.invoice-table tr:nth-child(odd) {
+    background-color: #ffffff;
 }
 
 
@@ -147,7 +249,6 @@
 .invoice-cell {
     font-size: 14px;
     color: #333;
-        border-bottom: 0.1px solid #101010 !important;
 }
 
 .status-tag {
@@ -236,20 +337,20 @@
     color: #101010 !important;
 }
 
-
-:host ::ng-deep .p-datatable-tfoot>tr>td {
+:host ::ng-deep .p-datatable-tbody>tr>td {
     background: #fff !important;
     color: #101010 !important;
 }
 
-
-
-
-
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
+    // table-layout: fixed;
+    width: calc(100vw - 336px);
     position: absolute;
 }
 
+:host ::ng-deep .p-datatable{
+    position: absolute;
+}
 
 :host ::ng-deep .p-datatable-tfoot {
     position: sticky;
@@ -265,8 +366,14 @@
 :host ::ng-deep p-dialog .p-datatable-tfoot {
     position: sticky;
     bottom: 30px;
+    
 }
 
+:host ::ng-deep p-dialog .p-datatable-tfoot>tr>td {
+    background: #fff;
+    color: #101010;
+
+}
 
 
 
@@ -300,62 +407,28 @@
 }
 
 
-
-
-
-
-
-.invoice-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+:host ::ng-deep .p-multiselect-label {
+    background: #fff !important;
+    color: #101010 !important;
 }
 
-.invoice-table th {
-    text-align: left;
-    padding: 12px;
-    background-color: #f4f7fa;
-    color: #333;
-    font-weight: 600;
-    border-bottom: 2px solid #ddd;
+
+:host ::ng-deep .p-multiselect-list {
+    background: #ffffff;
+    color: #101010;
 }
 
-.invoice-table td {
-    padding: 12px;
-    text-align: left;
-    font-size: 14px;
-    color: #666;
-    border-bottom: 1px solid #eee;
+:host ::ng-deep .p-multiselect-option.p-multiselect-option-multiselect.p-focus {
+    background: #eeebffa1;
+    color: rgb(0 0 0 / 87%);
 }
 
-.invoice-table tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
 
-.invoice-table tr:nth-child(odd) {
-    background-color: #ffffff;
-}
 
-.invoice-table tr:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-}
 
-.invoice-table tfoot td {
-    background: #fff;
-    font-weight: bold;
-}
 
-.invoice-cell {
-    word-wrap: break-word;
-}
 
-.invoice-row {
-    transition: background-color 0.2s ease;
-}
 
-.invoice-row.active {
-    background-color: #e0f7fa;
-}
+
+
+
