@@ -1,12 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { InvoicesTableComponent } from './invoices-table/invoices-table.component';
 import { CounterpartiesListComponent } from './counterparties-list/counterparties-list.component';
 import { ProductsComponent } from '../../../../../components/products/products.component';
 
 @Component({
   selector: 'app-counterparties',
-  imports: [CommonModule, InvoicesTableComponent, ProductsComponent, CounterpartiesListComponent],
+  imports: [CommonModule, ProductsComponent, CounterpartiesListComponent],
   templateUrl: './counterparties.component.html',
   styleUrl: './counterparties.component.scss'
 })

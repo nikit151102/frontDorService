@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../../../../environment';
 
@@ -32,7 +32,7 @@ export class InvoiceService {
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -40,28 +40,18 @@ export class InvoiceService {
     });
   }
 
-  getInvoicesByIdCounterparty(id: string, statuses: number[]): Observable<any> {
+  getInvoicesByIdCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-  
-    const requestBody = {
-      partnerId: id,
-      statusList: statuses
-    };
-  
-    return this.http.post<any>(`${environment.apiUrl}/api/Director/DocInvoices`, requestBody, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      })
+        'Authorization': `Bearer ${token}`
+      }),
     });
   }
-  
-  
-
   getInvoiceById(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -72,14 +62,14 @@ export class InvoiceService {
   saveInvoice(invoice: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/Supplier/DocInvoices/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${invoice.id}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/Supplier/DocInvoices`, invoice, {
+      return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -90,7 +80,7 @@ export class InvoiceService {
 
   deleteInvoice(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`

@@ -13,7 +13,12 @@ interface Counterparty {
 })
 export class CounterpartiesService {
   private apiUrl = `${environment.apiUrl}/`;
-  queryData: any = { filters: [], sorts: [] }
+  queryData: any = { filters: [ {
+      field: "type",
+      values: [
+        1
+      ],
+      type: 1}], sorts: [] }
   constructor(private http: HttpClient) {}
 
   // Получить всех контрагентов
