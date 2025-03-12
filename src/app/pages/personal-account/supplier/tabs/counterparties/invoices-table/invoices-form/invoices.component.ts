@@ -72,9 +72,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         }
       }
     }
-    if (changes['isEdit']) {
-      const currentCounterpartyId = changes['isEdit'].currentValue;
-      const previousCounterpartyId = changes['isEdit'].previousValue;
+    if (changes['isEditInvoice']) {
+      const currentCounterpartyId = changes['isEditInvoice'].currentValue;
+      const previousCounterpartyId = changes['isEditInvoice'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
       this.isEdit = this.isEditInvoice;
       }

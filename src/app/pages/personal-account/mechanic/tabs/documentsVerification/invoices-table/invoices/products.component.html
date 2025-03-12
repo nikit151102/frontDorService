@@ -1,4 +1,5 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
+<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
+    [isEditInvoice]="isEditInvoice"></app-invoices-form>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -28,19 +29,19 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
-        
+
 
                         <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                 
+
                         <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
                             [Field]="col.field" [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                 
+
                     </div>
                 </th>
 
@@ -82,7 +83,7 @@
                                     (click)="verificationInvoice(product.id, 3)">Отказать</button>
                                 <button class="btn btn-details" *ngIf="product.status == 1"
                                     (click)="verificationInvoice(product.id, 2)">принять</button>
-                                    <button class="btn btn-details" *ngIf="product.status != 1"
+                                <button class="btn btn-details" *ngIf="product.status != 1"
                                     (click)="getInvoiceById(product.id, false)">Подробнее</button>
                             </div>
                         </div>

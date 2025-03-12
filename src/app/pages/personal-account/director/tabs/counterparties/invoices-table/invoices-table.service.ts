@@ -111,6 +111,16 @@ export class InvoiceService {
   }
 
 
+  verification(id: string, status: any): Observable<void> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.patch<void>(`${environment.apiUrl}/api/Director/DocInvoices/${id}`, {status: status}, { headers });
+  }
 
   
 

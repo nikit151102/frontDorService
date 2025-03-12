@@ -28,19 +28,19 @@
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
-        
+
 
                         <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                 
+
                         <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
                             [Field]="col.field" [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                 
+
                     </div>
                 </th>
 
@@ -78,14 +78,24 @@
                             <button class="btn btn-dropdown" style="color: #101010;"
                                 (click)="toggleDropdown(product.id)">⋮</button>
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3"
+                                <button class="btn btn-delete"
                                     (click)="deleteInvoice(product.id)">Удалить</button>
-                                <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="getInvoiceById(product.id)">Изменить</button>
-                                <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3"
-                                    (click)="verificationInvoice(product.id)">Отправить</button>
-                                <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3"
-                                    (click)="verificationInvoice(product.id)">Подробнее</button>
+                                <button class="btn btn-edit" 
+                                    (click)="getInvoiceById(product.id)">Изменить</button>   
+                                <button class="btn btn-send" *ngIf="product.status == 1 " 
+                                    (click)="verificationInvoice(product.id, 4)">Отказать</button>
+                                <button class="btn btn-details" *ngIf="product.status == 1"
+                                    (click)="verificationInvoice(product.id, 7)">принять</button>
+
+                                    <button class="btn btn-send" *ngIf="product.status == 2 " 
+                                    (click)="verificationInvoice(product.id, 5)">Отказать</button>
+                                <button class="btn btn-details" *ngIf="product.status == 2"
+                                    (click)="verificationInvoice(product.id, 10)">принять</button>
+                                    
+                                    <button class="btn btn-send" *ngIf="product.status == 3 " 
+                                    (click)="verificationInvoice(product.id, 6)">Отказать</button>
+                                <button class="btn btn-details" *ngIf="product.status == 3"
+                                    (click)="verificationInvoice(product.id, 10)">принять</button>
                             </div>
                         </div>
                     </td>

@@ -7,20 +7,23 @@
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <div style="display: flex; gap: 15px;">
-                    <div class="p-field p-col-12">
-                        <label for="number">Номер счета-фактуры</label>
-                        <input id="number" [(ngModel)]="selectedInvoice.number" pInputText [disabled]="!isEdit" />
-                    </div>
-                    <div class="p-field p-col-12">
-                        <label for="dateTime">Дата</label>
-                        <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false" [disabled]="!isEdit"></p-calendar>
+                    <div style="display: flex; gap: 10px;">
+                        <div class="p-field p-col-12">
+                            <label for="number">Номер счета-фактуры</label>
+                            <input id="number" [(ngModel)]="selectedInvoice.number" pInputText [disabled]="!isEdit" />
+                        </div>
+                        <div class="p-field p-col-12">
+                            <label for="dateTime">Дата</label>
+                            <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false" [disabled]="!isEdit"></p-calendar>
+                        </div>
+    
+                        <div class="p-field p-col-12">
+                            <label for="stateNumberCar">Гос. номер автомобиля</label>
+                            <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText [disabled]="!isEdit" />
+                        </div>
                     </div>
 
-                    <div class="p-field p-col-12">
-                        <label for="stateNumberCar">Гос. номер автомобиля</label>
-                        <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText [disabled]="!isEdit" />
-                    </div>
-
+                    <div style="display: flex; gap: 10px;">
                     <div class="p-field p-col-12">
                         <label for="type">Тип</label>
                         <p-dropdown id="type" [(ngModel)]="type" [options]="types" optionLabel="label" optionValue="value" 
@@ -46,6 +49,7 @@
                             optionLabel="fullName" optionValue="id" [disabled]="!isEdit">
                         </p-dropdown>
                     </div>
+                   </div>
                 </div>
 
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton icon="pi pi-pencil"
