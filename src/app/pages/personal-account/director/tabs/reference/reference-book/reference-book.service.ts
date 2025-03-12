@@ -16,6 +16,7 @@ export class ReferenceBookService {
       'Authorization': `Bearer ${token}`
     });
   }
+  
   // Получение всех записей
   getRecords(endpoint: string): Observable<any[]> {
     return this.http.post<any[]>(`${environment.apiUrl}/${endpoint}/Filter`, {filters: [], sorts: []} , { headers: this.getHeader() });
