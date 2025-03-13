@@ -17,10 +17,10 @@
                             <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false" [disabled]="!isEdit"></p-calendar>
                         </div>
     
-                        <div class="p-field p-col-12">
+                        <!-- <div class="p-field p-col-12">
                             <label for="stateNumberCar">Гос. номер автомобиля</label>
                             <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText [disabled]="!isEdit" />
-                        </div>
+                        </div> -->
                     </div>
 
                     <div style="display: flex; gap: 10px;">
@@ -61,6 +61,8 @@
                             <th>Наименование товара</th>
                             <th>Количество</th>
                             <th>Сумма</th>
+                            <th>Единица измерения</th>
+                            <th>Назначение товара </th>
                             <th *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3"></th>
                         </tr>
                     </ng-template>
@@ -69,6 +71,27 @@
                             <td><input [(ngModel)]="product.productName" pInputText [disabled]="!isEdit" /></td>
                             <td><p-inputnumber [(ngModel)]="product.quantity" [disabled]="!isEdit"></p-inputnumber></td>
                             <td><p-inputnumber [(ngModel)]="product.amount" [disabled]="!isEdit"></p-inputnumber></td>
+                             <!-- Выпадающий список для Единицы измерения -->
+            <td>
+                <p-dropdown 
+                    [options]="measurementUnits" 
+                    optionLabel="name" 
+                    optionValue="id" 
+                    [(ngModel)]="product.measurementUnit"
+                    [disabled]="!isEdit">
+                </p-dropdown>
+            </td>
+
+            <!-- Выпадающий список для Назначение товара  -->
+            <td>
+                <p-dropdown 
+                    [options]="productTargets" 
+                    optionLabel="name" 
+                    optionValue="id" 
+                    [(ngModel)]="product.productTarget"
+                    [disabled]="!isEdit">
+                </p-dropdown>
+            </td>
                             <td *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
                                 <button pButton icon="pi pi-trash" class="btn-delete" (click)="removeProduct(i)"
                                     label="Удалить"></button>

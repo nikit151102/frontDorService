@@ -40,6 +40,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyId: any;
   @Input() isEditInvoice :any;
 
+  measurementUnits: any[] = [];
+  productTargets: any[] = [];
+
   adjustmentOptions = adjustmentOptions;
   columns = columns;
   types = types;
@@ -93,6 +96,35 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
         checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
       });
+    })
+
+
+    
+    this.invoiceService.getMeasurementUnits$().subscribe(units => {
+      if (units.length === 0) {
+        this.invoiceService.getMeasurementUnit().subscribe(values => {
+          this.invoiceService.setMeasurementUnits(values); 
+        });
+      }
+
+    });
+    this.invoiceService.getProductTargetsUnits$().subscribe(units => {
+      if (units.length === 0) {
+        this.invoiceService.getProductTarget().subscribe(values => {
+          this.invoiceService.setProductTargetsUnits(values); 
+        });
+      }
+    });
+
+
+    this.invoiceService.measurementUnits$.subscribe((data:any)=>{
+      this.measurementUnits = data.data;
+      console.log('measurementUnits',this.measurementUnits)
+    })
+
+    this.invoiceService.productTargets$.subscribe((data:any)=>{
+      this.productTargets = data.data;
+      console.log('productTargets',this.productTargets)
     })
   }
 
@@ -319,6 +351,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       productName: '',
       quantity: 0,
       amount: 0,
+      measurementUnit: '',
+      productTarget: '',
       date: new Date().toISOString()
     });
   }
@@ -352,7 +386,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
-      stateNumberCar: '',
+      // stateNumberCar: '',
       tax: 0,
       partnerId: this.counterpartyId,
       checkPersonId: '',
