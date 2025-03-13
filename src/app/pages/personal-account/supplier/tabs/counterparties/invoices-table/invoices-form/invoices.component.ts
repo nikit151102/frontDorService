@@ -351,8 +351,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       productName: '',
       quantity: 0,
       amount: 0,
-      measurementUnit: '',
-      productTarget: '',
+      measurementUnitId: '',
+      productTargetId: '',
       date: new Date().toISOString()
     });
   }
