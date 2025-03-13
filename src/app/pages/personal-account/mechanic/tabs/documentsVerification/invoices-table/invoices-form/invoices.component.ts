@@ -13,6 +13,7 @@ import { TableModule } from 'primeng/table';
 import { statuses, taxes, types, adjustmentOptions, columns, productColumns } from './data';
 import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoiceService } from '../invoices-table.service';
+import { ProductsService } from '../invoices/products.service';
 
 @Component({
   selector: 'app-invoices-form',
@@ -39,6 +40,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyId: any;
   @Input() isEditInvoice :any;
 
+  measurementUnits: any[] = [];
+  productTargets: any[] = [];
+
   adjustmentOptions = adjustmentOptions;
   columns = columns;
   types = types;
@@ -52,7 +56,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private invoiceService: InvoiceService,
     private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private productsService:ProductsService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -72,11 +77,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         }
       }
     }
-    if (changes['isEdit']) {
-      const currentCounterpartyId = changes['isEdit'].currentValue;
-      const previousCounterpartyId = changes['isEdit'].previousValue;
+    if (changes['isEditInvoice']) {
+      const currentCounterpartyId = changes['isEditInvoice'].currentValue;
+      const previousCounterpartyId = changes['isEditInvoice'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
       this.isEdit = this.isEditInvoice;
+      this.cdr.detectChanges();
       }
     }
     
@@ -90,6 +96,35 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
         checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
       });
+    })
+
+
+    
+    this.invoiceService.getMeasurementUnits$().subscribe(units => {
+      if (units.length === 0) {
+        this.invoiceService.getMeasurementUnit().subscribe(values => {
+          this.invoiceService.setMeasurementUnits(values); 
+        });
+      }
+
+    });
+    this.invoiceService.getProductTargetsUnits$().subscribe(units => {
+      if (units.length === 0) {
+        this.invoiceService.getProductTarget().subscribe(values => {
+          this.invoiceService.setProductTargetsUnits(values); 
+        });
+      }
+    });
+
+
+    this.invoiceService.measurementUnits$.subscribe((data:any)=>{
+      this.measurementUnits = data.data;
+      console.log('measurementUnits',this.measurementUnits)
+    })
+
+    this.invoiceService.productTargets$.subscribe((data:any)=>{
+      this.productTargets = data.data;
+      console.log('productTargets',this.productTargets)
     })
   }
 
@@ -281,8 +316,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       onAccept: () => {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
-            this.invoices = this.invoices.filter((inv) => inv.id !== id);
-
+            let invoices = this.productsService.getActiveData()
+            this.invoices = invoices.filter((inv:any) => inv.id !== id);
+;
             this.messageService.add({
               severity: 'success',
               summary: 'Удалено',
@@ -315,6 +351,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       productName: '',
       quantity: 0,
       amount: 0,
+      measurementUnitId: '',
+      productTargetId: '',
       date: new Date().toISOString()
     });
   }
@@ -348,13 +386,15 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
-      stateNumberCar: '',
+      // stateNumberCar: '',
       tax: 0,
       partnerId: this.counterpartyId,
       checkPersonId: '',
       productList: []
     };
+
     this.isEdit = true;
+
     this.addProduct();
 
   }

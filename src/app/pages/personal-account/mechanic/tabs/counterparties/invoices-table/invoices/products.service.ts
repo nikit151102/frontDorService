@@ -42,8 +42,8 @@ export class ProductsService {
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }
-  getActiveData(tab: any) {
-    this.dataSubject.value;
+  getActiveData() {
+    return this.dataSubject.value;
   }
 
 

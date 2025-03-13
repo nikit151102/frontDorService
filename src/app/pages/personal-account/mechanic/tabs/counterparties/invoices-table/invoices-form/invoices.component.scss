@@ -136,7 +136,7 @@
     position: fixed;
     bottom: 0;
     padding-bottom: 10px;
-    background: #fff;
+    background: transparent;
     display: flex;
     flex-direction: row-reverse;
     gap: 15px;
@@ -169,6 +169,7 @@
 :host ::ng-deep .p-inputtext,
 .p-select,
 .p-table {
+    width: 100%;
     background: #fff !important;
     color: #101010 !important;
 }
@@ -203,15 +204,15 @@
 
 
 :host ::ng-deep p-dialog .p-datatable-table {
-    position: absolute;
+    position: relative;
     padding-bottom: 45px;
+    
 }
 
 :host ::ng-deep p-dialog .p-datatable-tfoot {
     position: sticky;
     bottom: 30px;
 }
-
 
 
 
@@ -304,3 +305,4 @@
 .invoice-row.active {
     background-color: #e0f7fa;
 }
+

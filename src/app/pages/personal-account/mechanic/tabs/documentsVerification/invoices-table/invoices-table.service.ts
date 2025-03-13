@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../../../../../environment';
 
 interface Product {
@@ -121,6 +121,80 @@ export class InvoiceService {
     return this.http.patch<void>(`${environment.apiUrl}/api/Mechanic/DocInvoices/${id}`, {status: status}, { headers });
   }
 
+  
+  measurementUnits$ = new BehaviorSubject<any[]>([]);
+
+ /** ✅ Получаем поток данных */
+ getMeasurementUnits$(): Observable<any[]> {
+  return this.measurementUnits$.asObservable();
+}
+
+/** ✅ Устанавливаем данные */
+setMeasurementUnits(values: any[]) {
+  this.measurementUnits$.next(values);
+}
+
+/** ✅ Проверяем, есть ли данные */
+hasMeasurementUnits(): boolean {
+  return this.measurementUnits$.value.length > 0;
+}
+
+/** ✅ Загружаем данные с бэка */
+getMeasurementUnit(): Observable<any[]> {
+  if (this.hasMeasurementUnits()) {
+    return this.getMeasurementUnits$(); // Если уже есть данные, не запрашиваем бэкенд
+  }
+
+  const token = localStorage.getItem('YXV0aFRva2Vu');
+  const headers = new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${token}`
+  });
+  
+  return this.http.post<any[]>(`${environment.apiUrl}/api/Entities/MeasurementUnit/Filter`, { filters: [], sorts: [] }, { headers })
+    .pipe(
+      tap(response => this.setMeasurementUnits(response)) // ✅ Сохраняем данные в BehaviorSubject
+    );
+}
+
+
+
+
+  productTargets$ = new BehaviorSubject<any[]>([]);
+
+ /** ✅ Получаем поток данных */
+ getProductTargetsUnits$(): Observable<any[]> {
+  return this.productTargets$.asObservable();
+}
+
+/** ✅ Устанавливаем данные */
+setProductTargetsUnits(values: any[]) {
+  this.productTargets$.next(values);
+}
+
+/** ✅ Проверяем, есть ли данные */
+hasProductTargetsUnits(): boolean {
+  return this.productTargets$.value.length > 0;
+}
+  getProductTarget(): Observable<any[]> {
+    if (this.hasProductTargetsUnits()) {
+      return this.getProductTargetsUnits$(); // Если уже есть данные, не запрашиваем бэкенд
+    }
+  
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.post<any[]>(`${environment.apiUrl}/api/Entities/ProductTarget/Filter`, { filters: [], sorts: [] }, { headers })
+      .pipe(
+        tap(response => this.setProductTargetsUnits(response))// ✅ Сохраняем данные в BehaviorSubject
+      );
+  }
+
+  
+
+  
 
   private socket!: WebSocket;
   private messagesSubject = new Subject<any>();
