@@ -1,4 +1,4 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
+<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"></app-invoices-form>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -72,7 +72,7 @@
                     </ng-template>
 
                 </td>
-                <ng-container *ngIf="col.type === 'actions'">
+                <ng-container *ngIf="col.field == 'actions'">
                     <td class="invoice-cell actions-cell">
                         <div class="dropdown">
                             <button class="btn btn-dropdown" style="color: #101010;"

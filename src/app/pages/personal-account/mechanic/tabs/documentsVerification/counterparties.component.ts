@@ -18,10 +18,12 @@ export class CounterpartiesComponent {
 
   
   columnsInvoices = [
-    { field: 'number', header: 'Номер',type: 'string', visible: true, width: '300px' },
-    { field: 'expenseSum', header: 'Расход',type: 'number', visible: true, width: '300px' },
-    { field: 'incomeSum', header: 'Приход',type: 'number', visible: true, width: '300px' },
-    { field: 'dateTime', header: 'Дата',type: 'date', visible: true, width: '300px' }
+     { field: 'number', header: 'Номер', type: 'string', visible: true, width: '300px' },
+    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '200px' },
+    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '200px' },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '250px' },
+    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '300px' },
+    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '200px' }, // Ширина для кнопок
   ];
  
   totalInfoColumnInvoices = [

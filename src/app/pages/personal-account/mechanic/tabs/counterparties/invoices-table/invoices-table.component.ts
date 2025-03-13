@@ -1,12 +1,12 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ProductsComponent } from '../../../../../../components/products/products.component';
-import { InvoicesDataComponent } from './invoices/products.component';
+import { InvoicesDataMechanicComponent } from './invoices/products.component';
 
 @Component({
   selector: 'app-invoices-table',
   standalone: true,
-  imports: [CommonModule, InvoicesDataComponent,ProductsComponent],
+  imports: [CommonModule, InvoicesDataMechanicComponent,ProductsComponent],
   templateUrl: './invoices-table.component.html',
   styleUrls: ['./invoices-table.component.scss']
 })
@@ -43,12 +43,12 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
 
   columnsInvoices = [
-    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '15%' },
-    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
-    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
+    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '300px' },
+    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '300px' },
+    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '300px' },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '300px' },
+    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '300px' },
+    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '300px' }, // Ширина для кнопок
 ];
 
 

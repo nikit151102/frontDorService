@@ -94,5 +94,20 @@ export class ProductsComponent implements OnChanges, OnInit {
       console.error(`Method ${actionName} does not exist on ProductsService`);
     }
   }
+
+
+  
+  dropdownVisible: { [key: string]: boolean } = {}; 
+
+  toggleDropdown(productId: string) {
+      Object.keys(this.dropdownVisible).forEach(id => {
+          if (id !== productId) this.dropdownVisible[id] = false;
+      });
+  
+      this.dropdownVisible[productId] = !this.dropdownVisible[productId];
+  }
+  
+
+  verificationInvoice(id:string, status:number){}
   
 }

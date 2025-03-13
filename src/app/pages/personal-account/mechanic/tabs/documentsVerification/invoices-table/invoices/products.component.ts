@@ -17,7 +17,7 @@ import { InvoiceService } from '../invoices-table.service';
 import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
 
 @Component({
-  selector: 'app-invoices-data',
+  selector: 'app-invoicesdata',
   providers: [ProductsService, MessageService],
   imports: [CommonModule, TableModule,
     SearchFilterSortComponent,
@@ -63,10 +63,6 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     public productsService: ProductsService) { }
 
   ngOnInit() {
-    this.productService.activData$.subscribe((data:any)=>{
-      this.invoices = data;
-    })
-
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
@@ -154,8 +150,7 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         console.log('response', response)
-        // this.invoices = response.data; // Assuming response is the invoice array
-      this.productService.setActiveData(response.data)
+        this.invoices = response.data; // Assuming response is the invoice array
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });

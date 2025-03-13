@@ -43,12 +43,12 @@ export class InvoicesTableComponent implements OnInit, OnChanges {
 
 
   columnsInvoices = [
-    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '15%' },
-    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
-    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
+    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '300px' },
+    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '300px' },
+    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '300px' },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '300px' },
+    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '300px' },
+    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '300px' }, // Ширина для кнопок
 ];
 
 

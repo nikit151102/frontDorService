@@ -12,9 +12,9 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem, MessageService } from 'primeng/api';
-import { InvoicesFormComponent } from '../invoices-form/invoices.component';
 import { InvoiceService } from '../invoices-table.service';
 import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
+import { InvoicesFormComponent } from '../invoices-form/invoices.component';
 
 @Component({
   selector: 'app-invoices-data',
@@ -35,7 +35,7 @@ import { ConfirmPopupService } from '../../../../../../../components/confirm-pop
   styleUrl: './products.component.scss',
 })
 
-export class InvoicesDataComponent implements OnChanges, OnInit {
+export class InvoicesDataMechanicComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
   @Input() endpoint: any;
   @Input() columns: any;
@@ -63,6 +63,10 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     public productsService: ProductsService) { }
 
   ngOnInit() {
+    this.productService.activData$.subscribe((data:any)=>{
+      this.invoices = data;
+    })
+
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
@@ -150,7 +154,8 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         console.log('response', response)
-        this.invoices = response.data; // Assuming response is the invoice array
+        // this.invoices = response.data; // Assuming response is the invoice array
+      this.productService.setActiveData(response.data)
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
