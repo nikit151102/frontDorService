@@ -41,38 +41,38 @@
             </button>
 
 
-            <button class="menu-item" *ngIf="[1].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus == 1"
               (click)="verification(counterparty.id, counterparty, 4)">
               Отклонить новую фактуру
             </button>
 
-            <button class="menu-item" *ngIf="[1].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus ==  1"
               (click)="verification(counterparty.id, counterparty, 7)">
               Принять фактуру
             </button>
 
-            <button class="menu-item" *ngIf="[2].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus == 2"
               (click)="verification(counterparty.id, counterparty, 5)">
               Отправить на доработку
             </button>
 
-            <button class="menu-item" *ngIf="[2].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus == 2"
               (click)="verification(counterparty.id, counterparty, 7)">
               Принять изменения
             </button>
 
-            <button class="menu-item" *ngIf="[3].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus == 3"
               (click)="verification(counterparty.id, counterparty, 6)">
               Отменить удаление
             </button>
 
-            <button class="menu-item" *ngIf="[3].includes(counterparty.status)"
+            <button class="menu-item" *ngIf="counterparty.editStatus == 3"
               (click)="verification(counterparty.id, counterparty, 7)">
               Принять удаление
             </button>
 
 
-          <button class="menu-item" *ngIf="[9].includes(counterparty.status)"
+          <button class="menu-item" *ngIf="counterparty.editStatus == 9"
             (click)="verification(counterparty.id, counterparty, 8)">
             Отключить контрагента
           </button>

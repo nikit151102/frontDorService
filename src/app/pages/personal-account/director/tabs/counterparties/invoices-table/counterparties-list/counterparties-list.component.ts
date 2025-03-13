@@ -238,7 +238,7 @@ export class CounterpartiesListComponent {
   }
 
   verification(id: string, item: any, status: number) {
-    item.status = status;
+    item.editStatus = status;
     this.counterpartiesService.verification(id, item).subscribe((value: any) => {
 
     })
