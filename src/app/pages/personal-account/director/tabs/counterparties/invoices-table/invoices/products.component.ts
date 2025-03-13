@@ -190,8 +190,8 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
 
   verificationInvoice(invoiceId: any, status: any){
     this.confirmPopupService.openConfirmDialog({
-      title: 'Подтверждение отправки на проверку',
-      message: 'Вы уверены, что хотите отправить фактуру директору?',
+      title: 'Подтверждение',
+      message: 'Вы уверены, что хотите принять/отклонить?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
