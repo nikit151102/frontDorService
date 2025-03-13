@@ -215,6 +215,9 @@ export class CounterpartiesListComponent {
       case 4: return 'Отклонено';
       case 5: return 'Подтвержден';
       case 6: return 'Неактивный';
+      case 7: return 'Подтвердить';
+      case 8: return 'Не активный';
+      case 8: return 'Активный';
       default: return 'Неизвестный статус';
     }
   }
@@ -227,6 +230,9 @@ export class CounterpartiesListComponent {
       case 4: return 'rejected';
       case 5: return 'approved';
       case 6: return 'not-active';
+      case 7: return 'approved';
+      case 8: return 'approved';
+      case 9: return 'updated';
       default: return 'unknown';
     }
   }

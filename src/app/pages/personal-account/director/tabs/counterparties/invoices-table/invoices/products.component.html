@@ -82,20 +82,10 @@
                                     (click)="deleteInvoice(product.id)">Удалить</button>
                                 <button class="btn btn-edit" 
                                     (click)="getInvoiceById(product.id)">Изменить</button>   
-                                <button class="btn btn-send" *ngIf="product.status == 1 " 
+                                <button class="btn btn-send" *ngIf="product.status == 2 " 
                                     (click)="verificationInvoice(product.id, 4)">Отказать</button>
-                                <button class="btn btn-details" *ngIf="product.status == 1"
-                                    (click)="verificationInvoice(product.id, 7)">принять</button>
-
-                                    <button class="btn btn-send" *ngIf="product.status == 2 " 
-                                    (click)="verificationInvoice(product.id, 5)">Отказать</button>
                                 <button class="btn btn-details" *ngIf="product.status == 2"
-                                    (click)="verificationInvoice(product.id, 10)">принять</button>
-                                    
-                                    <button class="btn btn-send" *ngIf="product.status == 3 " 
-                                    (click)="verificationInvoice(product.id, 6)">Отказать</button>
-                                <button class="btn btn-details" *ngIf="product.status == 3"
-                                    (click)="verificationInvoice(product.id, 10)">принять</button>
+                                    (click)="verificationInvoice(product.id, 5)">принять</button>
                             </div>
                         </div>
                     </td>
