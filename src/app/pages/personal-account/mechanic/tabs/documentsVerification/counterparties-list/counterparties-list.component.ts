@@ -75,6 +75,7 @@ export class CounterpartiesListComponent {
     this.counterpartiesService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
+        this.sortCounterpartiesByStatus();
         this.select('00000000-0000-0000-0000-000000000000');
       },
       (error: any) => {
@@ -83,6 +84,20 @@ export class CounterpartiesListComponent {
     );
   }
 
+  sortCounterpartiesByStatus() {
+    this.counterparties.sort((a: any, b: any) => {
+      const isAForbidden = this.isForbiddenStatus(a.editStatus) ? 1 : 0;
+      const isBForbidden = this.isForbiddenStatus(b.editStatus) ? 1 : 0;
+  
+      if (isAForbidden !== isBForbidden) {
+        return isAForbidden - isBForbidden; 
+      }
+  
+      return a.editStatus - b.editStatus;
+    });
+  }
+  
+  
   initializeForm() {
     this.counterpartyForm = this.fb.group({
       id:[''],

@@ -63,9 +63,30 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     public productsService: ProductsService) { }
 
   ngOnInit() {
+    this.productService.activData$.subscribe((data:any)=>{
+      this.invoices = data;
+    })
+
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
+
+    // Adjusting the context menu to pass data correctly
+    this.items = [
+      {
+        label: 'Options',
+        items: [
+          {
+            label: 'Изменить',
+            command: (event) => this.updateInvoice(event)  // Pass the entire event, which includes the invoice data
+          },
+          {
+            label: 'удалить',
+            command: (event) => this.deleteInvoice(event)  // Pass the entire event, which includes the invoice data
+          }
+        ]
+      }
+    ];
   }
 
 
@@ -133,7 +154,8 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         console.log('response', response)
-        this.invoices = response.data; // Assuming response is the invoice array
+        // this.invoices = response.data; // Assuming response is the invoice array
+      this.productService.setActiveData(response.data)
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
@@ -141,16 +163,44 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     );
   }
 
+  deleteInvoice(invoiceId: any) {
+    this.confirmPopupService.openConfirmDialog({
+      title: 'Подтверждение удаления',
+      message: 'Вы уверены, что хотите удалить счет-фактуру?',
+      acceptLabel: 'Удалить',
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        this.invoiceService.deleteInvoice(invoiceId).subscribe(
+          () => {
+            this.productService.productsService = this.productService.productsService.filter((inv: any) => inv.id !== invoiceId);
 
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Удалено',
+              detail: 'Счет-фактура удалена'
+            });
+          },
+          (error) => {
+            console.error('Error deleting invoice', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Ошибка',
+              detail: 'Не удалось удалить счет'
+            });
+          }
+        );
+      }
+    });
+  }
 
-  verificationInvoice(invoiceId: any, status: any){
+  verificationInvoice(invoiceId: any){
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение отправки на проверку',
-      message: 'Вы уверены, что хотите отправить фактуру директору?',
+      message: 'Вы уверены, что хотите отправить фактуру механику?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.verification(invoiceId,status).subscribe(
+        this.invoiceService.sendingVerification(invoiceId).subscribe(
           () => {
         
             this.messageService.add({
@@ -189,6 +239,6 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
   
       this.dropdownVisible[productId] = !this.dropdownVisible[productId];
   }
-
+  
 
 }
