@@ -12,9 +12,10 @@ import { ToastModule } from 'primeng/toast';
 import { ButtonModule } from 'primeng/button';
 import { MenuModule } from 'primeng/menu';
 import { MenuItem, MessageService } from 'primeng/api';
-import { InvoicesFormComponent } from '../invoices-form/invoices.component';
+
 import { InvoiceService } from '../invoices-table.service';
 import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
+import { InvoicesFormComponent } from '../invoices-form/invoices.component';
 
 @Component({
   selector: 'app-invoices-data',

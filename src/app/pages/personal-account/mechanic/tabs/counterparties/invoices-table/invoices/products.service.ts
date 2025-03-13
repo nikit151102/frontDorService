@@ -28,7 +28,7 @@ export class ProductsService {
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[]=[{
     field: 'type',
-    values: [0],
+    values: [1],
     type: 1
   }];
   constructor(private http: HttpClient) { }

@@ -348,7 +348,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
 
     this.selectedInvoice.productList.push({
-      productName: '',
+      name: '',
       quantity: 0,
       amount: 0,
       measurementUnitId: '',

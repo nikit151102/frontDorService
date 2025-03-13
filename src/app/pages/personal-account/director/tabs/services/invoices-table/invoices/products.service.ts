@@ -35,16 +35,16 @@ export class ProductsService {
 
   endpoint: string = '';
 
-
   private dataSubject = new BehaviorSubject<any>(null);
   activData$ = this.dataSubject.asObservable();
 
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }
-  getActiveData(tab: any) {
-    this.dataSubject.value;
+  getActiveData() {
+    return this.dataSubject.value;
   }
+
 
 
 

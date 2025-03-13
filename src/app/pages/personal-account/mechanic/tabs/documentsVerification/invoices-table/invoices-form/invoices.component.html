@@ -71,7 +71,7 @@
                     </ng-template>
                     <ng-template pTemplate="body" let-product let-i="rowIndex">
                         <tr>
-                            <td style="width: 200px;"><input [(ngModel)]="product.productName" pInputText [disabled]="!isEdit" /></td>
+                            <td style="width: 200px;"><input [(ngModel)]="product.name" pInputText [disabled]="!isEdit" /></td>
                             <td style="width: 100px;"><p-inputnumber [(ngModel)]="product.quantity" [disabled]="!isEdit"></p-inputnumber></td>
                             <td style="width: 150px;"><p-inputnumber [(ngModel)]="product.amount" [disabled]="!isEdit"></p-inputnumber></td>
                             <td style="width: 180px;">
