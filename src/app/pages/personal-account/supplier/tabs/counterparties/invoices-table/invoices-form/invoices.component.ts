@@ -132,6 +132,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       console.log("selectedInvoice", value.data);
       this.selectedInvoice = value.data;
+      
     })
 
   }

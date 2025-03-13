@@ -39,12 +39,45 @@
             <button class="menu-item" (click)="deleteCounterparty(counterparty.id)">
               Удалить
             </button>
-            <button class="menu-item" *ngIf="counterparty.status == 3" (click)="verification(counterparty.id, counterparty, 7)">
-              Принять
+
+
+            <button class="menu-item" *ngIf="[1].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 4)">
+              Отклонить новую фактуру
             </button>
-            <button class="menu-item" *ngIf="counterparty.status == 3" (click)="verification(counterparty.id, counterparty, 8)">
-              Отклонить
+
+            <button class="menu-item" *ngIf="[1].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 7)">
+              Принять фактуру
             </button>
+
+            <button class="menu-item" *ngIf="[2].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 5)">
+              Отправить на доработку
+            </button>
+
+            <button class="menu-item" *ngIf="[2].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 7)">
+              Принять изменения
+            </button>
+
+            <button class="menu-item" *ngIf="[3].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 6)">
+              Отменить удаление
+            </button>
+
+            <button class="menu-item" *ngIf="[3].includes(counterparty.status)"
+              (click)="verification(counterparty.id, counterparty, 7)">
+              Принять удаление
+            </button>
+
+
+          <button class="menu-item" *ngIf="[9].includes(counterparty.status)"
+            (click)="verification(counterparty.id, counterparty, 8)">
+            Отключить контрагента
+          </button>
+
+
           </div>
         </div>
       </div>
