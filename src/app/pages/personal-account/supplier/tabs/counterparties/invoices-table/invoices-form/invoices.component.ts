@@ -13,6 +13,7 @@ import { TableModule } from 'primeng/table';
 import { statuses, taxes, types, adjustmentOptions, columns, productColumns } from './data';
 import { ConfirmPopupService } from '../../../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoiceService } from '../invoices-table.service';
+import { ProductsService } from '../invoices/products.service';
 
 @Component({
   selector: 'app-invoices-form',
@@ -52,7 +53,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private invoiceService: InvoiceService,
     private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private productsService:ProductsService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -77,6 +79,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const previousCounterpartyId = changes['isEditInvoice'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
       this.isEdit = this.isEditInvoice;
+      this.cdr.detectChanges();
       }
     }
     
@@ -281,8 +284,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       onAccept: () => {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
-            this.invoices = this.invoices.filter((inv) => inv.id !== id);
-
+            let invoices = this.productsService.getActiveData()
+            this.invoices = invoices.filter((inv:any) => inv.id !== id);
+;
             this.messageService.add({
               severity: 'success',
               summary: 'Удалено',
@@ -354,6 +358,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       checkPersonId: '',
       productList: []
     };
+
+    this.isEdit = true;
 
     this.addProduct();
 

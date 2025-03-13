@@ -354,7 +354,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       checkPersonId: '',
       productList: []
     };
-
+    this.isEdit = true;
     this.addProduct();
 
   }
