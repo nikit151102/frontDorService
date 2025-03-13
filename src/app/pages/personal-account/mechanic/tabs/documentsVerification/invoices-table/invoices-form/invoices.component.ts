@@ -364,23 +364,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
   }
 
-
-  sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id).subscribe((updatedInvoice: any) => {
-      const index = this.invoices.findIndex(invoice => invoice.id === id);
-      if (index !== -1) {
-        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
-        console.log('this.invoices[index]', this.invoices[index])
-        this.invoices = [...this.invoices];
-        this.cdr.detectChanges();
-        this.onDialogClose();
-      }
-    }, error => {
-      console.error('Ошибка при отправке на проверку:', error);
-    });
-  }
-
-
   createNewInvoice() {
     this.selectedInvoice = {
       dateTime: new Date().toISOString(),

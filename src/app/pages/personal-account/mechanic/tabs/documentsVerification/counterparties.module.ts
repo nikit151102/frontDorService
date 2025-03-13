@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DocumentsVerificationPagesRoutingModule } from './counterparties-routing.module';
+import { CounterpartiesPagesRoutingModule } from './counterparties-routing.module';
 
 
 
@@ -8,7 +8,7 @@ import { DocumentsVerificationPagesRoutingModule } from './counterparties-routin
   declarations: [],
   imports: [
     CommonModule,
-    DocumentsVerificationPagesRoutingModule
+    CounterpartiesPagesRoutingModule
   ]
 })
 export class DocumentsVerificationModule { }

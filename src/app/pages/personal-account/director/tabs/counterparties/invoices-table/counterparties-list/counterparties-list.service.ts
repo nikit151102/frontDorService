@@ -60,4 +60,16 @@ export class CounterpartiesService {
       }),
     });
   }
+
+  verification(id: string, updatedCounterparty: Counterparty): Observable<Counterparty> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    return this.http.put<Counterparty>(`${this.apiUrl}api/CommercialWork/Partner/${id}`, updatedCounterparty,
+      {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }),
+    });
+  }
+
 }

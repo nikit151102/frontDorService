@@ -42,7 +42,7 @@ enum EditStatusEnum {
   standalone: true,
   templateUrl: './counterparties-list.component.html',
   styleUrl: './counterparties-list.component.scss',
-   providers: [MessageService]
+  providers: [MessageService]
 })
 export class CounterpartiesListComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
@@ -86,7 +86,7 @@ export class CounterpartiesListComponent {
 
   initializeForm() {
     this.counterpartyForm = this.fb.group({
-      id:[''],
+      id: [''],
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
@@ -185,7 +185,7 @@ export class CounterpartiesListComponent {
     event.stopPropagation();
     this.menuOpenFor = this.menuOpenFor === id ? null : id;
   }
-  
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as Element;
@@ -207,33 +207,41 @@ export class CounterpartiesListComponent {
   }
 
 
-    getStatusLabel(status: number): string {
-      switch (status) {
-        case 1: return 'Новый';
-        case 2: return 'Измененный';
-        case 3: return 'Удален';
-        case 4: return 'Отклонено';
-        case 5: return 'Подтвержден';
-        case 6: return 'Неактивный';
-        default: return 'Неизвестный статус';
-      }
+  getStatusLabel(status: number): string {
+    switch (status) {
+      case 1: return 'Новый';
+      case 2: return 'Измененный';
+      case 3: return 'Удален';
+      case 4: return 'Отклонено';
+      case 5: return 'Подтвержден';
+      case 6: return 'Неактивный';
+      default: return 'Неизвестный статус';
     }
-  
-    getStatusClass(status: number): string {
-      switch (status) {
-        case 1: return 'new';
-        case 2: return 'updated';
-        case 3: return 'deleted';
-        case 4: return 'rejected';
-        case 5: return 'approved';
-        case 6: return 'not-active';
-        default: return 'unknown';
-      }
+  }
+
+  getStatusClass(status: number): string {
+    switch (status) {
+      case 1: return 'new';
+      case 2: return 'updated';
+      case 3: return 'deleted';
+      case 4: return 'rejected';
+      case 5: return 'approved';
+      case 6: return 'not-active';
+      default: return 'unknown';
     }
+  }
 
 
-    isForbiddenStatus(status: number): boolean {
-      const forbiddenStatuses = [2, 3, 7, 8];
-      return forbiddenStatuses.includes(status);
-    }
+  isForbiddenStatus(status: number): boolean {
+    const forbiddenStatuses = [2, 3, 7, 8];
+    return forbiddenStatuses.includes(status);
+  }
+
+  verification(id: string, item: any, status: number) {
+    item.status = status;
+    this.counterpartiesService.verification(id, item).subscribe((value: any) => {
+
+    })
+  }
+
 }

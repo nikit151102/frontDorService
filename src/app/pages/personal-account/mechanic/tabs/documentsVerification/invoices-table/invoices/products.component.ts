@@ -35,7 +35,7 @@ import { ConfirmPopupService } from '../../../../../../../components/confirm-pop
   styleUrl: './products.component.scss',
 })
 
-export class InvoicesDataComponent implements OnChanges, OnInit {
+export class InvoiceDataComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
   @Input() endpoint: any;
   @Input() columns: any;
@@ -63,6 +63,10 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     public productsService: ProductsService) { }
 
   ngOnInit() {
+    this.productService.activData$.subscribe((data:any)=>{
+      this.invoices = data;
+    })
+
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
@@ -106,10 +110,10 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
 
   statuses = [
     { label: 'Не отправлено', value: 0, id:0 },
-    { label: 'Проверка Механик', value: 1, id: 1 },
-    { label: 'Проверка Директор', value: 2, id: 2 },
-    { label: 'Отклонено Механик', value: 3, id: 3 },
-    { label: 'Отклонено Директор', value: 4, id: 4 },
+    { label: 'Проверка ', value: 1, id: 1 },
+    { label: 'Проверка ', value: 2, id: 2 },
+    { label: 'Отклонено ', value: 3, id: 3 },
+    { label: 'Отклонено ', value: 4, id: 4 },
     { label: 'Подписано', value: 5, id: 5 },
     { label: 'Удалено', value: 6, id: 6 }
   ];
@@ -150,7 +154,8 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         console.log('response', response)
-        this.invoices = response.data; // Assuming response is the invoice array
+        // this.invoices = response.data; // Assuming response is the invoice array
+      this.productService.setActiveData(response.data)
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
@@ -188,14 +193,15 @@ export class InvoicesDataComponent implements OnChanges, OnInit {
     });
   }
 
-  verificationInvoice(invoiceId: any){
+  verificationInvoice(invoiceId: any, invoice:any, status:number){
     this.confirmPopupService.openConfirmDialog({
-      title: 'Подтверждение отправки на проверку',
-      message: 'Вы уверены, что хотите отправить фактуру механику?',
+      title: 'Подтверждение ',
+      message: 'Вы уверены, что хотите принять/отклонить фактуру?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.sendingVerification(invoiceId).subscribe(
+        invoice.status = status;
+        this.invoiceService.sendingVerification(invoiceId,invoice).subscribe(
           () => {
         
             this.messageService.add({

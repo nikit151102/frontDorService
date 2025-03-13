@@ -8,8 +8,7 @@
       </div>
     </li>
 
-    <li *ngFor="let counterparty of counterparties"
-      (click)="select(counterparty.id)">
+    <li *ngFor="let counterparty of counterparties" (click)="select(counterparty.id)">
       <div class="counterparty-item">
         <div style="       display: flex;
             flex-direction: column;
@@ -34,13 +33,17 @@
         <div class="actions">
           <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
           <div *ngIf="menuOpenFor === counterparty.id" class="menu">
-            <button class="menu-item" (click)="openDialog($event, counterparty)"
-              [disabled]="!isEditable(counterparty.editStatus)">
+            <button class="menu-item" (click)="openDialog($event, counterparty)">
               Изменить
             </button>
-            <button class="menu-item" (click)="deleteCounterparty(counterparty.id)"
-              [disabled]="!isEditable(counterparty.editStatus)">
+            <button class="menu-item" (click)="deleteCounterparty(counterparty.id)">
               Удалить
+            </button>
+            <button class="menu-item" *ngIf="counterparty.status == 3" (click)="verification(counterparty.id, counterparty, 7)">
+              Принять
+            </button>
+            <button class="menu-item" *ngIf="counterparty.status == 3" (click)="verification(counterparty.id, counterparty, 8)">
+              Отклонить
             </button>
           </div>
         </div>
