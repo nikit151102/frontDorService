@@ -1,6 +1,6 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductsComponent } from '../../../../../../components/products/products.component';
+import { ProductsComponent } from '../../../../components/products/products.component';
 import { InvoicesDataComponent } from './invoices/products.component';
 
 @Component({

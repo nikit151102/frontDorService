@@ -16,8 +16,15 @@ interface CustomMenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavMenuComponent {
-  @Input() items: CustomMenuItem[] = [];
-  @Input() role: string = '';
+  items: CustomMenuItem[] = [
+    { label: 'Профиль', commandName: 'profile' },
+    { label: 'Контрагенты', commandName: 'clients' },
+    { label: 'Сервисы', commandName: 'services' },
+    // { label: 'Нал', commandName: '' },
+    { label: 'Документы', commandName: 'documentsVerification' },
+    { label: 'Справочники', commandName: 'reference' }
+    
+  ];
 
   constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
 
@@ -25,7 +32,7 @@ export class NavMenuComponent {
     this.activatedRoute.paramMap.subscribe(params => {
       const id = params.get('id');
       if (id) {
-        this.router.navigate([`${this.role}/${id}/${commandName}`]);
+        this.router.navigate([`${id}/${commandName}`]);
       }
     });
   }

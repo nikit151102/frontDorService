@@ -1,16 +1,15 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProductsComponent } from '../../../../components/products/products.component';
-import { InvoicesDataComponent } from './invoices/products.component';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { InvoicesComponent } from '../../../components/invoices/invoices.component';
+import { ProductsComponent } from '../../../components/products/products.component';
 
 @Component({
-  selector: 'app-invoices-table',
-  standalone: true,
-  imports: [CommonModule, InvoicesDataComponent,ProductsComponent],
-  templateUrl: './invoices-table.component.html',
-  styleUrls: ['./invoices-table.component.scss']
+  selector: 'app-invoices-content',
+  imports: [CommonModule, InvoicesComponent,ProductsComponent],
+  templateUrl: './invoices-content.component.html',
+  styleUrl: './invoices-content.component.scss'
 })
-export class InvoicesTableComponent implements OnInit, OnChanges {
+export class InvoicesContentComponent  implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   selectedComponent: string = 'invoices';
 

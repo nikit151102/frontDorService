@@ -1,15 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, HostListener, Output } from '@angular/core';
-import { CounterpartiesService } from './counterparties-list.service';
-import { FormGroup, FormBuilder, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
-import { ConfirmationService, MessageService } from 'primeng/api';
-import { ConfirmDialogModule } from 'primeng/confirmdialog';
-import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
-import { PartnerStatusService } from '../../../../../../services/statuses/partner-statuses.service';
+import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
+import { PartnerStatusService } from '../../../../services/statuses/partner-statuses.service';
+import { PartnerMenuService } from './partner-menu.service';
+
 interface Counterparty {
   id: number;
   name: string;
@@ -21,16 +21,15 @@ interface TypeOption {
 }
 
 @Component({
-  selector: 'app-counterparties-list',
+  selector: 'app-partner-menu',
   imports: [CommonModule, DialogModule,
     FormsModule, ReactiveFormsModule, DropdownModule,
     InputTextModule, ButtonModule, ConfirmDialogModule],
   standalone: true,
-  templateUrl: './counterparties-list.component.html',
-  styleUrl: './counterparties-list.component.scss',
-   providers: [MessageService]
+  templateUrl: './partner-menu.component.html',
+  styleUrl: './partner-menu.component.scss'
 })
-export class CounterpartiesListComponent {
+export class PartnerMenuComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
 
   counterparties: any = [];
@@ -48,10 +47,10 @@ export class CounterpartiesListComponent {
   ];
 
   constructor(
-    private counterpartiesService: CounterpartiesService,
+    private partnerMenuService: PartnerMenuService,
     private fb: FormBuilder,
     private confirmPopupService: ConfirmPopupService,
-    private partnerStatusService:PartnerStatusService
+    private partnerStatusService: PartnerStatusService
   ) { }
 
   ngOnInit(): void {
@@ -60,7 +59,7 @@ export class CounterpartiesListComponent {
   }
 
   loadCounterparties() {
-    this.counterpartiesService.getCounterparties().subscribe(
+    this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
         this.sortCounterpartiesByStatus();
@@ -71,15 +70,15 @@ export class CounterpartiesListComponent {
       }
     );
   }
-  
+
   sortCounterpartiesByStatus() {
     this.counterparties = this.partnerStatusService.sortByStatus(this.counterparties)
   }
-  
-  
+
+
   initializeForm() {
     this.counterpartyForm = this.fb.group({
-      id:[''],
+      id: [''],
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
@@ -131,7 +130,7 @@ export class CounterpartiesListComponent {
       };
 
       if (this.selectedCounterparty) {
-        this.counterpartiesService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
+        this.partnerMenuService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
           (updatedCounterparty) => {
             const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
             if (index !== -1) {
@@ -143,7 +142,7 @@ export class CounterpartiesListComponent {
           (error) => console.error('Ошибка редактирования контрагента:', error)
         );
       } else {
-        this.counterpartiesService.addCounterparty(formDataWithValueType).subscribe(
+        this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
           (newCounterparty) => {
             this.counterparties.push(newCounterparty);
             this.display = false;
@@ -163,7 +162,7 @@ export class CounterpartiesListComponent {
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.counterpartiesService.deleteCounterparty(id).subscribe(
+        this.partnerMenuService.deleteCounterparty(id).subscribe(
           () => {
             this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
             this.loadCounterparties();
@@ -178,7 +177,7 @@ export class CounterpartiesListComponent {
     event.stopPropagation();
     this.menuOpenFor = this.menuOpenFor === id ? null : id;
   }
-  
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const target = event.target as Element;
@@ -187,8 +186,8 @@ export class CounterpartiesListComponent {
     }
   }
 
- 
-      // Работа со статусами
+
+  // Работа со статусами
   isEditable(status: number): boolean {
     return this.partnerStatusService.isEditable(status);
   }
