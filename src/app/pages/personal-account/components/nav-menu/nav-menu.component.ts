@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { JwtService } from '../../../../services/jwt.service';
 
 interface CustomMenuItem {
   label: string;
@@ -15,7 +16,7 @@ interface CustomMenuItem {
   styleUrls: ['./nav-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class NavMenuComponent {
+export class NavMenuComponent  implements OnInit{
   items: CustomMenuItem[] = [
     { label: 'Профиль', commandName: 'profile' },
     { label: 'Контрагенты', commandName: 'clients' },
@@ -26,7 +27,13 @@ export class NavMenuComponent {
     
   ];
 
-  constructor(private activatedRoute: ActivatedRoute, private router: Router) {}
+  decodedRole:any;
+
+  constructor(private activatedRoute: ActivatedRoute, private jwtService:JwtService, private router: Router) {}
+  ngOnInit(): void {
+    this.decodedRole = this.jwtService.getDecodedToken();
+    console.log('role',this.decodedRole)
+  }
 
   execute(commandName: string) {
     this.activatedRoute.paramMap.subscribe(params => {

@@ -1,5 +1,6 @@
 export const environment = {
     apiUrl: 'https://localhost:5001',
+    token: 'YXV0aFRva2Vu'
 };
 
 // authToken   Base64 YXV0aFRva2Vu

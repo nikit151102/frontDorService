@@ -12,14 +12,12 @@ import { NumberFilterComponent } from '../../../../components/fields/number-filt
 import { SearchFilterSortComponent } from '../../../../components/fields/search-filter-sort/search-filter-sort.component';
 import { UuidSearchFilterSortComponent } from '../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
 import { ProductsService } from '../products/products.service';
-import { InvoicesFormComponent } from './invoices-form/invoices.component';
 import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
-import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
-import { InvoicesService } from './invoices.service';
-import { ButtonConfig, BUTTON_SETS } from './button-config';
+import { ServicesContentService } from '../../tabs/services/services-content/services-content.service';
+import { ServicesFormComponent } from './services-form/services-form.component';
 
 @Component({
-  selector: 'app-invoices',
+  selector: 'app-services',
   providers: [ProductsService, MessageService],
   imports: [CommonModule,
     TableModule,
@@ -32,18 +30,18 @@ import { ButtonConfig, BUTTON_SETS } from './button-config';
     ToastModule,
     ButtonModule,
     MenuModule,
-    InvoicesFormComponent
+    ServicesFormComponent
   ],
-  templateUrl: './invoices.component.html',
-  styleUrl: './invoices.component.scss'
+  templateUrl: './services.component.html',
+  styleUrl: './services.component.scss'
 })
-export class InvoicesComponent implements OnChanges, OnInit {
+export class ServicesComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
-  buttonConfigs: Record<string, ButtonConfig[]> = BUTTON_SETS;
-  
+  @Input() actions: { label: string, action: string }[] = []; // изменено на строку (название метода)
+  @Input() productService!: any;
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
@@ -59,14 +57,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
   selectedProduct: any;
   selectedColumns: string[] = [];
 
-  constructor(private invoiceService: InvoicesContentService,
+  constructor(private servicesContentService: ServicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
-    public productsService: ProductsService,
-  private invoicesService:InvoicesService) { }
+    public productsService: ProductsService) { }
 
   ngOnInit() {
-    this.invoicesService.activData$.subscribe((data: any) => {
+
+
+    this.productService.activData$.subscribe((data: any) => {
       this.invoices = data;
     })
 
@@ -75,30 +74,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.loadInvoices();
 
   }
-
-  getButtonSet(product: any): ButtonConfig[] {
-    switch (product.status) {
-      case 0: return this.buttonConfigs['supplier'];
-      case 1: return this.buttonConfigs['mechanic'];
-      case 2: return this.buttonConfigs['director'];
-      default: return this.buttonConfigs['default'];
-    }
-  }
-  
-  [key: string]: any; 
-  handleButtonClick(button: ButtonConfig, product: any) {
-    if (button.action && typeof this[button.action] === 'function') {
-      if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
-        this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);
-      } else {
-        this[button.action](product);
-      }
-    } else {
-      console.error(`Action method '${button.action}' not found.`);
-    }
-  }
-  
-  
 
 
   updateColumnVisibility() {
@@ -148,13 +123,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
 
-  // onActionClick(actionName: string, product: any) {
-  //   if (this.invoicesService && typeof this.productService[actionName] === 'function') {
-  //     this.productService[actionName](product);
-  //   } else {
-  //     console.error(`Method ${actionName} does not exist on ProductsService`);
-  //   }
-  // }
+  onActionClick(actionName: string, product: any) {
+    if (this.productService && typeof this.productService[actionName] === 'function') {
+      this.productService[actionName](product);
+    } else {
+      console.error(`Method ${actionName} does not exist on ProductsService`);
+    }
+  }
 
 
   updateInvoice(invoice: any) {
@@ -162,11 +137,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   loadInvoices() {
+
+
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         console.log('response', response)
         // this.invoices = response.data; // Assuming response is the invoice array
-        this.invoicesService.setActiveData(response.data)
+        this.productService.setActiveData(response.data)
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
@@ -181,10 +158,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.deleteInvoice(invoiceId).subscribe(
+        this.servicesContentService.deleteInvoice(invoiceId).subscribe(
           () => {
-            this.invoicesService.setActiveData(this.invoicesService.getActiveData().productsService.filter((inv: any) => inv.id !== invoiceId))
-            
+            this.productService.productsService = this.productService.productsService.filter((inv: any) => inv.id !== invoiceId);
+
             this.messageService.add({
               severity: 'success',
               summary: 'Удалено',
@@ -204,15 +181,16 @@ export class InvoicesComponent implements OnChanges, OnInit {
     });
   }
 
-  verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp:any) {
+  verificationInvoice(invoiceId: any) {
     this.confirmPopupService.openConfirmDialog({
-      title: titlePopUp,
-      message: messagePopUp,
+      title: 'Подтверждение отправки на проверку',
+      message: 'Вы уверены, что хотите отправить фактуру механику?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.sendingVerification(invoice, status).subscribe(
+        this.servicesContentService.sendingVerification(invoiceId).subscribe(
           () => {
+
             this.messageService.add({
               severity: 'success',
               summary: 'Отправка',

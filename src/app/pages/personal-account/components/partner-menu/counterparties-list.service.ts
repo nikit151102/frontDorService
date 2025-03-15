@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { environment } from '../../../../../../../environment';
+import { environment } from '../../../../../environment';
+import { Router } from '@angular/router';
 
 interface Counterparty {
   id: number;
@@ -14,11 +15,27 @@ interface Counterparty {
 export class CounterpartiesService {
   private apiUrl = `${environment.apiUrl}/`;
   queryData: any = { filters: [], sorts: [] }
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router:Router) {}
 
   // Получить всех контрагентов
   getCounterparties(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
+    this.queryData.filters = this.queryData.filters || [];
+
+    const currentUrl = this.router.url;
+
+    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+
+    const hasTypeFilter = this.queryData.filters.some((filter:any) => filter.field === 'type');
+
+    if (!hasTypeFilter) {
+      this.queryData.filters = [
+        { field: 'type', values: [typeValue], type: 1 },
+        ...this.queryData.filters
+      ];
+    }
+    console.log('this.queryData:', this.queryData)
+
     return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData  , {
       headers: new HttpHeaders({
         'Accept': 'application/json',

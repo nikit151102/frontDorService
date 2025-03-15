@@ -10,14 +10,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
-import { statuses, taxes, types, adjustmentOptions, columns, productColumns } from '../../../../../services/data';
+import { ServicesService } from '../services.service';
 import { ConfirmPopupService } from '../../../../../components/confirm-popup/confirm-popup.service';
-import { InvoicesService } from '../invoices.service';
-import { InvoicesContentService } from '../../../tabs/partners/invoices-content/invoices-content.service';
+import { adjustmentOptions, columns, types, taxes, productColumns, statuses } from '../../../../../services/data';
+import { ServicesContentService } from '../../../tabs/services/services-content/services-content.service';
 
 @Component({
-  selector: 'app-invoices-form',
-  standalone: true,
+  selector: 'app-services-form',
   imports: [
     CommonModule,
     TableModule,
@@ -31,11 +30,11 @@ import { InvoicesContentService } from '../../../tabs/partners/invoices-content/
     FormsModule,
     ReactiveFormsModule
   ],
-  templateUrl: './invoices.component.html',
-  styleUrl: './invoices.component.scss',
+  templateUrl: './services-form.component.html',
+  styleUrl: './services-form.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class InvoicesFormComponent implements OnInit, OnChanges {
+export class ServicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyId: any;
   @Input() isEditInvoice :any;
@@ -53,11 +52,11 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   checkers: any;
   isEdit:any;
   constructor(
-    private invoiceService: InvoicesContentService,
+    private servicesContentService: ServicesContentService,
     private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private productsService:InvoicesService
+     private productsService:ServicesService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -89,7 +88,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-    this.invoiceService.getCheckers().subscribe((values: any) => {
+    this.servicesContentService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
       this.checkers.forEach((checker: any) => {
         const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
@@ -100,36 +99,36 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
     
-    this.invoiceService.getMeasurementUnits$().subscribe(units => {
+    this.servicesContentService.getMeasurementUnits$().subscribe(units => {
       if (units.length === 0) {
-        this.invoiceService.getMeasurementUnit().subscribe(values => {
-          this.invoiceService.setMeasurementUnits(values); 
+        this.servicesContentService.getMeasurementUnit().subscribe(values => {
+          this.servicesContentService.setMeasurementUnits(values); 
         });
       }
 
     });
-    this.invoiceService.getProductTargetsUnits$().subscribe(units => {
+    this.servicesContentService.getProductTargetsUnits$().subscribe(units => {
       if (units.length === 0) {
-        this.invoiceService.getProductTarget().subscribe(values => {
-          this.invoiceService.setProductTargetsUnits(values); 
+        this.servicesContentService.getProductTarget().subscribe(values => {
+          this.servicesContentService.setProductTargetsUnits(values); 
         });
       }
     });
 
 
-    this.invoiceService.measurementUnits$.subscribe((data:any)=>{
+    this.servicesContentService.measurementUnits$.subscribe((data:any)=>{
       this.measurementUnits = data.data;
       console.log('measurementUnits',this.measurementUnits)
     })
 
-    this.invoiceService.productTargets$.subscribe((data:any)=>{
+    this.servicesContentService.productTargets$.subscribe((data:any)=>{
       this.productTargets = data.data;
       console.log('productTargets',this.productTargets)
     })
   }
 
   loadInvoice() {
-    this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
+    this.servicesContentService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       console.log("selectedInvoice", value.data);
       this.selectedInvoice = value.data;
       
@@ -201,7 +200,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   editInvoice(id: string) {
-    this.invoiceService.getInvoiceById(id).subscribe(
+    this.servicesContentService.getInvoiceById(id).subscribe(
       (invoice) => {
         this.selectedInvoice = invoice.data;
         const typeObj = types.find(t => t.value === invoice.data.type);
@@ -273,7 +272,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
         };
 
-        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+        this.servicesContentService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             if (this.selectedInvoice.id) {
               const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
@@ -315,7 +314,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.deleteInvoice(id).subscribe(
+        this.servicesContentService.deleteInvoice(id).subscribe(
           () => {
             let invoices = this.productsService.getActiveData()
             this.invoices = invoices.filter((inv:any) => inv.id !== id);
@@ -367,7 +366,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id,null).subscribe((updatedInvoice: any) => {
+    this.servicesContentService.sendingVerification(id).subscribe((updatedInvoice: any) => {
       const index = this.invoices.findIndex(invoice => invoice.id === id);
       if (index !== -1) {
         this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };

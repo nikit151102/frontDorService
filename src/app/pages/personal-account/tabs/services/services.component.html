@@ -1,1 +1,6 @@
-<p>services works!</p>
+<div class="container">
+    <!-- Левое меню -->
+    <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)"></app-partner-menu>
+    <!-- Правая часть -->
+    <app-invoices-content *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"></app-invoices-content>
+  </div>

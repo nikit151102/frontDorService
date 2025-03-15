@@ -2,8 +2,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../environment';
-import { ActivatedRoute, Router } from '@angular/router';
-
 
 interface FilterDto {
   field?: string;
@@ -22,16 +20,21 @@ interface QueryDto {
 }
 
 
-
-@Injectable({ providedIn: 'any' })
-export class ProductsService {
+@Injectable({
+  providedIn: 'root'
+})
+export class ServicesService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
-  constructor(private http: HttpClient, private router: Router) { }
+  defaultFilters: FilterDto[] = [{
+    field: 'type',
+    values: [1],
+    type: 1
+  }];
+  constructor(private http: HttpClient) { }
 
   endpoint: string = '';
 
-  defaultFilters: FilterDto[] = [];
 
   private dataSubject = new BehaviorSubject<any>(null);
   activData$ = this.dataSubject.asObservable();
@@ -39,30 +42,17 @@ export class ProductsService {
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }
-  getActiveData(tab: any) {
-    this.dataSubject.value;
+  getActiveData() {
+    return this.dataSubject.value;
   }
 
 
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-
     this.queryData.filters = this.queryData.filters || [];
-
-    const currentUrl = this.router.url;
-
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
-
-    const hasTypeFilter = this.queryData.filters.some(filter => filter.field === 'type');
-
-    if (!hasTypeFilter) {
-      this.queryData.filters = [
-        { field: 'type', values: [typeValue], type: 1 },
-        ...this.queryData.filters
-      ];
-    }
-    
+    this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
+    console.log('this.queryData',this.queryData)
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
@@ -75,6 +65,17 @@ export class ProductsService {
   onFilterChange(filter: FilterDto) {
     if (!this.queryData.filters) this.queryData.filters = [];
 
+    // Проверка на пустые значения для фильтра с типами 6, 7, 8, 9
+    if ([6, 7, 8, 9].includes(filter.type) && (filter.values && filter.values[0] === "")) {
+      // Если значения пустые, не добавляем фильтр
+      this.queryData.filters = this.queryData.filters.filter(
+        f => !(f.field === filter.field && [6, 7, 8, 9].includes(f.type))
+      );
+      this.loadProducts();
+      console.log('Обновленные фильтры:', this.queryData.filters);
+      return; // Выходим из метода, чтобы не продолжать добавление фильтра
+    }
+
     // Удаляем все фильтры с тем же полем и типом из массива, если тип фильтра один из 6, 7, 8, 9
     if ([6, 7, 8, 9].includes(filter.type)) {
       this.queryData.filters = this.queryData.filters.filter(
@@ -82,7 +83,7 @@ export class ProductsService {
       );
     }
 
-    // Удаляем все фильтры с тем же полем и типом из массива, если тип фильтра один из 6, 7, 8, 9
+    // Удаляем все фильтры с тем же полем и типом из массива, если тип фильтра один из 2, 3, 4, 5
     if ([2, 3, 4, 5].includes(filter.type)) {
       this.queryData.filters = this.queryData.filters.filter(
         f => !(f.field === filter.field && [2, 3, 4, 5].includes(f.type))
@@ -96,12 +97,17 @@ export class ProductsService {
 
     if (existingFilter) {
       existingFilter.values = filter.values; // Обновляем значения
-    } else {
-      this.queryData.filters.push(filter); // Добавляем новый фильтр
+    } else if (filter.values && filter.values[0] !== "") {
+      // Добавляем фильтр только если значения не пустые
+      this.queryData.filters.push(filter);
     }
-    this.loadProducts()
+
+    this.loadProducts();
     console.log('Обновленные фильтры:', this.queryData.filters);
   }
+
+
+
 
   onSortChange(sort: SortDto) {
     if (!this.queryData.sorts) this.queryData.sorts = [];
@@ -134,4 +140,6 @@ export class ProductsService {
       }
     );
   }
+
+
 }

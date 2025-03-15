@@ -2,23 +2,20 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
-import { JwtService } from '../../../../../services/jwt.service';
 
 @Component({
-  selector: 'app-invoices-content',
+  selector: 'app-services-content',
   imports: [CommonModule, InvoicesComponent,ProductsComponent],
-  templateUrl: './invoices-content.component.html',
-  styleUrl: './invoices-content.component.scss'
+  templateUrl: './services-content.component.html',
+  styleUrl: './services-content.component.scss'
 })
-export class InvoicesContentComponent  implements OnInit, OnChanges {
+export class ServicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   selectedComponent: string = 'invoices';
 
-  constructor(private jwtService:JwtService ) { }
+  constructor() { }
 
-  ngOnInit(): void { 
-    this.jwtService.getDecodedToken()
-  }
+  ngOnInit(): void { }
 
   ngOnChanges(changes: SimpleChanges): void { }
 

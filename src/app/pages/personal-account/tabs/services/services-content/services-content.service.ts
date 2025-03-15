@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { Observable, BehaviorSubject, tap, Subject } from 'rxjs';
 import { environment } from '../../../../../../environment';
 
 interface Product {
@@ -22,10 +22,11 @@ interface DocInvoice {
   tax: number;
   productList: Product[];
 }
+
 @Injectable({
   providedIn: 'root'
 })
-export class InvoicesContentService {
+export class ServicesContentService {
 
   constructor(private http: HttpClient) { }
 
@@ -87,7 +88,7 @@ export class InvoicesContentService {
     });
   }
 
-  sendingVerification(invoice: any, status: any): Observable<void> {
+  sendingVerification(id: string): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     const headers = new HttpHeaders({
@@ -95,11 +96,7 @@ export class InvoicesContentService {
       'Authorization': `Bearer ${token}`
     });
 
-    if(status){
-      invoice.status = status;
-    }
-
-    return this.http.patch<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${invoice.id}`, invoice, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${id}`, {}, { headers });
   }
 
   getCheckers() {
@@ -183,47 +180,5 @@ hasProductTargetsUnits(): boolean {
         tap(response => this.setProductTargetsUnits(response))// ✅ Сохраняем данные в BehaviorSubject
       );
   }
-
-  
-
-
-  private socket!: WebSocket;
-  private messagesSubject = new Subject<any>();
-  messages$ = this.messagesSubject.asObservable();
-
-  connectToWebSocket(): void {
-    const token = localStorage.getItem('YXV0aFRva2Vu');
-    const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}`;
-    this.socket = new WebSocket(url);
-
-    this.socket.onopen = () => {
-    };
-
-    this.socket.onmessage = (event) => {
-      try {
-        const data = JSON.parse(event.data);
-        this.messagesSubject.next(data);
-      } catch (e) {
-        console.error('Error parsing WebSocket message:', e);
-      }
-    };
-
-
-    this.socket.onerror = (error) => {
-      console.error('WebSocket error:', error);
-    };
-
-    this.socket.onclose = () => {
-    };
-  }
-
-  disconnectWebSocket(): void {
-    if (this.socket) {
-      this.socket.close();
-    }
-  }
-
-
-
 
 }

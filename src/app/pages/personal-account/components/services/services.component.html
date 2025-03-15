@@ -1,5 +1,5 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
-    [isEditInvoice]="isEditInvoice"></app-invoices-form>
+<app-services-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
+    [isEditInvoice]="isEditInvoice"></app-services-form>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -30,6 +30,7 @@
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
 
+
                         <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
@@ -43,6 +44,7 @@
 
                     </div>
                 </th>
+
             </ng-container>
         </tr>
         <tr>
@@ -69,6 +71,7 @@
                             {{ product[col.field] }}
                         </span>
                     </ng-template>
+
                 </td>
                 <ng-container *ngIf="col.type === 'actions'">
                     <td class="invoice-cell actions-cell">
@@ -76,22 +79,26 @@
                             <button class="btn btn-dropdown" style="color: #101010;"
                                 (click)="toggleDropdown(product.id)">⋮</button>
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <ng-container *ngFor="let button of getButtonSet(product)">
-                                    <button class="btn btn-details"
-                                        *ngIf="button.condition ? button.condition(product) : true"
-                                        [ngClass]="button.class"
-                                        (click)="handleButtonClick(button, product)"
-                                        [title]="button.titlePopUp">
-                                        {{ button.label }}
-                                    </button>
-                                </ng-container>                                
+                                <button class="btn btn-delete" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="deleteInvoice(product.id)">Удалить</button>
+                                <button class="btn btn-edit" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="getInvoiceById(product.id, true)">Изменить</button>
+                                <button class="btn btn-send" *ngIf="product.status == 0 || product.status == 3"
+                                    (click)="verificationInvoice(product.id)">Отправить</button>
+                                <button class="btn btn-details" *ngIf="product.status != 0 && product.status != 3"
+                                    (click)="getInvoiceById(product.id, false)">Подробнее</button>
                             </div>
                         </div>
                     </td>
                 </ng-container>
+
             </ng-container>
+
+
+
         </tr>
     </ng-template>
+
     <ng-template pTemplate="footer">
         <tr>
             <ng-container *ngFor="let col of columns; let i = index">
