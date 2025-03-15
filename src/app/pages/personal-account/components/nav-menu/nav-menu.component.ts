@@ -6,6 +6,7 @@ import { JwtService } from '../../../../services/jwt.service';
 interface CustomMenuItem {
   label: string;
   commandName?: string;
+   access: string
 }
 
 @Component({
@@ -17,22 +18,37 @@ interface CustomMenuItem {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NavMenuComponent  implements OnInit{
+  
   items: CustomMenuItem[] = [
-    { label: 'Профиль', commandName: 'profile' },
-    { label: 'Контрагенты', commandName: 'clients' },
-    { label: 'Сервисы', commandName: 'services' },
-    // { label: 'Нал', commandName: '' },
-    { label: 'Документы', commandName: 'documentsVerification' },
-    { label: 'Справочники', commandName: 'reference' }
+    { label: 'Профиль', commandName: 'profile', access: '' },
+    { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess' },
+    { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess' },
+    // { label: 'Нал', commandName: '', access: '', access: 'CashAccess },
+    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
     
   ];
-
-  decodedRole:any;
+  decodedRole: any[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private jwtService:JwtService, private router: Router) {}
+  
   ngOnInit(): void {
-    this.decodedRole = this.jwtService.getDecodedToken();
-    console.log('role',this.decodedRole)
+    const decodedToken = this.jwtService.getDecodedToken();
+    
+    if (decodedToken && decodedToken.role) {
+      if (Array.isArray(decodedToken.role)) {
+        this.decodedRole = decodedToken.role;
+      } else {
+        console.error('Ошибка: role не массив!', decodedToken.role);
+      }
+    } else {
+      console.error('Ошибка: Токен не содержит role!', decodedToken);
+    }
+
+    console.log('Decoded roles:', this.decodedRole);
+  }
+
+  hasAccess(access: string): boolean {
+    return !access || this.decodedRole.includes(access);
   }
 
   execute(commandName: string) {

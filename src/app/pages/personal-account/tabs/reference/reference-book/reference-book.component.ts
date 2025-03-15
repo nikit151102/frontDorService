@@ -3,7 +3,7 @@ import { referenceConfig } from './conf';
 import { ReferenceBookService } from './reference-book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToastService } from '../../../../../../services/toast.service';
+import { ToastService } from '../../../../../services/toast.service';
 
 
 @Component({
