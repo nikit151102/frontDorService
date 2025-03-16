@@ -79,12 +79,11 @@
                                 <ng-container *ngFor="let button of getButtonSet()">
                                     <button class="btn btn-details"
                                         *ngIf="button.condition ? button.condition(product) : true"
-                                        [ngClass]="button.class"
-                                        (click)="handleButtonClick(button, product)"
+                                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
                                         [title]="button.titlePopUp">
                                         {{ button.label }}
                                     </button>
-                                </ng-container>                                
+                                </ng-container>
                             </div>
                         </div>
                     </td>

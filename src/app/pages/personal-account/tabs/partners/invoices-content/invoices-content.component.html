@@ -4,7 +4,7 @@
 </div>
 
 <div *ngIf="selectedComponent === 'invoices'">
-    <app-invoices [counterpartyId]="counterpartyId" [columns]="columnsInvoices"
+    <app-invoices [counterpartyId]="counterpartyId" [columns]="columnsInvoices" [buttonConfigs]="getButtonConfigs()"
         [totalInfoColumn]="totalInfoColumnInvoices" [endpoint]="'api/CommercialWork/DocInvoice/Filter'"></app-invoices>
 </div>
 <div *ngIf="selectedComponent === 'products'">

@@ -1,4 +1,15 @@
-<button pButton label="Создать новую фактуру" icon="pi pi-plus" (click)="createNewInvoice()"></button>
+<button 
+  pButton 
+  label="Создать фактуру" 
+  icon="pi pi-plus" 
+  (click)="createNewInvoice()" 
+  [disabled]="counterpartyId === '00000000-0000-0000-0000-000000000000'">
+</button>
+
+<p *ngIf="counterpartyId === '00000000-0000-0000-0000-000000000000'" class="text-warning">
+  Необходимо выбрать контрагента
+</p>
+
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
@@ -46,7 +57,7 @@
                             <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"
                                 [disabled]="!isEdit"></p-dropdown>
                         </div>
-                        <div class="p-field p-col-12">
+                        <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
                             <label for="checkPersonId">Проверяющий</label>
                             <p-dropdown id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId"
                                 [options]="checkers" optionLabel="fullName" optionValue="id" [disabled]="!isEdit">

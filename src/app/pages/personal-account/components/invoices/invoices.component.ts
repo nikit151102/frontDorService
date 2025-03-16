@@ -16,8 +16,8 @@ import { InvoicesFormComponent } from './invoices-form/invoices.component';
 import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
 import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
 import { InvoicesService } from './invoices.service';
-import { ButtonConfig, BUTTON_SETS } from './button-config';
 import { JwtService } from '../../../../services/jwt.service';
+import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
 
 @Component({
   selector: 'app-invoices',
@@ -43,7 +43,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
-  buttonConfigs: Record<string, ButtonConfig[]> = BUTTON_SETS;
+  @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
 
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -54,6 +54,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.productsService.counterpartyId = this.counterpartyId;
       this.productsService.endpoint = this.endpoint;
       this.productsService.loadProducts();
+    }
+
+    if (changes['buttonConfigs']) {
+      this.buttonConfigs = this.buttonConfigs;
     }
   }
 
@@ -75,7 +79,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
     })
-
+console.log('buttonConfigs',this.buttonConfigs)
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();

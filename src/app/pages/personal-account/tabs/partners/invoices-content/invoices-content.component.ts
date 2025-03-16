@@ -3,24 +3,29 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
 import { JwtService } from '../../../../../services/jwt.service';
+import { BUTTON_SETS } from '../button-config';
 
 @Component({
   selector: 'app-invoices-content',
-  imports: [CommonModule, InvoicesComponent,ProductsComponent],
+  imports: [CommonModule, InvoicesComponent, ProductsComponent],
   templateUrl: './invoices-content.component.html',
   styleUrl: './invoices-content.component.scss'
 })
-export class InvoicesContentComponent  implements OnInit, OnChanges {
+export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   selectedComponent: string = 'invoices';
 
-  constructor(private jwtService:JwtService ) { }
+  constructor(private jwtService: JwtService) { }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.jwtService.getDecodedToken()
   }
 
   ngOnChanges(changes: SimpleChanges): void { }
+
+  getButtonConfigs() {
+    return BUTTON_SETS
+  }
 
   showComponent(component: string) {
     this.selectedComponent = component;
@@ -51,10 +56,10 @@ export class InvoicesContentComponent  implements OnInit, OnChanges {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
-];
+  ];
 
 
- 
+
   totalInfoColumnInvoices = [
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
@@ -72,16 +77,16 @@ export class InvoicesContentComponent  implements OnInit, OnChanges {
       action: (product: any) => this.deleteProduct(product)
     }
   ];
-  
+
   editProduct(product: any) {
     console.log('Редактируем:', product);
     // Здесь можно добавить логику редактирования, например, открытие модального окна
   }
-  
+
   deleteProduct(product: any) {
     console.log('Удаляем:', product);
     // Здесь можно добавить логику удаления, например, вызов API
   }
-  
+
 
 }

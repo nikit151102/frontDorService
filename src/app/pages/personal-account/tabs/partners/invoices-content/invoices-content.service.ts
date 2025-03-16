@@ -110,7 +110,7 @@ export class InvoicesContentService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<void>(`${environment.apiUrl}/api/CommercialWork/GetCheckers`, { headers });
+    return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
   }
 
 

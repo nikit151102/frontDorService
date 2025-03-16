@@ -17,6 +17,7 @@ import { InvoicesContentService } from '../../../tabs/partners/invoices-content/
 import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
 import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
+import { JwtService } from '../../../../../services/jwt.service';
 
 @Component({
   selector: 'app-invoices-form',
@@ -44,7 +45,8 @@ import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-
 export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyId: any;
-  @Input() isEditInvoice :any;
+  @Input() isEditInvoice: any;
+  visibleCheckPersonId: boolean = true;
 
   measurementUnits: any[] = [];
   productTargets: any[] = [];
@@ -57,13 +59,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   invoices: any[] = [];
   selectedInvoice: any;
   checkers: any;
-  isEdit:any;
+  isEdit: any;
   constructor(
     private invoiceService: InvoicesContentService,
     private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private productsService:InvoicesService
+    private productsService: InvoicesService,
+    private jwtService: JwtService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -78,7 +81,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-        if(this.invoiceId != null){
+        if (this.invoiceId != null) {
           this.loadInvoice();
         }
       }
@@ -87,14 +90,18 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['isEditInvoice'].currentValue;
       const previousCounterpartyId = changes['isEditInvoice'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-      this.isEdit = this.isEditInvoice;
-      this.cdr.detectChanges();
+        this.isEdit = this.isEditInvoice;
+        this.cdr.detectChanges();
       }
     }
-    
+
   }
 
   ngOnInit() {
+    let currentRole = this.jwtService.getDecodedToken().email;
+    if (currentRole == '3') {
+      this.visibleCheckPersonId = false;
+    }
     this.invoiceService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
       this.checkers.forEach((checker: any) => {
@@ -105,11 +112,11 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     })
 
 
-    
+
     this.invoiceService.getMeasurementUnits$().subscribe(units => {
       if (units.length === 0) {
         this.invoiceService.getMeasurementUnit().subscribe(values => {
-          this.invoiceService.setMeasurementUnits(values); 
+          this.invoiceService.setMeasurementUnits(values);
         });
       }
 
@@ -117,20 +124,20 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.invoiceService.getProductTargetsUnits$().subscribe(units => {
       if (units.length === 0) {
         this.invoiceService.getProductTarget().subscribe(values => {
-          this.invoiceService.setProductTargetsUnits(values); 
+          this.invoiceService.setProductTargetsUnits(values);
         });
       }
     });
 
 
-    this.invoiceService.measurementUnits$.subscribe((data:any)=>{
+    this.invoiceService.measurementUnits$.subscribe((data: any) => {
       this.measurementUnits = data.data;
-      console.log('measurementUnits',this.measurementUnits)
+      console.log('measurementUnits', this.measurementUnits)
     })
 
-    this.invoiceService.productTargets$.subscribe((data:any)=>{
+    this.invoiceService.productTargets$.subscribe((data: any) => {
       this.productTargets = data.data;
-      console.log('productTargets',this.productTargets)
+      console.log('productTargets', this.productTargets)
     })
   }
 
@@ -138,7 +145,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       console.log("selectedInvoice", value.data);
       this.selectedInvoice = value.data;
-      
+
     })
 
   }
@@ -273,6 +280,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       acceptLabel: acceptLabel,
       rejectLabel: 'Отмена',
       onAccept: () => {
+        if (this.visibleCheckPersonId == false) {
+          this.selectedInvoice = {
+            ...this.selectedInvoice,
+            checkPersonId: '00000000-0000-0000-0000-000000000000',
+          }
+        }
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
@@ -324,8 +337,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         this.invoiceService.deleteInvoice(id).subscribe(
           () => {
             let invoices = this.productsService.getActiveData()
-            this.invoices = invoices.filter((inv:any) => inv.id !== id);
-;
+            this.invoices = invoices.filter((inv: any) => inv.id !== id);
+            ;
             this.messageService.add({
               severity: 'success',
               summary: 'Удалено',
@@ -373,7 +386,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id,null).subscribe((updatedInvoice: any) => {
+    this.invoiceService.sendingVerification(id, null).subscribe((updatedInvoice: any) => {
       const index = this.invoices.findIndex(invoice => invoice.id === id);
       if (index !== -1) {
         this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
@@ -425,7 +438,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
-  
+
 }
 
 

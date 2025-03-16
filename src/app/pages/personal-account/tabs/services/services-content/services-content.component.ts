@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
+import { BUTTON_SERVICES_SETS } from './button-services-config';
 
 @Component({
   selector: 'app-services-content',
-  imports: [CommonModule, InvoicesComponent,ProductsComponent],
+  imports: [CommonModule, InvoicesComponent, ProductsComponent],
   templateUrl: './services-content.component.html',
   styleUrl: './services-content.component.scss'
 })
@@ -18,6 +19,10 @@ export class ServicesContentComponent implements OnInit, OnChanges {
   ngOnInit(): void { }
 
   ngOnChanges(changes: SimpleChanges): void { }
+
+  getButtonConfigs() {
+    return BUTTON_SERVICES_SETS
+  }
 
   showComponent(component: string) {
     this.selectedComponent = component;
@@ -48,10 +53,10 @@ export class ServicesContentComponent implements OnInit, OnChanges {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
-];
+  ];
 
 
- 
+
   totalInfoColumnInvoices = [
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
@@ -69,16 +74,16 @@ export class ServicesContentComponent implements OnInit, OnChanges {
       action: (product: any) => this.deleteProduct(product)
     }
   ];
-  
+
   editProduct(product: any) {
     console.log('Редактируем:', product);
     // Здесь можно добавить логику редактирования, например, открытие модального окна
   }
-  
+
   deleteProduct(product: any) {
     console.log('Удаляем:', product);
     // Здесь можно добавить логику удаления, например, вызов API
   }
-  
+
 
 }
