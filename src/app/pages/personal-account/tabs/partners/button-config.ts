@@ -6,7 +6,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
-            condition: (product) => product.status,
+            condition: (product) => product.editStatus,
         },
         {
             label: 'Изменить',
@@ -14,7 +14,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-edit',
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите внести изменения?',
-            condition: (product) => product.status === 7 || product.status === 5 || product.status === 6,
+            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
         },
         {
             label: 'Удалить',
@@ -22,7 +22,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить контрагента?',
-            condition: (product) => product.status === 7 || product.status === 5 || product.status === 6,
+            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
         }
     ],
     mechanic: [
@@ -30,7 +30,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
-            condition: (product) => product.status !== 0 && product.status !== 3,
+            condition: (product) => product.editStatus !== 0 && product.editStatus !== 3,
         }
     ],
     director: [
@@ -38,7 +38,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
-            condition: (product) => product.status,
+            condition: (product) => product.editStatus,
         },
         //Статус контрагента = 1
         {
@@ -48,7 +48,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
             status: 7,
-            condition: (product) => product.status === 1,
+            condition: (product) => product.editStatus === 1,
         },
         {
             label: 'Отклонить',
@@ -57,7 +57,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
             status: 10,
-            condition: (product) => product.status === 1,
+            condition: (product) => product.editStatus === 1,
         },
         
         //Статус контрагента = 2
@@ -68,7 +68,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
             status: 7,
-            condition: (product) => product.status === 2,
+            condition: (product) => product.editStatus === 2,
         },
         {
             label: 'Отклонить',
@@ -77,7 +77,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
             status: 10,
-            condition: (product) => product.status === 2,
+            condition: (product) => product.editStatus === 2,
         },
 
 
@@ -89,7 +89,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
             status: 7,
-            condition: (product) => product.status === 3,
+            condition: (product) => product.editStatus === 3,
         },
         {
             label: 'Отклонить',
@@ -98,7 +98,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
             status: 10,
-            condition: (product) => product.status === 3,
+            condition: (product) => product.editStatus === 3,
         },
 
         {
@@ -107,7 +107,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-edit',
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию контрагента?',
-            condition: (product) => product.status,
+            condition: (product) => product.editStatus,
         },
         {
             label: 'Удалить',
@@ -115,7 +115,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить контрагента?',
-            condition: (product) => product.status,
+            condition: (product) => product.editStatus,
         },
     ],
     default: [
@@ -123,7 +123,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
-            condition: (product) => product.status !== 0 && product.status !== 3,
+            condition: (product) => product.editStatus !== 0 && product.editStatus !== 3,
         }
     ]
 };

@@ -67,12 +67,13 @@ export class PartnerMenuComponent {
   }
 
   getButtonSet(): ButtonConfig[] {
+    console.log(' this.currentRole', this.currentRole)
     switch (this.currentRole) {
-      case "Снабженец":
+      case '2':
         return this.buttonConfigs['supplier'];
-      case "Механик":
+      case '3':
         return this.buttonConfigs['mechanic'];
-      case "Директор":
+      case '1':
         return this.buttonConfigs['director'];
       default:
         return this.buttonConfigs['default'];

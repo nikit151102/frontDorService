@@ -34,16 +34,8 @@
           <div class="actions">
             <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
             <div *ngIf="menuOpenFor === counterparty.id" class="menu">
-              <button class="menu-item" (click)="openDialog($event, counterparty)"
-                [disabled]="!isEditable(counterparty.editStatus)">
-                Изменить
-              </button>
-              <button class="menu-item" (click)="deleteCounterparty(counterparty.id)"
-                [disabled]="!isEditable(counterparty.editStatus)">
-                Удалить
-              </button>
               <ng-container *ngFor="let button of getButtonSet()">
-                <button class="btn btn-details"
+                <button class="menu-item" 
                     *ngIf="button.condition ? button.condition(counterparty) : true"
                     [ngClass]="button.class"
                     (click)="handleButtonClick(button, counterparty)"
