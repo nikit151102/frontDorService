@@ -24,11 +24,16 @@
     background-color: #3f4e9f;
 }
 
+.settings{
+    display: flex;
+    flex-direction: column;
+}
+
 ul {
     list-style: none;
     padding: 0;
     overflow-y: scroll;
-    height: calc(100vh - 242px);
+    height: calc(100vh - 290px);
     overflow-x: hidden;
     direction: rtl;
 }

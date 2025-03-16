@@ -11,6 +11,7 @@ import { PartnerStatusService } from '../../../../services/statuses/partner-stat
 import { PartnerMenuService } from './partner-menu.service';
 import { ButtonConfig } from './button-config';
 import { JwtService } from '../../../../services/jwt.service';
+import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 
 interface Counterparty {
   id: number;
@@ -26,7 +27,7 @@ interface TypeOption {
   selector: 'app-partner-menu',
   imports: [CommonModule, DialogModule,
     FormsModule, ReactiveFormsModule, DropdownModule,
-    InputTextModule, ButtonModule, ConfirmDialogModule],
+    InputTextModule, ButtonModule, ConfirmDialogModule, CustomInputComponent],
   standalone: true,
   templateUrl: './partner-menu.component.html',
   styleUrl: './partner-menu.component.scss'
@@ -81,24 +82,24 @@ export class PartnerMenuComponent {
 
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any, event?: Event) {
-    console.log('productproduct',product)
+    console.log('productproduct', product)
 
     if (button.action && typeof this[button.action] === 'function') {
-        if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
-            this[button.action](event,product, button.status, button.titlePopUp, button.messagePopUp, event);
-        } else if(button.isEditData == false || button.isEditData == true) {
-          this.isEdit = button.isEditData;
-          console.log('button.isEditData',this.isEdit)
-                this[button.action](event, product);
-                
-        } else{
-          
-            this[button.action](event, product);
-        }
+      if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
+        this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
+      } else if (button.isEditData == false || button.isEditData == true) {
+        this.isEdit = button.isEditData;
+        console.log('button.isEditData', this.isEdit)
+        this[button.action](event, product);
+
+      } else {
+
+        this[button.action](event, product);
+      }
     } else {
-        console.error(`Action method '${button.action}' not found.`);
+      console.error(`Action method '${button.action}' not found.`);
     }
-}
+  }
 
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(
@@ -136,7 +137,7 @@ export class PartnerMenuComponent {
     this.selectCounterparty.emit(id);
   }
 
-  isEdit:boolean = false;
+  isEdit: boolean = false;
 
   openDialog(event: MouseEvent, counterparty?: any) {
     event.stopPropagation();
@@ -214,7 +215,7 @@ export class PartnerMenuComponent {
 
 
   deleteCounterparty(event: any, partner: any) {
-    console.log('partnerpartnerpartner',partner)
+    console.log('partnerpartnerpartner', partner)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить контрагента?',
@@ -262,4 +263,38 @@ export class PartnerMenuComponent {
   isForbiddenStatus(status: number): boolean {
     return this.partnerStatusService.isForbiddenStatus(status);
   }
+
+
+
+  searchTerm: string = '';
+  filterField: string = 'fullName';
+  onSearchChange(value: string): void {
+    this.searchTerm = value;
+
+    const existingFilterIndex = this.partnerMenuService.queryData.filters.findIndex(
+      (f: any) => f.field === this.filterField
+    );
+
+    if (this.searchTerm) {
+      const filterDto = {
+        field: this.filterField,
+        values: [this.searchTerm],
+        type: 0
+      };
+
+      if (existingFilterIndex !== -1) {
+        this.partnerMenuService.queryData.filters[existingFilterIndex] = filterDto;
+      } else {
+        this.partnerMenuService.queryData.filters.push(filterDto);
+      }
+    } else {
+      if (existingFilterIndex !== -1) {
+        this.partnerMenuService.queryData.filters.splice(existingFilterIndex, 1);
+      }
+    }
+
+    this.loadCounterparties();
+  }
+
 }
+
