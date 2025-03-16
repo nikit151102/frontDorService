@@ -18,6 +18,7 @@ import { InvoicesContentService } from '../../tabs/partners/invoices-content/inv
 import { InvoicesService } from './invoices.service';
 import { JwtService } from '../../../../services/jwt.service';
 import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
+import { SettingsComponent } from './settings/settings.component';
 
 @Component({
   selector: 'app-invoices',
@@ -33,7 +34,8 @@ import { ButtonConfig } from '../../tabs/services/services-content/button-servic
     ToastModule,
     ButtonModule,
     MenuModule,
-    InvoicesFormComponent
+    InvoicesFormComponent,
+    SettingsComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss'
@@ -62,9 +64,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   selectedProduct: any;
-  selectedColumns: string[] = [];
+
   currentRole: any;
-  
+  selectedColumns: string[] = [];
+
   constructor(private invoiceService: InvoicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
@@ -79,11 +82,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
     })
-console.log('buttonConfigs',this.buttonConfigs)
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
 
+  }
+
+  updateSelectedColumns(columns: string[]) {
+    this.selectedColumns = columns;
+    this.updateColumnVisibility();
   }
 
   getButtonSet(): ButtonConfig[] {
@@ -266,6 +273,9 @@ console.log('buttonConfigs',this.buttonConfigs)
     this.dropdownVisible[productId] = !this.dropdownVisible[productId];
     this.cdRef.detectChanges();
   }
+
+
+
 
 
 }

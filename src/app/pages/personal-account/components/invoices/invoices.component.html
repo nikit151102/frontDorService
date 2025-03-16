@@ -3,10 +3,13 @@
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
-    <label>Выберите столбцы для отображения:</label>
-    <p-multiselect [options]="columns" [(ngModel)]="selectedColumns" optionLabel="header" optionValue="field"
-        placeholder="Выбрать колонки" (onChange)="updateColumnVisibility()" selectedItemsLabel="{0} выбрано">
-    </p-multiselect>
+
+<app-settings 
+  [columns]="columns" 
+  [selectedColumns]="selectedColumns" 
+  (selectedColumnsChange)="updateSelectedColumns($event)">
+</app-settings>
+
 </div>
 <p-table [value]="productsService.products" class="invoice-table">
     <ng-template pTemplate="header">

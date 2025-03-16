@@ -1,0 +1,122 @@
+.settings-container {
+    border-radius: 5px;
+    max-width: 300px;
+    color: #101010;
+}
+
+.settings-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 10px;
+    background: #f8f9fa;
+    border-radius: 5px;
+    transition: background 0.3s;
+
+    &:hover {
+        background: #e9ecef;
+    }
+
+    i {
+        transition: transform 0.3s;
+    }
+}
+
+.settings-panel {
+    overflow: hidden;
+    padding: 10px;
+    border-top: 1px solid #ddd;
+    background: #fff;
+}
+
+
+/* Контейнер мультиселектора */
+.p-multiselect {
+    width: 100%;
+    min-width: 200px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 5px;
+    background: #fff;
+    transition: border-color 0.3s ease-in-out;
+
+    &:hover {
+        border-color: #007bff;
+    }
+}
+
+/* Кнопка мультиселектора */
+.p-multiselect-label {
+    font-size: 14px;
+    color: #333;
+    padding: 8px;
+}
+
+/* Открытый список */
+.p-multiselect-panel {
+    z-index: 1050 !important;
+    position: absolute;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    max-height: 250px;
+    overflow-y: auto;
+}
+
+/* Элементы внутри списка */
+.p-multiselect-item {
+    font-size: 14px;
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+
+    &:hover {
+        background: #f1f1f1;
+    }
+}
+
+/* Выбранные элементы */
+.p-multiselect-item.p-highlight {
+    background: #007bff !important;
+    color: white;
+}
+
+/* Иконки чекбоксов */
+.p-multiselect-item .p-checkbox {
+    margin-right: 8px;
+}
+
+/* Стрелочка в мультиселекторе */
+.p-multiselect-trigger {
+    color: #007bff;
+}
+
+/* Когда мультиселектор открыт */
+.p-multiselect.p-focus {
+    border-color: #007bff;
+    box-shadow: 0px 0px 5px rgba(0, 123, 255, 0.3);
+}
+
+
+
+.p-iconfield .p-inputtext:not(:last-child) {
+    background: #fff;
+    color: #101010;
+
+}
+
+.p-multiselect-option:not(.p-multiselect-option-selected) {
+    background: #ffff;
+    color: #101010;
+}
+
+.p-multiselect-list {
+    background: #ffff;
+    color: #101010;
+}
+.p-multiselect-option {
+    color: #101010;
+}

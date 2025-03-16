@@ -3,13 +3,8 @@
   label="Создать фактуру" 
   icon="pi pi-plus" 
   (click)="createNewInvoice()" 
-  [disabled]="counterpartyId === '00000000-0000-0000-0000-000000000000'">
+ *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'">
 </button>
-
-<p *ngIf="counterpartyId === '00000000-0000-0000-0000-000000000000'" class="text-warning">
-  Необходимо выбрать контрагента
-</p>
-
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
