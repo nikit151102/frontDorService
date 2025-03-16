@@ -3,6 +3,7 @@
     <div class="number-box">
         <input type="text" [(ngModel)]="selectedNumber" (focus)="toggleFilter()"
             placeholder="Выберите число/диапазон..." readonly #numberInput />
+
         <button class="filter-btn" (click)="toggleFilter()">▼</button>
     </div>
 

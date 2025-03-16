@@ -42,6 +42,7 @@ export class NumberFilterComponent {
     this.isFilterOpen = !this.isFilterOpen;
   }
 
+
   toggleSort() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     const sortDto: SortDto = {

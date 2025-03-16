@@ -124,3 +124,26 @@ input:focus {
     margin-top: 10px;
 
 }
+
+
+
+.input-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-container svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .input-container input {
+    padding-left: 30px; /* Место для иконки */
+  }
+  
+
+input{
+    color: #101010;
+}

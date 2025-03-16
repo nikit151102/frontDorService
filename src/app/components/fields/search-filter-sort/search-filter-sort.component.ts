@@ -38,6 +38,17 @@ export class SearchFilterSortComponent {
     this.isFilterOpen = !this.isFilterOpen;
   }
 
+  inputWidth: string = '30px'; // начальная ширина
+
+  toggleSearch(isFocused: boolean) {
+    if (isFocused) {
+      this.inputWidth = '300px';  // Увеличиваем ширину при фокусе
+    } else {
+      this.inputWidth = '30px';  // Восстанавливаем исходную ширину при потере фокуса
+    }
+  }
+
+    
   onSearchChange() {
     const filterDto: FilterDto = {
       field: this.filterField,
@@ -88,8 +99,9 @@ export class SearchFilterSortComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside) {
-      this.isFilterOpen = false;
+    if (!clickedInside && this.inputWidth != '30px') {
+      this.inputWidth = '30px';  // Скрываем поле при клике вне
+      this.isFilterOpen = false; // Обновляем флаг
     }
   }
 
