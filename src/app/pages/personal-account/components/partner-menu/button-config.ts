@@ -4,6 +4,7 @@ export interface ButtonConfig {
     titlePopUp?: string;
     messagePopUp?: string;
     status?: number;
+    isEditData?: boolean;
     class: string;
     condition?: (product: any) => boolean;
 }

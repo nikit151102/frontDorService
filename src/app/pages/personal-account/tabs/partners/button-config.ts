@@ -4,24 +4,22 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
     supplier: [
         {
             label: 'Подробнее',
-            action: 'getInvoiceById',
+            action: 'openDialog',
             class: 'btn-details',
+            isEditData: false,
             condition: (product) => product.editStatus,
         },
         {
             label: 'Изменить',
-            action: 'getInvoiceById',
+            action: 'openDialog',
             class: 'btn-edit',
-            titlePopUp: 'Редактирование фактуры',
-            messagePopUp: 'Вы уверены, что хотите внести изменения?',
+            isEditData: true,
             condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
         },
         {
             label: 'Удалить',
             action: 'deleteCounterparty',
             class: 'btn-delete',
-            titlePopUp: 'Подтверждение удаления',
-            messagePopUp: 'Вы уверены, что хотите удалить контрагента?',
             condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
         }
     ],
@@ -30,6 +28,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
+            isEditData: false,
             condition: (product) => product.editStatus !== 0 && product.editStatus !== 3,
         }
     ],
@@ -38,6 +37,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Подробнее',
             action: 'getInvoiceById',
             class: 'btn-details',
+            isEditData: false,
             condition: (product) => product.editStatus,
         },
         //Статус контрагента = 1
@@ -105,6 +105,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Изменить',
             action: 'getInvoiceById',
             class: 'btn-edit',
+            isEditData: true,
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию контрагента?',
             condition: (product) => product.editStatus,

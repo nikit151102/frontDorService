@@ -1,5 +1,5 @@
 <div class="counterparties-list">
-    <button class="add-button" (click)="openDialog($event)">Добавить контрагента</button>
+    <button class="add-button" (click)="openDialog($event, true)">Добавить контрагента</button>
   
     <ul>
       <li (click)="select('00000000-0000-0000-0000-000000000000')">
@@ -35,14 +35,15 @@
             <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
             <div *ngIf="menuOpenFor === counterparty.id" class="menu">
               <ng-container *ngFor="let button of getButtonSet()">
-                <button class="menu-item" 
+                <button class="menu-item"
                     *ngIf="button.condition ? button.condition(counterparty) : true"
                     [ngClass]="button.class"
-                    (click)="handleButtonClick(button, counterparty)"
+                    (click)="handleButtonClick(button, counterparty, $event)"
                     [title]="button.titlePopUp">
                     {{ button.label }}
                 </button>
-            </ng-container>    
+            </ng-container>
+              
             </div>
           </div>
         </div>
@@ -74,7 +75,7 @@
           </div>
           <div class="p-field">
             <label for="kpp">КПП</label>
-            <input id="kpp" type="text" pInputText formControlName="kpp" />
+            <input id="kpp" type="text" pInputText formControlName="kpp"/>
           </div>
           <div class="p-field">
             <label for="address">Адрес</label>
@@ -93,8 +94,8 @@
         </div>
         <p-footer>
           <button type="button" pButton label="Отмена" icon="pi pi-times" (click)="display = false"></button>
-          <button type="submit" pButton label="Сохранить" icon="pi pi-check"
-            [disabled]="counterpartyForm.invalid"></button>
+          <button type="submit" pButton label="Сохранить" icon="pi pi-check" *ngIf="this.isEdit == true"
+            [disabled]="counterpartyForm.invalid" ></button>
         </p-footer>
       </form>
     </p-dialog>

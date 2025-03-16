@@ -81,17 +81,25 @@ export class PartnerMenuComponent {
   }
 
   [key: string]: any;
-  handleButtonClick(button: ButtonConfig, product: any) {
+  handleButtonClick(button: ButtonConfig, product: any, event?: Event) {
+    console.log('productproduct',product)
+
     if (button.action && typeof this[button.action] === 'function') {
-      if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
-        this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);
-      } else {
-        this[button.action](product);
-      }
+        if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
+            this[button.action](event,product, button.status, button.titlePopUp, button.messagePopUp, event);
+        } else if(button.isEditData == false || button.isEditData == true) {
+          this.isEdit = button.isEditData;
+          console.log('button.isEditData',this.isEdit)
+                this[button.action](event, product);
+                
+        } else{
+          
+            this[button.action](event, product);
+        }
     } else {
-      console.error(`Action method '${button.action}' not found.`);
+        console.error(`Action method '${button.action}' not found.`);
     }
-  }
+}
 
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(
@@ -129,6 +137,8 @@ export class PartnerMenuComponent {
     this.selectCounterparty.emit(id);
   }
 
+  isEdit:boolean = false;
+
   openDialog(event: MouseEvent, counterparty?: any) {
     event.stopPropagation();
     if (counterparty) {
@@ -149,7 +159,21 @@ export class PartnerMenuComponent {
       this.counterpartyForm.reset();
     }
     this.display = true;
-
+    if (!this.isEdit) {
+      this.counterpartyForm.controls['shortName'].disable();
+      this.counterpartyForm.controls['fullName'].disable();
+      this.counterpartyForm.controls['inn'].disable();
+      this.counterpartyForm.controls['ogrn'].disable();
+      this.counterpartyForm.controls['kpp'].disable();
+      this.counterpartyForm.controls['address'].disable();
+    } else {
+      this.counterpartyForm.controls['shortName'].enable();
+      this.counterpartyForm.controls['fullName'].enable();
+      this.counterpartyForm.controls['inn'].enable();
+      this.counterpartyForm.controls['ogrn'].enable();
+      this.counterpartyForm.controls['kpp'].enable();
+      this.counterpartyForm.controls['address'].enable();
+    }
   }
 
   onSubmit() {
@@ -190,16 +214,17 @@ export class PartnerMenuComponent {
   }
 
 
-  deleteCounterparty(id: string) {
+  deleteCounterparty(event: any, partner: any) {
+    console.log('partnerpartnerpartner',partner)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить контрагента?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.partnerMenuService.deleteCounterparty(id).subscribe(
+        this.partnerMenuService.deleteCounterparty(partner.id).subscribe(
           () => {
-            this.counterparties = this.counterparties.filter((c: any) => c.id !== id);
+            this.counterparties = this.counterparties.filter((c: any) => c.id !== partner.id);
             this.loadCounterparties();
           },
           (error) => console.error('Ошибка удаления контрагента:', error)

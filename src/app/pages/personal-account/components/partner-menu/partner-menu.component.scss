@@ -290,3 +290,10 @@ li.disabled {
     background: #fff !important;
 }
 
+
+.p-inputtext:disabled {
+    opacity: 1;
+    background: #f2f2f2;
+    color: #101010;
+
+}
