@@ -3,7 +3,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
 import { JwtService } from '../../../../../services/jwt.service';
-import { BUTTON_SETS } from '../button-config';
+import { BUTTON_SETS } from './button-config';
 
 @Component({
   selector: 'app-invoices-content',

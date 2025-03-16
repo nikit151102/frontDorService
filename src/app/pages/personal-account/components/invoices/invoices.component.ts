@@ -96,6 +96,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
       case '2':
+        console.log('this.buttonConfigs',this.buttonConfigs['supplier'])
         return this.buttonConfigs['supplier'];
       case '3':
         return this.buttonConfigs['mechanic'];
