@@ -1,0 +1,12 @@
+<div class="dropdown" [class.disabled]="disabled">
+    <div class="dropdown-toggle" (click)="toggleDropdown()">
+        {{ selectedLabel }}
+        <span class="arrow"></span>
+    </div>
+
+    <ul class="dropdown-menu" *ngIf="isOpen">
+        <li *ngFor="let option of options" (click)="selectOption(option)">
+            {{ option[optionLabel] }}
+        </li>
+    </ul>
+</div>

@@ -17,6 +17,7 @@ import { ConfirmPopupService } from '../../../../components/confirm-popup/confir
 import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
 import { InvoicesService } from './invoices.service';
 import { ButtonConfig, BUTTON_SETS } from './button-config';
+import { JwtService } from '../../../../services/jwt.service';
 
 @Component({
   selector: 'app-invoices',
@@ -43,7 +44,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() columns: any;
   @Input() totalInfoColumn: any;
   buttonConfigs: Record<string, ButtonConfig[]> = BUTTON_SETS;
-  
+
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
@@ -58,14 +59,18 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   selectedProduct: any;
   selectedColumns: string[] = [];
-
+  currentRole: any;
+  
   constructor(private invoiceService: InvoicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
     public productsService: ProductsService,
-  private invoicesService:InvoicesService) { }
+    private invoicesService: InvoicesService,
+    private jwtService: JwtService) { }
 
   ngOnInit() {
+    this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
+   
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
     })
@@ -76,16 +81,20 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   }
 
-  getButtonSet(product: any): ButtonConfig[] {
-    switch (product.status) {
-      case 0: return this.buttonConfigs['supplier'];
-      case 1: return this.buttonConfigs['mechanic'];
-      case 2: return this.buttonConfigs['director'];
-      default: return this.buttonConfigs['default'];
+  getButtonSet(): ButtonConfig[] {
+    switch (this.currentRole) {
+      case "Снабженец": 
+        return this.buttonConfigs['supplier'];
+      case "Механик": 
+        return this.buttonConfigs['mechanic'];
+      case "Директор": 
+        return this.buttonConfigs['director'];
+      default: 
+        return this.buttonConfigs['default'];
     }
   }
   
-  [key: string]: any; 
+  [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any) {
     if (button.action && typeof this[button.action] === 'function') {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
@@ -97,8 +106,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
       console.error(`Action method '${button.action}' not found.`);
     }
   }
-  
-  
+
+
 
 
   updateColumnVisibility() {
@@ -184,7 +193,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.invoiceService.deleteInvoice(invoiceId).subscribe(
           () => {
             this.invoicesService.setActiveData(this.invoicesService.getActiveData().productsService.filter((inv: any) => inv.id !== invoiceId))
-            
+
             this.messageService.add({
               severity: 'success',
               summary: 'Удалено',
@@ -204,7 +213,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     });
   }
 
-  verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp:any) {
+  verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
     this.confirmPopupService.openConfirmDialog({
       title: titlePopUp,
       message: messagePopUp,

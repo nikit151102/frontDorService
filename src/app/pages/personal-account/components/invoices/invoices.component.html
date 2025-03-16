@@ -76,7 +76,7 @@
                             <button class="btn btn-dropdown" style="color: #101010;"
                                 (click)="toggleDropdown(product.id)">⋮</button>
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <ng-container *ngFor="let button of getButtonSet(product)">
+                                <ng-container *ngFor="let button of getButtonSet()">
                                     <button class="btn btn-details"
                                         *ngIf="button.condition ? button.condition(product) : true"
                                         [ngClass]="button.class"

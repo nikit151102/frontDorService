@@ -40,13 +40,13 @@ export class PartnerStatusService {
     EditStatusEnum.NewRejected,
     EditStatusEnum.UpdateRejected,
     EditStatusEnum.DeleteRejected,
-    EditStatusEnum.Active
+    EditStatusEnum.Active,
+    EditStatusEnum.Approve
   ]);
 
   private readonly forbiddenStatuses = new Set([
     EditStatusEnum.Updated,
     EditStatusEnum.Deleted,
-    EditStatusEnum.Approve,
     EditStatusEnum.NotActive
   ]);
 

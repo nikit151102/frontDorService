@@ -14,6 +14,9 @@ import { statuses, taxes, types, adjustmentOptions, columns, productColumns } fr
 import { ConfirmPopupService } from '../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoicesService } from '../invoices.service';
 import { InvoicesContentService } from '../../../tabs/partners/invoices-content/invoices-content.service';
+import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
+import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-number/custom-input-number.component';
+import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
 
 @Component({
   selector: 'app-invoices-form',
@@ -29,7 +32,10 @@ import { InvoicesContentService } from '../../../tabs/partners/invoices-content/
     ConfirmDialogModule,
     DialogModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CustomDropdownComponent,
+    CustomInputNumberComponent,
+    CustomInputComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
@@ -419,6 +425,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
+  
 }
 
 
