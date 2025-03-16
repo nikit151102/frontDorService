@@ -99,7 +99,7 @@ export class InvoicesContentService {
       invoice.status = status;
     }
 
-    return this.http.patch<void>(`${environment.apiUrl}/api/Supplier/DocInvoices/${invoice.id}`, invoice, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/SendToCheck/${invoice.id}`, invoice, { headers });
   }
 
   getCheckers() {
@@ -110,7 +110,7 @@ export class InvoicesContentService {
       'Authorization': `Bearer ${token}`
     });
 
-    return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
+    return this.http.get<void>(`${environment.apiUrl}/api/CommercialWork/GetCheckers`, { headers });
   }
 
 

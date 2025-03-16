@@ -52,16 +52,16 @@ export class ProductsService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+//     const typeValue = currentUrl.includes('/services') ? 1 : 0;
+// console.log('typeValue',typeValue)
+//     const hasTypeFilter = this.queryData.filters.some(filter => filter.field === 'type');
 
-    const hasTypeFilter = this.queryData.filters.some(filter => filter.field === 'type');
-
-    if (!hasTypeFilter) {
-      this.queryData.filters = [
-        { field: 'type', values: [typeValue], type: 1 },
-        ...this.queryData.filters
-      ];
-    }
+//     if (!hasTypeFilter) {
+//       this.queryData.filters = [
+//         { field: 'type', values: [typeValue], type: 1 },
+//         ...this.queryData.filters
+//       ];
+//     }
     
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -66,6 +66,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private confirmPopupService: ConfirmPopupService,
     public productsService: ProductsService,
     private invoicesService: InvoicesService,
+    private cdRef: ChangeDetectorRef,
     private jwtService: JwtService) { }
 
   ngOnInit() {
@@ -83,22 +84,26 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
-      case "Снабженец": 
+      case '2':
         return this.buttonConfigs['supplier'];
-      case "Механик": 
+      case '3':
         return this.buttonConfigs['mechanic'];
-      case "Директор": 
+      case '1':
         return this.buttonConfigs['director'];
-      default: 
+      default:
         return this.buttonConfigs['default'];
     }
   }
   
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any) {
+    console.log('button.isEditDatabutton.isEditData',button.isEditData)
     if (button.action && typeof this[button.action] === 'function') {
-      if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
+      if ((button.titlePopUp || button.messagePopUp || button.status !== undefined ) && button.isEditData != false && button.isEditData != true) {
         this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);
+      } else  if(button.isEditData == false || button.isEditData == true) {
+        this.isEditInvoice = button.isEditData
+        this[button.action](product);
       } else {
         this[button.action](product);
       }
@@ -173,7 +178,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
   loadInvoices() {
     this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
-        console.log('response', response)
         // this.invoices = response.data; // Assuming response is the invoice array
         this.invoicesService.setActiveData(response.data)
       },
@@ -243,9 +247,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   selectInvoiceId: any;
   isEditInvoice: boolean = false;
-  getInvoiceById(invoiceId: any, isEdit: boolean) {
-    this.selectInvoiceId = invoiceId;
-    this.isEditInvoice = isEdit;
+  getInvoiceById(invoice: any) {
+    this.selectInvoiceId = invoice.id;
   }
 
 
@@ -257,6 +260,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     });
 
     this.dropdownVisible[productId] = !this.dropdownVisible[productId];
+    this.cdRef.detectChanges();
   }
 
 
