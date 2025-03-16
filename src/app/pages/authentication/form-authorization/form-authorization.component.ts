@@ -8,10 +8,9 @@ import { Router } from '@angular/router';
 import { TokenService } from '../../../services/token.service';
 import { ToastService } from '../../../services/toast.service';
 import { CookieConsentService } from '../../../services/cookie-consent.service';
-import { CustomInputComponent } from '../../../ui-kit/custom-input/custom-input.component';
 import { ProgressSpinnerService } from '../../../components/progress-spinner/progress-spinner.service';
 import { CurrentUserService } from '../../../services/current-user.service';
-import { InvoicesContentService } from '../../personal-account/tabs/partners/invoices-content/invoices-content.service';
+import { CustomInputComponent } from '../../../ui-kit/custom-input-auth/custom-input.component';
 
 @Component({
   selector: 'app-form-authorization',

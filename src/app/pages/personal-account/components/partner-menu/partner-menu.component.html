@@ -42,7 +42,7 @@
                 [disabled]="!isEditable(counterparty.editStatus)">
                 Удалить
               </button>
-              <!-- <ng-container *ngFor="let button of getButtonSet()">
+              <ng-container *ngFor="let button of getButtonSet()">
                 <button class="btn btn-details"
                     *ngIf="button.condition ? button.condition(counterparty) : true"
                     [ngClass]="button.class"
@@ -50,7 +50,7 @@
                     [title]="button.titlePopUp">
                     {{ button.label }}
                 </button>
-            </ng-container>     -->
+            </ng-container>    
             </div>
           </div>
         </div>

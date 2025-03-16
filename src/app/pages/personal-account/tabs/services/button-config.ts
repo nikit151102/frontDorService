@@ -26,7 +26,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Удалить',
-            action: 'deleteInvoice',
+            action: 'deleteCounterparty',
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить контрагента?',
@@ -111,7 +111,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Удалить',
-            action: 'deleteInvoice',
+            action: 'deleteCounterparty',
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить контрагента?',
