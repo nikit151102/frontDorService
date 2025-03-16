@@ -42,6 +42,15 @@
                 [disabled]="!isEditable(counterparty.editStatus)">
                 Удалить
               </button>
+              <!-- <ng-container *ngFor="let button of getButtonSet()">
+                <button class="btn btn-details"
+                    *ngIf="button.condition ? button.condition(counterparty) : true"
+                    [ngClass]="button.class"
+                    (click)="handleButtonClick(button, counterparty)"
+                    [title]="button.titlePopUp">
+                    {{ button.label }}
+                </button>
+            </ng-container>     -->
             </div>
           </div>
         </div>

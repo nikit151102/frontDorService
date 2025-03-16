@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { Component, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
@@ -9,6 +9,8 @@ import { InputTextModule } from 'primeng/inputtext';
 import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
 import { PartnerStatusService } from '../../../../services/statuses/partner-statuses.service';
 import { PartnerMenuService } from './partner-menu.service';
+import { ButtonConfig } from './button-config';
+import { JwtService } from '../../../../services/jwt.service';
 
 interface Counterparty {
   id: number;
@@ -31,6 +33,8 @@ interface TypeOption {
 })
 export class PartnerMenuComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
+  @Input() typeCode: any;
+  @Input() buttonConfigs!: Record<string, ButtonConfig[]>
 
   counterparties: any = [];
   selectedId: any;
@@ -38,6 +42,7 @@ export class PartnerMenuComponent {
   display: boolean = false;
   counterpartyForm!: FormGroup;
   selectedCounterparty: any | null = null;
+  currentRole: any;
 
   typeOptions: TypeOption[] = [
     { label: 'Контрагент', value: 0 },
@@ -50,12 +55,41 @@ export class PartnerMenuComponent {
     private partnerMenuService: PartnerMenuService,
     private fb: FormBuilder,
     private confirmPopupService: ConfirmPopupService,
-    private partnerStatusService: PartnerStatusService
+    private partnerStatusService: PartnerStatusService,
+    private jwtService: JwtService
   ) { }
 
   ngOnInit(): void {
+    this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
+
     this.loadCounterparties();
     this.initializeForm();
+  }
+
+  getButtonSet(): ButtonConfig[] {
+    switch (this.currentRole) {
+      case "Снабженец":
+        return this.buttonConfigs['supplier'];
+      case "Механик":
+        return this.buttonConfigs['mechanic'];
+      case "Директор":
+        return this.buttonConfigs['director'];
+      default:
+        return this.buttonConfigs['default'];
+    }
+  }
+
+  [key: string]: any;
+  handleButtonClick(button: ButtonConfig, product: any) {
+    if (button.action && typeof this[button.action] === 'function') {
+      if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
+        this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);
+      } else {
+        this[button.action](product);
+      }
+    } else {
+      console.error(`Action method '${button.action}' not found.`);
+    }
   }
 
   loadCounterparties() {

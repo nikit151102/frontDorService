@@ -1,6 +1,6 @@
 <div class="container">
     <!-- Левое меню -->
-    <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)"></app-partner-menu>
+    <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)" [typeCode]="0" [buttonConfigs]="getBUTTON_SETS()"></app-partner-menu>
     <!-- Правая часть -->
     <app-invoices-content *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"></app-invoices-content>
   </div>
