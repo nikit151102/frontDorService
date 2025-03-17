@@ -39,6 +39,27 @@ export class DateFilterSortComponent {
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
   }
+  inputWidth: string = '30px';
+  bgColor: string = 'transparent';
+  borderStyle: string = 'none';
+  isSearchOpen: boolean = false;
+  
+  toggleSearch(isFocused: boolean) {
+    if (isFocused) {
+      this.inputWidth = '300px';
+      this.bgColor = '#ffffff';
+      this.borderStyle = '1px solid #007BFF';
+      this.isSearchOpen = true;
+    } else {
+      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
+        this.inputWidth = '30px';
+        this.bgColor = 'transparent';
+        this.borderStyle = 'none';
+        this.isSearchOpen = false;
+      }, 200);
+    }
+  }
+
 
   toggleSort() {
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -119,8 +140,12 @@ export class DateFilterSortComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside) {
+    if (!clickedInside && this.inputWidth != '30px') {
       this.isFilterOpen = false;
+      this.inputWidth = '30px';
+      this.bgColor = 'transparent';
+      this.borderStyle = 'none';
+      this.isSearchOpen = false;
     }
   }
   

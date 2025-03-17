@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ButtonModule } from 'primeng/button';
 
 interface FilterDto {
   field?: string;
@@ -16,7 +17,7 @@ interface SortDto {
 @Component({
   selector: 'app-search-filter-sort',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ButtonModule],
   templateUrl: './search-filter-sort.component.html',
   styleUrl: './search-filter-sort.component.scss'
 })
@@ -38,13 +39,24 @@ export class SearchFilterSortComponent {
     this.isFilterOpen = !this.isFilterOpen;
   }
 
-  inputWidth: string = '30px'; // начальная ширина
-
+  inputWidth: string = '30px';
+  bgColor: string = 'transparent';
+  borderStyle: string = 'none';
+  isSearchOpen: boolean = false;
+  
   toggleSearch(isFocused: boolean) {
     if (isFocused) {
-      this.inputWidth = '300px';  // Увеличиваем ширину при фокусе
+      this.inputWidth = '300px';
+      this.bgColor = '#ffffff';
+      this.borderStyle = '1px solid #007BFF';
+      this.isSearchOpen = true;
     } else {
-      this.inputWidth = '30px';  // Восстанавливаем исходную ширину при потере фокуса
+      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
+        this.inputWidth = '30px';
+        this.bgColor = 'transparent';
+        this.borderStyle = 'none';
+        this.isSearchOpen = false;
+      }, 200);
     }
   }
 
@@ -100,8 +112,11 @@ export class SearchFilterSortComponent {
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside && this.inputWidth != '30px') {
-      this.inputWidth = '30px';  // Скрываем поле при клике вне
       this.isFilterOpen = false; // Обновляем флаг
+      this.inputWidth = '30px';
+      this.bgColor = 'transparent';
+      this.borderStyle = 'none';
+      this.isSearchOpen = false;
     }
   }
 

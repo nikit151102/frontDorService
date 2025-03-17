@@ -36,10 +36,32 @@ export class NumberFilterComponent {
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
-  constructor(private elementRef: ElementRef){}
-  
+  constructor(private elementRef: ElementRef) { }
+
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
+  }
+
+
+  inputWidth: string = '30px';
+  bgColor: string = 'transparent';
+  borderStyle: string = 'none';
+  isSearchOpen: boolean = false;
+  
+  toggleSearch(isFocused: boolean) {
+    if (isFocused) {
+      this.inputWidth = '300px';
+      this.bgColor = '#ffffff';
+      this.borderStyle = '1px solid #007BFF';
+      this.isSearchOpen = true;
+    } else {
+      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
+        this.inputWidth = '30px';
+        this.bgColor = 'transparent';
+        this.borderStyle = 'none';
+        this.isSearchOpen = false;
+      }, 200);
+    }
   }
 
 
@@ -60,6 +82,16 @@ export class NumberFilterComponent {
     this.endNumber = 0;
     this.showNumberInput = true;
     this.emitFilterChange();
+  }
+
+  onSearchChange() {
+    const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [Number(this.selectedNumber)],
+      type: 2
+    };
+
+    this.filterChange.emit(filterDto);
   }
 
   onNumberChange() {
@@ -121,12 +153,17 @@ export class NumberFilterComponent {
     this.emitFilterChange();   // Эмитируем сброс фильтра
   }
 
-    @HostListener('document:click', ['$event'])
-    onClickOutside(event: MouseEvent) {
-      const clickedInside = this.elementRef.nativeElement.contains(event.target);
-      if (!clickedInside) {
-        this.isFilterOpen = false;
-      }
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside && this.inputWidth != '30px') {
+      this.isFilterOpen = false; // Обновляем флаг
+      this.inputWidth = '30px';
+      this.bgColor = 'transparent';
+      this.borderStyle = 'none';
+      this.isSearchOpen = false;
     }
-    
+  }
+
+
 }
