@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { NumberFilterComponent } from '../../../../components/fields/number-filter/number-filter.component';
 import { UuidSearchFilterSortComponent } from '../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
+import { InvoicesFormComponent } from '../invoices/invoices-form/invoices.component';
 
 @Component({
   selector: 'app-products',
@@ -19,7 +20,7 @@ import { UuidSearchFilterSortComponent } from '../../../../components/fields/uui
     UuidSearchFilterSortComponent,
     FormsModule,
     MultiSelectModule,
-  
+    InvoicesFormComponent
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -96,6 +97,19 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
 
+  isEditInvoice:boolean = false;
+  selectInvoiceId: string = '';
+
+  onRowDblClick(event: MouseEvent, product: any, field: string) {
+
+    if (field == 'docInvoice') {
+      console.log('field',field)
+      this.isEditInvoice = false;
+      this.selectInvoiceId = product.docInvoiceId;
+    }
+  }
+
+  
   
   dropdownVisible: { [key: string]: boolean } = {}; 
 

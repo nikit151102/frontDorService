@@ -56,9 +56,9 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr class="invoice-row">
+        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) ">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"  (dblclick)="isEditInvoice = false; getInvoiceById(product)"
                     [style.width]="col.width">
                     <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}

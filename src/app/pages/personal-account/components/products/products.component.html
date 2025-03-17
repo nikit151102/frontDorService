@@ -1,3 +1,6 @@
+<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
+    [isEditInvoice]="isEditInvoice"></app-invoices-form>
+    
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -44,7 +47,7 @@
     <tbody>
         <tr *ngFor="let product of productsService.products" class="invoice-row">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width">
+                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width" (dblclick)="onRowDblClick($event, product, col.field)">
                     <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>

@@ -81,6 +81,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
+        console.log('this.invoiceId this.invoiceId ',this.invoiceId )
         if (this.invoiceId != null) {
           this.loadInvoice();
         }
