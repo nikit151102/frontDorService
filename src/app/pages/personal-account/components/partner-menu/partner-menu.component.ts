@@ -36,6 +36,7 @@ export class PartnerMenuComponent {
   @Output() selectCounterparty = new EventEmitter<number>();
   @Input() typeCode: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>
+  @Input() title: string = 'контрагента'
 
   counterparties: any = [];
   selectedId: any;

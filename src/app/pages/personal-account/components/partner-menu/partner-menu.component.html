@@ -1,9 +1,9 @@
 <div class="counterparties-list">
 
   <div class="settings">
-    <button class="add-button" (click)="isEdit = true; openDialog($event); ">Добавить контрагента</button>
+    <button class="add-button" (click)="isEdit = true; openDialog($event); ">Добавить {{title}}</button>
 
-    <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" placeholder="Поиск контрагента..."
+    <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" [placeholder]="'Найти...'"
       class="search-input">
     </app-custom-input>
 
@@ -60,7 +60,7 @@
 
 
   <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px' }">
-    <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header>
+    <!-- <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header> -->
     <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
         <div class="p-field">
