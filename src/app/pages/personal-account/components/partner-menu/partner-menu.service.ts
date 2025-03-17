@@ -70,4 +70,21 @@ export class PartnerMenuService {
     return this.http.put<Counterparty>(`${this.apiUrl}api/CommercialWork/Partner/${id}`, updatedCounterparty,
       { headers: this.getHeaders() });
   }
+
+  
+  sendingVerification(invoice: any, status: any): Observable<void> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    if(status){
+      status.editStatus = invoice
+    }
+
+    return this.http.put<void>(`${environment.apiUrl}/api/CommercialWork/Partner/${status.id}`, status, { headers });
+  }
+
 }

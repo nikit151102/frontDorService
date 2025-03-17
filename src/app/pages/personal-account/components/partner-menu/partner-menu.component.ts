@@ -89,7 +89,7 @@ export class PartnerMenuComponent {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
         this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
       } else if (button.isEditData == false || button.isEditData == true) {
-        this.isEdit = button.isEditData;
+        this.isEdit = true;
         console.log('button.isEditData', this.isEdit)
         this[button.action](event, product);
 
@@ -101,6 +101,29 @@ export class PartnerMenuComponent {
       console.error(`Action method '${button.action}' not found.`);
     }
   }
+
+  verificationPartner(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
+   
+    this.confirmPopupService.openConfirmDialog({
+      title: titlePopUp,
+      message: messagePopUp,
+      acceptLabel: 'Отправить',
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+
+        this.partnerMenuService.sendingVerification(titlePopUp, status).subscribe(
+          () => {
+      
+          },
+          (error) => {
+            console.error('Error deleting invoice', error);
+          
+          }
+        );
+      }
+    });
+  }
+
 
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(

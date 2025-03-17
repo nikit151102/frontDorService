@@ -212,6 +212,12 @@ li.disabled {
     color: #f44336;
 }
 
+.status-new-rej {
+    background-color: rgba(244, 67, 54, 0.1);
+    /* Полупрозрачный красный */
+    color: #f44336;
+}
+
 /* Статус "Подтвержден" */
 .status-update-rejected {
     background-color: rgba(76, 175, 80, 0.1);
