@@ -36,7 +36,7 @@ import { JwtService } from '../../../../../services/jwt.service';
     ReactiveFormsModule,
     CustomDropdownComponent,
     CustomInputNumberComponent,
-    CustomInputComponent
+    CustomInputComponent,
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',

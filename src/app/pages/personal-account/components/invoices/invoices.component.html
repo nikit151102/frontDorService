@@ -56,10 +56,11 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) ">
+        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) "
+        >
             <ng-container *ngFor="let col of columns">
                 <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"  (dblclick)="isEditInvoice = false; getInvoiceById(product)"
-                    [style.width]="col.width">
+                (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
                     <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
@@ -109,3 +110,23 @@
         </tr>
     </ng-template>
 </p-table>
+
+
+
+<!-- Контекстное меню -->
+<div *ngIf="contextMenuVisible" 
+     class="context-menu" 
+     [style.top.px]="contextMenuY" 
+     [style.left.px]="contextMenuX">
+     
+    <ng-container *ngFor="let button of getButtonSet()">
+        <button class="btn btn-details"
+            *ngIf="button.condition ? button.condition(selectedProduct) : true"
+            [ngClass]="button.class" 
+            (click)="handleButtonClick(button, selectedProduct)"
+            [title]="button.titlePopUp">
+            {{ button.label }}
+        </button>
+    </ng-container>
+</div>
+

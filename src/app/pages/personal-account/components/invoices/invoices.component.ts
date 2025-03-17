@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -278,5 +278,33 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
 
+
+  contextMenuVisible = false;
+  contextMenuX = 0;
+  contextMenuY = 0;
+
+  onRightClick(event: MouseEvent, product: any) {
+    event.preventDefault(); // Отключаем стандартное меню
+
+    this.selectedProduct = product;
+    this.contextMenuVisible = true;
+    this.contextMenuX = event.clientX;
+    this.contextMenuY = event.clientY;
+  }
+
+
+  closeAllMenus() {
+    this.contextMenuVisible = false;
+    this.dropdownVisible = {};
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: Event) {
+    const target = event.target as HTMLElement;
+    
+    if (!target.closest('.context-menu') && !target.closest('.dropdown')) {
+      this.closeAllMenus();
+    }
+  }
 
 }
