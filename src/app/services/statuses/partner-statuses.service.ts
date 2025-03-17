@@ -10,7 +10,8 @@ export enum EditStatusEnum {
   DeleteRejected = 6,
   Approve = 7,
   NotActive = 8,
-  Active = 9
+  Active = 9,
+  Reject  = 10
 }
 
 @Injectable({
@@ -18,21 +19,31 @@ export enum EditStatusEnum {
 })
 export class PartnerStatusService {
   private readonly statusLabels: Record<number, string> = {
-    [EditStatusEnum.New]: 'Новый',
+    [EditStatusEnum.New]: 'Новый',   
     [EditStatusEnum.Updated]: 'Измененный',
     [EditStatusEnum.Deleted]: 'Удален',
     [EditStatusEnum.NewRejected]: 'Отклонено',
+    [EditStatusEnum.UpdateRejected]: 'Отклонено',
+    [EditStatusEnum.DeleteRejected]: 'Отклонено',
     [EditStatusEnum.Approve]: 'Подтвержден',
-    [EditStatusEnum.NotActive]: 'Неактивный'
+    [EditStatusEnum.Reject]: 'Отклонено',
+    [EditStatusEnum.NotActive]: 'Неактивный',
+    [EditStatusEnum.Active]: 'Активный'
+    
   };
 
+
   private readonly statusClasses: Record<number, string> = {
-    [EditStatusEnum.New]: 'new',
-    [EditStatusEnum.Updated]: 'updated',
-    [EditStatusEnum.Deleted]: 'deleted',
-    [EditStatusEnum.NewRejected]: 'rejected',
-    [EditStatusEnum.Approve]: 'approved',
-    [EditStatusEnum.NotActive]: 'not-active'
+    [EditStatusEnum.New]: 'status-new',                 // Новый
+    [EditStatusEnum.Updated]: 'status-updated',         // Измененный
+    [EditStatusEnum.Deleted]: 'status-deleted',         // Удален
+    [EditStatusEnum.NewRejected]: 'status-new-rejected',// Отклонено (Новый)
+    [EditStatusEnum.UpdateRejected]: 'status-update-rejected', // Отклонено (Измененный)
+    [EditStatusEnum.DeleteRejected]: 'status-delete-rejected', // Отклонено (Удален)
+    [EditStatusEnum.Approve]: 'status-approved',        // Подтвержден
+    [EditStatusEnum.Reject]: 'status-rejected',         // Отклонено
+    [EditStatusEnum.NotActive]: 'status-not-active',    // Неактивный
+    [EditStatusEnum.Active]: 'status-active'            // Активный
   };
 
   private readonly editableStatuses = new Set([

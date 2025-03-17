@@ -33,7 +33,8 @@
               'status-rejected': counterparty.editStatus === 3,
               'status-deleted': counterparty.editStatus === 6,
               'status-new-rejected': counterparty.editStatus === 4,  
-              'status-update-rejected': counterparty.editStatus === 5   
+              'status-update-rejected': counterparty.editStatus === 5,
+              'status-active': counterparty.editStatus === 9  
           }" class="status-tag-text">
               {{ getStatusLabel(counterparty.editStatus) }}
             </span>
