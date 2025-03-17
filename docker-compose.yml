@@ -1,0 +1,21 @@
+services:
+
+  frontend:
+    container_name: frontend_1
+    build:
+      context: ./
+      dockerfile: Dockerfile-frontend
+    ports:
+      - 8020:8020
+    volumes:
+      - /app
+      - /app/node_modules
+    networks:
+      - dorservice
+    
+  
+networks:
+  dorservice:
+    external: true
+
+    
