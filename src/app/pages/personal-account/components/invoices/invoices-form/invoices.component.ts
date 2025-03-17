@@ -184,7 +184,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.selectedInvoice.productList.forEach((product: any) => {
         product.amount = Math.abs(product.amount);
       });
-      this.selectedInvoice.type = 0;
+      this.selectedInvoice.type = 1;
     }
   }
 
@@ -287,6 +287,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             checkPersonId: '00000000-0000-0000-0000-000000000000',
           }
         }
+        console.log('this.selectedInvoice',this.selectedInvoice)
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,

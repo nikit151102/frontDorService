@@ -19,7 +19,7 @@
                     <div style="display: flex; justify-content: space-between;">
                         <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
                             (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)">
+                            (sortChange)="productsService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
                         </app-search-filter-sort>
 
                         <!-- Аналогичные кнопки для других типов фильтров -->

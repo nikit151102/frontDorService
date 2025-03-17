@@ -14,7 +14,7 @@
                 [ngClass]="{'search-expanded': isSearchOpen}" />
         </div>
 
-        <button class="filter-btn" (click)="toggleFilter()">
+        <button class="filter-btn" (click)="toggleFilter()" *ngIf="isVisibleFilter">
             <svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44.023 44.023"
             xmlns:xlink="http://www.w3.org/1999/xlink" enable-background="new 0 0 44.023 44.023"
             style="width: 15px;">

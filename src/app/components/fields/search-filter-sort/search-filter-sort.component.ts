@@ -24,7 +24,7 @@ interface SortDto {
 export class SearchFilterSortComponent {
   @Input() filterField: string = ''; // Название поля для фильтрации
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
-
+  @Input() isVisibleFilter: boolean = true;
   searchTerm: string = '';
   selectedFilters: any[] = []; // Используем any, так как фильтры могут быть разных типов
   sortOrder: 'asc' | 'desc' = 'asc';
