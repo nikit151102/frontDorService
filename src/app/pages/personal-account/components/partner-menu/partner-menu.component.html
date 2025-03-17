@@ -1,7 +1,7 @@
 <div class="counterparties-list">
 
   <div class="settings">
-    <button class="add-button" (click)="openDialog($event, true)">Добавить контрагента</button>
+    <button class="add-button" (click)="isEdit = true; openDialog($event); ">Добавить контрагента</button>
 
     <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" placeholder="Поиск контрагента..."
       class="search-input">

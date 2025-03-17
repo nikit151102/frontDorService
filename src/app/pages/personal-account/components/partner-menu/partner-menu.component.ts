@@ -159,7 +159,7 @@ export class PartnerMenuComponent {
       this.counterpartyForm.reset();
     }
     this.display = true;
-    if (!this.isEdit) {
+    if (this.isEdit == false) {
       this.counterpartyForm.controls['shortName'].disable();
       this.counterpartyForm.controls['fullName'].disable();
       this.counterpartyForm.controls['inn'].disable();

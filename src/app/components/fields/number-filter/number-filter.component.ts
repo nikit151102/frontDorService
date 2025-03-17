@@ -50,7 +50,7 @@ export class NumberFilterComponent {
   
   toggleSearch(isFocused: boolean) {
     if (isFocused) {
-      this.inputWidth = '300px';
+      this.inputWidth = '150px';
       this.bgColor = '#ffffff';
       this.borderStyle = '1px solid #007BFF';
       this.isSearchOpen = true;

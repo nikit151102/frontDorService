@@ -51,7 +51,7 @@ export class UuidSearchFilterSortComponent {
   
   toggleSearch(isFocused: boolean) {
     if (isFocused) {
-      this.inputWidth = '300px';
+      this.inputWidth = '200px';
       this.bgColor = '#ffffff';
       this.borderStyle = '1px solid #007BFF';
       this.isSearchOpen = true;
