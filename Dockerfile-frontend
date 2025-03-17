@@ -8,7 +8,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 
 # Устанавливаем зависимости
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 # Устанавливаем Angular CLI глобально
 RUN npm install -g @angular/cli
