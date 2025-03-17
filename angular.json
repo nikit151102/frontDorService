@@ -62,6 +62,10 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "host": "0.0.0.0", 
+            "allowedHosts": ["vm-c486a4cd.na4u.ru"] 
+          },
           "configurations": {
             "production": {
               "buildTarget": "dorService:build:production"
