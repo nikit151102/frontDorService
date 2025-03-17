@@ -32,10 +32,10 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   }
 
   columns = [
-    { field: 'productTarget.name', header: 'Назначение', type: 'uuid', visible: true, width: '18%' },
+    { field: 'productTarget', header: 'Назначение', type: 'uuid', visible: true, width: '18%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'name', header: 'Товар', type: 'string', visible: true, width: '20%' },
     { field: 'quantity', header: 'Количество', type: 'number', visible: true, width: '13%' },
-    { field: 'measurementUnit.shortName', header: 'Ед.изм', type: 'number', visible: true, width: '13%' },
+    { field: 'measurementUnit', header: 'Ед.изм', type: 'uuid', visible: true, width: '13%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
     { field: 'amount', header: 'Сумма', type: 'number', visible: true, width: '13%' },
     { field: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%' },
     { field: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '14%' },

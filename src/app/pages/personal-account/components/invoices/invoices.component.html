@@ -33,7 +33,7 @@
                             (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
 
-                        <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="'ByPartner/123'"
+                        <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
                             (filterChange)="productsService.onFilterChange($event)"
                             (sortChange)="productsService.onSortChange($event)">

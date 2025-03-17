@@ -67,7 +67,9 @@ export class UuidSearchFilterSortComponent {
 
 
   ngOnChanges() {
+    console.log('apiEndpointapiEndpoint',this.apiEndpoint)
     if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
+      
       this.loadData();
     }
     if (this.enam != null) {
@@ -79,8 +81,9 @@ export class UuidSearchFilterSortComponent {
 
   loadData() {
     this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
-      (data) => {
-        this.products = data;
+      (data: any) => {
+        console.log('datdatadatadataa',data)
+        this.products = data.data;
         this.endpointDataLoaded = true;
         console.log('Данные получены с эндпоинта:', this.products);
       },

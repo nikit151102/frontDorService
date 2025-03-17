@@ -47,6 +47,7 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   ngOnInit() {
     this.selectedColumns = this.columns.map((col: any) => col.field);
+    console.log('this.columns',this.columns)
     this.updateColumnVisibility();
 
   }
