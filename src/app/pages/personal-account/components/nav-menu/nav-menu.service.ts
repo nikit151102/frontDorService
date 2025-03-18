@@ -30,6 +30,7 @@ export class NavMenuService {
       try {
         const data = JSON.parse(event.data);
         this.notificationsSubject.next(data);
+        console.log("web-socket works:", data);
       } catch (e) {
         console.error('Error parsing WebSocket message:', e);
       }
