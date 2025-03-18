@@ -24,7 +24,8 @@ export class NavMenuComponent  implements OnInit{
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess' },
     { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess' },
     // { label: 'Нал', commandName: '', access: '', access: 'CashAccess },
-    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
+    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' },
+    { label: 'Выйти', commandName: 'exit', access: '/' }
     
   ];
   decodedRole: any[] = [];
@@ -51,12 +52,19 @@ export class NavMenuComponent  implements OnInit{
     return !access || this.decodedRole.includes(access);
   }
 
-  execute(commandName: string) {
-    this.activatedRoute.paramMap.subscribe(params => {
-      const id = params.get('id');
-      if (id) {
-        this.router.navigate([`${id}/${commandName}`]);
-      }
-    });
+ execute(commandName: string) {
+    if(commandName == 'exit'){
+      this.router.navigate(['/']);
+      this.tokenService.clearToken();
+      window.history.pushState(null, '', '/');
+    }else{
+      this.activatedRoute.paramMap.subscribe(params => {
+        const id = params.get('id');
+        if (id) {
+          this.router.navigate([`${id}/${commandName}`]);
+        }
+      });
+    }
   }
+  
 }
