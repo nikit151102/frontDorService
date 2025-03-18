@@ -120,12 +120,12 @@ export class FormAuthorizationComponent implements OnInit {
 
       this.AuthorizationService.signIn(Data).subscribe(
         (response) => {
-          if (response.data) {
-            this.tokenService.setToken(response.data.token);
+          if (response.data.data) {
+            this.tokenService.setToken(response.data.data.token);
             this.progressSpinnerService.hide(); 
-            localStorage.setItem('VXNlcklk', response.data.id);
-            this.currentUserService.saveUser(response.data);
-            this.router.navigate([`/${response.data.id}`]);
+            localStorage.setItem('VXNlcklk', response.data.data.id);
+            this.currentUserService.saveUser(response.data.data);
+            this.router.navigate([`/${response.data.data.id}`]);
             this.navMenuService.setNotifications(response.notifyData);
           }
         },
