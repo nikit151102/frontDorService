@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../../../environment';
 
 @Injectable({
@@ -14,4 +14,6 @@ export class FormAuthorizationService {
     return this.http.post(`${environment.apiUrl}/auth/authentication`, formData);
   }
 
+
+  
 }
