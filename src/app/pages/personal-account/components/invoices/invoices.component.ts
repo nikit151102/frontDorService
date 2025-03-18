@@ -55,7 +55,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
-      this.invoicesService.loadProducts();
+      this.loadInvoices();
     }
 
     if (changes['buttonConfigs']) {
@@ -191,8 +191,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
   loadInvoices() {
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
-        // this.invoices = response.data; // Assuming response is the invoice array
-        this.invoicesService.setActiveData(response.data)
+         this.invoices = response.documentMetadata.data; // Assuming response is the invoice array
+        this.invoicesService.setActiveData(response.documentMetadata.data)
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });

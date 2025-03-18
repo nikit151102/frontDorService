@@ -34,7 +34,7 @@
                     <div style="display: flex; gap: 10px;">
                         <div class="p-field p-col-12">
                             <label for="type">Тип</label>
-                            <p-dropdown id="type" [(ngModel)]="type" [options]="types" optionLabel="label"
+                            <p-dropdown [style]="{ 'min-width': '120px' }" id="type" [(ngModel)]="type" [options]="types" optionLabel="label"
                                 optionValue="value" (onChange)="onTypeChange()" [disabled]="!isEdit">
                             </p-dropdown>
                         </div>
@@ -49,12 +49,12 @@
 
                         <div class="p-field p-col-12">
                             <label for="tax">Налог</label>
-                            <p-dropdown id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"
+                            <p-dropdown [style]="{ 'min-width': '120px' }" id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"
                                 [disabled]="!isEdit"></p-dropdown>
                         </div>
                         <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
                             <label for="checkPersonId">Проверяющий</label>
-                            <p-dropdown id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId"
+                            <p-dropdown [style]="{ 'min-width': '150px' }" id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId"
                                 [options]="checkers" optionLabel="fullName" optionValue="id" [disabled]="!isEdit">
                             </p-dropdown>
                         </div>

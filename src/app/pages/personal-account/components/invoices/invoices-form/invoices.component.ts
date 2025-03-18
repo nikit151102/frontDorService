@@ -73,7 +73,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     if (changes['counterpartyData']) {
       const currentCounterpartyId = changes['counterpartyData'].currentValue;
       const previousCounterpartyId = changes['counterpartyData'].previousValue;
-      if (currentCounterpartyId !== previousCounterpartyId) {
+      if (currentCounterpartyId !== previousCounterpartyId && this.invoiceId != undefined) {
         this.loadInvoice();
       }
     }
@@ -82,7 +82,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
         console.log('this.invoiceId this.invoiceId ', this.invoiceId)
-        if (this.invoiceId != null) {
+        if (this.invoiceId != null && this.invoiceId != undefined ) {
           this.loadInvoice();
         }
       }
@@ -105,7 +105,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
     this.invoiceService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
-      this.loadInvoice();
+  
       this.checkers.forEach((checker: any) => {
         const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
         const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
@@ -145,13 +145,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   loadInvoice() {
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
-      console.log("selectedInvoice", value.data);
+
       this.selectedInvoice = value.data;
       this.type = value.data.type
 
-      console.log('Полученные данные:', value.data);
-      console.log('Полученное значение налога:', value.data.tax);
-      console.log('Список налогов:', taxes);
       this.selectedInvoice.dateTime = new Date(value.data.dateTime);
       this.selectedInvoice.tax = taxes.find(tx => tx.value === value.data.tax);
 
@@ -162,7 +159,13 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       } else if (this.selectedInvoice.incomeSum == 0 && this.selectedInvoice.expenseSum < 0) {
         this.selectedInvoice.adjustmentType = { label: '+', value: 1 };
       }
-
+      if (value.data.productList) {
+        this.selectedInvoice.productList = value.data.productList.map((product:any) => ({
+          ...product,
+          measurementUnitId: product.measurementUnit ? product.measurementUnit.id : null,
+          productTargetId: product.productTarget ? product.productTarget.id : null,
+        }));
+      }
     })
 
   }
