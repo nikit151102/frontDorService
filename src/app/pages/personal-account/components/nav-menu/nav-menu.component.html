@@ -5,6 +5,11 @@
                 (click)="execute(item.commandName || '')" 
                 [disabled]="!hasAccess(item.access)">
                 {{ item.label }}
+                <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge">
+                    {{ getNotificationCount(item.notifyKey) }}
+                </span>
+                
+              
             </button>
         </li>
         <li>
@@ -15,3 +20,4 @@
         </li>
     </ul>
 </nav>
+

@@ -10,10 +10,13 @@ export class NavMenuService {
   constructor() { }
 
   private socket!: WebSocket;
-  private messagesSubject = new Subject<any>();
-  messages$ = this.messagesSubject.asObservable();
+  private notificationsSubject = new Subject<any>();
+  notifications$ = this.notificationsSubject.asObservable();
 
-  
+  setNotifications(valeu:any){
+    this.notificationsSubject.next(valeu);
+  }
+
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     const url = `${environment.apiUrl}/api/Profile/HistoryUpdates?token=${token}&queueTag=menu`;
@@ -25,12 +28,11 @@ export class NavMenuService {
     this.socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
-        this.messagesSubject.next(data);
+        this.notificationsSubject.next(data);
       } catch (e) {
         console.error('Error parsing WebSocket message:', e);
       }
     };
-
 
     this.socket.onerror = (error) => {
       console.error('WebSocket error:', error);

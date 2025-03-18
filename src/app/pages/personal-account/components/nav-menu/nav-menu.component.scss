@@ -45,3 +45,15 @@ button:disabled {
     cursor: not-allowed;
     border: 1px solid #d1d1d1;
 }
+
+.notification-badge {
+    background: red;
+    color: white;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 4px 8px;
+    border-radius: 12px;
+    margin-left: 8px;
+    min-width: 20px;
+    text-align: center;
+}
