@@ -11,37 +11,37 @@
 </app-settings>
 
 </div>
-<p-table [value]="productsService.products" class="invoice-table">
+<p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
         <tr>
             <ng-container *ngFor="let col of columns">
                 <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width">
                     <div style="display: flex; justify-content: space-between;">
                         <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
-                            (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
+                            (filterChange)="invoicesService.onFilterChange($event)"
+                            (sortChange)="invoicesService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
                         </app-search-filter-sort>
 
                         <!-- Аналогичные кнопки для других типов фильтров -->
                         <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
-                            (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)">
+                            (filterChange)="invoicesService.onFilterChange($event)"
+                            (sortChange)="invoicesService.onSortChange($event)">
                         </app-date-filter>
 
                         <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
-                            (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)">
+                            (filterChange)="invoicesService.onFilterChange($event)"
+                            (sortChange)="invoicesService.onSortChange($event)">
                         </app-number-filter>
 
                         <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint"
                             [fieldNames]="''" [enam]="null" [Field]="col.field"
-                            (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)">
+                            (filterChange)="invoicesService.onFilterChange($event)"
+                            (sortChange)="invoicesService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
 
                         <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
-                            [Field]="col.field" [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
-                            (sortChange)="productsService.onSortChange($event)">
+                            [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event)"
+                            (sortChange)="invoicesService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
 
                     </div>

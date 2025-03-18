@@ -53,9 +53,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
-      this.productsService.counterpartyId = this.counterpartyId;
-      this.productsService.endpoint = this.endpoint;
-      this.productsService.loadProducts();
+      this.invoicesService.counterpartyId = this.counterpartyId;
+      this.invoicesService.endpoint = this.endpoint;
+      this.invoicesService.loadProducts();
     }
 
     if (changes['buttonConfigs']) {
@@ -71,8 +71,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
   constructor(private invoiceService: InvoicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
-    public productsService: ProductsService,
-    private invoicesService: InvoicesService,
+    // public productsService: ProductsService,
+    public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
     private jwtService: JwtService) { }
 
@@ -140,10 +140,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
   getTotalValue(columnIndex: number): any {
-    if (!this.productsService.totalInfo) return null;
+    if (!this.invoicesService.totalInfo) return null;
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
-    return column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
+    return column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
   }
 
   statuses = [
@@ -189,7 +189,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   loadInvoices() {
-    this.productsService.getProductsByCounterparty(this.counterpartyId).subscribe(
+    this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         // this.invoices = response.data; // Assuming response is the invoice array
         this.invoicesService.setActiveData(response.data)

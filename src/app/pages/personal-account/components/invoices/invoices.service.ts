@@ -28,11 +28,7 @@ interface QueryDto {
 export class InvoicesService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
-  defaultFilters: FilterDto[] = [{
-    field: 'type',
-    values: [0],
-    type: 1
-  }];
+  defaultFilters: FilterDto[] = [];
   constructor(private http: HttpClient) { }
 
   endpoint: string = '';
@@ -153,6 +149,7 @@ export class InvoicesService {
       (data) => {
         this.products = data.documentMetadata.data;
         this.totalInfo = data.totalInfo;
+        this.setActiveData(data.documentMetadata.data)
       },
       (error) => {
         console.error('Ошибка загрузки товаров:', error);
