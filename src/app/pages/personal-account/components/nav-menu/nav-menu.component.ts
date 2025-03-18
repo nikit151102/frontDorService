@@ -74,19 +74,55 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     return !access || this.decodedRole.includes(access);
   }
 
-  shouldShowNotification(notifyKey?: string): boolean {
+  tooltipVisible = false;
+tooltipData: NotifyData | null = null;
+tooltipX = 0;
+tooltipY = 0;
+
+shouldShowNotification(notifyKey?: string): boolean {
     return notifyKey ? this.getNotificationCount(notifyKey) > 0 : false;
-  }
-  
-  getNotificationCount(notifyKey?: string): number {
+}
+
+getNotificationCount(notifyKey?: string): number {
     if (!this.notifications || !notifyKey || !(notifyKey in this.notifications)) {
-      return 0;
+        return 0;
     }
-  
+
     const data = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
     return (data?.NotDeliveredCount || 0) + (data?.NeedActionCount || 0);
-  }
-  
+}
+
+
+getNotificationClass(notifyKey?: string): string {
+    if (!this.notifications || !notifyKey || !(notifyKey in this.notifications)) {
+        return '';
+    }
+
+    const data = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
+    if (data?.NeedActionCount > 0) {
+        return 'notification-warning'; // Есть и непрочитанные, и требующие действий
+    } 
+    return 'notification-info'; // Только непрочитанные
+}
+
+
+showTooltip(notifyKey: string | undefined, event: MouseEvent): void {
+    if (!notifyKey || !this.notifications || !(notifyKey in this.notifications)) {
+        return;
+    }
+
+    this.tooltipData = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
+    this.tooltipX = event.clientX + 10;
+    this.tooltipY = event.clientY + 10;
+    this.tooltipVisible = true;
+}
+
+
+hideTooltip(): void {
+    this.tooltipVisible = false;
+    this.tooltipData = null;
+}
+
 
 
   execute(commandName: string) {

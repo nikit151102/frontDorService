@@ -126,7 +126,7 @@ export class FormAuthorizationComponent implements OnInit {
             localStorage.setItem('VXNlcklk', response.data.id);
             this.currentUserService.saveUser(response.data);
             this.router.navigate([`/${response.data.id}`]);
-            this.navMenuService.setNotifications(response);
+            this.navMenuService.setNotifications(response.notifyData);
           }
         },
         (error) => {

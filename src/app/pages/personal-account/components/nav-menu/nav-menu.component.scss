@@ -46,14 +46,41 @@ button:disabled {
     border: 1px solid #d1d1d1;
 }
 
+
+
+
+
 .notification-badge {
-    background: red;
     color: white;
     font-size: 12px;
     font-weight: bold;
     padding: 4px 8px;
     border-radius: 12px;
-    margin-left: 8px;
-    min-width: 20px;
     text-align: center;
+    display: inline-block;
+    position: absolute;
+    top: -6px;  
+    right: -6px; 
+    min-width: 20px;
+}
+
+.notification-info {
+    background: #5959ff;  // Только непрочитанные
+}
+
+.notification-warning {
+    background: orange;  // Есть и непрочитанные, и требующие действия
+}
+
+.tooltip {
+    text-align: start;
+    position: absolute;
+    background: rgba(255, 255, 255, 0.8);
+    color: #101010;
+    padding: 2px 4px;
+    border-radius: 10px;
+    font-size: 13px;
+    white-space: nowrap;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }

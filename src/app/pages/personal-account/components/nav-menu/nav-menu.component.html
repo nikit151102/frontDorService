@@ -3,21 +3,29 @@
         <li *ngFor="let item of items">
             <button 
                 (click)="execute(item.commandName || '')" 
-                [disabled]="!hasAccess(item.access)">
+                [disabled]="!hasAccess(item.access)"
+                style="position: relative;">
                 {{ item.label }}
-                <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge">
+                
+                <!-- Кружок уведомлений -->
+                <span 
+                    *ngIf="shouldShowNotification(item.notifyKey)" 
+                    class="notification-badge" 
+                    [ngClass]="getNotificationClass(item.notifyKey)"
+                    (mouseenter)="showTooltip(item.notifyKey, $event)" 
+                    (mouseleave)="hideTooltip()">
                     {{ getNotificationCount(item.notifyKey) }}
                 </span>
-                
-              
             </button>
+            
+             <!-- Всплывающая подсказка с деталями -->
+             <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
+                <p *ngIf="tooltipData?.NotDeliveredCount">Непрочитанных: {{ tooltipData?.NotDeliveredCount }}</p>
+                <p *ngIf="tooltipData?.NeedActionCount">Требуется действий: {{ tooltipData?.NeedActionCount }}</p>
+            </div>
         </li>
         <li>
-            <button 
-                (click)="execute('exit')" >
-                Выйти
-            </button>
+            <button (click)="execute('exit')">Выйти</button>
         </li>
     </ul>
 </nav>
-
