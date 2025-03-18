@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { JwtService } from '../../../../services/jwt.service';
+import { TokenService } from '../../../../services/token.service';
 
 interface CustomMenuItem {
   label: string;
@@ -30,7 +31,7 @@ export class NavMenuComponent  implements OnInit{
   ];
   decodedRole: any[] = [];
 
-  constructor(private activatedRoute: ActivatedRoute, private jwtService:JwtService, private router: Router) {}
+  constructor(private activatedRoute: ActivatedRoute, private jwtService:JwtService, private router: Router, private tokenService:TokenService) {}
   
   ngOnInit(): void {
     const decodedToken = this.jwtService.getDecodedToken();
