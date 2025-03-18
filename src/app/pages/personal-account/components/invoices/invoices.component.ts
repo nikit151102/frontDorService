@@ -81,6 +81,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
    
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
+      this.cdRef.detectChanges();
     })
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();

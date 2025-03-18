@@ -44,10 +44,28 @@ export class InvoicesService {
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }
+
   getActiveData() {
     return this.dataSubject.value;
   }
 
+  addItemToStart(newItem: any) {
+    const currentData = this.getActiveData();
+      this.dataSubject.next([newItem, ...currentData]);
+  }
+
+  updateActiveData(updatedData: any) {
+    const currentData = this.getActiveData();
+    
+    if (Array.isArray(currentData)) {
+
+      const updatedArray = currentData.map(item =>
+        item.id === updatedData.id ? { ...item, ...updatedData } : item
+      );
+
+      this.dataSubject.next(updatedArray);
+    }
+  }
 
 
   getProductsByCounterparty(id: string): Observable<any> {

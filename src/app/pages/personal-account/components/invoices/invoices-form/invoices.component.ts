@@ -312,13 +312,11 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
+            console.log('invoice.documentMetadata.data',invoice.documentMetadata.data)
             if (this.selectedInvoice.id) {
-              const index = this.invoices.findIndex(inv => inv.id === this.selectedInvoice.id);
-              if (index > -1) {
-                this.invoices[index] = { ...this.selectedInvoice };
-              }
+              this.productsService.updateActiveData(invoice.documentMetadata.data)
             } else {
-              this.invoices.push(invoice.data);
+              this.productsService.addItemToStart(invoice.documentMetadata.data)
             }
 
             this.messageService.add({
