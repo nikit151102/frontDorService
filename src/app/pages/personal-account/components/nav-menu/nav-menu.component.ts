@@ -25,8 +25,7 @@ export class NavMenuComponent  implements OnInit{
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess' },
     { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess' },
     // { label: 'Нал', commandName: '', access: '', access: 'CashAccess },
-    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' },
-    { label: 'Выйти', commandName: 'exit', access: '/' }
+    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
     
   ];
   decodedRole: any[] = [];
