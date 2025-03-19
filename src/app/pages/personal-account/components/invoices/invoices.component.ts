@@ -192,7 +192,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
          this.invoices = response.documentMetadata.data; // Assuming response is the invoice array
-        this.invoicesService.setActiveData(response.documentMetadata.data)
+        this.invoicesService.setActiveData(response.documentMetadata.data);
+        this.invoicesService.totalInfo = response.totalInfo;
       },
       (error) => {
         this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
@@ -207,9 +208,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.deleteInvoice(invoiceId).subscribe(
+        this.invoiceService.deleteInvoice(invoiceId.id).subscribe(
           () => {
-            this.invoicesService.setActiveData(this.invoicesService.getActiveData().productsService.filter((inv: any) => inv.id !== invoiceId))
+            this.invoicesService.removeItemById(invoiceId.id);
 
             this.messageService.add({
               severity: 'success',

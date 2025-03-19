@@ -66,7 +66,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
     private productsService: InvoicesService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -385,7 +385,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             } else {
               this.productsService.addItemToStart(invoice.documentMetadata.data);
             }
-  
+            this.productsService.totalInfo = invoice.totalInfo;
             this.messageService.add({
               severity: 'success',
               summary: 'Успех',

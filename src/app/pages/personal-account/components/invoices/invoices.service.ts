@@ -62,6 +62,15 @@ export class InvoicesService {
       this.dataSubject.next(updatedArray);
     }
   }
+  
+  removeItemById(id: any) {
+    const currentData = this.getActiveData();
+    
+    if (Array.isArray(currentData)) {
+      const filteredArray = currentData.filter(item => item.id !== id);
+      this.dataSubject.next(filteredArray);
+    }
+  }
 
 
   getProductsByCounterparty(id: string): Observable<any> {
