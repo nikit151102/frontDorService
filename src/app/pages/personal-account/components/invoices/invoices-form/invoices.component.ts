@@ -283,67 +283,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     );
   }
 
-  saveInvoice() {
-    let titlePopUp = '';
-    let acceptLabel = '';
-    if (this.selectedInvoice && this.selectedInvoice.id) {
-      titlePopUp = 'Вы действительно хотите обновить данные?';
-      acceptLabel = 'Обновить';
-    } else {
-      titlePopUp = 'Вы действительно хотите создать счет-фактуру?';
-      acceptLabel = 'Создать'
-    }
 
-    this.confirmPopupService.openConfirmDialog({
-      title: '',
-      message: titlePopUp,
-      acceptLabel: acceptLabel,
-      rejectLabel: 'Отмена',
-      onAccept: () => {
-        if (this.visibleCheckPersonId == false) {
-          this.selectedInvoice = {
-            ...this.selectedInvoice,
-            checkPersonId: '00000000-0000-0000-0000-000000000000',
-          }
-        }
-        console.log('this.selectedInvoice', this.selectedInvoice)
-        this.selectedInvoice = {
-          ...this.selectedInvoice,
-          tax: this.selectedInvoice.tax.value,
-          type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
-        };
-
-        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
-          (invoice) => {
-            console.log('invoice.documentMetadata.data',invoice.documentMetadata.data)
-            if (this.selectedInvoice.id) {
-              this.productsService.updateActiveData(invoice.documentMetadata.data)
-            } else {
-              this.productsService.addItemToStart(invoice.documentMetadata.data)
-            }
-
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Успех',
-              detail: 'Счет сохранен'
-            });
-
-            this.selectedInvoice = null;
-            this.cdr.detectChanges();
-          },
-          (error) => {
-            console.error('Error saving invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось сохранить счет'
-            });
-          }
-        );
-      }
-    });
-
-  }
 
   deleteInvoice(id: string) {
 
@@ -404,21 +344,107 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
 
-  sendingInvoice(id: string) {
-    this.invoiceService.sendingVerification(id, null).subscribe((updatedInvoice: any) => {
-      const index = this.invoices.findIndex(invoice => invoice.id === id);
-      if (index !== -1) {
-        this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
-        console.log('this.invoices[index]', this.invoices[index])
-        this.invoices = [...this.invoices];
-        this.cdr.detectChanges();
-        this.onDialogClose();
+  saveInvoice(callback?: (invoice: any) => void) {
+    let titlePopUp = '';
+    let acceptLabel = '';
+  
+    if (this.selectedInvoice && this.selectedInvoice.id) {
+      titlePopUp = 'Вы действительно хотите обновить данные?';
+      acceptLabel = 'Обновить';
+    } else {
+      titlePopUp = 'Вы действительно хотите создать счет-фактуру?';
+      acceptLabel = 'Создать';
+    }
+  
+    this.confirmPopupService.openConfirmDialog({
+      title: '',
+      message: titlePopUp,
+      acceptLabel: acceptLabel,
+      rejectLabel: 'Отмена',
+      onAccept: () => {
+        if (!this.visibleCheckPersonId) {
+          this.selectedInvoice = {
+            ...this.selectedInvoice,
+            checkPersonId: '00000000-0000-0000-0000-000000000000',
+          };
+        }
+  
+        console.log('this.selectedInvoice', this.selectedInvoice);
+        this.selectedInvoice = {
+          ...this.selectedInvoice,
+          tax: this.selectedInvoice.tax.value,
+          type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
+        };
+  
+        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+          (invoice) => {
+            console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
+            
+            if (this.selectedInvoice.id) {
+              this.productsService.updateActiveData(invoice.documentMetadata.data);
+            } else {
+              this.productsService.addItemToStart(invoice.documentMetadata.data);
+            }
+  
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Успех',
+              detail: 'Счет сохранен'
+            });
+  
+            const invoiceId = invoice.documentMetadata.data.id;
+            this.selectedInvoice = null;
+            this.cdr.detectChanges();
+  
+            if (callback && invoice.documentMetadata.data) {
+              callback(invoice.documentMetadata.data);
+            }
+          },
+          (error) => {
+            console.error('Ошибка при сохранении счета', error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Ошибка',
+              detail: 'Не удалось сохранить счет'
+            });
+          }
+        );
       }
-    }, error => {
-      console.error('Ошибка при отправке на проверку:', error);
     });
   }
+  
+  sendingInvoice(invoice: string, status:number) {
+    this.invoiceService.sendingVerification(invoice, status).subscribe(
+      (updatedInvoice: any) => {
+        const index = this.invoices.findIndex(invoice => invoice.id === invoice.id);
+        if (index !== -1) {
+          this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
+          console.log('this.invoices[index]', this.invoices[index]);
+          this.invoices = [...this.invoices];
+          this.cdr.detectChanges();
+          this.onDialogClose();
+        }
+      },
+      error => {
+        console.error('Ошибка при отправке на проверку:', error);
+      }
+    );
+  }
+  
+  
 
+  saveAndSendInvoice() {
+    this.saveInvoice((invoice: any) => {
+      let currentRole = this.jwtService.getDecodedToken().email;
+      if (currentRole == '3') {
+        this.sendingInvoice(invoice, 2);
+      }else if(currentRole == '2'){
+        this.sendingInvoice(invoice, 1);
+      }      
+    });
+  }
+  
+  
 
   createNewInvoice() {
     this.selectedInvoice = {
