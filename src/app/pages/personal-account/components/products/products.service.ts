@@ -54,13 +54,23 @@ export class ProductsService {
 
     const typeValue = currentUrl.includes('/services') ? 1 : 0;
 
-    let defaultFilters = [{
+    let defaultFilter = {
       field: 'DocInvoice.Partner.Type',
       values: [typeValue],
       type: 1
-    }]
+    }
 
-    return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, [...defaultFilters, ...this.queryData.filters], {
+    const filterExists = this.queryData.filters.some(filter => 
+      filter.field === defaultFilter.field &&
+      JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
+      filter.type === defaultFilter.type
+    );
+  
+    if (!filterExists) {
+      this.queryData.filters.push(defaultFilter);
+    }
+
+    return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
