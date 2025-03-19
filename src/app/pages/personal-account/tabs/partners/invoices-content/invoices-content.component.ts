@@ -4,6 +4,7 @@ import { InvoicesComponent } from '../../../components/invoices/invoices.compone
 import { ProductsComponent } from '../../../components/products/products.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { BUTTON_SETS } from './button-config';
+import { InvoicesService } from '../../../components/invoices/invoices.service';
 
 @Component({
   selector: 'app-invoices-content',
@@ -15,9 +16,17 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   selectedComponent: string = 'invoices';
 
-  constructor(private jwtService: JwtService) { }
+  constructor(private jwtService: JwtService,
+    private invoicesService:InvoicesService
+  ) { }
 
   ngOnInit(): void {
+    this.invoicesService.defaultFilters = [{
+      field: 'Pertner.Type',
+      values: [0],
+      type: 1
+    }]
+
     this.jwtService.getDecodedToken()
   }
 

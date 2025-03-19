@@ -3,6 +3,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
 import { BUTTON_SERVICES_SETS } from './button-services-config';
+import { InvoicesService } from '../../../components/invoices/invoices.service';
 
 @Component({
   selector: 'app-services-content',
@@ -14,9 +15,16 @@ export class ServicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   selectedComponent: string = 'invoices';
 
-  constructor() { }
+  constructor(private invoicesService:InvoicesService) { }
 
-  ngOnInit(): void { }
+  ngOnInit(): void { 
+    this.invoicesService.defaultFilters = [{
+      field: 'Pertner.Type',
+      values: [1],
+      type: 1
+    }]
+
+  }
 
   ngOnChanges(changes: SimpleChanges): void { }
 
