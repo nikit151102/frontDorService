@@ -19,7 +19,7 @@ export class ServicesContentComponent implements OnInit, OnChanges {
 
   ngOnInit(): void { 
     this.invoicesService.defaultFilters = [{
-      field: 'Pertner.Type',
+      field: 'Partner.Type',
       values: [1],
       type: 1
     }]
