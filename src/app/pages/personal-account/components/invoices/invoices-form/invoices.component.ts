@@ -18,6 +18,7 @@ import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/c
 import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
 import { JwtService } from '../../../../../services/jwt.service';
+import { ToastService } from '../../../../../services/toast.service';
 
 @Component({
   selector: 'app-invoices-form',
@@ -67,8 +68,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     private productsService: InvoicesService,
     private jwtService: JwtService,
+    private toastService:ToastService
   ) { }
-
+  
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyData']) {
       const currentCounterpartyId = changes['counterpartyData'].currentValue;
@@ -274,11 +276,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       },
       (error) => {
         console.error('Error fetching invoice details', error);
-        this.messageService.add({
-          severity: 'error',
-          summary: 'Ошибка',
-          detail: 'Не удалось загрузить счет'
-        });
+        this.toastService.showError('Ошибка', 'Не удалось загрузить счет');
       }
     );
   }
@@ -297,20 +295,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           () => {
             let invoices = this.productsService.getActiveData()
             this.invoices = invoices.filter((inv: any) => inv.id !== id);
-            ;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Удалено',
-              detail: 'Счет-фактура удалена'
-            });
+          
+            this.toastService.showSuccess('Удаление', 'Счет-фактура удалена');
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось удалить счет'
-            });
+            this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактура');
           }
         );
       }
@@ -391,7 +381,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
               summary: 'Успех',
               detail: 'Счет сохранен'
             });
-  
+            this.toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
             const invoiceId = invoice.documentMetadata.data.id;
             this.selectedInvoice = null;
             this.cdr.detectChanges();
@@ -402,11 +392,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           },
           (error) => {
             console.error('Ошибка при сохранении счета', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось сохранить счет'
-            });
+            this.toastService.showError('Ошибка', error.Message);
           }
         );
       }

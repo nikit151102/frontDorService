@@ -19,6 +19,7 @@ import { InvoicesService } from './invoices.service';
 import { JwtService } from '../../../../services/jwt.service';
 import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
 import { SettingsComponent } from './settings/settings.component';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-invoices',
@@ -72,6 +73,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
     // public productsService: ProductsService,
+    private toastService:ToastService,
     public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
     private jwtService: JwtService) { }
@@ -196,7 +198,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.invoicesService.totalInfo = response.totalInfo;
       },
       (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
+        this.toastService.showError('Ошибка', 'Не удалось загрузить счета!');
       }
     );
   }
@@ -211,20 +213,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.invoiceService.deleteInvoice(invoiceId.id).subscribe(
           () => {
             this.invoicesService.removeItemById(invoiceId.id);
-
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Удалено',
-              detail: 'Счет-фактура удалена'
-            });
+            this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось удалить счет'
-            });
+            this.toastService.showError('Ошибка', 'Не удалось удалить счет!');
           }
         );
       }
@@ -240,19 +233,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
       onAccept: () => {
         this.invoiceService.sendingVerification(invoice, status).subscribe(
           () => {
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Отправка',
-              detail: 'Счет-фактура успешно отправлена'
-            });
+            this.toastService.showSuccess('Отправка', 'Счет-фактура успешно отправлена');
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось отправить фактуру'
-            });
+            this.toastService.showError('Ошибка', 'Не удалось отправить счет-фактуру');
           }
         );
       }
