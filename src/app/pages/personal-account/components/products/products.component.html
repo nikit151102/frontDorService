@@ -26,7 +26,7 @@
                             (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
                         </app-number-filter>
                         <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
-                            [fieldNames]="'name'" [enam]="null" [Field]="col.field"
+                            [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType" [searchField]="col.searchField"
                             (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
                         <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"

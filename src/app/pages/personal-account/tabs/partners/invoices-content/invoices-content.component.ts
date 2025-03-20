@@ -41,14 +41,14 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   }
 
   columns = [
-    { field: 'productTarget', header: 'Назначение', type: 'uuid', visible: true, width: '18%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'productTarget.Id', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '18%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'name', header: 'Товар', type: 'string', visible: true, width: '20%' },
     { field: 'quantity', header: 'Количество', type: 'number', visible: true, width: '13%' },
-    { field: 'measurementUnit', header: 'Ед.изм', type: 'uuid', visible: true, width: '13%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
+    { field: 'measurementUnit.Id', filterType: 10, searchType: 'measurementUnit.Name', header: 'Ед.изм', type: 'uuid', visible: true, width: '13%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
     { field: 'amount', header: 'Сумма', type: 'number', visible: true, width: '13%' },
-    { field: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%',isFilter: true  },
-    { field: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '14%' },
-    { field: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' }
+    { field: 'DocInvoice.Number', header: 'Номер фактуры', type: 'string', visible: true, width: '10%', isFilter: false },
+    { field: 'DocInvoice.DateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '14%' },
+    { field: 'DocInvoice.Status', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' }
   ];
   
 

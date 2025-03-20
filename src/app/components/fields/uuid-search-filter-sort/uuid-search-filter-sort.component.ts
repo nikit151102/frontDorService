@@ -24,6 +24,7 @@ interface SortDto {
 export class UuidSearchFilterSortComponent {
   @Input() filterField: string = ''; // Название поля для фильтрации
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
+  @Input() searchField: string = '';
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
   @Input() fieldNames: string = ''; // Массив полей для отображения в выпадающем списке
   @Input() Field: string = ''; 
@@ -99,10 +100,11 @@ export class UuidSearchFilterSortComponent {
 
   onSearchChange() {
     const filterDto: FilterDto = {
-      field: this.Field,
+      field: this.searchField || this.Field,
       values: this.searchTerm ? [this.searchTerm] : [],
       type: 0
     };
+    
     this.filterChange.emit(filterDto);
   }
 
