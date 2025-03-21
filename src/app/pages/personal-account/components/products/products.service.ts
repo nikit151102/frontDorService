@@ -60,12 +60,12 @@ export class ProductsService {
       type: 1
     }
 
-    const filterExists = this.queryData.filters.some(filter => 
+    const filterExists = this.queryData.filters.some(filter =>
       filter.field === defaultFilter.field &&
       JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
       filter.type === defaultFilter.type
     );
-  
+
     if (!filterExists) {
       this.queryData.filters.push(defaultFilter);
     }
@@ -106,6 +106,10 @@ export class ProductsService {
     } else {
       this.queryData.filters.push(filter); // Добавляем новый фильтр
     }
+
+    // Удаляем фильтр, если values стал пустым массивом или `[""]`
+    this.queryData.filters = this.queryData.filters.filter(f => f.values && f.values.length > 0 && f.values[0] !== "");
+    
     this.loadProducts()
     console.log('Обновленные фильтры:', this.queryData.filters);
   }

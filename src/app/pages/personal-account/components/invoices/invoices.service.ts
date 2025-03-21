@@ -21,8 +21,8 @@ interface QueryDto {
 
 
 
-@Injectable({ 
-  providedIn: 'any' 
+@Injectable({
+  providedIn: 'any'
 })
 
 export class InvoicesService {
@@ -47,12 +47,12 @@ export class InvoicesService {
 
   addItemToStart(newItem: any) {
     const currentData = this.getActiveData();
-      this.dataSubject.next([newItem, ...currentData]);
+    this.dataSubject.next([newItem, ...currentData]);
   }
 
   updateActiveData(updatedData: any) {
     const currentData = this.getActiveData();
-    
+
     if (Array.isArray(currentData)) {
 
       const updatedArray = currentData.map(item =>
@@ -62,10 +62,10 @@ export class InvoicesService {
       this.dataSubject.next(updatedArray);
     }
   }
-  
+
   removeItemById(id: any) {
     const currentData = this.getActiveData();
-    
+
     if (Array.isArray(currentData)) {
       const filteredArray = currentData.filter(item => item.id !== id);
       this.dataSubject.next(filteredArray);
@@ -76,12 +76,12 @@ export class InvoicesService {
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.queryData.filters = this.queryData.filters || [];
-    
+
     if (!this.queryData.filters.includes(this.defaultFilters[0])) {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     }
 
-    
+
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
@@ -130,6 +130,10 @@ export class InvoicesService {
       // Добавляем фильтр только если значения не пустые
       this.queryData.filters.push(filter);
     }
+
+    // Удаляем фильтр, если values стал пустым массивом или `[""]`
+    this.queryData.filters = this.queryData.filters.filter(f => f.values && f.values.length > 0 && f.values[0] !== "");
+
 
     this.loadProducts();
     console.log('Обновленные фильтры:', this.queryData.filters);
