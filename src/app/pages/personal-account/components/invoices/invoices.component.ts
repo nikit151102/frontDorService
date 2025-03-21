@@ -88,7 +88,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
     this.loadInvoices();
-
   }
 
   updateSelectedColumns(columns: string[]) {
@@ -217,7 +216,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.toastService.showError('Ошибка', 'Не удалось удалить счет!');
+            this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактуру!');
           }
         );
       }

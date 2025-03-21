@@ -12,6 +12,7 @@ import { PartnerMenuService } from './partner-menu.service';
 import { ButtonConfig } from './button-config';
 import { JwtService } from '../../../../services/jwt.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
+import { ToastService } from '../../../../services/toast.service';
 
 interface Counterparty {
   id: number;
@@ -58,7 +59,8 @@ export class PartnerMenuComponent {
     private fb: FormBuilder,
     private confirmPopupService: ConfirmPopupService,
     private partnerStatusService: PartnerStatusService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private toastService:ToastService
   ) { }
 
   ngOnInit(): void {
@@ -134,6 +136,7 @@ export class PartnerMenuComponent {
       },
       (error: any) => {
         console.error('Ошибка загрузки контрагентов:', error);
+        this.toastService.showError('Ошибка', 'Ошибка загрузки контрагентов');
       }
     );
   }
@@ -220,9 +223,13 @@ export class PartnerMenuComponent {
               this.counterparties[index] = updatedCounterparty;
               this.display = false;
             }
+            this.toastService.showSuccess('Успех', 'Контрагент успешно отредактирован');
             this.loadCounterparties();
           },
-          (error) => console.error('Ошибка редактирования контрагента:', error)
+          (error) => {
+            console.error('Ошибка редактирования контрагента:', error)
+            this.toastService.showError('Ошибка', 'Ошибка редактирования контрагента');
+          } 
         );
       } else {
         this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
@@ -230,8 +237,13 @@ export class PartnerMenuComponent {
             this.counterparties.push(newCounterparty);
             this.display = false;
             this.loadCounterparties();
+            this.toastService.showSuccess('Успех', 'Контрагент успешно добавлен');
           },
-          (error) => console.error('Ошибка добавления контрагента:', error)
+          (error) => {
+            console.error('Ошибка добавления контрагента:', error);
+            this.toastService.showError('Ошибка', 'Ошибка добавления контрагента'); 
+          }
+
         );
       }
     }
@@ -249,9 +261,13 @@ export class PartnerMenuComponent {
         this.partnerMenuService.deleteCounterparty(partner.id).subscribe(
           () => {
             this.counterparties = this.counterparties.filter((c: any) => c.id !== partner.id);
+            this.toastService.showSuccess('Успех', 'Контрагент удален');
             this.loadCounterparties();
           },
-          (error) => console.error('Ошибка удаления контрагента:', error)
+          (error) =>{
+            console.error('Ошибка удаления контрагента:', error)
+            this.toastService.showError('Ошибка', 'Не удалось удалить контрагента'); 
+          } 
         );
       }
     });

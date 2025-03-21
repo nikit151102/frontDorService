@@ -15,6 +15,7 @@ import { ProductsService } from '../products/products.service';
 import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
 import { ServicesContentService } from '../../tabs/services/services-content/services-content.service';
 import { ServicesFormComponent } from './services-form/services-form.component';
+import { ToastService } from '../../../../services/toast.service';
 
 @Component({
   selector: 'app-services',
@@ -60,6 +61,7 @@ export class ServicesComponent implements OnChanges, OnInit {
   constructor(private servicesContentService: ServicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
+    private toastService:ToastService,
     public productsService: ProductsService) { }
 
   ngOnInit() {
@@ -146,7 +148,7 @@ export class ServicesComponent implements OnChanges, OnInit {
         this.productService.setActiveData(response.data)
       },
       (error) => {
-        this.messageService.add({ severity: 'error', summary: 'Ошибка', detail: 'Не удалось загрузить счета' });
+        this.toastService.showError('Ошибка', 'Не удалось загрузить счета!');
       }
     );
   }
@@ -162,19 +164,11 @@ export class ServicesComponent implements OnChanges, OnInit {
           () => {
             this.productService.productsService = this.productService.productsService.filter((inv: any) => inv.id !== invoiceId);
 
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Удалено',
-              detail: 'Счет-фактура удалена'
-            });
+            this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось удалить счет'
-            });
+            this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактуру!');
           }
         );
       }
@@ -184,26 +178,18 @@ export class ServicesComponent implements OnChanges, OnInit {
   verificationInvoice(invoiceId: any) {
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение отправки на проверку',
-      message: 'Вы уверены, что хотите отправить фактуру механику?',
+      message: 'Вы уверены, что хотите отправить фактуру?',
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
         this.servicesContentService.sendingVerification(invoiceId).subscribe(
           () => {
 
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Отправка',
-              detail: 'Счет-фактура успешно отправлена'
-            });
+            this.toastService.showSuccess('Отправка', 'Счет-фактура успешно отправлена');
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.messageService.add({
-              severity: 'error',
-              summary: 'Ошибка',
-              detail: 'Не удалось отправить фактуру'
-            });
+            this.toastService.showError('Ошибка', 'Не удалось отправить счет-фактуру');
           }
         );
       }
