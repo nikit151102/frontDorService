@@ -14,13 +14,13 @@ interface CustomMenuItem {
 }
 
 interface FullNotifyData{
-  PartnersNotifyData:NotifyData, // Данные уведомлений для Контрагентов
-  ServicesNotifyData:NotifyData // Данные уведомлений для Сервисов
+  partnersNotifyData:NotifyData, // Данные уведомлений для Контрагентов
+  servicesNotifyData:NotifyData // Данные уведомлений для Сервисов
 }
 
 interface NotifyData {
-  NotDeliveredCount: number, // Количество непрочитанных
-  NeedActionCount: number // Количество Требуются действия
+  notDeliveredCount: number, // Количество непрочитанных
+  needActionCount: number // Количество Требуются действия
 }
 
 @Component({
@@ -35,8 +35,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
   items: CustomMenuItem[] = [
     { label: 'Профиль', commandName: 'profile', access: '' },
-    { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'PartnersNotifyData' },
-    { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess', notifyKey: 'ServicesNotifyData' },
+    { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
+    { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess', notifyKey: 'servicesNotifyData' },
     // { label: 'Нал', commandName: '', access: '', access: 'CashAccess },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
@@ -66,8 +66,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
     this.notificationSubscription = this.navMenuService.notifications$.subscribe((data: any) => {
       this.notifications = data;
+      
     });
-
+this.notifications = this.navMenuService.getNotifications();
+console.log('notifications',this.notifications)
   }
 
   hasAccess(access: string): boolean {
@@ -83,13 +85,11 @@ shouldShowNotification(notifyKey?: string): boolean {
     return notifyKey ? this.getNotificationCount(notifyKey) > 0 : false;
 }
 
-getNotificationCount(notifyKey?: string): number {
-    if (!this.notifications || !notifyKey || !(notifyKey in this.notifications)) {
-        return 0;
-    }
-
-    const data = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
-    return (data?.NotDeliveredCount || 0) + (data?.NeedActionCount || 0);
+getNotificationCount(notifyKey: any): number {
+  const data = this.navMenuService.getNotifications();
+  return data && data[notifyKey] 
+    ? (data[notifyKey].notDeliveredCount || 0) + (data[notifyKey].needActionCount || 0)
+    : 0;
 }
 
 
@@ -99,7 +99,7 @@ getNotificationClass(notifyKey?: string): string {
     }
 
     const data = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
-    if (data?.NeedActionCount > 0) {
+    if (data?.needActionCount > 0) {
         return 'notification-warning'; // Есть и непрочитанные, и требующие действий
     } 
     return 'notification-info'; // Только непрочитанные

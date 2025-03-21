@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environment';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +10,20 @@ export class NavMenuService {
   constructor() { }
 
   private socket!: WebSocket;
-  private notificationsSubject = new Subject<any>();
+  private notificationsSubject = new BehaviorSubject<any>(null);
   notifications$ = this.notificationsSubject.asObservable();
 
-  setNotifications(valeu:any){
+  setNotifications(valeu: any) {
     this.notificationsSubject.next(valeu);
+  }
+
+  getNotifications() {
+    return this.notificationsSubject.value
   }
 
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    console.log('token',token)
+    console.log('token', token)
     const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=menu`;
     this.socket = new WebSocket(url);
 
@@ -49,5 +53,5 @@ export class NavMenuService {
       this.socket.close();
     }
   }
-  
+
 }

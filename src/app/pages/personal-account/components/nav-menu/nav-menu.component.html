@@ -20,8 +20,8 @@
             
              <!-- Всплывающая подсказка с деталями -->
              <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
-                <p *ngIf="tooltipData?.NotDeliveredCount">Непрочитанных: {{ tooltipData?.NotDeliveredCount }}</p>
-                <p *ngIf="tooltipData?.NeedActionCount">Требуется действий: {{ tooltipData?.NeedActionCount }}</p>
+                <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
+                <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
             </div>
         </li>
         <li>
