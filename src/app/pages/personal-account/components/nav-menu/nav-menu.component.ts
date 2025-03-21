@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { JwtService } from '../../../../services/jwt.service';
 import { TokenService } from '../../../../services/token.service';
@@ -13,9 +13,9 @@ interface CustomMenuItem {
   notifyKey?: string;
 }
 
-interface FullNotifyData{
-  partnersNotifyData:NotifyData, // Данные уведомлений для Контрагентов
-  servicesNotifyData:NotifyData // Данные уведомлений для Сервисов
+interface FullNotifyData {
+  partnersNotifyData: NotifyData, // Данные уведомлений для Контрагентов
+  servicesNotifyData: NotifyData // Данные уведомлений для Сервисов
 }
 
 interface NotifyData {
@@ -44,9 +44,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   decodedRole: any[] = [];
   notifications: any;
   private notificationSubscription!: Subscription;
-  
+
   constructor(private activatedRoute: ActivatedRoute,
     private jwtService: JwtService, private router: Router,
+    private cdr: ChangeDetectorRef,
     private tokenService: TokenService, private navMenuService: NavMenuService) { }
 
   ngOnInit(): void {
@@ -66,10 +67,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
     this.notificationSubscription = this.navMenuService.notifications$.subscribe((data: any) => {
       this.notifications = data;
-      
+      this.cdr.detectChanges();
     });
-this.notifications = this.navMenuService.getNotifications();
-console.log('notifications',this.notifications)
+    this.notifications = this.navMenuService.getNotifications();
+    console.log('notifications', this.notifications)
   }
 
   hasAccess(access: string): boolean {
@@ -77,51 +78,51 @@ console.log('notifications',this.notifications)
   }
 
   tooltipVisible = false;
-tooltipData: NotifyData | null = null;
-tooltipX = 0;
-tooltipY = 0;
+  tooltipData: NotifyData | null = null;
+  tooltipX = 0;
+  tooltipY = 0;
 
-shouldShowNotification(notifyKey?: string): boolean {
+  shouldShowNotification(notifyKey?: string): boolean {
     return notifyKey ? this.getNotificationCount(notifyKey) > 0 : false;
-}
+  }
 
-getNotificationCount(notifyKey: any): number {
-  const data = this.navMenuService.getNotifications();
-  return data && data[notifyKey] 
-    ? (data[notifyKey].notDeliveredCount || 0) + (data[notifyKey].needActionCount || 0)
-    : 0;
-}
+  getNotificationCount(notifyKey: any): number {
+    const data = this.navMenuService.getNotifications();
+    return data && data[notifyKey]
+      ? (data[notifyKey].notDeliveredCount || 0) + (data[notifyKey].needActionCount || 0)
+      : 0;
+  }
 
 
-getNotificationClass(notifyKey?: string): string {
+  getNotificationClass(notifyKey?: string): string {
     if (!this.notifications || !notifyKey || !(notifyKey in this.notifications)) {
-        return '';
+      return '';
     }
 
     const data = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
     if (data?.needActionCount > 0) {
-        return 'notification-warning'; // Есть и непрочитанные, и требующие действий
-    } 
+      return 'notification-warning'; // Есть и непрочитанные, и требующие действий
+    }
     return 'notification-info'; // Только непрочитанные
-}
+  }
 
 
-showTooltip(notifyKey: string | undefined, event: MouseEvent): void {
+  showTooltip(notifyKey: string | undefined, event: MouseEvent): void {
     if (!notifyKey || !this.notifications || !(notifyKey in this.notifications)) {
-        return;
+      return;
     }
 
     this.tooltipData = this.notifications[notifyKey as keyof FullNotifyData] as NotifyData;
     this.tooltipX = event.clientX + 10;
     this.tooltipY = event.clientY + 10;
     this.tooltipVisible = true;
-}
+  }
 
 
-hideTooltip(): void {
+  hideTooltip(): void {
     this.tooltipVisible = false;
     this.tooltipData = null;
-}
+  }
 
 
 

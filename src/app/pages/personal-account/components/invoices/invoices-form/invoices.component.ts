@@ -68,9 +68,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     private productsService: InvoicesService,
     private jwtService: JwtService,
-    private toastService:ToastService
+    private toastService: ToastService
   ) { }
-  
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyData']) {
       const currentCounterpartyId = changes['counterpartyData'].currentValue;
@@ -84,7 +84,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
         console.log('this.invoiceId this.invoiceId ', this.invoiceId)
-        if (this.invoiceId != null && this.invoiceId != undefined ) {
+        if (this.invoiceId != null && this.invoiceId != undefined) {
           this.loadInvoice();
         }
       }
@@ -107,7 +107,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
     this.invoiceService.getCheckers().subscribe((values: any) => {
       this.checkers = values.data;
-  
+
       this.checkers.forEach((checker: any) => {
         const initialFirstName = checker.firstName ? checker.firstName.charAt(0).toUpperCase() + '.' : '';
         const initialPatronymic = checker.patronymic ? checker.patronymic.charAt(0).toUpperCase() + '.' : '';
@@ -149,7 +149,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
 
       this.selectedInvoice = value.data;
-      this.type = value.data.type
 
       this.selectedInvoice.dateTime = new Date(value.data.dateTime);
       this.selectedInvoice.tax = taxes.find(tx => tx.value === value.data.tax);
@@ -157,12 +156,16 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.selectedInvoice.checkPersonId = value.data.checkPerson.id;
 
       if (this.selectedInvoice.expenseSum == 0 && this.selectedInvoice.incomeSum < 0) {
-        this.selectedInvoice.adjustmentType = { label: '-', value: 2 };
+        this.adjustmentType = 2; // -
+        this.type = 0;
       } else if (this.selectedInvoice.incomeSum == 0 && this.selectedInvoice.expenseSum < 0) {
-        this.selectedInvoice.adjustmentType = { label: '+', value: 1 };
+        this.adjustmentType = 1; // +
+        this.type = 0;
+      } else{
+        this.type = 1;
       }
       if (value.data.productList) {
-        this.selectedInvoice.productList = value.data.productList.map((product:any) => ({
+        this.selectedInvoice.productList = value.data.productList.map((product: any) => ({
           ...product,
           measurementUnitId: product.measurementUnit ? product.measurementUnit.id : null,
           productTargetId: product.productTarget ? product.productTarget.id : null,
@@ -193,19 +196,19 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   onAmountChange(value: any, index: number) {
-    console.log('value',value)
-    console.log('this.type',this.type)
+    console.log('value', value)
+    console.log('this.type', this.type)
     const updatedProducts = [...this.selectedInvoice.productList]; // Создаем новый массив
     if (this.type !== 1 || this.selectedInvoice.expenseSum < 0) {
       updatedProducts[index].amount = `-${value}`;
     } else {
       updatedProducts[index].amount = value;
     }
-    
+
     this.selectedInvoice.productList = updatedProducts; // Обновляем массив, чтобы Angular заметил изменения
   }
-  
-  
+
+
   adjustmentType: number | null = null;
   type: number | null = null;
 
@@ -257,12 +260,22 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         const taxObj = taxes.find(t => t.value === invoice.data.tax);
         const formattedDate = invoice.data.dateTime ? new Date(invoice.data.dateTime) : null;
 
-        this.selectedInvoice = {
-          ...invoice.data,
-          type: typeObj || null,
-          tax: taxObj || null,
-          dateTime: formattedDate || null
-        };
+        if (this.calculatingAmount() < 0 && (this.adjustmentType === 1 || this.adjustmentType === 2)) {
+          this.selectedInvoice = {
+            ...invoice.data,
+            type: this.adjustmentType === 2 ? 0 : 1,
+            tax: taxObj || null,
+            dateTime: formattedDate || null
+          };
+        } else {
+          this.selectedInvoice = {
+            ...invoice.data,
+            type: 1,
+            tax: taxObj || null,
+            dateTime: formattedDate || null
+          };
+        }
+        
         this.type = invoice.data.type;
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
@@ -308,7 +321,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           () => {
             let invoices = this.productsService.getActiveData()
             this.invoices = invoices.filter((inv: any) => inv.id !== id);
-          
+
             this.toastService.showSuccess('Удаление', 'Счет-фактура удалена');
           },
           (error) => {
@@ -350,7 +363,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   saveInvoice(callback?: (invoice: any) => void) {
     let titlePopUp = '';
     let acceptLabel = '';
-  
+
     if (this.selectedInvoice && this.selectedInvoice.id) {
       titlePopUp = 'Вы действительно хотите обновить данные?';
       acceptLabel = 'Обновить';
@@ -358,7 +371,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       titlePopUp = 'Вы действительно хотите создать счет-фактуру?';
       acceptLabel = 'Создать';
     }
-  
+
     this.confirmPopupService.openConfirmDialog({
       title: '',
       message: titlePopUp,
@@ -371,18 +384,18 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             checkPersonId: '00000000-0000-0000-0000-000000000000',
           };
         }
-  
+
         console.log('this.selectedInvoice', this.selectedInvoice);
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type
         };
-  
+
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
-            
+
             if (this.selectedInvoice.id) {
               this.productsService.updateActiveData(invoice.documentMetadata.data);
             } else {
@@ -398,7 +411,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             const invoiceId = invoice.documentMetadata.data.id;
             this.selectedInvoice = null;
             this.cdr.detectChanges();
-  
+
             if (callback && invoice.documentMetadata.data) {
               callback(invoice.documentMetadata.data);
             }
@@ -411,8 +424,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       }
     });
   }
-  
-  sendingInvoice(invoice: string, status:number) {
+
+  sendingInvoice(invoice: string, status: number) {
     this.invoiceService.sendingVerification(invoice, status).subscribe(
       (updatedInvoice: any) => {
         const index = this.invoices.findIndex(invoice => invoice.id === invoice.id);
@@ -429,21 +442,21 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       }
     );
   }
-  
-  
+
+
 
   saveAndSendInvoice() {
     this.saveInvoice((invoice: any) => {
       let currentRole = this.jwtService.getDecodedToken().email;
       if (currentRole == '3') {
         this.sendingInvoice(invoice, 2);
-      }else if(currentRole == '2'){
+      } else if (currentRole == '2') {
         this.sendingInvoice(invoice, 1);
-      }      
+      }
     });
   }
-  
-  
+
+
 
   createNewInvoice() {
     this.selectedInvoice = {
