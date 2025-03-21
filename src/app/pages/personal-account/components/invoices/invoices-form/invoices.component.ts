@@ -192,7 +192,20 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
-
+  onAmountChange(value: any, index: number) {
+    console.log('value',value)
+    console.log('this.type',this.type)
+    const updatedProducts = [...this.selectedInvoice.productList]; // Создаем новый массив
+    if (this.type !== 1 || this.selectedInvoice.expenseSum < 0) {
+      updatedProducts[index].amount = `-${value}`;
+    } else {
+      updatedProducts[index].amount = value;
+    }
+    
+    this.selectedInvoice.productList = updatedProducts; // Обновляем массив, чтобы Angular заметил изменения
+  }
+  
+  
   adjustmentType: number | null = null;
   type: number | null = null;
 

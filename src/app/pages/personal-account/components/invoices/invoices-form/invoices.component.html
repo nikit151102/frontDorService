@@ -80,7 +80,7 @@
                         <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit"
                             [min]="1"></app-custom-input-number>
                         <app-custom-input-number [(ngModel)]="product.amount" [disabled]="!isEdit"
-                            [min]="0"></app-custom-input-number>
+                            [min]="0" (ngModelChange)="onAmountChange($event, i)"></app-custom-input-number>
                         <app-custom-dropdown [options]="measurementUnits" optionLabel="name" optionValue="id"
                             [(selected)]="product.measurementUnitId" [disabled]="!isEdit">
                         </app-custom-dropdown>
