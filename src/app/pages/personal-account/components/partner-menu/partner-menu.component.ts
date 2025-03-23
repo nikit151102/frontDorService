@@ -204,7 +204,20 @@ export class PartnerMenuComponent {
   }
 
   onSubmit() {
-    if (this.counterpartyForm.valid) {
+
+    if (this.counterpartyForm.invalid) {
+      if (this.counterpartyForm.controls['shortName'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Краткое наименование" обязательно для заполнения');
+      }
+      if (this.counterpartyForm.controls['fullName'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Полное наименование" обязательно для заполнения');
+      }
+      if (this.counterpartyForm.controls['inn'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "ИНН" обязательно для заполнения');
+      }
+      return;
+    }
+
 
       const formData = this.counterpartyForm.value;
 
@@ -246,7 +259,6 @@ export class PartnerMenuComponent {
 
         );
       }
-    }
   }
 
 

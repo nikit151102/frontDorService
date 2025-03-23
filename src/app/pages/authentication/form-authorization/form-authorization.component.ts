@@ -104,41 +104,48 @@ export class FormAuthorizationComponent implements OnInit {
 
   onSignIn() {
     this.signInForm.markAllAsTouched();
-
-    if (this.signInForm.valid) {
-
-
-      this.progressSpinnerService.show();
-
-      const formData = this.signInForm.value;
-
-      const Data = {
-        userName: formData.username,
-        password: formData.password,
-        email: ""
-      };
-
-      this.AuthorizationService.signIn(Data).subscribe(
-        (response) => {
-          if (response.data.data) {
-            this.tokenService.setToken(response.data.data.token);
-            this.progressSpinnerService.hide(); 
-            localStorage.setItem('VXNlcklk', response.data.data.id);
-            this.currentUserService.saveUser(response.data.data);
-            this.router.navigate([`/${response.data.data.id}`]);
-            this.navMenuService.setNotifications(response.notifyData);
-          }
-        },
-        (error) => {
-          this.progressSpinnerService.hide();
-          const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-          this.toastService.showError('Ошибка', errorMessage);
-        }
-      );
-    } else {
-      this.toastService.showWarn('Предупреждение', 'Форма невалидна')
+  
+    if (this.signInForm.invalid) {
+      if (this.signInForm.controls['username'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Электронная почта" обязательно для заполнения');
+      }
+      if (this.signInForm.controls['password'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Пароль" обязательно для заполнения');
+      }
+      if (this.signInForm.controls['password'].hasError('minlength')) {
+        this.toastService.showWarn('Ошибка', 'Пароль должен содержать не менее 6 символов');
+      }
+      return;
     }
+  
+    this.progressSpinnerService.show();
+    const formData = this.signInForm.value;
+    const Data = {
+      userName: formData.username,
+      password: formData.password,
+      email: ""
+    };
+  
+    this.AuthorizationService.signIn(Data).subscribe(
+      (response) => {
+        if (response.data.data) {
+          this.tokenService.setToken(response.data.data.token);
+          this.progressSpinnerService.hide();
+          localStorage.setItem('VXNlcklk', response.data.data.id);
+          this.currentUserService.saveUser(response.data.data);
+          this.router.navigate([`/${response.data.data.id}`]);
+          this.navMenuService.setNotifications(response.notifyData);
+          this.toastService.showSuccess('Успешно', 'Вы вошли в систему');
+        }
+      },
+      (error) => {
+        this.progressSpinnerService.hide();
+        const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
+        this.toastService.showError('Ошибка входа', errorMessage);
+      }
+    );
   }
+  
 
 
   handleKeyDown(event: KeyboardEvent): void {

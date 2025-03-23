@@ -18,7 +18,7 @@ export class ToastService {
   messages$ = this.messagesSubject.asObservable();
   private idCounter = 0;
 
-  private showMessage(type: 'success' | 'error' | 'info' | 'warning', summary: string, detail: string, duration: number = 3000) {
+  private showMessage(type: 'success' | 'error' | 'info' | 'warning', summary: string, detail: string, duration: number = 5000) {
     const id = this.idCounter++;
     const formattedDetail = detail.replace(/\n/g, '<br>'); // Форматируем переносы строк
     const toast: ToastMessage = { id, type, summary, detail: formattedDetail, duration };
