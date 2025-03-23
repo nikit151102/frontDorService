@@ -14,10 +14,11 @@ import { InvoicesService } from '../../../components/invoices/invoices.service';
 })
 export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
+  @Input() notificationItem: any;
   selectedComponent: string = 'invoices';
 
   constructor(private jwtService: JwtService,
-    private invoicesService:InvoicesService
+    private invoicesService: InvoicesService
   ) { }
 
   ngOnInit(): void {
@@ -30,7 +31,12 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     this.jwtService.getDecodedToken()
   }
 
-  ngOnChanges(changes: SimpleChanges): void { }
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['notifications']) {
+      console.log('Notifications изменились:');
+      this.invoicesService.updateOrAddItem(this.notificationItem);
+    }
+  }
 
   getButtonConfigs() {
     return BUTTON_SETS
@@ -50,7 +56,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '14%' },
     { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' }
   ];
-  
+
 
   totalInfoColumn = [
     { columnNum: 2, value: 'totalExpenseSum' },
@@ -60,7 +66,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
 
   columnsInvoices = [
-    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '15%' , isFilter: false},
+    { field: 'number', header: 'Номер', type: 'string', visible: true, width: '15%', isFilter: false },
     { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
     { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },

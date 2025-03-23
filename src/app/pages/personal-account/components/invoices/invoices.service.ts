@@ -72,6 +72,25 @@ export class InvoicesService {
     }
   }
 
+  updateOrAddItem(newItem: any) {
+    const currentData = this.getActiveData();
+  
+    if (Array.isArray(currentData)) {
+      const index = currentData.findIndex(item => item.id === newItem.id);
+  
+      if (index !== -1) {
+        // Если объект найден, обновляем его
+        currentData[index] = { ...currentData[index], ...newItem };
+      } else {
+        // Если объект не найден, добавляем в начало
+        currentData.unshift(newItem);
+      }
+  
+      this.dataSubject.next([...currentData]);
+    }
+  }
+
+  
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');

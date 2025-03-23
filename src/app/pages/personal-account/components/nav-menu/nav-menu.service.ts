@@ -23,7 +23,6 @@ export class NavMenuService {
 
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    console.log('token', token)
     const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=menu`;
     this.socket = new WebSocket(url);
 
