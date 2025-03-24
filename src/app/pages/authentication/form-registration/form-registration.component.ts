@@ -1,28 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, HostListener, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormsModule } from '@angular/forms';
+import { Component, EventEmitter, HostListener, Output } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CustomButtonComponent } from '../../../ui-kit/custom-button/custom-button.component';
-import { FormAuthorizationService } from './form-authorization.service';
+import { CustomInputComponent } from '../../../ui-kit/custom-input-auth/custom-input.component';
 import { Router } from '@angular/router';
-import { TokenService } from '../../../services/token.service';
-import { ToastService } from '../../../services/toast.service';
-import { CookieConsentService } from '../../../services/cookie-consent.service';
 import { ProgressSpinnerService } from '../../../components/progress-spinner/progress-spinner.service';
 import { CurrentUserService } from '../../../services/current-user.service';
-import { CustomInputComponent } from '../../../ui-kit/custom-input-auth/custom-input.component';
+import { ToastService } from '../../../services/toast.service';
+import { TokenService } from '../../../services/token.service';
 import { NavMenuService } from '../../personal-account/components/nav-menu/nav-menu.service';
+import { FormRegistrationService } from './form-registration.service';
+import { InputOtpModule } from 'primeng/inputotp';
 
 @Component({
-  selector: 'app-form-authorization',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomButtonComponent, CustomInputComponent],
-  templateUrl: './form-authorization.component.html',
-  styleUrls: ['./form-authorization.component.scss']
+  selector: 'app-form-registration',
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomButtonComponent, CustomInputComponent, InputOtpModule],
+  templateUrl: './form-registration.component.html',
+  styleUrl: './form-registration.component.scss'
 })
-export class FormAuthorizationComponent implements OnInit {
-  @Output() visibleBtns: EventEmitter<boolean> = new EventEmitter<boolean>();
-
+export class FormRegistrationComponent {
   signInForm: FormGroup;
   currentUser: boolean = false;
   dataCurrentUser: any;
@@ -30,19 +26,29 @@ export class FormAuthorizationComponent implements OnInit {
   public isMenuVisible: boolean = false;
 
   constructor(private fb: FormBuilder,
-    private AuthorizationService: FormAuthorizationService,
+    private registrationService: FormRegistrationService,
     private router: Router,
     private tokenService: TokenService,
     private progressSpinnerService: ProgressSpinnerService,
     private toastService: ToastService,
-    private cookieConsentService: CookieConsentService,
-    private currentUserService:CurrentUserService,
-    private navMenuService:NavMenuService
+    private currentUserService: CurrentUserService,
+    private navMenuService: NavMenuService
   ) {
     this.signInForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
+      code: ['']
+    }, {
+      validators: this.passwordMatchValidator
     });
+  }
+
+  // Валидация для проверки совпадения паролей
+  private passwordMatchValidator(form: FormGroup): { [key: string]: boolean } | null {
+    const password = form.get('password')?.value;
+    const confirmPassword = form.get('confirmPassword')?.value;
+    return password && confirmPassword && password !== confirmPassword ? { 'passwordMismatch': true } : null;
   }
 
   private safeBtoa(input: string): string {
@@ -59,7 +65,6 @@ export class FormAuthorizationComponent implements OnInit {
       this.dataCurrentUser = JSON.parse(this.safeAtob(encryptedEmail));
       this.signInForm.patchValue({ username: this.dataCurrentUser.email });
       this.currentUser = true;
-      this.visibleBtns.emit(false);
     }
 
     setTimeout(() => {
@@ -90,7 +95,6 @@ export class FormAuthorizationComponent implements OnInit {
     this.signInForm.patchValue({ username: '' });
     localStorage.removeItem(this.localStorageKey);
     this.currentUser = false;
-    this.visibleBtns.emit(true);
     this.isMenuVisible = false;
   }
 
@@ -115,18 +119,22 @@ export class FormAuthorizationComponent implements OnInit {
       if (this.signInForm.controls['password'].hasError('minlength')) {
         this.toastService.showWarn('Ошибка', 'Пароль должен содержать не менее 6 символов');
       }
+      if (this.signInForm.hasError('passwordMismatch')) {
+        this.toastService.showWarn('Ошибка', 'Пароли не совпадают');
+      }
       return;
     }
+  
   
     this.progressSpinnerService.show();
     const formData = this.signInForm.value;
     const Data = {
       userName: formData.username,
       password: formData.password,
-      email: ""
+      initialPassCode: Number(formData.code)
     };
   
-    this.AuthorizationService.signIn(Data).subscribe(
+    this.registrationService.signIn(Data).subscribe(
       (response) => {
         if (response.data.data) {
           this.tokenService.setToken(response.data.data.token);
@@ -145,8 +153,10 @@ export class FormAuthorizationComponent implements OnInit {
       }
     );
   }
-  
 
+  handleOtp(otp: string) {
+    console.log('Введенный код:', otp);
+  }
 
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
@@ -156,12 +166,7 @@ export class FormAuthorizationComponent implements OnInit {
 
   @Output() switch = new EventEmitter<string>();
 
-  goToRegister() {
-    this.switch.emit('register');
+  goToLogin(){
+    this.switch.emit('login');
   }
-
-  goToForgotPassword() {
-    this.switch.emit('forgot');
-  }
-
 }

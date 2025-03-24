@@ -11,6 +11,12 @@
           [minlength]="6">
         </app-custom-input>
       </div>
+      <a (click)="goToRegister()" style="    text-align: start;
+      color: #5412d4;
+      width: 100%;
+      margin-bottom: 10px;
+      text-decoration: underline;">Создать аккаунт</a>
+  <!-- <button (click)="goToForgotPassword()">Забыли пароль?</button> -->
       <div class="buttonGroup">
         <app-custom-button [backgroundColor]="'#8e9aaf'" [hoverColor]="'#7b889f'" [textColor]="'#ffffff'"
           (buttonClick)="onSignIn()">

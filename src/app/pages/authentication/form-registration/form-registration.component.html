@@ -1,0 +1,31 @@
+<div class="container">
+    <form [formGroup]="signInForm" novalidate (keydown)="handleKeyDown($event)" autocomplete="off" id="formSignIn">
+        <h1>Вход</h1>
+        <div class="inputGroup">
+            <app-custom-input label="Электронная почта" type="email" formControlName="username" placeholder=""
+                [required]="true">
+            </app-custom-input>
+
+            <app-custom-input label="Пароль" type="password" formControlName="password" placeholder="" [required]="true"
+                [minlength]="6">
+            </app-custom-input>
+
+            <app-custom-input label="Повторите пароль" type="password" formControlName="confirmPassword" placeholder="" [required]="true"
+                [minlength]="6">
+            </app-custom-input>
+
+            <p-inputotp formControlName="code" size="large"/>
+        </div>
+        <a (click)="goToLogin()" style="    text-align: start;
+        color: #5412d4;
+        width: 100%;
+        margin-bottom: 10px;
+        text-decoration: underline;">Войти в аккаунт</a>
+        <div class="buttonGroup">
+            <app-custom-button [backgroundColor]="'#8e9aaf'" [hoverColor]="'#7b889f'" [textColor]="'#ffffff'"
+                (buttonClick)="onSignIn()">
+                Зарегистрироваться
+            </app-custom-button>
+        </div>
+    </form>
+</div>
