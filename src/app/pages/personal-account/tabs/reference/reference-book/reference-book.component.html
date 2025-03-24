@@ -59,7 +59,7 @@
                         </ng-container>
                         <ng-template #normalField>
                             <span>
-                                {{ product[col.field] }}
+                                {{ getNestedValue(product, col.field) }}
                             </span>
                         </ng-template>
                     </td>
