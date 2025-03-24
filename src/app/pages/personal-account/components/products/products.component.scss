@@ -4,6 +4,9 @@
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    width: calc(100vw - 310px);
     // position: absolute;
 }
 
@@ -88,10 +91,6 @@
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
 }
 
-.invoice-table {
-    width: 100%;
-    margin-top: 20px;
-}
 
 .actionsBtn {
     display: flex;
@@ -186,14 +185,6 @@
     background-color: rgba(158, 158, 158, 0.1);
     /* Полупрозрачный серый */
     color: #9e9e9e;
-}
-
-
-
-
-.invoice-table {
-    background-color: #ffffff !important;
-    color: #000000 !important;
 }
 
 .invoice-table .invoice-row {

@@ -14,3 +14,6 @@ app-invoices-table {
     height: 85vh;
 }
 
+app-invoices-content{
+    width: calc(100% - 290px) !important
+}

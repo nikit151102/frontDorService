@@ -33,4 +33,8 @@ export class ReferenceComponent {
    this.select(type)
   }
 
+  ngOnInit(): void {
+this.select('030521');
+    
+  }
 }
