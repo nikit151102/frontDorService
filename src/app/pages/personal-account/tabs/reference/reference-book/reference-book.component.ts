@@ -4,16 +4,25 @@ import { ReferenceBookService } from './reference-book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ToastService } from '../../../../../services/toast.service';
+import { TableModule } from 'primeng/table';
+import { DateFilterSortComponent } from '../../../../../components/fields/date-filter/date-filter.component';
+import { NumberFilterComponent } from '../../../../../components/fields/number-filter/number-filter.component';
+import { SearchFilterSortComponent } from '../../../../../components/fields/search-filter-sort/search-filter-sort.component';
+import { UuidSearchFilterSortComponent } from '../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
 
 
 @Component({
   selector: 'app-reference-book',
-  standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, TableModule,
+    SearchFilterSortComponent,
+    DateFilterSortComponent,
+    NumberFilterComponent,
+    UuidSearchFilterSortComponent,
+  ],
   templateUrl: './reference-book.component.html',
   styleUrls: ['./reference-book.component.scss']
 })
-export class ReferenceBookComponent implements OnInit, OnChanges{
+export class ReferenceBookComponent implements OnInit, OnChanges {
   currentConfig: any;
   data: any[] = []; // Данные для таблицы
   formFields: any; // Поля для создания и редактирования
@@ -21,11 +30,12 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   modalTitle = 'Создать запись'; // Заголовок модального окна
   modalAction = 'Создать'; // Действие в модальном окне
   modalData: any = {}; // Данные для модального окна
+  columns: any;
 
   @Input() typeId: any;
-  
+
   constructor(
-    private referenceBookService: ReferenceBookService,
+    public referenceBookService: ReferenceBookService,
     private toastService: ToastService,
     private cdr: ChangeDetectorRef,
   ) { }
@@ -41,35 +51,23 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
 
     if (this.currentConfig) {
       this.formFields = this.currentConfig.formFields;
+      this.referenceBookService.endpoint = this.currentConfig.endpoint;
+      this.columns = this.currentConfig.tableColumns;
     }
 
-    this.loadData();
-    this.cdr.detectChanges(); 
+    this.referenceBookService.loadData();
+    this.cdr.detectChanges();
   }
-  
-  ngOnInit(): void {}
 
-  // Загрузка данных
-  loadData(): void {
-    this.referenceBookService.getRecords(this.currentConfig.endpoint).subscribe(
-      (response: any) => {
-        if (response && response.data && Array.isArray(response.data)) {
-          this.data = response.data;
-          this.cdr.detectChanges();
-        } else {
-          this.toastService.showError('Ошибка', 'Данные не найдены в ответе.');
-        }
-      },
-      (error) => {
-        const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-        this.toastService.showError('Ошибка', errorMessage);
-      }
-    );
+  ngOnInit(): void {
+    this.referenceBookService.activData$.subscribe((data: any) => {
+      this.data = data;
+    })
   }
+
 
   // Открытие модального окна для создания записи
   openCreateModal(currentEndpoint: string): void {
-    if (this.currentConfig.connectionReference) this.loadConnectionReferenceData()
     this.modalTitle = 'Создать запись';
     this.modalAction = 'Создать';
     this.modalData = {};
@@ -82,11 +80,10 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   }
 
   // Открытие модального окна для редактирования записи
-  async openEditModal(currentEndpoint: string, item: any): Promise<void> {
+  async openEditModal(item: any): Promise<void> {
 
     if (this.currentConfig.connectionReference) {
       try {
-        await this.loadConnectionReferenceData();
 
         const field = this.currentConfig.connectionReference.field;
         const positionField = this.currentConfig.connectionReference.fieldName;
@@ -143,7 +140,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
         }
       }
 
-      this.createRecord(endpoint, this.modalData);
+      this.createRecord(this.modalData);
     } else {
       const allowedFields = this.formFields.map((field: any) => field.field);
       const idRecord = this.modalData.id;
@@ -166,7 +163,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
         }
       }
 
-      this.updateRecord(endpoint, idRecord, this.modalData);
+      this.updateRecord(idRecord, this.modalData);
 
     }
 
@@ -175,8 +172,8 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
 
 
   // Создание новой записи
-  createRecord(currentEndpoint: string, newRecord: any): void {
-    this.referenceBookService.newRecord(currentEndpoint, newRecord).subscribe(
+  createRecord(newRecord: any): void {
+    this.referenceBookService.newRecord(newRecord).subscribe(
       (response) => {
         this.data.push(response.data);
         this.toastService.showSuccess('Успех', 'Запись успешно создана');
@@ -189,8 +186,8 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   }
 
   // Обновление записи
-  updateRecord(currentEndpoint: string, id: number, updatedRecord: any): void {
-    this.referenceBookService.updateRecord(currentEndpoint, id, updatedRecord).subscribe(
+  updateRecord(id: number, updatedRecord: any): void {
+    this.referenceBookService.updateRecord(id, updatedRecord).subscribe(
       (response) => {
         const index = this.data.findIndex((item) => item.id === id);
         if (index !== -1) {
@@ -206,8 +203,8 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   }
 
   // Удаление записи
-  deleteRecord(currentEndpoint: string, id: number): void {
-    this.referenceBookService.deleteRecord(currentEndpoint, id).subscribe(
+  deleteRecord(id: number): void {
+    this.referenceBookService.deleteRecord(id).subscribe(
       () => {
         this.data = this.data.filter((item) => item.id !== id);
         this.toastService.showSuccess('Успех', 'Запись успешно удалена');
@@ -229,51 +226,24 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   connectionReferenceData: any[] = []; // Данные для связи
   connectionReferenceColumns: any[] = []; // Столбцы для отображения связи
 
-  // Загрузка данных для связи (например, должности для сотрудников)
-  loadConnectionReferenceData(): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const connectionConfig = referenceConfig.find(
-        (config) => config.typeId === this.currentConfig.connectionReference.typeId
-      );
-      if (connectionConfig) {
-        this.referenceBookService.getRecords(connectionConfig.endpoint).subscribe(
-          (response: any) => {
-            if (response && response.data) {
-              this.connectionReferenceData = response.data;
-              this.connectionReferenceColumns = connectionConfig.tableColumns.filter(column => column.field !== 'code');
-
-              resolve();
-            } else {
-              reject('Данные не найдены');
-            }
-          },
-          (error) => {
-            const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-            this.toastService.showError('Ошибка', errorMessage);
-            reject(error);
-          }
-        );
-      } else {
-        reject('Конфигурация для связи не найдена');
-      }
-    });
-  }
 
   // Текущий выбранный элемент
   selectedReference: any;
-  dropdownVisible: boolean = false;
 
   // Метод для закрытия выпадающего списка
   closeDropdown(): void {
-    this.dropdownVisible = false;
+    this.dropdownVisible = {};
     this.cdr.detectChanges();
   }
 
-  // Метод для отображения или скрытия выпадающего списка
-  toggleDropdown(): void {
-    this.dropdownVisible = !this.dropdownVisible;
-    setTimeout(() => this.checkDropdownPosition(), 0);
-    this.cdr.detectChanges();
+  dropdownVisible: { [key: string]: boolean } = {};
+
+  toggleDropdown(productId: string) {
+    Object.keys(this.dropdownVisible).forEach(id => {
+      if (id !== productId) this.dropdownVisible[id] = false;
+    });
+
+    this.dropdownVisible[productId] = !this.dropdownVisible[productId];
   }
 
   // Выбор элемента
@@ -281,7 +251,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
     const field = this.currentConfig.connectionReference.field;
     this.modalData[field] = item.id;
     this.selectedReference = item;
-    this.dropdownVisible = false;
+    this.dropdownVisible = {};
     this.cdr.detectChanges();
   }
 
@@ -324,7 +294,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
   @HostListener('document:click', ['$event'])
   clickOutside(event: Event): void {
     if (!this.dropdownContainer?.nativeElement.contains(event.target)) {
-      this.dropdownVisible = false;
+      this.dropdownVisible = {};
     }
   }
 
@@ -334,6 +304,21 @@ export class ReferenceBookComponent implements OnInit, OnChanges{
     if (this.dropdownVisible) {
       this.checkDropdownPosition();
     }
+  }
+
+
+
+  contextMenuVisible = false;
+  contextMenuX = 0;
+  contextMenuY = 0;
+
+  onRightClick(event: MouseEvent, product: any) {
+    event.preventDefault(); // Отключаем стандартное меню
+
+    this.modalData = product;
+    this.contextMenuVisible = true;
+    this.contextMenuX = event.clientX;
+    this.contextMenuY = event.clientY;
   }
 
 

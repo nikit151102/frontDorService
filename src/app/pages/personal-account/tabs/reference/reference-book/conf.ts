@@ -4,10 +4,10 @@ export const referenceConfig = [
         endpoint: 'api/User',
         pageTitle: 'Сотрудники',
         tableColumns: [
-            { label: 'Фамилия', field: 'lastName' },
-            { label: 'Имя', field: 'firstName' },
-            { label: 'Отчество', field: 'patronymic' },
-            { label: 'Дожность', field: 'position.name' },
+            { label: 'Фамилия', field: 'lastName', type: 'string'},
+            { label: 'Имя', field: 'firstName' , type: 'string'},
+            { label: 'Отчество', field: 'patronymic', type: 'string' },
+            { label: 'Дожность', field: 'position.name', type: 'string' },
             { label: '', field: '' },
         ],
         formFields: [
@@ -15,17 +15,19 @@ export const referenceConfig = [
             { label: 'Имя', field: 'firstName', type: 'text' },
             { label: 'Отчество', field: 'patronymic', type: 'text' },
             { label: 'Дожность', field: 'representationOrder', type: 'text' },
+            { label: 'Права доступа', field: 'representationOrder', type: 'checkboxes' },
         ],
     },
     {
         typeId: '495142',
-        endpoint: 'api/Entities/ProductTarget',
-        pageTitle: 'Назначение товара',
+        endpoint: 'api/Entities/MeasurementUnit',
+        pageTitle: 'Единицы измерения',
         tableColumns: [
-            { label: 'Код', field: 'code' },
-            { label: 'Наименование', field: 'name' },
-            { label: 'Короткое наименование', field: 'shortName' },
-            { label: 'Коэффициент', field: 'coef' },
+            { label: 'Код', field: 'code' , type: 'string'},
+            { label: 'Наименование', field: 'name', type: 'string' },
+            { label: 'Короткое наименование', field: 'shortName', type: 'string' },
+            { label: 'Коэффициент', field: 'coef' , type: 'number'},
+            
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text' },
@@ -36,12 +38,12 @@ export const referenceConfig = [
     },
     {
         typeId: '915825',
-        endpoint: 'api/Entities/MeasurementUnit',
-        pageTitle: 'Единицы измерения',
+        endpoint: 'api/Entities/ProductTarget',
+        pageTitle: 'Назначение товара',
         tableColumns: [
-            { label: 'Код', field: 'code' },
-            { label: 'Наименование', field: 'name' },
-            { label: 'Короткое наименование', field: 'shortName' },
+            { label: 'Код', field: 'code', type: 'string' },
+            { label: 'Наименование', field: 'name', type: 'string' },
+            { label: 'Короткое наименование', field: 'shortName', type: 'string' },
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text' },
