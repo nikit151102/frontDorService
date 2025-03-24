@@ -212,3 +212,7 @@
     background: #fff;
     border-radius: 15px;
 }
+
+:host ::ng-deep .p-inputotp {
+    justify-content: center;
+}
