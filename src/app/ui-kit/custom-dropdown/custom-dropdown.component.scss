@@ -12,6 +12,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    color: #101010;
 }
 
 .dropdown-menu {
@@ -30,6 +31,9 @@
 .dropdown-menu li {
     padding: 10px;
     list-style: none;
+    color: #101010;
+    border-bottom: 1px solid #d9d7d7;
+    margin: 0 5px;
 }
 
 .dropdown-menu li:hover {

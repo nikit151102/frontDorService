@@ -5,7 +5,7 @@
         <ng-template pTemplate="header">
             <tr>
                 <ng-container *ngFor="let col of columns">
-                    <th class="filter-header" [style.width]="col.width">
+                    <th class="filter-header" [style.min-width]="col.width">
                         <div style="display: flex; justify-content: space-between;">
                             <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field"
                                 [filterType]="1" (filterChange)="referenceBookService.onFilterChange($event)"
@@ -13,7 +13,6 @@
                                 [isVisibleFilter]="col.isFilter">
                             </app-search-filter-sort>
 
-                            <!-- Аналогичные кнопки для других типов фильтров -->
                             <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
                                 (filterChange)="referenceBookService.onFilterChange($event)"
                                 (sortChange)="referenceBookService.onSortChange($event)">
@@ -38,21 +37,22 @@
 
                         </div>
                     </th>
-                </ng-container>
-            </tr>
-            <tr>
-                <ng-container *ngFor="let col of columns">
-                    <th [style.width]="col.width">{{ col.header }}</th>
+
                 </ng-container>
                 <th></th>
             </tr>
-
+            <tr>
+                <ng-container *ngFor="let col of columns">
+                    <th [style.min-width]="col.width">{{ col.label }}</th>
+                </ng-container>
+                <th></th>
+            </tr>
         </ng-template>
 
         <ng-template pTemplate="body" let-product>
             <tr class="invoice-row" (dblclick)="openEditModal(product)">
                 <ng-container *ngFor="let col of columns">
-                    <td *ngIf="col.type != 'actions'" class="invoice-cell" (dblclick)="openEditModal(product)"
+                    <td class="invoice-cell" (dblclick)="openEditModal(product)"
                         (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
                         <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                             {{ product[col.field] | date: 'dd-MM-yyyy' }}
@@ -65,31 +65,13 @@
                     </td>
                 </ng-container>
                 <td class="invoice-cell actions-cell">
-                    <div class="dropdown" style="
-                    display: flex;
-                    flex-direction: column;
-                    gap: 5px;">
-                        <!-- <button class="btn btn-dropdown" style="color: #101010;"
-                            (click)="toggleDropdown(product.id)">⋮</button> -->
-                        <!-- <div class="dropdown-menu" *ngIf="dropdownVisible[product.id]"> -->
-
-
-
-                        <!-- <ng-container *ngFor="let button of getButtonSet()">
-                                <button class="btn btn-details"
-                                    *ngIf="button.condition ? button.condition(product) : true"
-                                    [ngClass]="button.class" (click)="handleButtonClick(button, product)"
-                                    [title]="button.titlePopUp">
-                                    {{ button.label }}
-                                </button>
-                            </ng-container> -->
+                    <div class="dropdown" style="display: flex; flex-direction: column; gap: 5px;">
                         <button class="btn btn-details" (click)="openEditModal(product)">
                             Изменить
                         </button>
                         <button class="btn btn-details" (click)="deleteRecord(product.id)">
                             Удалить
                         </button>
-                        <!-- </div> -->
                     </div>
                 </td>
             </tr>
@@ -107,24 +89,24 @@
             <form>
                 <div class="form-group-container" [ngClass]="{'two-columns': formFields.length > 4}">
                     <div class="form-group" *ngFor="let field of formFields">
-                        <label [for]="field.field">{{ field.label }}:</label>
-                        <input *ngIf="field.type === 'text'" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
+                        <label *ngIf="field.visible == true" [for]="field.field ">{{ field.label }}:</label>
+                        <input *ngIf="field.type === 'text' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
                             name="{{ field.field }}" class="form-control" required type="text" />
 
-                        <input *ngIf="field.type === 'date'" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
+                        <input *ngIf="field.type === 'date' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
                             name="{{ field.field }}" class="form-control" required type="date" />
 
-                        <input *ngIf="field.type === 'number'" id="{{ field.field }}"
+                        <input *ngIf="field.type === 'number' && field.visible == true" id="{{ field.field }}"
                             [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
                             type="number" />
 
-                        <ng-container *ngIf="field.type === 'dropdown'">
-                            <app-custom-dropdown [options]="positions" [optionLabel]="'Должность'" [optionValue]="'id'"
+                        <ng-container *ngIf="field.type === 'dropdown' && field.visible == true">
+                            <app-custom-dropdown [options]="positions" [optionLabel]="'name'" [optionValue]="'id'"
                                 [disabled]="false" [selected]="modalData[field.field]"
                                 (selectedChange)="modalData[field.field] = $event">
                             </app-custom-dropdown>
                         </ng-container>
-                        <ng-container *ngIf="field.type === 'checkboxes'">
+                        <ng-container *ngIf="field.type === 'checkboxes' && field.visible == true">
                             <app-custom-checkbox [options]="permisions" [disabled]="false"
                                 [selected]="modalData[field.field]" (selectedChange)="modalData[field.field] = $event">
                             </app-custom-checkbox>
@@ -132,13 +114,30 @@
 
                     </div>
                 </div>
-                <button (click)="closeModal()"class="btn btn-success">Закрыть</button>
-                <button (click)="onSubmit(currentConfig.endpoint)" type="submit" class="btn btn-success">{{ modalAction
-                    }}</button>
+                <div id="form-btns">
+                    <button (click)="onSubmit(currentConfig.endpoint)" type="submit" class="btn btn-success">{{
+                        modalAction
+                        }}</button>
+                    <button (click)="closeModal()" class="btn btn-close">Закрыть</button>
+                </div>
             </form>
 
         </div>
     </div>
+
+    <div class="modal" *ngIf="isModalUserCreateOpen" [ngClass]="{ 'open': isModalUserCreateOpen }">
+        <div class="modal-content" style="max-width: 500px;">
+            <span class="close-btn" (click)="isModalUserCreateOpen = false">×</span>
+            <h2>Код доступа</h2>
+            <div class="code-container">
+                <span *ngFor="let digit of newUserCode.split('')" class="code-digit">
+                    {{ digit }}
+                </span>
+            </div>
+            
+        </div>
+    </div>
+
 </div>
 
 

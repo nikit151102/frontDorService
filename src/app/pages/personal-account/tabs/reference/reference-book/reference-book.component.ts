@@ -36,8 +36,8 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   modalData: any = {}; // Данные для модального окна
   columns: any;
 
-  positions:any;
-  permisions:any;
+  positions: any;
+  permisions: any;
 
   @Input() typeId: any;
 
@@ -60,12 +60,12 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       this.formFields = this.currentConfig.formFields;
       this.referenceBookService.endpoint = this.currentConfig.endpoint;
       this.columns = this.currentConfig.tableColumns;
-      if(this.currentConfig.pageTitle == 'Сотрудники'){
-        this.referenceBookService.getPosition().subscribe((values:any)=>{
+      if (this.currentConfig.pageTitle == 'Сотрудники') {
+        this.referenceBookService.getPosition().subscribe((values: any) => {
           this.positions = values.data;
         })
 
-        this.referenceBookService.getPermision().subscribe((values:any)=>{
+        this.referenceBookService.getPermision().subscribe((values: any) => {
           this.permisions = values.data;
         })
       }
@@ -147,20 +147,29 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
         this.toastService.showError('Ошибка', 'Не найден creatorId');
         return;
       }
+
       if (this.currentConfig.connectionReference) {
         const relatedField = this.currentConfig.connectionReference.field;
-
         if (!this.modalData[relatedField]) {
           this.toastService.showError('Ошибка', `Не выбрана ${this.currentConfig.connectionReference.label}`);
           return;
         }
       }
 
+      this.formFields.forEach((field: any) => {
+        if (field.visible === false && !this.modalData.hasOwnProperty(field.field)) {
+          if (field.type == 'boolean') {
+            this.modalData[field.field] = true;
+          } else {
+            this.modalData[field.field] = '';
+          }
+        }
+      });
+
       this.createRecord(this.modalData);
     } else {
       const allowedFields = this.formFields.map((field: any) => field.field);
       const idRecord = this.modalData.id;
-
       for (const key in this.modalData) {
         if (this.modalData.hasOwnProperty(key)) {
           if (!allowedFields.includes(key) && key !== this.currentConfig.connectionReference?.field) {
@@ -168,8 +177,19 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
           }
         }
       }
-      Object.assign(this.modalData, { id: idRecord });
 
+      //  this.formFields.forEach((field: any) => {
+      //   if (field.visible === false && !this.modalData.hasOwnProperty(field.field)) {
+      //    if(field.type == 'boolean'){
+      //     this.modalData[field.field] = true; 
+      //    }else{
+      //     this.modalData[field.field] = '';  
+      //    }
+      //   }
+      // });
+
+      // Дополнительно добавляем id в modalData
+      Object.assign(this.modalData, { id: idRecord });
 
       if (this.currentConfig.connectionReference) {
         const relatedField = this.currentConfig.connectionReference.field;
@@ -180,11 +200,13 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       }
 
       this.updateRecord(idRecord, this.modalData);
-
     }
 
     this.closeModal();
   }
+
+
+
 
 
   // Создание новой записи
@@ -193,6 +215,10 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       (response) => {
         this.data.push(response.data);
         this.toastService.showSuccess('Успех', 'Запись успешно создана');
+        if (this.currentConfig.pageTitle == 'Сотрудники' && response.data) {
+          this.newUserCode = response.data.initialPassCode;
+          this.isModalUserCreateOpen = true;
+        }
       },
       (error) => {
         const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
@@ -257,14 +283,14 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   toggleDropdown(productId: string) {
     console.log('Before:', this.dropdownVisible);
     Object.keys(this.dropdownVisible).forEach(id => {
-        if (id !== productId) this.dropdownVisible[id] = false;
+      if (id !== productId) this.dropdownVisible[id] = false;
     });
 
     this.dropdownVisible[productId] = !this.dropdownVisible[productId];
     console.log('After:', this.dropdownVisible);
 
     this.cdr.detectChanges();
-}
+  }
 
 
   // Выбор элемента
@@ -344,4 +370,6 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
 
 
+  isModalUserCreateOpen: boolean = false;
+  newUserCode: any;
 }

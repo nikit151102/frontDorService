@@ -67,11 +67,11 @@ export class ReferenceBookService {
   }
 
   getPosition() {
-    return this.http.post<any>(`${environment.apiUrl}/`, { headers: this.getHeader() });
+    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Position/Filter`, { filters: [], sorts: [] }, { headers: this.getHeader() });
   }
 
   getPermision(){
-    return this.http.post<any>(`${environment.apiUrl}/`, { headers: this.getHeader() });
+    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Permission/Filter`, { filters: [], sorts: [] }, { headers: this.getHeader() });
   }
 
   queryData: QueryDto = { filters: [], sorts: [] };

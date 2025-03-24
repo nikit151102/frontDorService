@@ -13,11 +13,22 @@ export class CustomCheckboxComponent {
   @Input() disabled: boolean = false;
   @Output() selectedChange = new EventEmitter<string[]>(); 
 
+  ngOnInit() {
+    // Убедитесь, что selected всегда массив
+    if (!Array.isArray(this.selected)) {
+      this.selected = [];
+    }
+  }
+
   isSelected(id: string): boolean {
-    return this.selected.includes(id);
+    return Array.isArray(this.selected) && this.selected.includes(id);
   }
 
   toggleSelection(id: string) {
+    if (!Array.isArray(this.selected)) {
+      this.selected = [];
+    }
+
     const index = this.selected.indexOf(id);
     if (index === -1) {
       this.selected = [...this.selected, id]; 
@@ -26,5 +37,4 @@ export class CustomCheckboxComponent {
     }
     this.selectedChange.emit(this.selected); 
   }
-
 }

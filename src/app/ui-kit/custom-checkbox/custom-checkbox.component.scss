@@ -1,0 +1,84 @@
+.checkbox-group {
+    display: grid;
+    gap: 10px;
+    margin: 20px 0;
+
+    /* По умолчанию 1 колонка */
+    grid-template-columns: repeat(1, 1fr);
+
+    /* Когда элементов больше 5, используем 2 колонки */
+    @media (min-width: 600px) {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    /* Когда элементов больше 10, используем 3 колонки */
+    @media (min-width: 900px) {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 500;
+    color: #333;
+    cursor: pointer;
+    position: relative;
+    padding-left: 40px;
+    padding-right: 10px;
+    user-select: none;
+    transition: color 0.3s ease;
+
+    &:hover {
+        color: #007bff;
+    }
+
+    input[type="checkbox"] {
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border: 2px solid #ddd;
+        border-radius: 4px;
+        background-color: white;
+        appearance: none;
+        cursor: pointer;
+        transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    input[type="checkbox"]:checked {
+        background-color: #007bff;
+        box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.3);
+    }
+
+    input[type="checkbox"]:hover {
+        border-color: #007bff;
+    }
+
+ 
+
+    input[type="checkbox"]:disabled {
+        background-color: #e0e0e0;
+        border-color: #ccc;
+        cursor: not-allowed;
+    }
+
+    span {
+        margin-left: 10px;
+        color: #333;
+        font-weight: 500;
+    }
+}
+
+.checkbox-label input[type="checkbox"]:checked + span {
+    color: #007bff;
+    font-weight: bold;
+}
+
+.checkbox-label input[type="checkbox"]:disabled + span {
+    color: #aaa;
+    font-weight: normal;
+}

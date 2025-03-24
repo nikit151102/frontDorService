@@ -10,7 +10,7 @@ import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from
 export class CustomDropdownComponent {
 
   @Input() options: any[] = [];  // Передаем список значений
-  @Input() optionLabel: string = 'label'; // Какое поле показывать
+  @Input() optionLabel: string = 'name'; // Какое поле показывать
   @Input() optionValue: string = 'value'; // Какое поле использовать как value
   @Input() disabled: boolean = false; // Можно ли редактировать
   @Input() selected: any; // Текущее выбранное значение
