@@ -57,7 +57,7 @@ export class ReferenceBookService {
   }
 
   // Обновление существующей записи
-  updateRecord( id: number, record: any): Observable<any> {
+  updateRecord(id: number, record: any): Observable<any> {
     return this.http.put<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, record, { headers: this.getHeader() });
   }
 
@@ -66,7 +66,13 @@ export class ReferenceBookService {
     return this.http.delete<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, { headers: this.getHeader() });
   }
 
+  getPosition() {
+    return this.http.post<any>(`${environment.apiUrl}/`, { headers: this.getHeader() });
+  }
 
+  getPermision(){
+    return this.http.post<any>(`${environment.apiUrl}/`, { headers: this.getHeader() });
+  }
 
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];
@@ -195,7 +201,7 @@ export class ReferenceBookService {
     console.log('Обновленные данные:', this.queryData);
   }
 
-  
+
 
   loadData() {
     this.getRecords().subscribe(

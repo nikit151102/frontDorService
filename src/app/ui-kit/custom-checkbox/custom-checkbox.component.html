@@ -1,0 +1,7 @@
+<div class="checkbox-group">
+    <label *ngFor="let option of options" class="checkbox-label">
+        <input type="checkbox" [value]="option.id" [checked]="isSelected(option.id)"
+            (change)="toggleSelection(option.id)" [disabled]="disabled" />
+        {{ option.name }}
+    </label>
+</div>

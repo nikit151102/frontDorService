@@ -14,7 +14,7 @@ export const referenceConfig = [
             { label: 'Фамилия', field: 'lastName', type: 'text' },
             { label: 'Имя', field: 'firstName', type: 'text' },
             { label: 'Отчество', field: 'patronymic', type: 'text' },
-            { label: 'Дожность', field: 'representationOrder', type: 'text' },
+            { label: 'Дожность', field: 'representationOrder', type: 'dropdown' },
             { label: 'Права доступа', field: 'representationOrder', type: 'checkboxes' },
         ],
     },

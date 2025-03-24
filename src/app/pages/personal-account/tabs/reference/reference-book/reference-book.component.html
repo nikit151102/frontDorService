@@ -46,7 +46,7 @@
                 </ng-container>
                 <th></th>
             </tr>
-           
+
         </ng-template>
 
         <ng-template pTemplate="body" let-product>
@@ -65,11 +65,17 @@
                     </td>
                 </ng-container>
                 <td class="invoice-cell actions-cell">
-                    <div class="dropdown">
-                        <button class="btn btn-dropdown" style="color: #101010;"
-                            (click)="toggleDropdown(product.id)">⋮</button>
-                        <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                            <!-- <ng-container *ngFor="let button of getButtonSet()">
+                    <div class="dropdown" style="
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;">
+                        <!-- <button class="btn btn-dropdown" style="color: #101010;"
+                            (click)="toggleDropdown(product.id)">⋮</button> -->
+                        <!-- <div class="dropdown-menu" *ngIf="dropdownVisible[product.id]"> -->
+
+
+
+                        <!-- <ng-container *ngFor="let button of getButtonSet()">
                                 <button class="btn btn-details"
                                     *ngIf="button.condition ? button.condition(product) : true"
                                     [ngClass]="button.class" (click)="handleButtonClick(button, product)"
@@ -77,13 +83,13 @@
                                     {{ button.label }}
                                 </button>
                             </ng-container> -->
-                            <button class="btn btn-details" (click)="openEditModal(product)">
-                                Изменить
-                            </button>
-                            <button class="btn btn-details" (click)="deleteRecord(product.id)">
-                                Удалить
-                            </button>
-                        </div>
+                        <button class="btn btn-details" (click)="openEditModal(product)">
+                            Изменить
+                        </button>
+                        <button class="btn btn-details" (click)="deleteRecord(product.id)">
+                            Удалить
+                        </button>
+                        <!-- </div> -->
                     </div>
                 </td>
             </tr>
@@ -111,9 +117,22 @@
                         <input *ngIf="field.type === 'number'" id="{{ field.field }}"
                             [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
                             type="number" />
+
+                        <ng-container *ngIf="field.type === 'dropdown'">
+                            <app-custom-dropdown [options]="positions" [optionLabel]="'Должность'" [optionValue]="'id'"
+                                [disabled]="false" [selected]="modalData[field.field]"
+                                (selectedChange)="modalData[field.field] = $event">
+                            </app-custom-dropdown>
+                        </ng-container>
+                        <ng-container *ngIf="field.type === 'checkboxes'">
+                            <app-custom-checkbox [options]="permisions" [disabled]="false"
+                                [selected]="modalData[field.field]" (selectedChange)="modalData[field.field] = $event">
+                            </app-custom-checkbox>
+                        </ng-container>
+
                     </div>
                 </div>
-
+                <button (click)="closeModal()"class="btn btn-success">Закрыть</button>
                 <button (click)="onSubmit(currentConfig.endpoint)" type="submit" class="btn btn-success">{{ modalAction
                     }}</button>
             </form>

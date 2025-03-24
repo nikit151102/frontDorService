@@ -9,6 +9,8 @@ import { DateFilterSortComponent } from '../../../../../components/fields/date-f
 import { NumberFilterComponent } from '../../../../../components/fields/number-filter/number-filter.component';
 import { SearchFilterSortComponent } from '../../../../../components/fields/search-filter-sort/search-filter-sort.component';
 import { UuidSearchFilterSortComponent } from '../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
+import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
+import { CustomCheckboxComponent } from '../../../../../ui-kit/custom-checkbox/custom-checkbox.component';
 
 
 @Component({
@@ -18,6 +20,8 @@ import { UuidSearchFilterSortComponent } from '../../../../../components/fields/
     DateFilterSortComponent,
     NumberFilterComponent,
     UuidSearchFilterSortComponent,
+    CustomDropdownComponent,
+    CustomCheckboxComponent
   ],
   templateUrl: './reference-book.component.html',
   styleUrls: ['./reference-book.component.scss']
@@ -31,6 +35,9 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   modalAction = 'Создать'; // Действие в модальном окне
   modalData: any = {}; // Данные для модального окна
   columns: any;
+
+  positions:any;
+  permisions:any;
 
   @Input() typeId: any;
 
@@ -53,6 +60,15 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       this.formFields = this.currentConfig.formFields;
       this.referenceBookService.endpoint = this.currentConfig.endpoint;
       this.columns = this.currentConfig.tableColumns;
+      if(this.currentConfig.pageTitle == 'Сотрудники'){
+        this.referenceBookService.getPosition().subscribe((values:any)=>{
+          this.positions = values.data;
+        })
+
+        this.referenceBookService.getPermision().subscribe((values:any)=>{
+          this.permisions = values.data;
+        })
+      }
     }
 
     this.referenceBookService.loadData();
@@ -239,12 +255,17 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   dropdownVisible: { [key: string]: boolean } = {};
 
   toggleDropdown(productId: string) {
+    console.log('Before:', this.dropdownVisible);
     Object.keys(this.dropdownVisible).forEach(id => {
-      if (id !== productId) this.dropdownVisible[id] = false;
+        if (id !== productId) this.dropdownVisible[id] = false;
     });
 
     this.dropdownVisible[productId] = !this.dropdownVisible[productId];
-  }
+    console.log('After:', this.dropdownVisible);
+
+    this.cdr.detectChanges();
+}
+
 
   // Выбор элемента
   selectReference(item: any): void {
