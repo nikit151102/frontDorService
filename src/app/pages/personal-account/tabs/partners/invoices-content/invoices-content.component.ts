@@ -32,7 +32,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['notifications']) {
+    if (changes['notificationItem']) {
       console.log('Notifications изменились:');
       this.invoicesService.updateOrAddItem(this.notificationItem);
     }
