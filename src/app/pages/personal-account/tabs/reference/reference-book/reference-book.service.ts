@@ -71,9 +71,11 @@ export class ReferenceBookService {
   }
 
   getPermision(){
-    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Permission/Filter`, { filters: [], sorts: [] }, { headers: this.getHeader() });
+    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Permission/Filter`, 
+    { filters: [{field: "PermissionCategory",
+      type: 0,
+      values: ["SectionPermissions"]}], sorts: [] }, { headers: this.getHeader() });
   }
-
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];
 
