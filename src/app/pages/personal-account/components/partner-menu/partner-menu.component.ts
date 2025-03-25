@@ -166,42 +166,47 @@ export class PartnerMenuComponent {
   }
 
   isEdit: boolean = false;
+  oldPrototype: any;
 
   openDialog(event: MouseEvent, counterparty?: any) {
     event.stopPropagation();
     if (counterparty) {
-      this.selectedCounterparty = counterparty;
-
-      this.counterpartyForm.patchValue({
-        shortName: counterparty.shortName,
-        fullName: counterparty.fullName,
-        inn: counterparty.inn,
-        ogrn: counterparty.ogrn,
-        kpp: counterparty.kpp,
-        address: counterparty.address,
-        id: counterparty.id,
-        type: this.typeOptions.find(option => option.value === counterparty.type)
+      this.partnerMenuService.getCounterpartyItem(counterparty.id).subscribe((data: any) => {
+        const counterpartyData = data.data;
+        const prototype = counterpartyData.prototype || counterpartyData;
+        this.selectedCounterparty = prototype;
+        this.oldPrototype = counterpartyData.prototype ? counterpartyData : null;
+        this.counterpartyForm.patchValue({
+          shortName: prototype.shortName,
+          fullName: prototype.fullName,
+          inn: prototype.inn,
+          ogrn: prototype.ogrn,
+          kpp: prototype.kpp,
+          address: prototype.address,
+          id: prototype.id,
+          type: this.typeOptions.find(option => option.value === prototype.type)
+        });
+        this.toggleFormFields(this.isEdit);
       });
     } else {
       this.selectedCounterparty = null;
       this.counterpartyForm.reset();
+      this.toggleFormFields(this.isEdit);
     }
     this.display = true;
-    if (this.isEdit == false) {
-      this.counterpartyForm.controls['shortName'].disable();
-      this.counterpartyForm.controls['fullName'].disable();
-      this.counterpartyForm.controls['inn'].disable();
-      this.counterpartyForm.controls['ogrn'].disable();
-      this.counterpartyForm.controls['kpp'].disable();
-      this.counterpartyForm.controls['address'].disable();
-    } else {
-      this.counterpartyForm.controls['shortName'].enable();
-      this.counterpartyForm.controls['fullName'].enable();
-      this.counterpartyForm.controls['inn'].enable();
-      this.counterpartyForm.controls['ogrn'].enable();
-      this.counterpartyForm.controls['kpp'].enable();
-      this.counterpartyForm.controls['address'].enable();
-    }
+  }
+
+  // Метод для включения/выключения полей формы
+  private toggleFormFields(isEditable: boolean) {
+    const fields = ['shortName', 'fullName', 'inn', 'ogrn', 'kpp', 'address'];
+
+    fields.forEach(field => {
+      if (isEditable) {
+        this.counterpartyForm.controls[field].enable();
+      } else {
+        this.counterpartyForm.controls[field].disable();
+      }
+    });
   }
 
   onSubmit() {
@@ -302,15 +307,17 @@ export class PartnerMenuComponent {
 
   // Работа со статусами
   isEditable(status: number): boolean {
-    if(this.currentRole  == 1){
+    if (this.currentRole == 1) {
       return false;
 
-    }else{
+    } else {
       return this.partnerStatusService.isEditable(status);
     }
   }
 
   getStatusLabel(status: number): string {
+    console.log('status', status)
+    console.log('this.partnerStatusService.getStatusLabel(status)', this.partnerStatusService.getStatusLabel(status))
     return this.partnerStatusService.getStatusLabel(status);
   }
 
@@ -319,9 +326,9 @@ export class PartnerMenuComponent {
   }
 
   isForbiddenStatus(status: number): boolean {
-    if(this.currentRole  == 1){
+    if (this.currentRole == 1) {
       return false;
-    }else{
+    } else {
       return this.partnerStatusService.isForbiddenStatus(status);
     }
   }

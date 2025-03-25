@@ -14,13 +14,13 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             action: 'openDialog',
             class: 'btn-edit',
             isEditData: true,
-            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
+            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6 || product.editStatus === 9,
         },
         {
             label: 'Удалить',
             action: 'deleteCounterparty',
             class: 'btn-delete',
-            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6,
+            condition: (product) => product.editStatus === 7 || product.editStatus === 5 || product.editStatus === 6 || product.editStatus === 9,
         }
     ],
     mechanic: [

@@ -269,16 +269,34 @@ export class InvoicesComponent implements OnChanges, OnInit {
   contextMenuVisible = false;
   contextMenuX = 0;
   contextMenuY = 0;
-
+  
   onRightClick(event: MouseEvent, product: any) {
-    event.preventDefault(); // Отключаем стандартное меню
-
+    event.preventDefault();
+  
     this.selectedProduct = product;
     this.contextMenuVisible = true;
-    this.contextMenuX = event.clientX;
-    this.contextMenuY = event.clientY;
+  
+    let posX = event.pageX;
+    let posY = event.pageY;
+  
+    const menuWidth = 200; 
+    const menuHeight = 150; 
+    const screenWidth = window.innerWidth;
+    const screenHeight = window.innerHeight;
+    const scrollY = window.scrollY; 
+  
+    if (posX + menuWidth > screenWidth) {
+      posX = screenWidth - menuWidth - 10;
+    }
+  
+    if (posY + menuHeight > screenHeight + scrollY) {
+      posY = event.pageY - menuHeight; 
+    }
+  
+    this.contextMenuX = posX;
+    this.contextMenuY = posY;
   }
-
+  
 
   closeAllMenus() {
     this.contextMenuVisible = false;

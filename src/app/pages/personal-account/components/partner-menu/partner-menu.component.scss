@@ -25,7 +25,7 @@
     background-color: #3f4e9f;
 }
 
-.settings{
+.settings {
     display: flex;
     flex-direction: column;
 }
@@ -225,7 +225,7 @@ li.disabled {
     color: #4caf50;
 }
 
-.status-active{
+.status-active {
     background-color: rgba(76, 175, 80, 0.1);
     /* Полупрозрачный зеленый */
     color: #4caf50;
@@ -313,4 +313,34 @@ li.disabled {
     background: #f2f2f2;
     color: #101010;
 
+}
+
+
+
+.field-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.old-value {
+    display: block;
+    font-size: 0.9rem;
+    color: #888;
+    margin-top: 0.3rem;
+}
+
+.p-field input {
+    border-radius: 4px;
+    padding: 0.5rem;
+    width: 100%;
+}
+
+.p-field label {
+    font-weight: bold;
+}
+
+.p-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
 }

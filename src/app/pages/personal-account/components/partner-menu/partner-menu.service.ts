@@ -60,6 +60,14 @@ export class PartnerMenuService {
     );
   }
 
+  getCounterpartyItem(id:string){
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    return this.http.get<void>(`${this.apiUrl}api/CommercialWork/Partner/${id}`,
+      { headers: this.getHeaders() }
+    );
+    
+  }
+
   // Редактировать контрагента
   editCounterparty(id: string, updatedCounterparty: Counterparty): Observable<Counterparty> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
