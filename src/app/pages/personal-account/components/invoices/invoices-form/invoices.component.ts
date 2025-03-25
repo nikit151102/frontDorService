@@ -162,7 +162,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       } else if (this.selectedInvoice.incomeSum == 0 && this.selectedInvoice.expenseSum < 0) {
         this.adjustmentType = 1; // +
         this.type = 0;
-      } else{
+      } else {
         this.type = 1;
       }
       if (value.data.productList) {
@@ -276,7 +276,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             dateTime: formattedDate || null
           };
         }
-        
+
         this.type = invoice.data.type;
         delete this.selectedInvoice.expenseSum;
         delete this.selectedInvoice.incomeSum;
@@ -347,6 +347,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       name: '',
       quantity: 0,
       amount: 0,
+      sumAmount: 0,
       measurementUnitId: '',
       productTargetId: '',
       date: new Date().toISOString()
@@ -358,6 +359,38 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     if (this.selectedInvoice) {
       this.selectedInvoice.productList.splice(index, 1);
     }
+  }
+
+  onQuantityOrAmountChange(product: any) {
+    if (product.quantity != null && product.amount != null) {
+      product.sumAmount = product.quantity * product.amount;
+    }
+  }
+
+  onQuantityOrSumAmountChange(product: any) {
+    if (product.quantity != null && product.sumAmount != null) {
+      product.amount = product.sumAmount / product.quantity; 
+    }
+  }
+
+
+  onValueChange(changedField: 'quantity' | 'amount' | 'sumAmount', index: number) {
+    const product = this.selectedInvoice.productList[index];
+
+    if (!product) return;
+
+    const { quantity, amount, sumAmount } = product;
+
+    // Если введены quantity и amount, пересчитать sumAmount
+    if (changedField !== 'sumAmount' && quantity && amount) {
+      product.sumAmount = quantity * amount;
+    }
+
+    // Если введены quantity и sumAmount, пересчитать amount
+    else if (changedField !== 'amount' && quantity && sumAmount) {
+      product.amount = sumAmount / quantity;
+    }
+
   }
 
 

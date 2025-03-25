@@ -1,15 +1,11 @@
-<button 
-  pButton 
-  label="Создать фактуру" 
-  icon="pi pi-plus" 
-  (click)="createNewInvoice()" 
- *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'">
+<button pButton label="Создать фактуру" icon="pi pi-plus" (click)="createNewInvoice()"
+    *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'">
 </button>
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'Редактирование фактуры (' + counterpartyName + ')'"
-        (onHide)="onDialogClose()">
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true"
+        [header]="'Редактирование фактуры (' + counterpartyName + ')'" (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <div style="display: flex; gap: 15px;">
@@ -17,7 +13,7 @@
                         <div class="p-field p-col-12">
                             <label for="number">Номер фактуры</label>
                             <app-custom-input [(ngModel)]="selectedInvoice.number" [disabled]="!isEdit"
-                            placeholder="Введите номер фактуры"></app-custom-input>
+                                placeholder="Введите номер фактуры"></app-custom-input>
                         </div>
                         <div class="p-field p-col-12">
                             <label for="dateTime">Дата</label>
@@ -34,8 +30,9 @@
                     <div style="display: flex; gap: 10px;">
                         <div class="p-field p-col-12">
                             <label for="type">Тип</label>
-                            <p-dropdown [style]="{ 'min-width': '120px' }" id="type" [(ngModel)]="type" [options]="types" optionLabel="label"
-                                optionValue="value" (onChange)="onTypeChange()" [disabled]="!isEdit">
+                            <p-dropdown [style]="{ 'min-width': '120px' }" id="type" [(ngModel)]="type"
+                                [options]="types" optionLabel="label" optionValue="value" (onChange)="onTypeChange()"
+                                [disabled]="!isEdit">
                             </p-dropdown>
                         </div>
 
@@ -49,13 +46,14 @@
 
                         <div class="p-field p-col-12">
                             <label for="tax">Налог</label>
-                            <p-dropdown [style]="{ 'min-width': '120px' }" id="tax" [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"
-                                [disabled]="!isEdit"></p-dropdown>
+                            <p-dropdown [style]="{ 'min-width': '120px' }" id="tax" [(ngModel)]="selectedInvoice.tax"
+                                [options]="taxes" optionLabel="label" [disabled]="!isEdit"></p-dropdown>
                         </div>
                         <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
                             <label for="checkPersonId">Проверяющий</label>
-                            <p-dropdown [style]="{ 'min-width': '150px' }" id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId"
-                                [options]="checkers" optionLabel="fullName" optionValue="id" [disabled]="!isEdit">
+                            <p-dropdown [style]="{ 'min-width': '150px' }" id="checkPersonId"
+                                [(ngModel)]="selectedInvoice.checkPersonId" [options]="checkers" optionLabel="fullName"
+                                optionValue="id" [disabled]="!isEdit">
                             </p-dropdown>
                         </div>
                     </div>
@@ -70,6 +68,7 @@
                         <div>Наименование товара</div>
                         <div>Количество</div>
                         <div>Цена</div>
+                        <div>Общая сумма</div>
                         <div>Единица измерения</div>
                         <div>Назначение товара</div>
                         <div *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3"></div>
@@ -77,10 +76,18 @@
                     <div *ngFor="let product of selectedInvoice.productList; let i = index" class="product-row">
                         <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
                             placeholder="Введите название товара"></app-custom-input>
-                        <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit"
-                            [min]="1"></app-custom-input-number>
-                        <app-custom-input-number [(ngModel)]="product.amount" [disabled]="!isEdit"
-                            [min]="0" (ngModelChange)="onAmountChange($event, i)"></app-custom-input-number>
+                        <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit" [min]="1"
+                            (ngModelChange)="onQuantityOrAmountChange(product); onQuantityOrSumAmountChange(product)">
+                        </app-custom-input-number>
+
+                        <app-custom-input-number [(ngModel)]="product.amount" [disabled]="!isEdit" [min]="0"
+                            (ngModelChange)="onQuantityOrAmountChange(product)">
+                        </app-custom-input-number>
+
+                        <app-custom-input-number [(ngModel)]="product.sumAmount" [disabled]="!isEdit" [min]="0"
+                            (ngModelChange)="onQuantityOrSumAmountChange(product)">
+                        </app-custom-input-number>
+
                         <app-custom-dropdown [options]="measurementUnits" optionLabel="name" optionValue="id"
                             [(selected)]="product.measurementUnitId" [disabled]="!isEdit">
                         </app-custom-dropdown>
@@ -96,8 +103,8 @@
                 <div class="product-footer">
                     <div></div>
                     <div></div>
-                    <div>{{ calculatingAmount() }}</div>
                     <div></div>
+                    <div style="text-align: center;">{{ calculatingAmount() }}</div>
                     <div></div>
                     <div></div>
                 </div>
@@ -109,8 +116,7 @@
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
-                    label="Сохранить и отправить" icon="pi pi-check"
-                    (click)="saveAndSendInvoice()"></button>
+                    label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
 
                 <button *ngIf="selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton label="Закрыть"
                     (click)="onDialogClose()"></button>
@@ -120,5 +126,3 @@
 </ng-container>
 
 <p-confirmDialog></p-confirmDialog>
-
-
