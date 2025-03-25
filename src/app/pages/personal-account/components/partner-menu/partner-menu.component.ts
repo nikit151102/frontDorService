@@ -131,6 +131,7 @@ export class PartnerMenuComponent {
     this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
+
         this.sortCounterpartiesByStatus();
         this.select('00000000-0000-0000-0000-000000000000', '');
       },
@@ -301,7 +302,12 @@ export class PartnerMenuComponent {
 
   // Работа со статусами
   isEditable(status: number): boolean {
-    return this.partnerStatusService.isEditable(status);
+    if(this.currentRole  == 1){
+      return false;
+
+    }else{
+      return this.partnerStatusService.isEditable(status);
+    }
   }
 
   getStatusLabel(status: number): string {
@@ -313,7 +319,11 @@ export class PartnerMenuComponent {
   }
 
   isForbiddenStatus(status: number): boolean {
-    return this.partnerStatusService.isForbiddenStatus(status);
+    if(this.currentRole  == 1){
+      return false;
+    }else{
+      return this.partnerStatusService.isForbiddenStatus(status);
+    }
   }
 
 
