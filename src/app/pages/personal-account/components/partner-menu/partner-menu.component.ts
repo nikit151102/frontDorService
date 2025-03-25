@@ -93,7 +93,7 @@ export class PartnerMenuComponent {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
         this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
       } else if (button.isEditData == false || button.isEditData == true) {
-        this.isEdit = true;
+        this.isEdit = button.isEditData;
         console.log('button.isEditData', this.isEdit)
         this[button.action](event, product);
 
@@ -167,7 +167,7 @@ export class PartnerMenuComponent {
     this.selectCounterparty.emit({ id: id, name: name });
   }
 
-  isEdit: boolean = false;
+  isEdit: boolean = true;
   oldPrototype: any;
 
   openDialog(event: MouseEvent, counterparty?: any) {
