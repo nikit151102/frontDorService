@@ -497,18 +497,19 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
-      tax: taxes[0],
+      tax: taxes?.length ? taxes[0] : 0, 
       partnerId: this.counterpartyId,
-      checkPersonId: this.checkers[0].id,
+      checkPersonId: this.checkers?.length ? this.checkers[0].id : '', 
       comment: '',
       productList: []
     };
-this.type = types[0].value;
+
+    this.type = types?.length ? types[0].value : 0;
     this.isEdit = true;
 
     this.addProduct();
+}
 
-  }
 
 
   onDialogClose() {
