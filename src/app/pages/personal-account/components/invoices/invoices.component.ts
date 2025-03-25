@@ -125,6 +125,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     } else {
       console.error(`Action method '${button.action}' not found.`);
     }
+    this.cdRef.detectChanges();
   }
 
 
