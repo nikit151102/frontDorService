@@ -137,12 +137,11 @@ export class FormRegistrationComponent {
     this.registrationService.signIn(Data).subscribe(
       (response) => {
         if (response.data.data) {
-          this.tokenService.setToken(response.data.data.token);
+          this.tokenService.setToken(response.data.token);
           this.progressSpinnerService.hide();
-          localStorage.setItem('VXNlcklk', response.data.data.id);
-          this.currentUserService.saveUser(response.data.data);
-          this.router.navigate([`/${response.data.data.id}`]);
-          this.navMenuService.setNotifications(response.notifyData);
+          localStorage.setItem('VXNlcklk', response.data.id);
+          this.currentUserService.saveUser(response.data);
+          this.router.navigate([`/${response.data.id}`]);
           this.toastService.showSuccess('Успешно', 'Вы вошли в систему');
         }
       },

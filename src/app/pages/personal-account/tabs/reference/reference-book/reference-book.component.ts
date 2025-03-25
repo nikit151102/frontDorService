@@ -71,6 +71,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       }
     }
 
+
     this.referenceBookService.loadData();
     this.cdr.detectChanges();
   }
@@ -166,6 +167,19 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
         }
       });
 
+      const userNameField = this.formFields.find((field: any) => field.field === 'userName');
+      if (userNameField) {
+        const lastName = this.modalData.lastName?.trim() || '';
+        const firstName = this.modalData.firstName?.trim() || '';
+        const patronymic = this.modalData.patronymic?.trim() || '';
+
+        if (lastName && firstName && patronymic) {
+          this.modalData.userName =
+            lastName.charAt(0).toUpperCase() + lastName.slice(1) +
+            firstName.charAt(0).toUpperCase() +
+            patronymic.charAt(0).toUpperCase();
+        }
+      }
       this.createRecord(this.modalData);
     } else {
       const allowedFields = this.formFields.map((field: any) => field.field);
@@ -209,6 +223,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
 
 
+
   // Создание новой записи
   createRecord(newRecord: any): void {
     this.referenceBookService.newRecord(newRecord).subscribe(
@@ -216,7 +231,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
         this.data.push(response.data);
         this.toastService.showSuccess('Успех', 'Запись успешно создана');
         if (this.currentConfig.pageTitle == 'Сотрудники' && response.data) {
-          this.newUserCode = response.data.initialPassCode;
+          this.newUser = response.data;
           this.isModalUserCreateOpen = true;
         }
       },
@@ -371,5 +386,5 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
 
   isModalUserCreateOpen: boolean = false;
-  newUserCode: any;
+  newUser: any;
 }

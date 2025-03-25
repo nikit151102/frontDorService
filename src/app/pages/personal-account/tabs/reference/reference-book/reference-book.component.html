@@ -59,7 +59,7 @@
                         </ng-container>
                         <ng-template #normalField>
                             <span>
-                                {{ product[col.field] }}
+                                {{ getNestedValue(product, col.field) }}
                             </span>
                         </ng-template>
                     </td>
@@ -126,17 +126,22 @@
     </div>
 
     <div class="modal" *ngIf="isModalUserCreateOpen" [ngClass]="{ 'open': isModalUserCreateOpen }">
-        <div class="modal-content" style="max-width: 500px;">
+        <div class="modal-content">
             <span class="close-btn" (click)="isModalUserCreateOpen = false">×</span>
-            <h2>Код доступа</h2>
+    
+            <h2 class="modal-title">Логин</h2>
+            <p class="username">{{ newUser.userName }}</p>
+    
+            <h2 class="modal-title">Код доступа</h2>
             <div class="code-container">
-                <span *ngFor="let digit of newUserCode.split('')" class="code-digit">
+                <span *ngFor="let digit of (newUser.initialPassCode + '').split('')" class="code-digit">
                     {{ digit }}
-                </span>
+                </span>                
             </div>
-            
         </div>
     </div>
+    
+    
 
 </div>
 
