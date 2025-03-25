@@ -8,7 +8,7 @@
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" header="Редактирование счета-фактуры"
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'Редактирование фактуры (' + counterpartyName + ')'"
         (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">

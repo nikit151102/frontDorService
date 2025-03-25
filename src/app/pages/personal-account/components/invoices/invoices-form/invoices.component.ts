@@ -45,6 +45,7 @@ import { ToastService } from '../../../../../services/toast.service';
 })
 export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
+  @Input() counterpartyName!: any;
   @Input() counterpartyId: any;
   @Input() isEditInvoice: any;
   visibleCheckPersonId: boolean = true;

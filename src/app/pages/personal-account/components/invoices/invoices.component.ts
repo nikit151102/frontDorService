@@ -36,13 +36,14 @@ import { ToastService } from '../../../../services/toast.service';
     ButtonModule,
     MenuModule,
     InvoicesFormComponent,
-    SettingsComponent
+    // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss'
 })
 export class InvoicesComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
+  @Input() counterpartyName!: any;
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;

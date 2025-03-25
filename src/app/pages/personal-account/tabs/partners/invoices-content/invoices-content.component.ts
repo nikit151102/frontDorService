@@ -14,6 +14,7 @@ import { InvoicesService } from '../../../components/invoices/invoices.service';
 })
 export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
+  @Input() counterpartyName!: any;
   @Input() notificationItem: any;
   selectedComponent: string = 'invoices';
 

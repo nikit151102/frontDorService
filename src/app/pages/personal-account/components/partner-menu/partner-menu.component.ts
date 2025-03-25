@@ -34,7 +34,7 @@ interface TypeOption {
   styleUrl: './partner-menu.component.scss'
 })
 export class PartnerMenuComponent {
-  @Output() selectCounterparty = new EventEmitter<number>();
+  @Output() selectCounterparty = new EventEmitter<{ id: any, name: any }>();
   @Input() typeCode: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>
   @Input() title: string = 'контрагента'
@@ -60,7 +60,7 @@ export class PartnerMenuComponent {
     private confirmPopupService: ConfirmPopupService,
     private partnerStatusService: PartnerStatusService,
     private jwtService: JwtService,
-    private toastService:ToastService
+    private toastService: ToastService
   ) { }
 
   ngOnInit(): void {
@@ -105,7 +105,7 @@ export class PartnerMenuComponent {
   }
 
   verificationPartner(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
-   
+
     this.confirmPopupService.openConfirmDialog({
       title: titlePopUp,
       message: messagePopUp,
@@ -115,11 +115,11 @@ export class PartnerMenuComponent {
 
         this.partnerMenuService.sendingVerification(titlePopUp, status).subscribe(
           () => {
-      
+
           },
           (error) => {
             console.error('Error deleting invoice', error);
-          
+
           }
         );
       }
@@ -132,7 +132,7 @@ export class PartnerMenuComponent {
       (data: any) => {
         this.counterparties = data.data;
         this.sortCounterpartiesByStatus();
-        this.select('00000000-0000-0000-0000-000000000000');
+        this.select('00000000-0000-0000-0000-000000000000', '');
       },
       (error: any) => {
         console.error('Ошибка загрузки контрагентов:', error);
@@ -159,9 +159,9 @@ export class PartnerMenuComponent {
     });
   }
 
-  select(id: any) {
+  select(id: any, name: string) {
     this.selectedId = id;
-    this.selectCounterparty.emit(id);
+    this.selectCounterparty.emit({ id: id, name: name });
   }
 
   isEdit: boolean = false;
@@ -219,46 +219,46 @@ export class PartnerMenuComponent {
     }
 
 
-      const formData = this.counterpartyForm.value;
+    const formData = this.counterpartyForm.value;
 
-      const { type, ...rest } = formData;
+    const { type, ...rest } = formData;
 
-      const formDataWithValueType = {
-        ...rest,
-        type: type ? type.value : null
-      };
+    const formDataWithValueType = {
+      ...rest,
+      type: type ? type.value : null
+    };
 
-      if (this.selectedCounterparty) {
-        this.partnerMenuService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
-          (updatedCounterparty) => {
-            const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
-            if (index !== -1) {
-              this.counterparties[index] = updatedCounterparty;
-              this.display = false;
-            }
-            this.toastService.showSuccess('Успех', 'Контрагент успешно отредактирован');
-            this.loadCounterparties();
-          },
-          (error) => {
-            console.error('Ошибка редактирования контрагента:', error)
-            this.toastService.showError('Ошибка', 'Ошибка редактирования контрагента');
-          } 
-        );
-      } else {
-        this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
-          (newCounterparty) => {
-            this.counterparties.push(newCounterparty);
+    if (this.selectedCounterparty) {
+      this.partnerMenuService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
+        (updatedCounterparty) => {
+          const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
+          if (index !== -1) {
+            this.counterparties[index] = updatedCounterparty;
             this.display = false;
-            this.loadCounterparties();
-            this.toastService.showSuccess('Успех', 'Контрагент успешно добавлен');
-          },
-          (error) => {
-            console.error('Ошибка добавления контрагента:', error);
-            this.toastService.showError('Ошибка', 'Ошибка добавления контрагента'); 
           }
+          this.toastService.showSuccess('Успех', 'Контрагент успешно отредактирован');
+          this.loadCounterparties();
+        },
+        (error) => {
+          console.error('Ошибка редактирования контрагента:', error)
+          this.toastService.showError('Ошибка', 'Ошибка редактирования контрагента');
+        }
+      );
+    } else {
+      this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
+        (newCounterparty) => {
+          this.counterparties.push(newCounterparty);
+          this.display = false;
+          this.loadCounterparties();
+          this.toastService.showSuccess('Успех', 'Контрагент успешно добавлен');
+        },
+        (error) => {
+          console.error('Ошибка добавления контрагента:', error);
+          this.toastService.showError('Ошибка', 'Ошибка добавления контрагента');
+        }
 
-        );
-      }
+      );
+    }
   }
 
 
@@ -276,10 +276,10 @@ export class PartnerMenuComponent {
             this.toastService.showSuccess('Успех', 'Контрагент удален');
             this.loadCounterparties();
           },
-          (error) =>{
+          (error) => {
             console.error('Ошибка удаления контрагента:', error)
-            this.toastService.showError('Ошибка', 'Не удалось удалить контрагента'); 
-          } 
+            this.toastService.showError('Ошибка', 'Не удалось удалить контрагента');
+          }
         );
       }
     });

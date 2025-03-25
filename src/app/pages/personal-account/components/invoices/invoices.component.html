@@ -1,15 +1,16 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
+<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyName" [counterpartyId]="counterpartyId"
     [isEditInvoice]="isEditInvoice"></app-invoices-form>
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
 
-<app-settings 
+<!-- <app-settings 
   [columns]="columns" 
   [selectedColumns]="selectedColumns" 
   (selectedColumnsChange)="updateSelectedColumns($event)">
-</app-settings>
+</app-settings> -->
 
+<h2 style="color: #101010;">    {{counterpartyName}}</h2>
 </div>
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">

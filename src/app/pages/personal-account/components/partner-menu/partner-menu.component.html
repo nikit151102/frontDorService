@@ -10,14 +10,14 @@
   </div>
 
   <ul>
-    <li (click)="select('00000000-0000-0000-0000-000000000000')">
+    <li (click)="select('00000000-0000-0000-0000-000000000000', '')">
       <div class="counterparty-item">
         <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
       </div>
     </li>
 
     <li *ngFor="let counterparty of counterparties"
-      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id)"
+      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty.shortName)"
       [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
       <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
         <div style="       display: flex;
