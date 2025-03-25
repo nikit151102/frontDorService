@@ -58,10 +58,15 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="p-field p-col-12">
+                    <label for="comment">Комментарий</label>
+                    <textarea id="comment" [(ngModel)]="selectedInvoice.comment"></textarea>
+                </div>
+              
 
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
-
 
                 <div class="product-list">
                     <div class="product-header">

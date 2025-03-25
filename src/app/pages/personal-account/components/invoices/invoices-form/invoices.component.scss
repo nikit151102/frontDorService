@@ -25,11 +25,11 @@
 }
 
 .invoice-table tr:nth-child(even) {
-    background-color: #f9f9f9 !important; 
+    background-color: #f9f9f9 !important;
 }
 
 .invoice-table tr:nth-child(odd) {
-    background-color: #ffffff !important; 
+    background-color: #ffffff !important;
 }
 
 
@@ -206,7 +206,7 @@
 :host ::ng-deep p-dialog .p-datatable-table {
     position: relative;
     padding-bottom: 45px;
-    
+
 }
 
 :host ::ng-deep p-dialog .p-datatable-tfoot {
@@ -326,7 +326,9 @@
     gap: 10px;
 }
 
-.product-header, .product-row, .product-footer {
+.product-header,
+.product-row,
+.product-footer {
     display: grid;
     grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
     gap: 10px;
@@ -349,7 +351,7 @@
 }
 
 .product-row:nth-child(even) {
-    background-color: #f9f9f9; 
+    background-color: #f9f9f9;
 }
 
 .product-row:nth-child(odd) {
@@ -357,7 +359,7 @@
 }
 
 .product-row.editing {
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
 }
 
 input {
@@ -382,8 +384,20 @@ input:focus {
 
 
 
-.text-warning{
+.text-warning {
     color: #ff1d1d;
     margin: 0;
     width: 150px;
+}
+
+
+textarea {
+    width: 100%;
+    height: 75px;
+    font-size: 14px;
+    background: rgb(255, 255, 255);
+    color: #101010;
+    border-radius: 6px;
+    resize: none;
+    overflow: auto;
 }
