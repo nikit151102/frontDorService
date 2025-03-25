@@ -22,7 +22,7 @@ export const referenceConfig = [
         ],
     },
     {
-        typeId: '495142',
+        typeId: '915825',
         endpoint: 'api/Entities/MeasurementUnit',
         pageTitle: 'Единицы измерения',
         tableColumns: [
@@ -39,7 +39,7 @@ export const referenceConfig = [
         ],
     },
     {
-        typeId: '915825',
+        typeId: '495142',
         endpoint: 'api/Entities/ProductTarget',
         pageTitle: 'Назначение товара',
         tableColumns: [

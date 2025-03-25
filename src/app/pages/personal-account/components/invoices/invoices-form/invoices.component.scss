@@ -136,7 +136,7 @@
     position: fixed;
     bottom: 0;
     padding-bottom: 10px;
-    background: transparent;
+    background: #fff;
     display: flex;
     flex-direction: row-reverse;
     gap: 15px;
@@ -328,7 +328,7 @@
 
 .product-header, .product-row, .product-footer {
     display: grid;
-    grid-template-columns: 25% 10% 10% 20% 20% 10%;
+    grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
     gap: 10px;
     align-items: center;
 }
@@ -341,7 +341,9 @@
 
 .product-footer {
     position: sticky;
-    bottom: 0;
+    bottom: 26px;
+    height: 40px;
+    background: #fff;
     font-weight: bold;
     padding-top: 10px;
 }
