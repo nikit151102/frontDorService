@@ -69,7 +69,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     private productsService: InvoicesService,
     private jwtService: JwtService,
-    private toastService: ToastService
+    private toastService: ToastService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {

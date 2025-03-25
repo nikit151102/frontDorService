@@ -401,3 +401,11 @@ textarea {
     resize: none;
     overflow: auto;
 }
+
+:host ::ng-deep .p-datepicker .p-datepicker-panel {
+    background: #fff;
+}
+
+:host ::ng-deep .p-datepicker-header {
+    background: #fff;
+}
