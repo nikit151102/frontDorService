@@ -37,15 +37,11 @@ export class PartnerMenuService {
     const currentUrl = this.router.url;
 
     const typeValue = currentUrl.includes('/services') ? 1 : 0;
+ 
+  this.queryData.filters = this.queryData.filters.filter((filter: any) => filter.field !== 'type');
 
-    const hasTypeFilter = this.queryData.filters.some((filter:any) => filter.field === 'type');
+  this.queryData.filters.unshift({ field: 'type', values: [typeValue], type: 1 });
 
-    if (!hasTypeFilter) {
-      this.queryData.filters = [
-        { field: 'type', values: [typeValue], type: 1 },
-        ...this.queryData.filters
-      ];
-    }
 
     return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData, 
       { headers: this.getHeaders() })
