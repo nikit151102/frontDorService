@@ -43,7 +43,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         //Статус контрагента = 1
         {
             label: 'Принять',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
@@ -52,7 +52,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Отклонить',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
@@ -63,7 +63,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         //Статус контрагента = 2
         {
             label: 'Принять',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
@@ -72,7 +72,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Отклонить',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
@@ -84,7 +84,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         //Статус контрагента = 3
         {
             label: 'Принять',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать контрагента?',
@@ -93,7 +93,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Отклонить',
-            action: 'verificationInvoice',
+            action: 'verificationPartner',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить контрагента?',
