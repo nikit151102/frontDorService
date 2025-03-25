@@ -1,0 +1,218 @@
+.container {
+    padding: 20px;
+
+    .headerBtns {
+        display: flex;
+        justify-content: space-between;
+
+        .backButton {
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100px;
+            border-radius: 20px;
+            transition: background 0.3s ease;
+
+            &:hover {
+                background: #f3f3f3;
+            }
+
+            .icon-back {
+                width: 24px;
+                height: 24px;
+                color: ghost;
+                fill: var(--color-typo-ghost);
+            }
+        }
+
+    }
+
+    @media (max-width: 768px) {
+        height: 90%;
+    }
+
+    #formSignIn {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+
+        h1 {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .inputGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .buttonGroup {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+    }
+}
+
+.containerUser {
+    padding: 20px;
+
+    @media (max-width: 768px) {
+        height: 90%;
+    }
+
+    .headerBtns {
+        display: flex;
+        justify-content: space-between;
+
+        .backButton {
+            display: flex;
+            padding: 10px;
+            align-items: center;
+            justify-content: flex-start;
+            width: 100px;
+            border-radius: 20px;
+            transition: background 0.3s ease;
+
+            &:hover {
+                background: #f3f3f3;
+            }
+
+            .icon-back {
+                width: 24px;
+                height: 24px;
+                color: ghost;
+                fill: var(--color-typo-ghost);
+            }
+        }
+
+        .menu {
+            width: 40px;
+            height: 40px;
+            text-decoration: none;
+            border-radius: 10px;
+
+            &:hover {
+                background-color: #f3f3f3;
+            }
+        }
+
+    }
+
+    .dropdownMenu {
+        position: absolute;
+        top: 50px;
+        right: 20px;
+        background: white;
+        padding: 10px;
+        border: 0.5px solid #efefef;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        transition: opacity 0.3s ease;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        background: none;
+
+        &:hover {
+            background-color: #f3f3f3;
+        }
+    }
+
+    .userInfo {
+        width: 100%;
+        height: 60px;
+        display: flex;
+        align-items: flex-end;
+        gap: 15px;
+
+        .avatar {
+            width: 60px;
+            height: auto;
+        }
+
+        #dataUser {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            justify-content: space-around;
+
+            .userName {
+                font-size: 16px;
+                font-weight: 500;
+            }
+
+            .email {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+
+    }
+
+    #selectUserSignIn {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding-top: 30px;
+
+        .inputGroup {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+            width: 100%;
+            padding-bottom: 20px;
+        }
+
+        .buttonGroup {
+            display: flex;
+            gap: 10px;
+            width: 100%;
+        }
+    }
+}
+
+.app-custom-button {
+    flex: 1;
+    background-color: #28a745;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+
+    &:hover {
+        background-color: #218838;
+    }
+}
+
+.app-pop-up-entry {
+    flex: 1;
+}
+
+
+:host ::ng-deep .p-inputotp-input.p-inputtext-lg {
+    color: #101010;
+    background: #fff;
+    border-radius: 15px;
+}
+
+:host ::ng-deep .p-inputotp {
+    justify-content: center;
+}

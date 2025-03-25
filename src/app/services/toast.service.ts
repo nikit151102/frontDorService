@@ -1,29 +1,51 @@
 import { Injectable } from '@angular/core';
-import { MessageService } from 'primeng/api';
+import { BehaviorSubject } from 'rxjs';
+
+export interface ToastMessage {
+  id: number;
+  type: 'success' | 'error' | 'info' | 'warning';
+  summary: string;
+  detail: string;
+  duration?: number;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ToastService {
-  constructor(private messageService: MessageService) {}
+  private messages: ToastMessage[] = [];
+  private messagesSubject = new BehaviorSubject<ToastMessage[]>([]);
+  messages$ = this.messagesSubject.asObservable();
+  private idCounter = 0;
 
-  showSuccess(summary: string, detail: string): void {
-    console.log("success")
-    this.messageService.add({ severity: 'success', summary, detail });
+  private showMessage(type: 'success' | 'error' | 'info' | 'warning', summary: string, detail: string, duration: number = 5000) {
+    const id = this.idCounter++;
+    const formattedDetail = detail.replace(/\n/g, '<br>'); // Форматируем переносы строк
+    const toast: ToastMessage = { id, type, summary, detail: formattedDetail, duration };
+    this.messages.push(toast);
+    this.messagesSubject.next([...this.messages]);
+
+    setTimeout(() => this.remove(id), duration);
   }
 
-  showError(summary: string, detail: string): void {
-    const formattedDetail = detail.replace(/\n/g, '<br>');
-    this.messageService.add({ severity: 'error', summary, detail: formattedDetail });
-  }
-  
-
-  showInfo(summary: string, detail: string): void {
-    const formattedDetail = detail.replace(/\n/g, '<br>');
-    this.messageService.add({ severity: 'info', summary, detail });
+  showSuccess(summary: string, detail: string) {
+    this.showMessage('success', summary, detail);
   }
 
-  showWarn(summary: string, detail: string): void {
-    this.messageService.add({ severity: 'warn', summary, detail });
+  showError(summary: string, detail: string) {
+    this.showMessage('error', summary, detail);
+  }
+
+  showInfo(summary: string, detail: string) {
+    this.showMessage('info', summary, detail);
+  }
+
+  showWarn(summary: string, detail: string) {
+    this.showMessage('warning', summary, detail);
+  }
+
+  remove(id: number) {
+    this.messages = this.messages.filter(msg => msg.id !== id);
+    this.messagesSubject.next([...this.messages]);
   }
 }

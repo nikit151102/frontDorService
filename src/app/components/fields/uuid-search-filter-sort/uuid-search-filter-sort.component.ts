@@ -24,6 +24,7 @@ interface SortDto {
 export class UuidSearchFilterSortComponent {
   @Input() filterField: string = ''; // Название поля для фильтрации
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
+  @Input() searchField: string = '';
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
   @Input() fieldNames: string = ''; // Массив полей для отображения в выпадающем списке
   @Input() Field: string = ''; 
@@ -44,8 +45,32 @@ export class UuidSearchFilterSortComponent {
     private elementRef: ElementRef
   ) { }
 
+  inputWidth: string = '30px';
+  bgColor: string = 'transparent';
+  borderStyle: string = 'none';
+  isSearchOpen: boolean = false;
+  
+  toggleSearch(isFocused: boolean) {
+    if (isFocused) {
+      this.inputWidth = '200px';
+      this.bgColor = '#ffffff';
+      this.borderStyle = '1px solid #007BFF';
+      this.isSearchOpen = true;
+    } else {
+      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
+        this.inputWidth = '30px';
+        this.bgColor = 'transparent';
+        this.borderStyle = 'none';
+        this.isSearchOpen = false;
+      }, 200);
+    }
+  }
+
+
   ngOnChanges() {
+    console.log('apiEndpointapiEndpoint',this.apiEndpoint)
     if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
+      
       this.loadData();
     }
     if (this.enam != null) {
@@ -57,8 +82,9 @@ export class UuidSearchFilterSortComponent {
 
   loadData() {
     this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
-      (data) => {
-        this.products = data;
+      (data: any) => {
+        console.log('datdatadatadataa',data)
+        this.products = data.data;
         this.endpointDataLoaded = true;
         console.log('Данные получены с эндпоинта:', this.products);
       },
@@ -74,10 +100,11 @@ export class UuidSearchFilterSortComponent {
 
   onSearchChange() {
     const filterDto: FilterDto = {
-      field: this.Field,
+      field: this.searchField || this.Field,
       values: this.searchTerm ? [this.searchTerm] : [],
       type: 0
     };
+    
     this.filterChange.emit(filterDto);
   }
 
@@ -129,8 +156,12 @@ export class UuidSearchFilterSortComponent {
     @HostListener('document:click', ['$event'])
     onClickOutside(event: MouseEvent) {
       const clickedInside = this.elementRef.nativeElement.contains(event.target);
-      if (!clickedInside) {
+      if (!clickedInside && this.inputWidth != '30px') {
         this.isFilterOpen = false;
+        this.inputWidth = '30px';
+        this.bgColor = 'transparent';
+        this.borderStyle = 'none';
+        this.isSearchOpen = false;
       }
     }
 }

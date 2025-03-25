@@ -1,0 +1,28 @@
+# Используем Node.js в качестве базового образа
+FROM node:20.12-alpine3.18
+
+# Устанавливаем рабочую директорию внутри контейнера
+WORKDIR /app
+
+# Копируем файлы package.json и package-lock.json в рабочую директорию
+COPY package.json package-lock.json ./
+
+# Устанавливаем зависимости
+RUN npm install --legacy-peer-deps
+
+# Устанавливаем Angular CLI глобально
+RUN npm install -g @angular/cli
+
+# Копируем остальные файлы проекта в контейнер
+COPY . .
+
+# Устанавливаем переменные окружения
+ARG VERSION_NUMBER_ARG=no-version
+ENV VERSION_NUMBER=$VERSION_NUMBER_ARG
+ENV TZ=Europe/Zurich
+
+# Открываем порт 80 для доступа к приложению
+EXPOSE 80
+
+# Команда для запуска Angular приложения с использованием ng serve
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "8020"]

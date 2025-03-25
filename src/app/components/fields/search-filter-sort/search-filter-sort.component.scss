@@ -21,12 +21,10 @@
 input {
     width: 100%;
     padding: 10px 40px 10px 12px;
-    border: 1px solid #ddd;
     border-radius: 6px;
     font-size: 14px;
     transition: all 0.3s ease-in-out;
     outline: none;
-    background: white;
 }
 
 input:focus {
@@ -84,10 +82,10 @@ input:focus {
 
 /* Кнопка сортировки */
 .sort-btn {
-    background: white;
-    border: 1px solid #ddd;
+    background: transparent;
+    border: none;
     border-radius: 6px;
-    padding: 8px;
+    padding: 4px;
     font-size: 16px;
     cursor: pointer;
     color: #666;
@@ -96,9 +94,8 @@ input:focus {
 }
 
 .sort-btn:hover {
-    background: #007bff;
+    background: #007bff36;
     color: white;
-    border-color: #007bff;
 }
 
 
@@ -123,4 +120,27 @@ input:focus {
     border: none;
     margin-top: 10px;
 
+}
+
+
+
+.input-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-container svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .input-container input {
+    padding-left: 30px; /* Место для иконки */
+  }
+  
+
+input{
+    color: #101010;
 }

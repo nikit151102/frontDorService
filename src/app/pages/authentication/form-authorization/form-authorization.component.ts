@@ -8,10 +8,10 @@ import { Router } from '@angular/router';
 import { TokenService } from '../../../services/token.service';
 import { ToastService } from '../../../services/toast.service';
 import { CookieConsentService } from '../../../services/cookie-consent.service';
-import { CustomInputComponent } from '../../../ui-kit/custom-input/custom-input.component';
 import { ProgressSpinnerService } from '../../../components/progress-spinner/progress-spinner.service';
 import { CurrentUserService } from '../../../services/current-user.service';
-import { InvoiceService } from '../../personal-account/supplier/tabs/counterparties/invoices-table/invoices-table.service';
+import { CustomInputComponent } from '../../../ui-kit/custom-input-auth/custom-input.component';
+import { NavMenuService } from '../../personal-account/components/nav-menu/nav-menu.service';
 
 @Component({
   selector: 'app-form-authorization',
@@ -37,7 +37,7 @@ export class FormAuthorizationComponent implements OnInit {
     private toastService: ToastService,
     private cookieConsentService: CookieConsentService,
     private currentUserService:CurrentUserService,
-    private invoiceService:InvoiceService
+    private navMenuService:NavMenuService
   ) {
     this.signInForm = this.fb.group({
       username: ['', Validators.required],
@@ -104,55 +104,64 @@ export class FormAuthorizationComponent implements OnInit {
 
   onSignIn() {
     this.signInForm.markAllAsTouched();
-
-    if (this.signInForm.valid) {
-
-
-      this.progressSpinnerService.show();
-
-      const formData = this.signInForm.value;
-
-      const Data = {
-        userName: formData.username,
-        password: formData.password,
-        email: ""
-      };
-
-      this.AuthorizationService.signIn(Data).subscribe(
-        (response) => {
-          if (response.data) {
-            this.tokenService.setToken(response.data.token);
-            this.progressSpinnerService.hide(); 
-            localStorage.setItem('VXNlcklk', response.data.id);
-
-            this.currentUserService.getDataUser().subscribe((value: any)=>{
-              if(value.data){
-                this.currentUserService.saveUser(value.data);
-                if(value.data.roles[0]?.name === 'Снабженец') this.router.navigate([`/supplier/${response.data.id}`]);
-                if(value.data.roles[0]?.name === 'Механик') this.router.navigate([`/mechanic/${response.data.id}`]);
-                if(value.data.roles[0]?.name === 'Директор') this.router.navigate([`/director/${response.data.id}`]);
-                
-                this.invoiceService.connectToWebSocket();
-              }
-            })
-          }
-        },
-        (error) => {
-          this.progressSpinnerService.hide();
-          const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-          this.toastService.showError('Ошибка', errorMessage);
-        }
-      );
-    } else {
-      this.toastService.showWarn('Предупреждение', 'Форма невалидна')
+  
+    if (this.signInForm.invalid) {
+      if (this.signInForm.controls['username'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Электронная почта" обязательно для заполнения');
+      }
+      if (this.signInForm.controls['password'].hasError('required')) {
+        this.toastService.showWarn('Ошибка', 'Поле "Пароль" обязательно для заполнения');
+      }
+      if (this.signInForm.controls['password'].hasError('minlength')) {
+        this.toastService.showWarn('Ошибка', 'Пароль должен содержать не менее 6 символов');
+      }
+      return;
     }
+  
+    this.progressSpinnerService.show();
+    const formData = this.signInForm.value;
+    const Data = {
+      userName: formData.username,
+      password: formData.password,
+      email: ""
+    };
+  
+    this.AuthorizationService.signIn(Data).subscribe(
+      (response) => {
+        if (response.data.data) {
+          this.tokenService.setToken(response.data.data.token);
+          this.progressSpinnerService.hide();
+          localStorage.setItem('VXNlcklk', response.data.data.id);
+          this.currentUserService.saveUser(response.data.data);
+          this.router.navigate([`/${response.data.data.id}`]);
+          this.navMenuService.setNotifications(response.notifyData);
+          this.toastService.showSuccess('Успешно', 'Вы вошли в систему');
+        }
+      },
+      (error) => {
+        this.progressSpinnerService.hide();
+        const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
+        this.toastService.showError('Ошибка входа', errorMessage);
+      }
+    );
   }
+  
 
 
   handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
       this.onSignIn();
     }
+  }
+
+  @Output() switch = new EventEmitter<string>();
+
+  goToRegister() {
+    this.switch.emit('register');
+  }
+
+  goToForgotPassword() {
+    this.switch.emit('forgot');
   }
 
 }

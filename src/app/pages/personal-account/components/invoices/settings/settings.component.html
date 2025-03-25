@@ -1,0 +1,23 @@
+<div class="settings-container">
+    <!-- Кнопка "Дополнительные настройки" -->
+    <div class="settings-toggle" (click)="toggleSettings()">
+        <span>Дополнительные настройки</span>
+        <i class="pi" [ngClass]="{'pi-chevron-down': !showSettings, 'pi-chevron-up': showSettings}"></i>
+    </div>
+
+    <!-- Блок настроек с анимацией -->
+    <div class="settings-panel" *ngIf="showSettings" [@slideToggle]>
+        <label>Выберите столбцы для отображения:</label>
+        <p-multiselect 
+        [options]="columns" 
+        [(ngModel)]="selectedColumns" 
+        optionLabel="header" 
+        optionValue="field"
+        placeholder="Выбрать колонки" 
+        (onChange)="onColumnsChange($event)" 
+        selectedItemsLabel="{0} выбрано"
+        appendTo="body">
+    </p-multiselect>
+    
+    </div>
+</div>

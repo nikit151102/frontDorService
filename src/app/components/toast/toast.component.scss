@@ -1,0 +1,109 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-15px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(-10px) scale(0.95);
+    }
+}
+
+.toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+}
+
+.toast {
+    display: flex;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.8);
+    color: #444;
+    padding: 14px 20px;
+    border-radius: 10px;
+    min-width: 240px;
+    max-width: 340px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(8px);
+    transition: all 0.3s ease-in-out;
+    opacity: 0.95;
+    animation: fadeIn 0.5s ease-out;
+    border-left: 6px solid;
+}
+
+/* Пастельные цвета для разных типов уведомлений */
+.toast.success {
+    background: rgba(212, 237, 218, 0.85);
+    border-color: #79c589;
+    color: #2d6331;
+}
+
+.toast.error {
+    background: rgba(248, 215, 218, 0.85);
+    border-color: #e57373;
+    color: #7b1f1f;
+}
+
+.toast.info {
+    background: rgba(209, 231, 242, 0.85);
+    border-color: #5aa6c8;
+    color: #1d5465;
+}
+
+.toast.warning {
+    background: rgba(255, 243, 205, 0.85);
+    border-color: #e0a800;
+    color: #7b5800;
+}
+
+.toast-content {
+    flex-grow: 1;
+}
+
+.toast-content strong {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.toast p {
+    font-size: 14px;
+    margin: 0;
+    opacity: 0.85;
+}
+
+.toast button {
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 20px;
+    margin-left: auto;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+
+.toast button:hover {
+    color: #444;
+}
+
+/* Анимация исчезновения */
+.toast.fade-out {
+    animation: fadeOut 0.5s ease-in forwards;
+}

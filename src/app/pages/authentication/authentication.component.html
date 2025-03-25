@@ -1,3 +1,7 @@
 <div class="content">
-  <app-form-authorization (visibleBtns)="onVisibleBtnsChange($event)"></app-form-authorization>
+  <div class="container">
+    <app-form-authorization *ngIf="currentView === 'login'" (switch)="switchView($event)"></app-form-authorization>
+    <app-form-registration *ngIf="currentView === 'register'" (switch)="switchView($event)"></app-form-registration>
+    <app-form-recovery *ngIf="currentView === 'forgot'" (switch)="switchView($event)"></app-form-recovery>
+  </div>
 </div>

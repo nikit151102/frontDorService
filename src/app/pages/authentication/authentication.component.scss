@@ -68,8 +68,8 @@ button.ghost {
 	box-shadow: 4px 5px 18px 0px rgba(34, 60, 80, 0.09);
 	position: relative;
 	overflow: hidden;
-	width: 768px;
-	max-width: 100%;
+    width: 100%;
+    max-width: 400px;
 	min-height: 500px;
 
 	@media (max-width: 768px) {

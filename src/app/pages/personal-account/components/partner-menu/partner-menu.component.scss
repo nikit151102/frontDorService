@@ -1,0 +1,316 @@
+/* Стиль для списка контрагентов */
+.counterparties-list {
+    width: 270px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+}
+
+.add-button {
+    background-color: #5c6bc0;
+    color: white;
+    border: none;
+    padding: 12px 20px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.add-button:hover {
+    background-color: #3f4e9f;
+}
+
+.settings{
+    display: flex;
+    flex-direction: column;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+    overflow-y: scroll;
+    height: calc(100vh - 290px);
+    overflow-x: hidden;
+    direction: rtl;
+}
+
+ul::-webkit-scrollbar {
+    width: 12px;
+    /* ширина scrollbar */
+}
+
+ul::-webkit-scrollbar-track {
+    background: rgb(240, 240, 240);
+    /* цвет дорожки */
+}
+
+ul::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 252);
+    /* цвет плашки */
+    border-radius: 20px;
+    /* закругления плашки */
+    border: 3px solid rgb(255, 255, 255);
+    /* padding вокруг плашки */
+}
+
+li {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px;
+    background-color: #ffffff;
+    color: #101010;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+li:hover {
+    transform: translateX(5px);
+}
+
+li span.active {
+    font-weight: bold;
+    color: #5c6bc0;
+}
+
+/* Убираем возможность клика по элементам, если он неактивен */
+li.disabled {
+    pointer-events: none;
+    background-color: #f0f0f0;
+    /* Добавляем легкую серую заливку для блокировки */
+    opacity: 0.6;
+    /* Уменьшаем прозрачность */
+}
+
+.counterparty-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.actions {
+    position: relative;
+}
+
+.gear-btn {
+    background: transparent;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    transition: color 0.3s;
+}
+
+.gear-btn:hover {
+    color: #5c6bc0;
+}
+
+/* Стиль меню */
+.menu {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: #ffffff;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    padding: 5px;
+    width: 150px;
+}
+
+.menu-item {
+    background: #f9f9f9;
+    color: #101010;
+    border: none;
+    padding: 8px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.menu-item:hover {
+    background-color: #e0e0e0;
+}
+
+/* Стиль для тега статуса */
+.status-tag {
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.status-tag-text {
+    display: inline-block;
+    padding: 4px 10px;
+    border-radius: 10px;
+    font-weight: 600;
+    color: #fff;
+    text-transform: capitalize;
+}
+
+.status-tag {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 12px;
+    font-weight: bold;
+    font-size: 0.9rem;
+    text-align: center;
+    transition: background-color 0.3s, color 0.3s;
+    margin-right: 8px;
+    padding-left: 0;
+}
+
+/* Статус "Новый" */
+.status-not-checked {
+    background-color: rgba(255, 193, 7, 0.1);
+    /* Полупрозрачный желтый */
+    color: #ffc107;
+}
+
+/* Статус "Измененный" */
+.status-sent-for-check {
+    background-color: rgba(33, 150, 243, 0.1);
+    /* Полупрозрачный синий */
+    color: #2196f3;
+}
+
+/* Статус "Подтвержден" */
+.status-approved {
+    background-color: rgba(76, 175, 80, 0.1);
+    /* Полупрозрачный зеленый */
+    color: #4caf50;
+}
+
+/* Статус "Отклонено" */
+.status-rejected {
+    background-color: rgba(244, 67, 54, 0.1);
+    /* Полупрозрачный красный */
+    color: #f44336;
+}
+
+/* Статус "Удалено" */
+.status-deleted {
+    background-color: rgba(158, 158, 158, 0.1);
+    /* Полупрозрачный серый */
+    color: #9e9e9e;
+}
+
+/* Статус "Отклонено" */
+.status-new-rejected {
+    background-color: rgba(244, 67, 54, 0.1);
+    /* Полупрозрачный красный */
+    color: #f44336;
+}
+
+.status-new-rej {
+    background-color: rgba(244, 67, 54, 0.1);
+    /* Полупрозрачный красный */
+    color: #f44336;
+}
+
+/* Статус "Подтвержден" */
+.status-update-rejected {
+    background-color: rgba(76, 175, 80, 0.1);
+    /* Полупрозрачный зеленый */
+    color: #4caf50;
+}
+
+.status-active{
+    background-color: rgba(76, 175, 80, 0.1);
+    /* Полупрозрачный зеленый */
+    color: #4caf50;
+}
+
+
+
+/* Дополнительные стили для оформления */
+.p-dialog .p-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.p-dialog .p-header {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.p-dialog .p-fluid {
+    padding: 20px;
+}
+
+.p-dialog .p-field {
+    margin-bottom: 16px;
+}
+
+.p-dialog .p-field label {
+    font-weight: 600;
+    color: #333;
+}
+
+.p-inputtext {
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    width: 100%;
+    margin-top: 6px;
+    transition: border-color 0.3s;
+    color: #101010;
+    background: #fff;
+}
+
+.p-inputtext:focus {
+    border-color: #5c6bc0;
+}
+
+.p-dropdown {
+    width: 100%;
+    font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.p-dropdown:focus {
+    border-color: #5c6bc0;
+}
+
+.p-button {
+    border-radius: 5px;
+    background-color: #5c6bc0;
+    color: white;
+}
+
+.p-button:focus,
+.p-button:active {
+    background-color: #3f4e9f;
+}
+
+.p-button:hover {
+    background-color: #3f4e9f;
+}
+
+:host ::ng-deep .p-dialog {
+    color: #101010 !important;
+    background: #fff !important;
+}
+
+
+.p-inputtext:disabled {
+    opacity: 1;
+    background: #f2f2f2;
+    color: #101010;
+
+}

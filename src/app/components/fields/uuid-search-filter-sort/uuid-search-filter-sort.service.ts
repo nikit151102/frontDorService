@@ -12,7 +12,7 @@ export class UuidSearchFilterSortService {
 
   getProductsByEndpoint(endpoint: string): Observable<any[]> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any[]>(`${environment.apiUrl}${endpoint}`, {
+    return this.http.post<any[]>(`${environment.apiUrl}${endpoint}`, {filters: [], sorts: []}, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`

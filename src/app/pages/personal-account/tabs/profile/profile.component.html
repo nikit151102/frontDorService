@@ -1,0 +1,36 @@
+<div class="profile-container" >
+    <h2 class="profile-title">Профиль пользователя</h2>
+  
+    <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="profile-form">
+      <div class="input-group">
+        <label>Имя</label>
+        <input formControlName="firstName" type="text" placeholder="Введите имя">
+      </div>
+  
+      <div class="input-group">
+        <label>Фамилия</label>
+        <input formControlName="lastName" type="text" placeholder="Введите фамилию">
+      </div>
+  
+      <div class="input-group">
+        <label>Отчество</label>
+        <input formControlName="patronymic" type="text" placeholder="Введите отчество">
+      </div>
+  
+      <div class="input-group">
+        <label>Email</label>
+        <input formControlName="email" type="email" placeholder="example@mail.com">
+      </div>
+  
+      <button type="submit" class="save-button">Сохранить</button>
+    </form>
+  </div>
+  
+  <!-- Лоадер -->
+  <!-- <div class="loader" *ngIf="loading"></div>
+  
+  Ошибка
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div> -->
+  

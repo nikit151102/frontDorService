@@ -1,0 +1,8 @@
+<div class="custom-input-number" [class.disabled]="disabled">
+    <input 
+    type="text" 
+    [value]="value" 
+    (input)="handleInput($event)" 
+    (keypress)="preventNonNumeric($event)" 
+    [disabled]="disabled" />
+</div>

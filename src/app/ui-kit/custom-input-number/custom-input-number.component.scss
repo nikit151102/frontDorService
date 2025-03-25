@@ -1,0 +1,43 @@
+.custom-input-number {
+    display: flex;
+    align-items: center;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  
+    input {
+      width: 100%;
+      padding: 0.5rem;
+      border: none;
+      outline: none;
+      text-align: center;
+      font-size: 16px;
+      background-color: #fff;
+      color: #333;
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+  
+      &:disabled {
+        background-color: #f5f5f5;
+        cursor: not-allowed;
+        color: #aaa;
+      }
+  
+      &:focus {
+        background-color: #f7f7f7;
+        border-color: #9c9c9c;
+      }
+    }
+  
+    &.disabled {
+      opacity: 0.6;
+      pointer-events: none;
+    }
+  
+    // Стиль для ховера
+    &:hover input:not(:disabled) {
+      border-color: #aaa;
+      background-color: #f7f7f7;
+    }
+  }
+  

@@ -6,6 +6,7 @@ import { provideRouter } from '@angular/router';
 import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
+import { GlobalErrorHandlerService } from './error-handler.service';
 export const appConfig: ApplicationConfig = {
   providers: [
     importProvidersFrom([BrowserAnimationsModule, HttpClientModule]),
@@ -16,7 +17,11 @@ export const appConfig: ApplicationConfig = {
             theme: {
                 preset: Aura
             }
-        })
+        }),
+        {
+          provide: ErrorHandler,
+          useClass: GlobalErrorHandlerService,
+        },
   ],
 };
 

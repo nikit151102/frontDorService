@@ -50,6 +50,7 @@ input:focus {
     color: #007bff;
 }
 
+
 /* Выпадающий список фильтров */
 .filter-dropdown {
     position: absolute;
@@ -85,10 +86,10 @@ input:focus {
 
 /* Кнопка сортировки */
 .sort-btn {
-    background: white;
-    border: 1px solid #ddd;
+    background: transparent;
+    border: none;
     border-radius: 6px;
-    padding: 8px;
+    padding: 4px;
     font-size: 16px;
     cursor: pointer;
     color: #666;
@@ -97,9 +98,8 @@ input:focus {
 }
 
 .sort-btn:hover {
-    background: #007bff;
+    background: #007bff36;
     color: white;
-    border-color: #007bff;
 }
 
 .btn-reset {
@@ -124,3 +124,31 @@ input:focus {
     margin-top: 10px;
 
 }
+
+
+
+
+
+.input-container {
+    position: relative;
+    width: 100%;
+  }
+  
+  .input-container svg {
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  
+  .input-container input {
+    padding-left: 30px; /* Место для иконки */
+  }
+  
+
+input{
+    color: #101010;
+}
+
+
+
