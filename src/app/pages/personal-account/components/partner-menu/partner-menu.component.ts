@@ -13,6 +13,7 @@ import { ButtonConfig } from './button-config';
 import { JwtService } from '../../../../services/jwt.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 import { ToastService } from '../../../../services/toast.service';
+import { Router } from '@angular/router';
 
 interface Counterparty {
   id: number;
@@ -60,7 +61,8 @@ export class PartnerMenuComponent {
     private confirmPopupService: ConfirmPopupService,
     private partnerStatusService: PartnerStatusService,
     private jwtService: JwtService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -251,6 +253,10 @@ export class PartnerMenuComponent {
         }
       );
     } else {
+      const currentUrl = this.router.url;
+
+    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+    formDataWithValueType.type = typeValue;
       this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
         (newCounterparty) => {
           this.counterparties.push(newCounterparty);
