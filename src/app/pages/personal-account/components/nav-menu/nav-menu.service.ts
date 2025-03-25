@@ -28,6 +28,7 @@ export class NavMenuService {
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
+      this.socket.send(JSON.stringify({ action: "GetInitialData" }));
     };
 
     this.socket.onmessage = (event) => {
