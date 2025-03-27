@@ -424,13 +424,26 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
-          productList: this.selectedInvoice.productList.map((product:any) => ({
-            ...product,
-            formattedAmount: product.amount ? parseFloat(product.amount.toString().replace(',', '.')) : 0,
-            formattedSumAmount: product.sumAmount ? parseFloat(product.sumAmount.toString().replace(',', '.')) : 0
-          }))
+          productList: this.selectedInvoice.productList.map((product: any) => {
+            const updatedProduct: any = {
+              ...product,
+              formattedAmount: product.amount ? parseFloat(product.amount.toString().replace(',', '.')) : 0,
+              formattedSumAmount: product.sumAmount ? parseFloat(product.sumAmount.toString().replace(',', '.')) : 0
+            };
+        
+            if (product.measurementUnitId === "") {
+              delete updatedProduct.measurementUnitId;
+            }
+
+            if (product.productTargetId === "") {
+              delete updatedProduct.productTargetId;
+            }
+        
+            return updatedProduct;
+          })
         };
 
+        
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
