@@ -21,8 +21,8 @@ export class CustomInputNumberComponent implements ControlValueAccessor {
   @Output() valueChange = new EventEmitter<number>();
 
   value: number = 0;
-  onTouched: () => void = () => {};
-  onChange: (value: number) => void = () => {};
+  onTouched: () => void = () => { };
+  onChange: (value: number) => void = () => { };
 
   writeValue(value: number): void {
     this.value = value || 0;
@@ -40,21 +40,43 @@ export class CustomInputNumberComponent implements ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+
   handleInput(event: any) {
-    let newValue = event.target.value.replace(/\D/g, ''); // Удаляет все нечисловые символы
-    newValue = newValue ? parseInt(newValue, 10) : 0;
-
-    if (newValue < this.min) newValue = this.min;
-    if (newValue > this.max) newValue = this.max;
-
-    this.value = newValue;
+    let newValue = event.target.value;
+    if (newValue === ',' || newValue === '.') {
+      newValue = '0,';
+    }
+    newValue = newValue.replace('.', ',');
+    newValue = newValue.replace(/[^0-9,]/g, '');
+    const commaCount = newValue.split(',').length - 1;
+    if (commaCount > 1) {
+      newValue = newValue.substring(0, newValue.indexOf(',') + newValue.substring(newValue.indexOf(',')).replace(/,/g, '').length);
+    }
+    let numericValue = newValue ? parseFloat(newValue.replace(',', '.')) : 0;
+    numericValue = Math.max(this.min, Math.min(this.max, numericValue));
+    this.value = numericValue;
     this.onChange(this.value);
     this.valueChange.emit(this.value);
   }
 
+
   preventNonNumeric(event: KeyboardEvent) {
-    if (!/[0-9]/.test(event.key) && event.key !== 'Backspace') {
+    const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'];
+
+    if (!/[0-9.,]/.test(event.key) && !allowedKeys.includes(event.key)) {
       event.preventDefault();
     }
+
+    const inputElement = event.target as HTMLInputElement;
+
+    if ((event.key === ',' || event.key === '.') && inputElement) {
+      if (inputElement.value.indexOf(',') !== -1) {
+        event.preventDefault();
+      }
+    }
+  }
+
+  getFormattedValue(): string {
+    return new Intl.NumberFormat('ru-RU').format(this.value);
   }
 }

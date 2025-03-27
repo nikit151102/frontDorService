@@ -1,7 +1,7 @@
 <div class="custom-input-number" [class.disabled]="disabled">
     <input 
     type="text" 
-    [value]="value" 
+    [value]="getFormattedValue()"
     (input)="handleInput($event)" 
     (keypress)="preventNonNumeric($event)" 
     [disabled]="disabled" />
