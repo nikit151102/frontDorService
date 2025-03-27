@@ -24,7 +24,7 @@
                 flex-direction: column;
                 align-items: flex-end;
             ">
-          <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
+          <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName }}</span>
           <div class="status-tag">
             <span [ngClass]="{
                 'status-not-checked': counterparty.editStatus === 1,
