@@ -146,7 +146,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (!this.invoicesService.totalInfo) return null;
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
-    return column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
+    const value = column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
+
+    return typeof value === 'number' ? value.toString().replace('.', ',') : value;
   }
 
   statuses = [
@@ -194,8 +196,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
   loadInvoices() {
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
-         this.invoices = response.documentMetadata.data; // Assuming response is the invoice array
-        this.invoicesService.setActiveData(response.documentMetadata.data);
+        this.invoices = response.documentMetadata.data.map((invoice:any) => ({
+          ...invoice,
+          expenseSum: invoice.expenseSum.toString().replace('.', ','),
+          incomeSum: invoice.incomeSum.toString().replace('.', ',')
+        }));
+        this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
       },
       (error) => {

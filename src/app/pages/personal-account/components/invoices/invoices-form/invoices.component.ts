@@ -526,7 +526,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       let totalAmount = this.selectedInvoice.productList.reduce((sum: number, product: any) => {
         return sum + (product.quantity * product.amount);
       }, 0);
-      return totalAmount
+  
+      return totalAmount.toFixed(3).replace('.', ',');
     } else {
 
       return 0;
