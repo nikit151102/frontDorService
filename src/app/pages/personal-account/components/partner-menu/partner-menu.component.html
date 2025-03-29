@@ -17,7 +17,7 @@
     </li>
 
     <li *ngFor="let counterparty of counterparties"
-      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty.shortName)"
+      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty)"
       [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
       <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
         <div style="       display: flex;

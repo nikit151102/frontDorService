@@ -343,15 +343,19 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.selectedInvoice.productList = [];
     }
 
+    const defaultUnit = this.measurementUnits.find(unit => unit.name === 'Штуки')?.id || '';
+
+
     this.selectedInvoice.productList.push({
       name: '',
       quantity: 0,
       amount: 0,
       sumAmount: 0,
-      measurementUnitId: '',
+      measurementUnitId: defaultUnit,
       productTargetId: '',
       date: new Date().toISOString()
     });
+
   }
 
 

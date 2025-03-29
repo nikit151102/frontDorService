@@ -43,7 +43,7 @@ import { ToastService } from '../../../../services/toast.service';
 })
 export class InvoicesComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
-  @Input() counterpartyName!: any;
+  @Input() counterpartyData!: any;
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
@@ -58,6 +58,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.loadInvoices();
+      console.log('counterpartyData', this.counterpartyData)
     }
 
     if (changes['buttonConfigs']) {
@@ -201,6 +202,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
           expenseSum: invoice.expenseSum.toString().replace('.', ','),
           incomeSum: invoice.incomeSum.toString().replace('.', ',')
         }));
+        console.log('invoices',this.invoices)
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
       },

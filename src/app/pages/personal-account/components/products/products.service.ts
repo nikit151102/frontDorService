@@ -137,8 +137,13 @@ export class ProductsService {
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(
       (data) => {
-        this.products = data.documentMetadata.data;
+        this.products = data.documentMetadata.data.map((invoice:any) => ({
+          ...invoice,
+          amount: invoice.amount.toString().replace('.', ','),
+        }));
         this.totalInfo = data.totalInfo;
+        console.log('data',data)
+        console.log('products',this.products)
       },
       (error) => {
         console.error('Ошибка загрузки товаров:', error);

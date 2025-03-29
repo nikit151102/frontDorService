@@ -67,7 +67,9 @@ export class ProductsComponent implements OnChanges, OnInit {
     if (!this.productsService.totalInfo) return null;
 
     const column = this.totalInfoColumn.find((col:any) => col.columnNum === columnIndex);
-    return column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
+    const value = column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
+
+    return typeof value === 'number' ? value.toString().replace('.', ',') : value;
   }
 
   statuses = [

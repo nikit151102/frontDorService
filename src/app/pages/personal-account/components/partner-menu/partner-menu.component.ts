@@ -35,7 +35,7 @@ interface TypeOption {
   styleUrl: './partner-menu.component.scss'
 })
 export class PartnerMenuComponent {
-  @Output() selectCounterparty = new EventEmitter<{ id: any, name: any }>();
+  @Output() selectCounterparty = new EventEmitter<any>();
   @Input() typeCode: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>
   @Input() title: string = 'контрагента'
@@ -94,7 +94,7 @@ export class PartnerMenuComponent {
         this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
       } else if (button.isEditData == false || button.isEditData == true) {
         this.isEdit = button.isEditData;
-        console.log('button.isEditData', this.isEdit)
+        // console.log('button.isEditData', this.isEdit)
         this[button.action](event, product);
 
       } else {
@@ -162,9 +162,10 @@ export class PartnerMenuComponent {
     });
   }
 
-  select(id: any, name: string) {
+  select(id: any, data:any) {
     this.selectedId = id;
-    this.selectCounterparty.emit({ id: id, name: name });
+    this.selectCounterparty.emit({id: id, data: data});
+    console.log('id',id)
   }
 
   isEdit: boolean = true;
@@ -322,8 +323,8 @@ export class PartnerMenuComponent {
   }
 
   getStatusLabel(status: number): string {
-    console.log('status', status)
-    console.log('this.partnerStatusService.getStatusLabel(status)', this.partnerStatusService.getStatusLabel(status))
+    // console.log('status', status)
+    // console.log('this.partnerStatusService.getStatusLabel(status)', this.partnerStatusService.getStatusLabel(status))
     return this.partnerStatusService.getStatusLabel(status);
   }
 
