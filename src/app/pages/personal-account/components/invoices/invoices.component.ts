@@ -43,7 +43,7 @@ import { ToastService } from '../../../../services/toast.service';
 })
 export class InvoicesComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
-  @Input() counterpartyData!: any;
+  @Input() counterpartyData: any = {};
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;

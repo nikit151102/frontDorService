@@ -221,6 +221,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.adjustmentType = null;
       this.selectedInvoice.productList.forEach((product: any) => {
         product.amount = Math.abs(product.amount);
+        product.sumAmount = Math.abs(product.sumAmount);
       });
       this.selectedInvoice.type = 1;
     }
@@ -232,8 +233,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
         if (this.type === 0) {
           product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : -1);
+          product.sumAmount = -Math.abs(product.sumAmount);
         } else {
           product.amount = Math.abs(product.amount);
+          product.sumAmount = Math.abs(product.sumAmount);
         }
       });
 
@@ -367,15 +370,40 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   onQuantityOrAmountChange(product: any) {
     if (product.quantity != null && product.amount != null) {
-      product.sumAmount = product.quantity * product.amount;
-    }
-  }
+        product.sumAmount = product.quantity * product.amount;
 
-  onQuantityOrSumAmountChange(product: any) {
-    if (product.quantity != null && product.sumAmount != null) {
-      product.amount = product.sumAmount / product.quantity; 
+        if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
+            product.sumAmount = -Math.abs(product.sumAmount);
+        }
+
+        if (this.type === 0) {
+            product.sumAmount = -Math.abs(product.sumAmount);
+            product.amount = -Math.abs(product.amount);
+        }
     }
-  }
+}
+
+
+onQuantityOrSumAmountChange(product: any) {
+    if (product.quantity != null && product.sumAmount != null) {
+        if (product.quantity !== 0) {
+            product.amount = product.sumAmount / product.quantity;
+
+            if ((product.sumAmount < 0 && product.quantity > 0) || (product.sumAmount > 0 && product.quantity < 0)) {
+                product.amount = -Math.abs(product.amount);
+            }
+
+            if (this.type === 0) {
+              product.sumAmount = -Math.abs(product.sumAmount);
+              product.amount = -Math.abs(product.amount);
+          }
+
+        } else {
+            product.amount = 0;
+        }
+    }
+}
+
 
 
   onValueChange(changedField: 'quantity' | 'amount' | 'sumAmount', index: number) {

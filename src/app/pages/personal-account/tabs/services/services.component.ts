@@ -14,9 +14,9 @@ export class ServicesComponent {
   selectedCounterpartyId: number | null = null;
   selectedCounterpartyName: any;
 
-  onSelectCounterparty(data:{id: number, name: string}) {
+  onSelectCounterparty(data:{id: number, data: string}) {
     this.selectedCounterpartyId = data.id;
-    this.selectedCounterpartyName = data.name;
+    this.selectedCounterpartyName = data.data;
   }
 
   getBUTTON_SETS() {
