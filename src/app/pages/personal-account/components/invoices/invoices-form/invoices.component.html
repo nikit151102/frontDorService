@@ -5,7 +5,8 @@
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
     <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true"
-        [header]="'Редактирование фактуры (' + counterpartyName + ')'" (onHide)="onDialogClose()">
+        [header]="'Редактирование фактуры (' + selectedInvoice.partner.shortName + ' - ' + selectedInvoice.partner.fullName + ')'"
+        (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <div style="display: flex; gap: 15px;">
@@ -58,12 +59,12 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="p-field p-col-12">
                     <label for="comment">Комментарий</label>
                     <textarea id="comment" [(ngModel)]="selectedInvoice.comment"></textarea>
                 </div>
-              
+
 
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
