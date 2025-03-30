@@ -75,7 +75,7 @@ export class InvoicesService {
   updateOrAddItem(newItem: any) {
     const currentData = this.getActiveData();
   
-    if (Array.isArray(currentData)) {
+    if (Array.isArray(currentData) && newItem.id) {
       const index = currentData.findIndex(item => item.id === newItem.id);
   
       if (index !== -1) {

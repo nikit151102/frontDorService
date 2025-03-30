@@ -31,15 +31,16 @@ export class NavMenuService {
       this.socket.send(JSON.stringify({ action: "GetInitialData" }));
     };
 
-    this.socket.onmessage = (event) => {
+    this.socket.onmessage = (event) => {    
       try {
         const data = JSON.parse(event.data);
         this.notificationsSubject.next(data);
         console.log("web-socket works:", data);
-      } catch (e) {
-        console.error('Error parsing WebSocket message:', e);
+      } catch {
+        console.warn("Received non-JSON message:", event.data);
       }
     };
+    
 
     this.socket.onerror = (error) => {
       console.error('WebSocket error:', error);
