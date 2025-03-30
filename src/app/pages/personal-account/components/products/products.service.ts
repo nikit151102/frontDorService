@@ -139,7 +139,7 @@ export class ProductsService {
       (data) => {
         this.products = data.documentMetadata.data.map((invoice:any) => ({
           ...invoice,
-          amount: invoice.amount.toString().replace('.', ','),
+          sumAmount: invoice.sumAmount.toString().replace('.', ','),
         }));
         this.totalInfo = data.totalInfo;
         console.log('data',data)
