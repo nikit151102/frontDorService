@@ -459,8 +459,8 @@ onQuantityOrSumAmountChange(product: any) {
           productList: this.selectedInvoice.productList.map((product: any) => {
             const updatedProduct: any = {
               ...product,
-              formattedAmount: product.amount ? parseFloat(product.amount.toString().replace(',', '.')) : 0,
-              formattedSumAmount: product.sumAmount ? parseFloat(product.sumAmount.toString().replace(',', '.')) : 0
+              amount: product.amount ? parseFloat(product.amount.toString().replace(',', '.')) : 0,
+              sumAmount: product.sumAmount ? parseFloat(product.sumAmount.toString().replace(',', '.')) : 0
             };
         
             if (product.measurementUnitId === "") {
