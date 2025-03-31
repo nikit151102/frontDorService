@@ -74,10 +74,10 @@ export class InvoicesService {
 
   updateOrAddItem(newItem: any) {
     const currentData = this.getActiveData();
-  
+
     if (Array.isArray(currentData) && newItem.id) {
       const index = currentData.findIndex(item => item.id === newItem.id);
-  
+
       if (index !== -1) {
         // Если объект найден, обновляем его
         currentData[index] = { ...currentData[index], ...newItem };
@@ -85,12 +85,12 @@ export class InvoicesService {
         // Если объект не найден, добавляем в начало
         currentData.unshift(newItem);
       }
-  
+
       this.dataSubject.next([...currentData]);
     }
   }
 
-  
+
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -100,6 +100,15 @@ export class InvoicesService {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     }
 
+    if (!this.queryData.sorts) {
+      this.queryData.sorts = [];
+    }
+
+    const exists = this.queryData.sorts.some((sort) => sort.field === 'dateTime');
+
+    if (!exists) {
+      this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
+    }
 
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({

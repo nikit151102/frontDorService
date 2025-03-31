@@ -70,6 +70,17 @@ export class ProductsService {
       this.queryData.filters.push(defaultFilter);
     }
 
+    if (!this.queryData.sorts) {
+      this.queryData.sorts = [];
+    }
+
+    const exists = this.queryData.sorts.some((sort) => sort.field === 'DocInvoice.DateTime');
+
+    if (!exists) {
+      this.queryData.sorts.push({ field: 'DocInvoice.DateTime', sortType: 0 });
+    }
+
+
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
