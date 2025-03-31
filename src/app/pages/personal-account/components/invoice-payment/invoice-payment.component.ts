@@ -4,6 +4,7 @@ import { InvoicePaymentService } from './invoice-payment.service';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InvoicesService } from '../invoices/invoices.service';
 
 @Component({
   selector: 'app-invoice-payment',
@@ -26,7 +27,8 @@ export class InvoicePaymentComponent implements OnInit {
 
   constructor(
     private cdr: ChangeDetectorRef,
-    public invoicePaymentService: InvoicePaymentService
+    public invoicePaymentService: InvoicePaymentService,
+    private invoicesService: InvoicesService
   ) { }
 
   ngOnInit() {
@@ -57,7 +59,10 @@ export class InvoicePaymentComponent implements OnInit {
     };
 
     this.invoicePaymentService.setPayment(data).subscribe(
-      () => this.invoicePaymentService.visibleModal(false),
+      (data:any) => {
+        this.invoicePaymentService.visibleModal(false)
+        this.invoicesService.addItemToStart(data.documentMetadata.data)
+      },
       (error) => console.error('Ошибка при оплате:', error)
     );
   }
