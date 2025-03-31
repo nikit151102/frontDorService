@@ -1,16 +1,27 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName" [counterpartyId]="counterpartyId"
-    [isEditInvoice]="isEditInvoice"></app-invoices-form>
+<div style=" display: flex; gap: 10px;">
+    <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
+    [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
+
+<button (click)="openPaymentModal()" *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'" style="    padding: 8px;
+background: #34d399;
+border: none;
+color: #101010;
+border-radius: 7px;">Оплатить</button>
+</div>
+
+
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
 
-<!-- <app-settings 
+    <!-- <app-settings 
   [columns]="columns" 
   [selectedColumns]="selectedColumns" 
   (selectedColumnsChange)="updateSelectedColumns($event)">
 </app-settings> -->
 
-<h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData" >    {{counterpartyData?.shortName}} <span *ngIf="counterpartyData.fullName">-</span> {{counterpartyData?.fullName}}</h2>
+    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData"> {{counterpartyData?.shortName}} <span
+            *ngIf="counterpartyData.fullName">-</span> {{counterpartyData?.fullName}}</h2>
 </div>
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
@@ -57,11 +68,11 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) "
-        >
+        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) ">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"  (dblclick)="isEditInvoice = false; getInvoiceById(product)"
-                (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
+                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+                    (dblclick)="isEditInvoice = false; getInvoiceById(product)"
+                    (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
                     <ng-container *ngIf="col.field === 'dateTime'; else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
@@ -115,19 +126,16 @@
 
 
 <!-- Контекстное меню -->
-<div *ngIf="contextMenuVisible" 
-     class="context-menu" 
-     [style.top.px]="contextMenuY" 
-     [style.left.px]="contextMenuX">
-     
+<div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
+
     <ng-container *ngFor="let button of getButtonSet()">
-        <button class="btn btn-details"
-            *ngIf="button.condition ? button.condition(selectedProduct) : true"
-            [ngClass]="button.class" 
-            (click)="handleButtonClick(button, selectedProduct)"
-            [title]="button.titlePopUp">
+        <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct) : true"
+            [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
             {{ button.label }}
         </button>
     </ng-container>
 </div>
 
+
+
+<app-invoice-payment [counterpartyId]="counterpartyId"></app-invoice-payment>

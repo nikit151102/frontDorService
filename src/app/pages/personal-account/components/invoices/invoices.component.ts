@@ -20,6 +20,8 @@ import { JwtService } from '../../../../services/jwt.service';
 import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
 import { SettingsComponent } from './settings/settings.component';
 import { ToastService } from '../../../../services/toast.service';
+import { InvoicePaymentComponent } from '../invoice-payment/invoice-payment.component';
+import { InvoicePaymentService } from '../invoice-payment/invoice-payment.service';
 
 @Component({
   selector: 'app-invoices',
@@ -36,6 +38,7 @@ import { ToastService } from '../../../../services/toast.service';
     ButtonModule,
     MenuModule,
     InvoicesFormComponent,
+    InvoicePaymentComponent
     // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
@@ -75,14 +78,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
     // public productsService: ProductsService,
-    private toastService:ToastService,
+    private toastService: ToastService,
     public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
-    private jwtService: JwtService) { }
+    private jwtService: JwtService,
+    public invoicePaymentService: InvoicePaymentService) { }
 
   ngOnInit() {
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
-   
+
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
       this.cdRef.detectChanges();
@@ -110,14 +114,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
         return this.buttonConfigs['default'];
     }
   }
-  
+
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any) {
-    console.log('button.isEditDatabutton.isEditData',button.isEditData)
+    console.log('button.isEditDatabutton.isEditData', button.isEditData)
     if (button.action && typeof this[button.action] === 'function') {
-      if ((button.titlePopUp || button.messagePopUp || button.status !== undefined ) && button.isEditData != false && button.isEditData != true) {
+      if ((button.titlePopUp || button.messagePopUp || button.status !== undefined) && button.isEditData != false && button.isEditData != true) {
         this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);
-      } else  if(button.isEditData == false || button.isEditData == true) {
+      } else if (button.isEditData == false || button.isEditData == true) {
         this.isEditInvoice = button.isEditData
         this[button.action](product);
       } else {
@@ -131,6 +135,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
 
+  openPaymentModal() {
+    this.invoicePaymentService.selectInvoiceId = this.selectInvoiceId;
+    this.invoicePaymentService.selectInvoiceFullName = this.counterpartyData?.fullName;
+    this.invoicePaymentService.selectInvoiceShortName = this.counterpartyData?.shortName;
+    this.invoicePaymentService.visibleModal(true)
+  }
 
   updateColumnVisibility() {
     this.columns.forEach((col: any) => {
@@ -197,12 +207,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
   loadInvoices() {
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
-        this.invoices = response.documentMetadata.data.map((invoice:any) => ({
+        this.invoices = response.documentMetadata.data.map((invoice: any) => ({
           ...invoice,
           expenseSum: invoice.expenseSum.toString().replace('.', ','),
           incomeSum: invoice.incomeSum.toString().replace('.', ',')
         }));
-        console.log('invoices',this.invoices)
+        console.log('invoices', this.invoices)
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
       },
@@ -278,34 +288,34 @@ export class InvoicesComponent implements OnChanges, OnInit {
   contextMenuVisible = false;
   contextMenuX = 0;
   contextMenuY = 0;
-  
+
   onRightClick(event: MouseEvent, product: any) {
     event.preventDefault();
-  
+
     this.selectedProduct = product;
     this.contextMenuVisible = true;
-  
+
     let posX = event.pageX;
     let posY = event.pageY;
-  
-    const menuWidth = 200; 
-    const menuHeight = 150; 
+
+    const menuWidth = 200;
+    const menuHeight = 150;
     const screenWidth = window.innerWidth;
     const screenHeight = window.innerHeight;
-    const scrollY = window.scrollY; 
-  
+    const scrollY = window.scrollY;
+
     if (posX + menuWidth > screenWidth) {
       posX = screenWidth - menuWidth - 10;
     }
-  
+
     if (posY + menuHeight > screenHeight + scrollY) {
-      posY = event.pageY - menuHeight; 
+      posY = event.pageY - menuHeight;
     }
-  
+
     this.contextMenuX = posX;
     this.contextMenuY = posY;
   }
-  
+
 
   closeAllMenus() {
     this.contextMenuVisible = false;
@@ -315,7 +325,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-    
+
     if (!target.closest('.context-menu') && !target.closest('.dropdown')) {
       this.closeAllMenus();
     }
