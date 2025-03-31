@@ -81,6 +81,13 @@ export class ProductsService {
     }
 
 
+    const existsDocPaymentType = this.queryData.filters.some((sort) => sort.field === 'DocInvoice.DocPaymentType');
+
+    if (!existsDocPaymentType) {
+      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values:[0], type: 0 });
+    }
+
+
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
