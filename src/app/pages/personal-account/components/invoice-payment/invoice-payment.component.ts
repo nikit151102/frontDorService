@@ -61,7 +61,8 @@ export class InvoicePaymentComponent implements OnInit {
     this.invoicePaymentService.setPayment(data).subscribe(
       (data:any) => {
         this.invoicePaymentService.visibleModal(false)
-        this.invoicesService.addItemToStart(data.documentMetadata.data)
+        this.invoicesService.addItemToStart(data.documentMetadata.data);
+        this.invoicesService.totalInfo =  data.totalInfo;
       },
       (error) => console.error('Ошибка при оплате:', error)
     );
