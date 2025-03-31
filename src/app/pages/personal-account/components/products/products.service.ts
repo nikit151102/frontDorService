@@ -84,7 +84,7 @@ export class ProductsService {
     const existsDocPaymentType = this.queryData.filters.some((sort) => sort.field === 'DocInvoice.DocPaymentType');
 
     if (!existsDocPaymentType) {
-      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values:[0], type:  });
+      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values:[0], type: 1 });
     }
 
 
