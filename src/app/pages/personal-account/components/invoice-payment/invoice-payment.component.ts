@@ -49,6 +49,7 @@ export class InvoicePaymentComponent implements OnInit {
       dateTime: this.dateTime,
       type: 1,
       partnerId: this.counterpartyId,
+      docPaymentType: 1,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
         quantity: 1,
