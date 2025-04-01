@@ -103,8 +103,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
+      case '4':
+        return this.buttonConfigs['accountant'];
       case '2':
-
         return this.buttonConfigs['supplier'];
       case '3':
         return this.buttonConfigs['mechanic'];
@@ -169,7 +170,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
     { label: 'Отклонено Механик', value: 3, id: 3 },
     { label: 'Отклонено Директор', value: 4, id: 4 },
     { label: 'Подписано', value: 5, id: 5 },
-    { label: 'Удалено', value: 6, id: 6 }
+    { label: 'Удалено', value: 6, id: 6 },
+    { label: 'Проведено', value: 7, id: 7 }
   ];
 
 
@@ -186,6 +188,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       case 4: return 'status-rejected';
       case 5: return 'status-approved';
       case 6: return 'status-deleted';
+      case 7: return 'status-approved';
       default: return '';
     }
   }
