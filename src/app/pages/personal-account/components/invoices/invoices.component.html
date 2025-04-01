@@ -2,7 +2,7 @@
     <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
     [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
 
-<button (click)="openPaymentModal()" *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'" style="    padding: 8px;
+<button (click)="openPaymentModal()" *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 " style="    padding: 8px;
 background: #34d399;
 border: none;
 color: #fff;
