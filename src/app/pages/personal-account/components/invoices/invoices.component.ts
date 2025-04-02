@@ -188,7 +188,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       case 4: return 'status-rejected';
       case 5: return 'status-approved';
       case 6: return 'status-deleted';
-      case 7: return 'status-approved';
+      case 7: return 'status-completed';
       default: return '';
     }
   }

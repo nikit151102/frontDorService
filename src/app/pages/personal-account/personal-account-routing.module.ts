@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PersonalAccountComponent } from './personal-account.component';
+import { LoadingComponent } from './tabs/loading/loading.component';
 
 const routes: Routes = [
   {
     path: '', component: PersonalAccountComponent,
     children: [
-      { path: '', redirectTo: 'clients', pathMatch: 'full' }, 
+      { path: 'loading', component: LoadingComponent },
       {
         path: 'clients', loadChildren: () => import('./tabs/partners/partners.module').then(m => m.PartnersModule)
       },
