@@ -1,17 +1,17 @@
-import { CommonModule } from '@angular/common';
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
-import { BUTTON_SETS } from './button-config';
+import { BUTTON_SETS } from '../../partners/button-config';
+import { CommonModule } from '@angular/common';
+import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 
 @Component({
-  selector: 'app-invoices-content',
+  selector: 'app-nal-content',
   imports: [CommonModule, InvoicesComponent],
-  templateUrl: './invoices-content.component.html',
-  styleUrl: './invoices-content.component.scss'
+  templateUrl: './nal-content.component.html',
+  styleUrl: './nal-content.component.scss'
 })
-export class InvoicesContentComponent implements OnInit, OnChanges {
+export class NalContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
   @Input() counterpartyData!: any;
   @Input() notificationItem: any;
@@ -24,12 +24,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.invoicesService.defaultFilters = [{
       field: 'Partner.Type',
-      values: [0,1],
-      type: 1
-    },
-    {
-      field: 'Status',
-      values: [5],
+      values: [2],
       type: 1
     }]
 
