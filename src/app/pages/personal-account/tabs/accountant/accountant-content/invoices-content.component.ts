@@ -56,8 +56,8 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
-    { field: 'partnerName', header: 'Контрагент', type: 'date', visible: true, width: '20%' },
-    { field: 'creatorName', header: 'Создатель', type: 'date', visible: true, width: '20%' },
+    { field: 'partnerName', header: 'Контрагент', type: 'string', visible: true, width: '20%' },
+    { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' },
   ];
 
