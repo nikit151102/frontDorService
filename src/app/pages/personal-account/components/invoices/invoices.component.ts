@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, HostListener, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -38,19 +38,21 @@ import { InvoicePaymentService } from '../invoice-payment/invoice-payment.servic
     ButtonModule,
     MenuModule,
     InvoicesFormComponent,
-    InvoicePaymentComponent
+    InvoicePaymentComponent,
     // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss'
 })
 export class InvoicesComponent implements OnChanges, OnInit {
+  @Input() tableWidth: string = 'calc(100vw - 336px)'; 
   @Input() counterpartyId!: any;
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
+
 
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -82,9 +84,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
     private jwtService: JwtService,
-    public invoicePaymentService: InvoicePaymentService) { }
+    public invoicePaymentService: InvoicePaymentService, 
+    private el: ElementRef, private renderer: Renderer2) { }
 
   ngOnInit() {
+    this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
+  
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
 
     this.invoicesService.activData$.subscribe((data: any) => {
@@ -96,6 +101,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.loadInvoices();
   }
 
+  @HostBinding('style.--table-width') get cssVariable() {
+    return this.tableWidth;
+  }
+  
   updateSelectedColumns(columns: string[]) {
     this.selectedColumns = columns;
     this.updateColumnVisibility();
