@@ -66,5 +66,4 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { columnNum: 2, value: 'totalIncomeSum' },
   ]
 
-
 }
