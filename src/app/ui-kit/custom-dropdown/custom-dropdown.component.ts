@@ -33,9 +33,15 @@ export class CustomDropdownComponent {
   }
 
   get selectedLabel(): string {
-    const selectedOption = this.options.find(opt => opt[this.optionValue] === this.selected);
+    if (!this.options || !Array.isArray(this.options)) {
+      return 'Выберите';
+    }
+  
+    const selectedOption = this.options.find(opt => opt?.[this.optionValue] === this.selected);
     return selectedOption ? selectedOption[this.optionLabel] : 'Выберите';
   }
+  
+  
   
   @HostListener('document:click', ['$event'])
   handleOutsideClick(event: Event) {
