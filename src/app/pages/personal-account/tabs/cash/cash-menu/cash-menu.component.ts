@@ -12,9 +12,7 @@ export class CashMenuComponent implements OnInit {
 
   selectedName: string = '';
   items: any[] = [
-    { name: 'Снабженец', access: '' },
-    { name: 'Механик', access: '' },
-    { name: 'Директор', access: '' }
+    { name: 'Механик', access: '' }
   ];
 
   constructor(private jwtService: JwtService) { }

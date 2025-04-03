@@ -67,7 +67,7 @@ export interface InvoiceField {
 export interface InvoiceButton {
     label: string;
     icon?: string;
-    action: (model: any) => void;
+    action: (model: any, dependencies: any ) => void;
     disabled?: boolean;
 }
 

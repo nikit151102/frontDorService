@@ -24,7 +24,7 @@ export class MechanicComponent implements OnInit {
     { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
     { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' },
+    { field: 'actions', header: 'Действия', type: 'actions', visible: false, width: '10%' },
   ];
 
   totalInfoColumnInvoices = [
@@ -34,7 +34,9 @@ export class MechanicComponent implements OnInit {
 
   ngOnInit(): void {
     this.generalFormService.setConfig(FORM_SETS);
+    console.log('MODEL',MODEL)
     this.generalFormService.setModel(MODEL);
+    console.log('this.generalFormService.setModel',this.generalFormService.getModel())
     this.generalFormService.setService(this.mechanicActionsService);
   }
 

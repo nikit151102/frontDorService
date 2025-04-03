@@ -16,6 +16,11 @@ import { CustomInputComponent } from '../../../../ui-kit/custom-input-auth/custo
 import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { InvoiceConfig } from '../../../../interfaces/common.interface';
 import { GeneralFormService } from './general-form.service';
+import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
+import { ToastService } from '../../../../services/toast.service';
+import { ProductsService } from '../products/products.service';
+import { InvoicesService } from '../invoices/invoices.service';
+import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
 
 @Component({
   selector: 'general-form',
@@ -51,6 +56,11 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     private generalFormService: GeneralFormService,
     private cdr: ChangeDetectorRef,
     private jwtService: JwtService,
+    private confirmPopupService: ConfirmPopupService,
+    private invoiceService: InvoicesContentService,
+    private productsService: ProductsService,
+    private messageService: MessageService,
+    private toastService: ToastService,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -60,12 +70,16 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.generalFormService.getConfig().subscribe(config => {
+
+    this.generalFormService.getConfig().subscribe((config: any) => {
       this.config = config;
       this.initializeModel(config);
     });
 
-    this.service = this.generalFormService.getService();
+    this.generalFormService.getModel().subscribe((model: any) => {
+      this.model = model;
+    });
+
     const currentRole = this.jwtService.getDecodedToken().email;
     this.isEdit = currentRole !== '3';
   }
@@ -79,11 +93,21 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     }
   }
 
-  executeAction(action: (model: any, service: any) => void): void {
+  executeAction(action: (model: any, dependencies: any) => void): void {
     if (typeof action === 'function') {
-      action(this.model, this.service);
+      const dependencies = {
+        confirmPopupService: this.confirmPopupService,
+        invoiceService: this.invoiceService,
+        productsService: this.productsService,
+        messageService: this.messageService,
+        toastService: this.toastService,
+        jwtService: this.jwtService
+      };
+
+      action(this.model, dependencies);
     }
   }
+
 
   onDialogClose(): void {
     this.selectedInvoice = null;
@@ -91,14 +115,12 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.selectedInvoice = {};
-    this.model = {};
-    if (this.config?.fields) {
-      this.config.fields.forEach(field => {
-        this.model[field.name] = field.type === 'dropdown' ? field.options?.[0]?.value : '';
-      });
-    }
+    this.model = this.generalFormService.getDataModel();
+    // if (this.config?.fields) {
+    //   this.config.fields.forEach(field => {
+    //     this.model[field.name] = field.type === 'dropdown' ? field.options?.[0]?.value : '';
+    //   });
+    // }
 
-    this.generalFormService.setSelectedInvoice(this.model);
-    this.generalFormService.setModel(this.model);
   }
 }

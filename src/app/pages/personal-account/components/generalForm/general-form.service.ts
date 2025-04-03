@@ -36,6 +36,11 @@ export class GeneralFormService {
     return this.modelSubject.asObservable();
   }
 
+
+  getDataModel() {
+    return this.modelSubject.getValue();
+  }
+
   // Запись модель
   setModel(model: Record<string, any>): void {
     this.modelSubject.next(model);
