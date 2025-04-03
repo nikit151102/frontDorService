@@ -312,6 +312,12 @@
     color: #9e9e9e;
 }
 
+/* Статус "Проведена" */
+.status-completed {
+    background-color: rgba(0, 188, 212, 0.1); 
+    color: #00bcd4; 
+}
+
 
 
 
@@ -358,7 +364,7 @@
 
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
     // table-layout: fixed;
-    width: calc(100vw - 336px);
+    width: var(--table-width, calc(100vw - 336px)); 
     position: absolute;
 }
 

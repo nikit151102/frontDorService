@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PersonalAccountComponent } from './personal-account.component';
+import { LoadingComponent } from './tabs/loading/loading.component';
 
 const routes: Routes = [
   {
     path: '', component: PersonalAccountComponent,
     children: [
-      { path: '', redirectTo: 'clients', pathMatch: 'full' }, 
+      { path: 'loading', component: LoadingComponent },
       {
         path: 'clients', loadChildren: () => import('./tabs/partners/partners.module').then(m => m.PartnersModule)
       },
@@ -15,6 +16,9 @@ const routes: Routes = [
       },
       {
         path: 'reference', loadChildren: () => import('./tabs/reference/reference.module').then(m => m.ReferenceModule)
+      },
+      {
+        path: 'accountant', loadChildren: () => import('./tabs/accountant/accountant.module').then(m => m.AccountantModule)
       },
       {
         path: 'profile', loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfileModule)
