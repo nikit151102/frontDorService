@@ -1,0 +1,42 @@
+<button pButton label="Создать" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
+
+<ng-container *ngIf="selectedInvoice">
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true"
+        [header]="'Редактирование фактуры (' + selectedInvoice?.partner?.shortName + ' - ' + selectedInvoice?.partner?.fullName + ')'"
+        (onHide)="onDialogClose()">
+        <div class="form-container">
+            <div class="p-fluid p-formgrid p-grid">
+                <ng-container *ngFor="let field of config.fields">
+                    <div class="p-field p-col-12" [ngSwitch]="field.type">
+                        <label [for]="field.name">{{ field.label }}</label>
+
+                        <app-custom-input *ngSwitchCase="'text'" [(ngModel)]="model[field.name]" [disabled]="!isEdit"
+                            [placeholder]="field.placeholder"></app-custom-input>
+
+                        <p-calendar *ngSwitchCase="'date'" [id]="field.name" [(ngModel)]="model[field.name]"
+                            [showTime]="false" [disabled]="!isEdit"></p-calendar>
+
+                        <app-custom-dropdown *ngSwitchCase="'dropdown'" [options]="field.options"
+                            [optionLabel]="field.optionLabel" [optionValue]="field.optionValue"
+                            [(selected)]="model[field.name]"
+                            (selectedChange)="field.onChange && field.onChange(model[field.name])"
+                            [disabled]="!isEdit"></app-custom-dropdown>
+
+                        <app-custom-input-number *ngSwitchCase="'number'" [(ngModel)]="model[field.name]"
+                            [min]="field.min" [max]="field.max" [disabled]="!isEdit"></app-custom-input-number>
+
+                        <textarea *ngSwitchCase="'textarea'" [id]="field.name" [(ngModel)]="model[field.name]"
+                            [disabled]="!isEdit"></textarea>
+                    </div>
+                </ng-container>
+            </div>
+            <p-footer>
+                <button *ngFor="let button of config.buttons" pButton [label]="button.label"
+                    (click)="executeAction(button.action)" [disabled]="button.disabled">
+                </button>
+            </p-footer>
+        </div>
+    </p-dialog>
+</ng-container>
+
+<p-confirmDialog></p-confirmDialog>

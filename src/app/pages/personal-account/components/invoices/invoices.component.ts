@@ -22,6 +22,8 @@ import { SettingsComponent } from './settings/settings.component';
 import { ToastService } from '../../../../services/toast.service';
 import { InvoicePaymentComponent } from '../invoice-payment/invoice-payment.component';
 import { InvoicePaymentService } from '../invoice-payment/invoice-payment.service';
+import { GeneralFormComponent } from '../generalForm/general-form.component';
+import { InvoiceConfig } from '../../../../interfaces/common.interface';
 
 @Component({
   selector: 'app-invoices',
@@ -39,6 +41,7 @@ import { InvoicePaymentService } from '../invoice-payment/invoice-payment.servic
     MenuModule,
     InvoicesFormComponent,
     InvoicePaymentComponent,
+    GeneralFormComponent
     // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
@@ -52,8 +55,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() columns: any;
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
-
-
+  @Input() generalForm: boolean = false;
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
