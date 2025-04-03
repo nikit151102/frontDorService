@@ -1,0 +1,14 @@
+<div class="counterparties-list">
+    <ul>
+        <li *ngFor="let item of items" (click)="hasAccess(item.access) && select(item.name)"
+            [class.disabled]="!hasAccess(item.access)">
+            <div class="counterparty-item" [class.disabled]="!hasAccess(item.access)">
+                <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                    <span [class.active]="item.name === selectedName" style="text-align: end;">
+                        {{ item.name }}
+                    </span>
+                </div>
+            </div>
+        </li>
+    </ul>
+</div>
