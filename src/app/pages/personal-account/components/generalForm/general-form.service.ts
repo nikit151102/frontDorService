@@ -9,7 +9,7 @@ export class GeneralFormService {
   private configSubject: BehaviorSubject<InvoiceConfig> = new BehaviorSubject<InvoiceConfig>(this.getInitialConfig());
   private modelSubject: BehaviorSubject<Record<string, any>> = new BehaviorSubject<Record<string, any>>({});
   private selectedInvoiceSubject: BehaviorSubject<any> = new BehaviorSubject<any>(null);
-  private service: any = {};
+  private service: any;
 
   constructor() { }
 
@@ -54,6 +54,11 @@ export class GeneralFormService {
   // Получение сервиса
   getService() {
     return this.service;
+  }
+
+  // Запись сервиса
+  setService(data: any) {
+    this.service = data;
   }
 
 }

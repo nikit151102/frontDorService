@@ -18,12 +18,10 @@ import { InvoicesContentService } from '../../tabs/partners/invoices-content/inv
 import { InvoicesService } from './invoices.service';
 import { JwtService } from '../../../../services/jwt.service';
 import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
-import { SettingsComponent } from './settings/settings.component';
 import { ToastService } from '../../../../services/toast.service';
 import { InvoicePaymentComponent } from '../invoice-payment/invoice-payment.component';
 import { InvoicePaymentService } from '../invoice-payment/invoice-payment.service';
 import { GeneralFormComponent } from '../generalForm/general-form.component';
-import { InvoiceConfig } from '../../../../interfaces/common.interface';
 
 @Component({
   selector: 'app-invoices',
