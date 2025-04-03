@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AccountantService } from './accountant.service';
 import { InvoicesContentComponent } from './accountant-content/invoices-content.component';
+import { PartnerMenuComponent } from '../../components/partner-menu/partner-menu.component';
+import { BUTTON_SETS } from './button-config';
 
 @Component({
   selector: 'app-accountant',
-  imports: [CommonModule, InvoicesContentComponent],
+  imports: [CommonModule, InvoicesContentComponent, PartnerMenuComponent],
   templateUrl: './accountant.component.html',
   styleUrl: './accountant.component.scss'
 })
@@ -29,10 +31,14 @@ export class AccountantComponent implements OnInit {
     })
   }
 
-  onSelectCounterparty(data:{id: number, data: string}) {
-    console.log('data',data)
+  onSelectCounterparty(data: { id: number, data: string }) {
+    console.log('data', data)
     this.selectedCounterpartyId = data.id;
     this.selectedCounterparty = data.data;
+  }
+
+  getBUTTON_SETS() {
+    return BUTTON_SETS
   }
 
 }

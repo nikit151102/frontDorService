@@ -173,7 +173,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   statuses = [
-    { label: 'Не отправлено', value: 0, id: 0 },
+    { label: 'Черновик', value: 0, id: 0 },
     { label: 'Проверка Механик', value: 1, id: 1 },
     { label: 'Проверка Директор', value: 2, id: 2 },
     { label: 'Отклонено Механик', value: 3, id: 3 },

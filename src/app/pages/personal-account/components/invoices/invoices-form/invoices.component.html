@@ -120,7 +120,7 @@
             </div>
             <p-footer>
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
-                    label="Сохранить" icon="pi pi-check" (click)="saveInvoice()"></button>
+                    label="Черновик" icon="pi pi-check" (click)="saveInvoice()"></button>
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
 
