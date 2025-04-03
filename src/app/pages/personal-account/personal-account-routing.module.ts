@@ -21,6 +21,9 @@ const routes: Routes = [
         path: 'accountant', loadChildren: () => import('./tabs/accountant/accountant.module').then(m => m.AccountantModule)
       },
       {
+        path: 'cash', loadChildren: () => import('./tabs/cash/cash.module').then(m => m.CashModule)
+      },
+      {
         path: 'profile', loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfileModule)
       }
     ]
