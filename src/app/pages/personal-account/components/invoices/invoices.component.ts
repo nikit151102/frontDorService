@@ -214,6 +214,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
   // }
 
 
+  formatNumber(value: any): number {
+    const num = parseFloat(value);
+    if (isNaN(num)) {
+      throw new Error('Неверное значение. Не удалось преобразовать в число');
+    }
+    return Math.round(num * 100) / 100;
+  }
+
+  
   updateInvoice(invoice: any) {
     this.selectInvoice = invoice;
   }

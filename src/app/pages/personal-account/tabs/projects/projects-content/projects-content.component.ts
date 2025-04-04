@@ -62,7 +62,8 @@ export class ProjectsContentComponent implements OnInit, OnChanges {
 
   totalInfoColumn = [
     { columnNum: 2, value: 'totalExpenseSum' },
-    { columnNum: 4, value: 'totalIncomeSum' }
+    { columnNum: 4, value: 'totalIncomeSum' },
+    { columnNum: 7, value: 'totalSaldo' },
   ];
 
 
@@ -81,6 +82,7 @@ export class ProjectsContentComponent implements OnInit, OnChanges {
   totalInfoColumnInvoices = [
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
+    { columnNum: 3, value: 'totalSaldo' },
   ]
 
 
