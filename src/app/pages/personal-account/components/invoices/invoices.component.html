@@ -1,17 +1,21 @@
 <div style=" display: flex; gap: 10px;">
-    <app-invoices-form *ngIf="!generalForm" [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
-        [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
-
-    <general-form *ngIf="generalForm"></general-form>
-
-    <button (click)="openPaymentModal()"
-        *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 " style="    padding: 8px;
+    <ng-container *ngIf="!generalForm">
+        <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
+            [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
+    </ng-container>
+    <ng-container *ngIf="generalForm">
+        <general-form></general-form>
+    </ng-container>
+    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
+        <button (click)="openPaymentModal()" style="    padding: 8px;
         background: #34d399;
         border: none;
         color: #fff;
         border-radius: 7px;">
-        Оплатить
-    </button>
+            Оплатить
+        </button>
+    </ng-container>
+
 </div>
 
 
@@ -25,8 +29,13 @@
   (selectedColumnsChange)="updateSelectedColumns($event)">
 </app-settings> -->
 
-    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData"> {{counterpartyData?.shortName}} <span
-            *ngIf="counterpartyData.fullName">-</span> {{counterpartyData?.fullName}}</h2>
+    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData"> 
+        {{counterpartyData?.shortName}}
+        <span *ngIf="counterpartyData.fullName">
+            -
+        </span>
+        {{counterpartyData?.fullName}}
+    </h2>
 </div>
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
