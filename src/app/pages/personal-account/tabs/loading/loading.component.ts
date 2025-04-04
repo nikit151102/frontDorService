@@ -32,8 +32,8 @@ export class LoadingComponent {
 
   private setUserFullName() {
     const user = this.currentUserService.getUser();
-    if (user && user.firstName && user.lastName) {
-      this.userFullName = `${user.firstName} ${user.lastName}`;
+    if (user && user.firstName && user.patronymic) {
+      this.userFullName = `${user.firstName} ${user.patronymic}`;
     } else {
       this.userFullName = 'Гость'; 
     }
