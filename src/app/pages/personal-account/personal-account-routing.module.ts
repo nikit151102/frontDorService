@@ -27,7 +27,7 @@ const routes: Routes = [
         path: 'projects', loadChildren: () => import('./tabs/projects/projects.module').then(m => m.ProjectsModule)
       },
       {
-        path: 'base', loadChildren: () => import('./tabs/caretaker/base.module').then(m => m.CaretakerModule)
+        path: 'base', loadChildren: () => import('./tabs/base/base.module').then(m => m.BaseModule)
       },
       
       {

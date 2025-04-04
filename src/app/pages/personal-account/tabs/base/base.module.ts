@@ -11,4 +11,4 @@ import { BaseTabRoutingModule } from './base-routing.module';
     BaseTabRoutingModule
   ]
 })
-export class CaretakerModule { }
+export class BaseModule { }
