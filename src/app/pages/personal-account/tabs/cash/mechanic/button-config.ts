@@ -10,7 +10,7 @@ export interface ButtonConfig {
 }
 
 export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
-    supplier: [
+    mechanic: [
         {
             label: 'Подробнее',
             action: 'getInvoiceById',
@@ -43,33 +43,6 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
             condition: (product) => product.status === 0 || product.status === 3,
-        }
-    ],
-    mechanic: [
-        {
-            label: 'Подробнее',
-            action: 'getInvoiceById',
-            class: 'btn-details',
-            isEditData: false,
-            condition: (product) => product.status !== 0 && product.status !== 3,
-        },
-        {
-            label: 'Принять',
-            action: 'verificationInvoice',
-            class: 'btn-send',
-            titlePopUp: 'Подтверждение принятия',
-            messagePopUp: 'Вы уверены, что хотите отправить фактуру директору на подпись?',
-            status: 2,
-            condition: (product) => product.status === 1,
-        },
-        {
-            label: 'Отклонить',
-            action: 'verificationInvoice',
-            class: 'btn-delete',
-            titlePopUp: 'Подтверждение отклонения',
-            messagePopUp: 'Вы уверены, что хотите отклонить фактуру?',
-            status: 3,
-            condition: (product) => product.status === 1,
         }
     ],
     director: [

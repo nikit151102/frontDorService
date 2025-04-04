@@ -57,6 +57,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     private jwtService: JwtService,
     private confirmPopupService: ConfirmPopupService,
+    private invoicesService:InvoicesService,
     private invoiceService: InvoicesContentService,
     private productsService: ProductsService,
     private messageService: MessageService,
@@ -93,7 +94,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     }
   }
 
-  executeAction(action: (model: any, dependencies: any) => void): void {
+  executeAction(action: (model: any, dependencies: any, sendClose: any) => void): void {
     if (typeof action === 'function') {
       const dependencies = {
         confirmPopupService: this.confirmPopupService,
@@ -101,10 +102,11 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         productsService: this.productsService,
         messageService: this.messageService,
         toastService: this.toastService,
-        jwtService: this.jwtService
+        jwtService: this.jwtService,
+        invoicesService: this.invoicesService
       };
 
-      action(this.model, dependencies);
+      action(this.model, dependencies, this.onDialogClose());
     }
   }
 

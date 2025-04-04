@@ -73,11 +73,11 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
     buttons: [
         {
             label: 'Сохранить и отправить',
-            action: (model: any, dependencies: any) => handleSaveAndSend(model, dependencies, true),
+            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, true, sendClose),
         },
         {
             label: 'Черновик',
-            action: (model: any, dependencies: any) => handleSaveAndSend(model, dependencies, false),
+            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, false, sendClose),
         },
         {
             label: 'Отменить',
@@ -88,8 +88,8 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
 }
 };
 
-function handleSaveAndSend(model: any, dependencies: any, send: boolean) {
-    const { confirmPopupService, invoiceService, productsService, messageService, toastService, jwtService } = dependencies;
+function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: any) {
+    const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
 
     const data = {
         dateTime: model.dateTime,
@@ -113,10 +113,11 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean) {
         acceptLabel: acceptLabel,
         rejectLabel: 'Отмена',
         onAccept: () => {
+            
             invoiceService.saveInvoice(data).subscribe(
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
-                    productsService.addItemToStart(invoice.documentMetadata.data);
+                    if(!send) invoicesService.addItemToStart(invoice.documentMetadata.data);
                     messageService.add({
                         severity: 'success',
                         summary: 'Успех',
@@ -125,11 +126,10 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean) {
                     toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
 
                     const currentRole = jwtService.getDecodedToken().email;
-                    const verificationLevel = currentRole === '3' ? 2 : (currentRole === '2' ? 1 : null);
-
-                    if (verificationLevel) {
-                        invoiceService.sendingVerification(invoice, verificationLevel).subscribe(
-                            () => {},
+                    let verificationLevel = currentRole === '3' ? 2 : (currentRole === '1' ? 5 : null);
+                    if (send) {
+                        invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel).subscribe(
+                            (data: any) => { invoicesService.addItemToStart(data.data);},
                             (error:any) => {
                                 console.error('Ошибка при отправке на проверку:', error);
                             }
