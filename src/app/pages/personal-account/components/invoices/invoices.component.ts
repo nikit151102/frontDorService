@@ -52,6 +52,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() endpoint: any;
   @Input() endpointGetData: any;
   @Input() columns: any;
+  @Input() paymentType: number = 1;
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
   @Input() generalForm: boolean = false;

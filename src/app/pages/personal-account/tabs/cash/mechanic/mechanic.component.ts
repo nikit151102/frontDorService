@@ -5,6 +5,7 @@ import { BUTTON_SETS } from './button-config';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { getFormSets, MODEL } from './form-config';
 import { MechanicActionsService } from './mechanic-actions.service';
+import { JwtService } from '../../../../../services/jwt.service';
 
 @Component({
   selector: 'app-mechanic',
@@ -14,8 +15,8 @@ import { MechanicActionsService } from './mechanic-actions.service';
 })
 export class MechanicComponent implements OnInit {
 
-  constructor(private generalFormService: GeneralFormService, private mechanicActionsService: MechanicActionsService) { }
-
+  constructor(private generalFormService: GeneralFormService, private mechanicActionsService: MechanicActionsService, private jwtService:JwtService) { }
+  paymentType: number = 2;
   columnsInvoices = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
     { field: 'productTarget.id', fieldView: 'productTarget.name', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
@@ -35,11 +36,10 @@ export class MechanicComponent implements OnInit {
   buttonConfigs: any;
 
   ngOnInit(): void {
-    console.log('MODEL', MODEL)
+    const currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.setModel(MODEL);
-    console.log('this.generalFormService.setModel', this.generalFormService.getModel())
     this.generalFormService.setService(this.mechanicActionsService);
-
+    this.paymentType = currentRole === '3' ? 2 : 3;
     Promise.all([
       this.loadData('/api/Entities/ProductTarget/Filter')
     ]).then(([productTarget]) => {

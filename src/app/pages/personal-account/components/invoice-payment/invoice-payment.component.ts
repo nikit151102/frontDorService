@@ -15,6 +15,7 @@ import { InvoicesService } from '../invoices/invoices.service';
 })
 export class InvoicePaymentComponent implements OnInit {
   @Input() counterpartyId: string = '';
+  @Input() paymentType: number = 1;
   visible: boolean = false;
   title: string = 'Оплата';
   message: string = '';
@@ -49,7 +50,7 @@ export class InvoicePaymentComponent implements OnInit {
       dateTime: this.dateTime,
       type: 1,
       partnerId: this.counterpartyId,
-      docPaymentType: 1,
+      docPaymentType: this.paymentType,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
         quantity: 1,
