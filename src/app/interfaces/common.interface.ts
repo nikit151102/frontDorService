@@ -61,7 +61,7 @@ export interface InvoiceField {
     optionValue: string;
     min: number;
     max: number;
-    onChange?: (value: any) => void;
+    onChange?: (value: any, model: any) => void;
 }
 
 export interface InvoiceButton {

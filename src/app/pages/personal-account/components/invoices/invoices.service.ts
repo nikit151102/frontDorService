@@ -32,6 +32,7 @@ export class InvoicesService {
   constructor(private http: HttpClient) { }
 
   endpoint: string = '';
+  endpointGetData: string| null = null;
 
 
   private dataSubject = new BehaviorSubject<any>(null);
@@ -109,8 +110,14 @@ export class InvoicesService {
     if (!exists) {
       this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
     }
-
-    return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
+    let url
+    if(this.endpointGetData){
+      url = `${environment.apiUrl}/${this.endpointGetData}`;
+    }
+    else{
+      url = `${environment.apiUrl}/${this.endpoint}/${id}`;
+    }
+    return this.http.post<any>( url, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`

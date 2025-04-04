@@ -73,14 +73,15 @@ export class CustomInputComponent implements ControlValueAccessor, OnInit, After
   }
 
   handleBlur(): void {
-    if (this.value.trim() !== '') {
+    if ((this.value || '').trim() !== '') {
       this.touched = true;
-    }else{
+    } else {
       this.touched = false;
     }
     this.onTouched();
   }
-
+  
+  
   handleFocus(): void {
     this.touched = true;
   }

@@ -50,6 +50,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() counterpartyId!: any;
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
+  @Input() endpointGetData: any;
   @Input() columns: any;
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
@@ -217,6 +218,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   loadInvoices() {
+    this.invoicesService.endpointGetData = this.endpointGetData
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
         this.invoices = response.documentMetadata.data.map((invoice: any) => ({

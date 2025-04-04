@@ -1,7 +1,13 @@
 import { ConfirmPopupService } from "../../../../../components/confirm-popup/confirm-popup.service";
 import { InvoiceConfig } from "../../../../../interfaces/common.interface";
 
-export const FORM_SETS: InvoiceConfig = {
+interface FormDataSources {
+    productTarget: any[];
+  }
+
+  
+export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
+    return {
     fields: [
         {
             name: 'dateTime',
@@ -19,11 +25,16 @@ export const FORM_SETS: InvoiceConfig = {
             label: 'Назначение',
             type: 'dropdown',
             placeholder: 'Выберите назначение',
-            options: [],
-            optionLabel: 'productTarget.Name',
-            optionValue: 'productTarget.Id',
+            options: productsTarget.productTarget || [],
+            optionLabel: 'name',
+            optionValue: 'id',
             min: 0,
             max: 0,
+            onChange: (selectedId: string, model: any) => {
+                console.log('Выбрано назначение с id:', selectedId);
+                model['productTargetId'] = selectedId; 
+                console.log('model',model)
+              },
         },
         {
             name: 'productName',
@@ -74,6 +85,7 @@ export const FORM_SETS: InvoiceConfig = {
             },
         },
     ],
+}
 };
 
 function handleSaveAndSend(model: any, dependencies: any, send: boolean) {
@@ -81,7 +93,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean) {
 
     const data = {
         dateTime: model.dateTime,
-        type: 1,
+        type: 2,
         DocPaymentType: model.DocPaymentType,
         manufacturer: model.manufacturer,
         productList: [{

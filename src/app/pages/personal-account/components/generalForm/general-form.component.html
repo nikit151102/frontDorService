@@ -19,7 +19,7 @@
                         <app-custom-dropdown *ngSwitchCase="'dropdown'" [options]="field.options"
                             [optionLabel]="field.optionLabel" [optionValue]="field.optionValue"
                             [(selected)]="model[field.name]"
-                            (selectedChange)="field.onChange && field.onChange(model[field.name])"
+                            (selectedChange)="field.onChange && field.onChange(model[field.name], model)"
                             [disabled]="!isEdit"></app-custom-dropdown>
 
                         <app-custom-input-number *ngSwitchCase="'number'" [(ngModel)]="model[field.name]"
