@@ -106,7 +106,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         invoicesService: this.invoicesService
       };
 
-      action(this.model, dependencies, this.onDialogClose());
+      action(this.model, dependencies, this.onDialogClose);
     }
   }
 

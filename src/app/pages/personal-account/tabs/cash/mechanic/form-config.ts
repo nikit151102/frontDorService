@@ -3,93 +3,93 @@ import { InvoiceConfig } from "../../../../../interfaces/common.interface";
 
 interface FormDataSources {
     productTarget: any[];
-  }
-
-  
-export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
-    return {
-    fields: [
-        {
-            name: 'dateTime',
-            label: 'Дата',
-            type: 'date',
-            placeholder: 'Выберите дату',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-        },
-        {
-            name: 'productTarget.Id',
-            label: 'Назначение',
-            type: 'dropdown',
-            placeholder: 'Выберите назначение',
-            options: productsTarget.productTarget || [],
-            optionLabel: 'name',
-            optionValue: 'id',
-            min: 0,
-            max: 0,
-            onChange: (selectedId: string, model: any) => {
-                console.log('Выбрано назначение с id:', selectedId);
-                model['productTargetId'] = selectedId; 
-                console.log('model',model)
-              },
-        },
-        {
-            name: 'productName',
-            label: 'Наименование',
-            type: 'text',
-            placeholder: 'Введите номер',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-        },
-        {
-            name: 'manufacturer',
-            label: 'Наименование',
-            type: 'text',
-            placeholder: 'Введите номер',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-        },
-        {
-            name: 'expenseSum',
-            label: 'Расход',
-            type: 'text',
-            placeholder: 'Введите расход',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-        }
-    ],
-    buttons: [
-        {
-            label: 'Сохранить и отправить',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, true, sendClose),
-        },
-        {
-            label: 'Черновик',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, false, sendClose),
-        },
-        {
-            label: 'Отменить',
-            action: (model: any) => {
-            },
-        },
-    ],
 }
+
+
+export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
+    return {
+        fields: [
+            {
+                name: 'dateTime',
+                label: 'Дата',
+                type: 'date',
+                placeholder: 'Выберите дату',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+            },
+            {
+                name: 'productTarget.Id',
+                label: 'Назначение',
+                type: 'dropdown',
+                placeholder: 'Выберите назначение',
+                options: productsTarget.productTarget || [],
+                optionLabel: 'name',
+                optionValue: 'id',
+                min: 0,
+                max: 0,
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано назначение с id:', selectedId);
+                    model['productTargetId'] = selectedId;
+                    console.log('model', model)
+                },
+            },
+            {
+                name: 'productName',
+                label: 'Наименование',
+                type: 'text',
+                placeholder: 'Введите номер',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+            },
+            {
+                name: 'manufacturer',
+                label: 'Наименование',
+                type: 'text',
+                placeholder: 'Введите номер',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+            },
+            {
+                name: 'expenseSum',
+                label: 'Расход',
+                type: 'text',
+                placeholder: 'Введите расход',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+            }
+        ],
+        buttons: [
+            {
+                label: 'Сохранить и отправить',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Черновик',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+            },
+            {
+                label: 'Отменить',
+                action: (model: any) => {
+                },
+            },
+        ],
+    }
 };
 
-function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: any) {
-    const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
+function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
+    const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
 
     const data = {
         dateTime: model.dateTime,
@@ -113,24 +113,25 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         acceptLabel: acceptLabel,
         rejectLabel: 'Отмена',
         onAccept: () => {
-            
+
             invoiceService.saveInvoice(data).subscribe(
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
-                    if(!send) invoicesService.addItemToStart(invoice.documentMetadata.data);
-                    messageService.add({
-                        severity: 'success',
-                        summary: 'Успех',
-                        detail: 'Счет сохранен'
-                    });
+                    if (!send) {
+                        invoicesService.addItemToStart(invoice.documentMetadata.data);
+                        sendClose();
+                    }
                     toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
 
                     const currentRole = jwtService.getDecodedToken().email;
                     let verificationLevel = currentRole === '3' ? 2 : (currentRole === '1' ? 5 : null);
                     if (send) {
                         invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel).subscribe(
-                            (data: any) => { invoicesService.addItemToStart(data.data);},
-                            (error:any) => {
+                            (data: any) => {
+                                invoicesService.addItemToStart(data.data);
+                                sendClose();
+                            },
+                            (error: any) => {
                                 console.error('Ошибка при отправке на проверку:', error);
                             }
                         );
