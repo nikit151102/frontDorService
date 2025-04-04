@@ -24,6 +24,10 @@ const routes: Routes = [
         path: 'cash', loadChildren: () => import('./tabs/cash/cash.module').then(m => m.CashModule)
       },
       {
+        path: 'projects', loadChildren: () => import('./tabs/projects/projects.module').then(m => m.ProjectsModule)
+      },
+      
+      {
         path: 'profile', loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfileModule)
       }
     ]
