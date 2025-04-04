@@ -82,7 +82,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     });
 
     const currentRole = this.jwtService.getDecodedToken().email;
-    this.isEdit = currentRole !== '3';
+
   }
 
   private initializeModel(config: InvoiceConfig): void {
