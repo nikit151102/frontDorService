@@ -41,7 +41,7 @@ export const referenceConfig = [
     {
         typeId: '495142',
         endpoint: 'api/Entities/ProductTarget',
-        pageTitle: 'Назначение товара',
+        pageTitle: 'Склады',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '33%' },
             { label: 'Наименование', field: 'name', type: 'string', width: '33%' },
@@ -51,6 +51,19 @@ export const referenceConfig = [
             { label: 'Код', field: 'code', type: 'text', visible: true},
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
             { label: 'Короткое наименование', field: 'shortName', type: 'text', visible: true },
+        ],
+    },
+    {
+        typeId: '925812',
+        endpoint: 'api/Entities/Storage',
+        pageTitle: 'Назначение товара',
+        tableColumns: [
+            { label: 'Код', field: 'code', type: 'string', width: '49%' },
+            { label: 'Наименование', field: 'cargoName', type: 'string', width: '49%' },
+        ],
+        formFields: [
+            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Наименование', field: 'cargoName', type: 'text', visible: true },
         ],
     },
 ];
