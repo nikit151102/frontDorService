@@ -19,6 +19,9 @@ import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-n
 import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { ToastService } from '../../../../../services/toast.service';
+import { PartnerMenuService } from '../../partner-menu/partner-menu.service';
+import { InvoicesEditPartnerPopUpComponent } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.component';
+import { InvoicesEditPartnerPopUpService } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.service';
 
 @Component({
   selector: 'app-invoices-form',
@@ -38,6 +41,7 @@ import { ToastService } from '../../../../../services/toast.service';
     CustomDropdownComponent,
     CustomInputNumberComponent,
     CustomInputComponent,
+    InvoicesEditPartnerPopUpComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
@@ -48,6 +52,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyName!: any;
   @Input() counterpartyId: any;
   @Input() isEditInvoice: any;
+
   visibleCheckPersonId: boolean = true;
 
   measurementUnits: any[] = [];
@@ -70,6 +75,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private productsService: InvoicesService,
     private jwtService: JwtService,
     private toastService: ToastService,
+    private invoicesEditPartnerPopUpService: InvoicesEditPartnerPopUpService
   ) { }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -115,8 +121,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         checker.fullName = `${checker.lastName} ${initialFirstName} ${initialPatronymic}`.trim();
       });
     })
-
-
 
     this.invoiceService.getMeasurementUnits$().subscribe(units => {
       if (units.length === 0) {
@@ -370,39 +374,39 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   onQuantityOrAmountChange(product: any) {
     if (product.quantity != null && product.amount != null) {
-        product.sumAmount = product.quantity * product.amount;
+      product.sumAmount = product.quantity * product.amount;
 
-        if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
-            product.sumAmount = -Math.abs(product.sumAmount);
+      if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
+        product.sumAmount = -Math.abs(product.sumAmount);
+      }
+
+      if (this.type === 0) {
+        product.sumAmount = -Math.abs(product.sumAmount);
+        product.amount = -Math.abs(product.amount);
+      }
+    }
+  }
+
+
+  onQuantityOrSumAmountChange(product: any) {
+    if (product.quantity != null && product.sumAmount != null) {
+      if (product.quantity !== 0) {
+        product.amount = product.sumAmount / product.quantity;
+
+        if ((product.sumAmount < 0 && product.quantity > 0) || (product.sumAmount > 0 && product.quantity < 0)) {
+          product.amount = -Math.abs(product.amount);
         }
 
         if (this.type === 0) {
-            product.sumAmount = -Math.abs(product.sumAmount);
-            product.amount = -Math.abs(product.amount);
+          product.sumAmount = -Math.abs(product.sumAmount);
+          product.amount = -Math.abs(product.amount);
         }
+
+      } else {
+        product.amount = 0;
+      }
     }
-}
-
-
-onQuantityOrSumAmountChange(product: any) {
-    if (product.quantity != null && product.sumAmount != null) {
-        if (product.quantity !== 0) {
-            product.amount = product.sumAmount / product.quantity;
-
-            if ((product.sumAmount < 0 && product.quantity > 0) || (product.sumAmount > 0 && product.quantity < 0)) {
-                product.amount = -Math.abs(product.amount);
-            }
-
-            if (this.type === 0) {
-              product.sumAmount = -Math.abs(product.sumAmount);
-              product.amount = -Math.abs(product.amount);
-          }
-
-        } else {
-            product.amount = 0;
-        }
-    }
-}
+  }
 
 
 
@@ -462,7 +466,7 @@ onQuantityOrSumAmountChange(product: any) {
               amount: product.amount ? parseFloat(product.amount.toString().replace(',', '.')) : 0,
               sumAmount: product.sumAmount ? parseFloat(product.sumAmount.toString().replace(',', '.')) : 0
             };
-        
+
             if (product.measurementUnitId === "") {
               delete updatedProduct.measurementUnitId;
             }
@@ -470,12 +474,12 @@ onQuantityOrSumAmountChange(product: any) {
             if (product.productTargetId === "") {
               delete updatedProduct.productTargetId;
             }
-        
+
             return updatedProduct;
           })
         };
 
-        
+
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
             console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
@@ -507,6 +511,36 @@ onQuantityOrSumAmountChange(product: any) {
         );
       }
     });
+  }
+
+  editPartner() {
+    this.invoicesEditPartnerPopUpService.openConfirmDialog();
+  }
+
+  AcceptEditPartner(idPartner: string) {
+    this.selectedInvoice.partnerId = idPartner;
+    this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+      (invoice) => {
+        console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
+
+        this.productsService.removeItemById(invoice.documentMetadata.data.id);
+
+        this.productsService.totalInfo = invoice.totalInfo;
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Успех',
+          detail: 'Счет сохранен'
+        });
+        this.toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
+        const invoiceId = invoice.documentMetadata.data.id;
+        this.selectedInvoice = null;
+        this.cdr.detectChanges();
+      },
+      (error) => {
+        console.error('Ошибка при сохранении счета', error);
+        this.toastService.showError('Ошибка', error.Message);
+      }
+    );
   }
 
   sendingInvoice(invoice: string, status: number) {
@@ -547,9 +581,9 @@ onQuantityOrSumAmountChange(product: any) {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
-      tax: taxes?.length ? taxes[0] : 0, 
+      tax: taxes?.length ? taxes[0] : 0,
       partnerId: this.counterpartyId,
-      checkPersonId: this.checkers?.length ? this.checkers[0].id : '', 
+      checkPersonId: this.checkers?.length ? this.checkers[0].id : '',
       comment: '',
       productList: []
     };
@@ -558,7 +592,7 @@ onQuantityOrSumAmountChange(product: any) {
     this.isEdit = true;
 
     this.addProduct();
-}
+  }
 
 
 
@@ -571,7 +605,7 @@ onQuantityOrSumAmountChange(product: any) {
       let totalAmount = this.selectedInvoice.productList.reduce((sum: number, product: any) => {
         return sum + (product.quantity * product.amount);
       }, 0);
-  
+
       return totalAmount.toFixed(3).replace('.', ',');
     } else {
 

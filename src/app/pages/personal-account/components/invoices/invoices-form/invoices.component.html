@@ -123,8 +123,10 @@
                     label="Черновик" icon="pi pi-check" (click)="saveInvoice()"></button>
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
+                <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
+                    label="Изменить Контрагента" icon="pi pi-check" (click)="editPartner()"></button>
 
-                <button *ngIf="selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton label="Закрыть"
+                <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton label="Закрыть"
                     (click)="onDialogClose()"></button>
             </p-footer>
         </div>
@@ -132,3 +134,5 @@
 </ng-container>
 
 <p-confirmDialog></p-confirmDialog>
+
+<app-invoices-edit-partner-pop-up (partnerSelected)="AcceptEditPartner($event)"></app-invoices-edit-partner-pop-up>

@@ -135,6 +135,7 @@ export class PartnerMenuComponent {
         this.counterparties = data.data;
 
         this.sortCounterpartiesByStatus();
+        this.partnerMenuService.partnersData = this.counterparties;
         this.select('00000000-0000-0000-0000-000000000000', '');
       },
       (error: any) => {

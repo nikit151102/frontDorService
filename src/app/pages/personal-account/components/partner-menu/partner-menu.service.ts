@@ -16,6 +16,8 @@ interface Counterparty {
 export class PartnerMenuService {
   private apiUrl = `${environment.apiUrl}/`;
 
+  partnersData: any;
+
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem(environment.token) || '';
     return new HttpHeaders({
