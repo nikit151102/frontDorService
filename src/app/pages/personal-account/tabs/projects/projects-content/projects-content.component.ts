@@ -56,6 +56,7 @@ export class ProjectsContentComponent implements OnInit, OnChanges {
     { field: 'sumAmount', fieldView: 'sumAmount', header: 'Общая сумма', type: 'number', visible: true, width: '11%' },
     { field: 'DocInvoice.Number', fieldView: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%', isFilter: false },
     { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '13%' },
+    { field: 'DocInvoice.CreatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
     { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' }
   ];
 
@@ -74,6 +75,7 @@ export class ProjectsContentComponent implements OnInit, OnChanges {
     { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
+    { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
   ];
 
