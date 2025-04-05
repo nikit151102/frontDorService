@@ -35,7 +35,9 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['notificationItem']) {
       console.log('Notifications изменились:');
-      this.invoicesService.updateOrAddItem(this.notificationItem);
+      if(this.notificationItem.partner.id == this.counterpartyId){
+        this.invoicesService.updateOrAddItem(this.notificationItem);
+      }
     }
   }
 
