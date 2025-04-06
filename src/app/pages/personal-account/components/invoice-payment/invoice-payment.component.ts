@@ -49,7 +49,9 @@ export class InvoicePaymentComponent implements OnInit {
     const data = {
       dateTime: this.dateTime,
       type: 1,
-      partnerId: this.counterpartyId,
+      partnerId: (this.counterpartyId === '00000000-0000-0000-0000-000000000001')
+        ? '00000000-0000-0000-0000-000000000000'
+        : this.counterpartyId,
       docPaymentType: this.paymentType,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
@@ -61,10 +63,10 @@ export class InvoicePaymentComponent implements OnInit {
     };
 
     this.invoicePaymentService.setPayment(data).subscribe(
-      (data:any) => {
+      (data: any) => {
         this.invoicePaymentService.visibleModal(false)
         this.invoicesService.addItemToStart(data.documentMetadata.data);
-        this.invoicesService.totalInfo =  data.totalInfo;
+        this.invoicesService.totalInfo = data.totalInfo;
       },
       (error) => console.error('Ошибка при оплате:', error)
     );
@@ -87,5 +89,5 @@ export class InvoicePaymentComponent implements OnInit {
       (error) => console.error(`Ошибка загрузки ${targetProperty}:`, error)
     );
   }
-  
+
 }

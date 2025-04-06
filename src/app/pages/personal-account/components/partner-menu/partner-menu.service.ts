@@ -38,7 +38,7 @@ export class PartnerMenuService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+    const typeValue = currentUrl.includes('/services') ? 1 : (currentUrl.includes('/project') ? 2 : 0);
  
   this.queryData.filters = this.queryData.filters.filter((filter: any) => filter.field !== 'type');
 
