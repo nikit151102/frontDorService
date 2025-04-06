@@ -54,7 +54,7 @@ export interface DocInvoice {
 export interface InvoiceField {
     name: string;
     label: string;
-    type: 'text' | 'date' | 'dropdown' | 'textarea';
+    type: 'text' | 'date' | 'dropdown' | 'textarea' | 'number';
     placeholder: string;
     options: { label: string; value: any }[];
     optionLabel: string;

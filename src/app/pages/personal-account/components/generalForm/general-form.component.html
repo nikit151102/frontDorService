@@ -23,7 +23,7 @@
                             [disabled]="!isEdit"></app-custom-dropdown>
 
                         <app-custom-input-number *ngSwitchCase="'number'" [(ngModel)]="model[field.name]"
-                            [min]="field.min" [max]="field.max" [disabled]="!isEdit"></app-custom-input-number>
+                            [min]="field.min" [disabled]="!isEdit"></app-custom-input-number>
 
                         <textarea *ngSwitchCase="'textarea'" [id]="field.name" [(ngModel)]="model[field.name]"
                             [disabled]="!isEdit"></textarea>
