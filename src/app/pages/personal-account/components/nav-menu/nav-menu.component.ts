@@ -76,8 +76,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   }
 
   hasAccess(access: string): boolean {
-    // return !access || this.decodedRole.includes(access);
-    return true
+    return !access || this.decodedRole.includes(access);
+    // return true
   }
 
   tooltipVisible = false;
