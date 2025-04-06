@@ -300,7 +300,7 @@ export function getFormExpenseSets(productsTarget:FormDataSources): InvoiceConfi
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
 
-    const data = {
+    const dataForm = {
         dateTime: model.dateTime || '',
         auto: model.auto || '',
         placeFrom: model.placeFrom || '',
@@ -314,7 +314,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
     };
-    
+    console.log('data', dataForm)
 
     const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
     const acceptLabel = model && model.id ? 'Обновить' : 'Создать';
@@ -326,11 +326,10 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         rejectLabel: 'Отмена',
         onAccept: () => {
             
-            invoiceService.saveInvoice(data, 'api/CommercialWork/ManagerDocument').subscribe(
+            invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument').subscribe(
                 (invoice: any) => {
-                    console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
                     if(!send) {
-                        invoicesService.addItemToStart(invoice.documentMetadata.data);
+                        invoicesService.addItemToStart(invoice.data);
                         sendClose();
                     }
                     toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');

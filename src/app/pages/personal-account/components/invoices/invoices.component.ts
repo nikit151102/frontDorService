@@ -93,7 +93,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
   
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
-
+    console.log('this.currentRolethis.currentRole',this.currentRole)
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
       this.cdRef.detectChanges();
@@ -114,6 +114,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
+      case '5':
+        console.log('this.buttonConfigs',this.buttonConfigs['householdManager'])
+        return this.buttonConfigs['householdManager'];
       case '4':
         return this.buttonConfigs['accountant'];
       case '2':
@@ -228,15 +231,33 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   loadInvoices() {
-    this.invoicesService.endpointGetData = this.endpointGetData
+    this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
       (response) => {
-        this.invoices = response.documentMetadata.data.map((invoice: any) => ({
-          ...invoice,
-          expenseSum: invoice.expenseSum.toString().replace('.', ','),
-          incomeSum: invoice.incomeSum.toString().replace('.', ',')
-        }));
-        console.log('invoices', this.invoices)
+        const mapInvoice = (invoice: any) => {
+          const transformed = {
+            ...invoice,
+            expenseSum: invoice.expenseSum?.toString().replace('.', ','),
+            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
+          };
+  
+          if ('cargoId' in invoice) {
+            transformed.id = invoice.cargoId;
+            delete transformed.cargoId;
+          }
+  
+          return transformed;
+        };
+  
+        if (response.documentMetadata && response.documentMetadata.data) {
+          this.invoices = response.documentMetadata.data.map(mapInvoice);
+        } else if (response.data) {
+          this.invoices = response.data.map(mapInvoice);
+        } else {
+          this.invoices = [];
+        }
+  
+        console.log('invoices', this.invoices);
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
       },
@@ -245,15 +266,28 @@ export class InvoicesComponent implements OnChanges, OnInit {
       }
     );
   }
+  
+
+  
+  
 
   deleteInvoice(invoiceId: any) {
+    console.log('invoiceId',invoiceId)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.deleteInvoice(invoiceId.id).subscribe(
+        let endpoint;
+        if(endpoint != '/api/CommercialWork/DocInvoice'){
+          endpoint = this.endpoint;
+        }else{
+          endpoint = '/api/CommercialWork/DocInvoice';
+
+        }
+        
+        this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
           () => {
             this.invoicesService.removeItemById(invoiceId.id);
             this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
@@ -288,9 +322,20 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   selectInvoiceId: any;
+  selectData:any;
   isEditInvoice: boolean = false;
+
   getInvoiceById(invoice: any) {
-    this.selectInvoiceId = invoice.id;
+    console.log('invoice',invoice)
+    if(this.generalForm){
+      this.selectData = { ...invoice };
+      console.log('generalForm invoice',invoice)
+    }else{
+      this.selectInvoiceId = invoice.id;
+      this.selectInvoiceId = { ...invoice.id };
+
+    }
+    
   }
 
 

@@ -59,11 +59,11 @@ export const referenceConfig = [
         pageTitle: 'Грузы',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '33%' },
-            { label: 'Наименование', field: 'name', type: 'string', width: '33%' },
+            { label: 'Наименование', field: 'cargoName', type: 'string', width: '33%' },
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true},
-            { label: 'Наименование', field: 'name', type: 'text', visible: true },
+            { label: 'Наименование', field: 'cargoName', type: 'text', visible: true },
         ],
     },
     {
@@ -72,11 +72,11 @@ export const referenceConfig = [
         pageTitle: 'Назначение товара',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '49%' },
-            { label: 'Наименование', field: 'cargoName', type: 'string', width: '49%' },
+            { label: 'Наименование', field: 'storageName', type: 'string', width: '49%' },
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true},
-            { label: 'Наименование', field: 'cargoName', type: 'text', visible: true },
+            { label: 'Наименование', field: 'storageName', type: 'text', visible: true },
         ],
     },
 ];

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -46,6 +46,7 @@ import { InvoicesContentService } from '../../tabs/partners/invoices-content/inv
   providers: [ConfirmationService, MessageService]
 })
 export class GeneralFormComponent implements OnInit, OnChanges {
+  @Input() data:any;
   config!: InvoiceConfig;
   service: any;
   model: Record<string, any> = {};
@@ -65,10 +66,27 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data) {
+      this.selectedInvoice = this.data;
+      this.patchModelWithData(this.data);
+    }
+  
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
     }
   }
+
+  private patchModelWithData(data: any): void {
+    if (!this.config?.fields) return;
+  
+    for (const field of this.config.fields) {
+      if (data.hasOwnProperty(field.name)) {
+        this.model[field.name] = data[field.name];
+      }
+    }
+  }
+
+  
   groupedFields:any;
   groupFieldsByRow() {
     this.groupedFields = {};
@@ -119,7 +137,9 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         jwtService: this.jwtService,
         invoicesService: this.invoicesService
       };
-
+      if(this.data && this.data.id){
+        this.model['id'] = this.data.id;
+      }
       action(this.model, dependencies, this.onDialogClose.bind(this));
     }
   }

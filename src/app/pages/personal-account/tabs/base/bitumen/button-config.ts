@@ -89,6 +89,42 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             condition: (product) => product.status,
         },
     ],
+    householdManager:
+    [
+        {
+            label: 'Подробнее',
+            action: 'getInvoiceById',
+            class: 'btn-details',
+            isEditData: false,
+            condition: (product) => product.status,
+        },
+        {
+            label: 'Изменить',
+            action: 'getInvoiceById',
+            class: 'btn-edit',
+            titlePopUp: 'Редактирование фактуры',
+            messagePopUp: 'Вы уверены, что хотите внести изменения?',
+            isEditData: true,
+            condition: (product) => product.status === 0 || product.status === 3,
+        },
+        {
+            label: 'Отправить',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отправки',
+            messagePopUp: 'Вы уверены, что хотите отправить фактуру механику на проверку?',
+            status: 2,
+            condition: (product) => product.status === 0 || product.status === 3,
+        },
+        {
+            label: 'Удалить',
+            action: 'deleteInvoice',
+            class: 'btn-delete',
+            titlePopUp: 'Подтверждение удаления',
+            messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
+            condition: (product) => product.status === 0 || product.status === 3,
+        }
+    ],
     default: [
         {
             label: 'Подробнее',

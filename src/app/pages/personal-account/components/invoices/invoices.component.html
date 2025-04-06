@@ -4,7 +4,7 @@
             [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
     </ng-container>
     <ng-container *ngIf="generalForm">
-        <general-form></general-form>
+        <general-form [data]="selectData"></general-form>
     </ng-container>
     <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
         <button (click)="openPaymentModal()" style="    padding: 8px;
