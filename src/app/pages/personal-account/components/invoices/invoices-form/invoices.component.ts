@@ -90,6 +90,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
+        
+        if (Array.isArray(this.invoiceId)) {
+          this.invoiceId = this.invoiceId.join('');
+          
+          this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
+        }
         console.log('this.invoiceId this.invoiceId ', this.invoiceId)
         if (this.invoiceId != null && this.invoiceId != undefined) {
           this.loadInvoice();
@@ -151,6 +157,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
   loadInvoice() {
+    if (typeof this.invoiceId === 'object') {
+      this.invoiceId = Object.values(this.invoiceId).join('');
+      
+      this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
+    }
+    console.log('this.invoiceId this.invoiceId ', this.invoiceId)
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
 
       this.selectedInvoice = value.data;
