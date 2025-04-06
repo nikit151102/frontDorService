@@ -1,31 +1,42 @@
-<nav class="nav-menu">
-    <ul>
-        <li *ngFor="let item of items">
-            <button 
-                (click)="execute(item.commandName || '')" 
-                [disabled]="!hasAccess(item.access)"
-                style="position: relative;">
-                {{ item.label }}
+<div style="display: flex;     justify-content: space-between;">
+    <nav class="nav-menu">
+        <ul>
+            <li *ngFor="let item of items">
+                <button 
+                    (click)="execute(item.commandName || '')" 
+                    [disabled]="!hasAccess(item.access)"
+                    style="position: relative;">
+                    {{ item.label }}
+                    
+                    <!-- Кружок уведомлений -->
+                    <span 
+                        *ngIf="shouldShowNotification(item.notifyKey)" 
+                        class="notification-badge" 
+                        [ngClass]="getNotificationClass(item.notifyKey)"
+                        (mouseenter)="showTooltip(item.notifyKey, $event)" 
+                        (mouseleave)="hideTooltip()">
+                        {{ getNotificationCount(item.notifyKey) }}
+                    </span>
+                </button>
                 
-                <!-- Кружок уведомлений -->
-                <span 
-                    *ngIf="shouldShowNotification(item.notifyKey)" 
-                    class="notification-badge" 
-                    [ngClass]="getNotificationClass(item.notifyKey)"
-                    (mouseenter)="showTooltip(item.notifyKey, $event)" 
-                    (mouseleave)="hideTooltip()">
-                    {{ getNotificationCount(item.notifyKey) }}
-                </span>
-            </button>
-            
-             <!-- Всплывающая подсказка с деталями -->
-             <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
-                <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
-                <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
+                 <!-- Всплывающая подсказка с деталями -->
+                 <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
+                    <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
+                    <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
+                </div>
+            </li>
+        </ul>
+    </nav>
+    
+    
+    <div class="navbar-profile" (click)="onProfileClick($event)">
+        <img src="5e227329363657_55ef8df90a1ca-no-bg-preview.png" alt="Profile" class="profile-pic" />
+        <div class="dropdown">
+            <div class="dropdown-content" *ngIf="isDropdownVisible">
+                <a (click)="execute('profile')">Профиль</a>
+                <a (click)="execute('exit')">Выйти</a>
             </div>
-        </li>
-        <li>
-            <button (click)="execute('exit')">Выйти</button>
-        </li>
-    </ul>
-</nav>
+        </div>
+    </div>
+    
+</div>
