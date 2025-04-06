@@ -60,8 +60,15 @@ export class InvoicesContentService {
 
   saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
+    let invoiceid;
+    console.log('invoice-----------------',invoice)
+    if (invoice.cargoId) {
+      invoiceid = invoice.cargoId;
+    }else{
+      invoiceid = invoice.id;
+    }
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`

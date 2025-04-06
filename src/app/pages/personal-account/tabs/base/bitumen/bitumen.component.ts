@@ -22,8 +22,8 @@ export class BitumenComponent implements OnInit {
     private generalFormService: GeneralFormService,
     private bitumenService: BitumenService,
     private jwtService: JwtService,
-    private invoicesService:InvoicesService
-  ) {}
+    private invoicesService: InvoicesService
+  ) { }
 
   paymentType: number = 2;
   productTarget: any;
@@ -62,7 +62,7 @@ export class BitumenComponent implements OnInit {
     },
     { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
-  
+
 
   columnsExpenseData = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '12%' },
@@ -92,7 +92,7 @@ export class BitumenComponent implements OnInit {
     { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
-  
+
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
 
@@ -104,20 +104,6 @@ export class BitumenComponent implements OnInit {
 
     this.generalFormService.setService(this.bitumenService);
 
-    this.loadData('/api/Entities/Cargo/Filter')
-      .then((productTarget) => {
-        const dataSources = {
-          productTarget: productTarget.data
-        };
-        
-        const formSet = getFormArrivalSets(dataSources);
-        this.generalFormService.setConfig(formSet);
-        this.generalFormService.setModel(MODEL);
-        this.generalFormService.setService(this.bitumenService);
-      this.buttonConfigs = formSet.buttons;
-      });
-
-     
   }
 
   loadData(apiEndpoint: string): Promise<any> {
@@ -132,22 +118,38 @@ export class BitumenComponent implements OnInit {
     });
   }
 
+  defaultFilters: any;
   switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+    this.invoicesService.queryData = { filters: [], sorts: [] };
     this.invoicesService.defaultFilters = [{
       field: 'ManagerDocType',
       values: [typeDocs],
       type: 1
-    }]
+    }];
+
+    this.defaultFilters = { ...this.invoicesService.defaultFilters };
     this.currentComponent = type;
     this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-    const formSet = type === 'arrival'
-      ? getFormArrivalSets({ productTarget: this.productTarget })
-      : getFormExpenseSets({ productTarget: this.productTarget });
+    this.loadData('/api/Entities/Cargo/Filter')
+      .then((productTarget) => {
+        this.productTarget = productTarget.data;
+        const dataSources = { productTarget: this.productTarget };
 
-    this.generalFormService.setConfig(formSet);
-    this.buttonConfigs = formSet.buttons;
+        const formSet = type === 'arrival'
+          ? getFormArrivalSets(dataSources)
+          : getFormExpenseSets(dataSources);
+
+        MODEL.managerDocType = type === 'arrival' ? 0 : 1;
+
+        this.generalFormService.setService(this.bitumenService);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+
+        this.buttonConfigs = formSet.buttons;
+      });
   }
+
 
   getButtonConfigs() {
     return BUTTON_SETS;

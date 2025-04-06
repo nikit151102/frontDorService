@@ -46,7 +46,7 @@ import { InvoicesContentService } from '../../tabs/partners/invoices-content/inv
   providers: [ConfirmationService, MessageService]
 })
 export class GeneralFormComponent implements OnInit, OnChanges {
-  @Input() data:any;
+  @Input() data: any;
   config!: InvoiceConfig;
   service: any;
   model: Record<string, any> = {};
@@ -58,7 +58,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     private cdr: ChangeDetectorRef,
     private jwtService: JwtService,
     private confirmPopupService: ConfirmPopupService,
-    private invoicesService:InvoicesService,
+    private invoicesService: InvoicesService,
     private invoiceService: InvoicesContentService,
     private productsService: ProductsService,
     private messageService: MessageService,
@@ -70,24 +70,36 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       this.selectedInvoice = this.data;
       this.patchModelWithData(this.data);
     }
-  
+
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
     }
   }
 
   private patchModelWithData(data: any): void {
-    if (!this.config?.fields) return;
-  
+    if (!this.config?.fields) {
+      console.warn('Конфигурация или поля не определены');
+      return;
+    }
+    console.log('data', data)
     for (const field of this.config.fields) {
       if (data.hasOwnProperty(field.name)) {
-        this.model[field.name] = data[field.name];
+        if (field.name === 'id') {
+          this.model['id'] = data['id'];
+        } else {
+          this.model[field.name] = data[field.name];
+        }
+      } else {
+        console.warn(`⚠️ Поле "${field.name}" отсутствует в данных`);
       }
     }
+
+    console.log('✅ Финальная модель после патча:', this.model);
   }
 
-  
-  groupedFields:any;
+
+
+  groupedFields: any;
   groupFieldsByRow() {
     this.groupedFields = {};
     for (const field of this.config.fields) {
@@ -105,12 +117,12 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       this.config = config;
       this.initializeModel(config);
       this.groupFieldsByRow();
-      console.log('config',config)
+      console.log('config', config)
     });
 
     this.generalFormService.getModel().subscribe((model: any) => {
       this.model = model;
-      console.log('model',model)
+      console.log('model', model)
     });
 
     const currentRole = this.jwtService.getDecodedToken().email;
@@ -137,9 +149,11 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         jwtService: this.jwtService,
         invoicesService: this.invoicesService
       };
-      if(this.data && this.data.id){
+      if (this.data && this.data.id) {
         this.model['id'] = this.data.id;
-      }
+      };
+
+
       action(this.model, dependencies, this.onDialogClose.bind(this));
     }
   }

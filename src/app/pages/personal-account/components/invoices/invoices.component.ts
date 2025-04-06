@@ -56,11 +56,19 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
   @Input() generalForm: boolean = false;
+  @Input() defaultFilter:any;
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
 
   ngOnChanges(changes: SimpleChanges) {
+    
+    if (changes['defaultFilter']) {
+      this.invoicesService.counterpartyId = this.counterpartyId;
+      this.invoicesService.endpoint = this.endpoint;
+      this.loadInvoices();
+      console.log('counterpartyData', this.counterpartyData)
+    }
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;

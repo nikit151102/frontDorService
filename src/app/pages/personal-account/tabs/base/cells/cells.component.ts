@@ -20,8 +20,8 @@ export class CellsComponent implements OnInit {
     private generalFormService: GeneralFormService,
     private cellsService: CellsService,
     private jwtService: JwtService,
-    private invoicesService:InvoicesService
-  ) {}
+    private invoicesService: InvoicesService
+  ) { }
 
   paymentType: number = 2;
   productTarget: any;
@@ -52,7 +52,7 @@ export class CellsComponent implements OnInit {
     { field: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '8%' },
     { field: 'amount', header: 'Цена', type: 'string', visible: true, width: '8%' },
   ];
-  
+
 
   columnsExpenseData = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '12%' },
@@ -82,7 +82,7 @@ export class CellsComponent implements OnInit {
     { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
-  
+
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
 
@@ -99,15 +99,16 @@ export class CellsComponent implements OnInit {
         const dataSources = {
           productTarget: productTarget.data
         };
-        
+
         const formSet = getFormArrivalSets(dataSources);
         this.generalFormService.setConfig(formSet);
+        MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
         this.generalFormService.setModel(MODEL);
         this.generalFormService.setService(this.cellsService);
-      this.buttonConfigs = formSet.buttons;
+        this.buttonConfigs = formSet.buttons;
       });
 
-     
+
   }
 
   loadData(apiEndpoint: string): Promise<any> {
@@ -122,12 +123,15 @@ export class CellsComponent implements OnInit {
     });
   }
 
+  defaultFilters: any;
   switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+    this.invoicesService.queryData = { filters: [], sorts: [] };
     this.invoicesService.defaultFilters = [{
       field: 'ManagerDocType',
       values: [typeDocs],
       type: 1
-    }]
+    }];
+    this.defaultFilters = { ...this.invoicesService.defaultFilters };
     this.currentComponent = type;
     this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
@@ -135,6 +139,8 @@ export class CellsComponent implements OnInit {
       ? getFormArrivalSets({ productTarget: this.productTarget })
       : getFormExpenseSets({ productTarget: this.productTarget });
 
+    MODEL.managerDocType = type === 'arrival' ? 0 : 1;
+    this.generalFormService.setModel(MODEL);
     this.generalFormService.setConfig(formSet);
     this.buttonConfigs = formSet.buttons;
   }

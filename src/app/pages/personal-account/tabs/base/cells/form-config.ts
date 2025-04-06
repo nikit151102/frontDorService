@@ -216,7 +216,7 @@ export function getFormExpenseSets(productsTarget:FormDataSources): InvoiceConfi
             type: 'dropdown',
             placeholder: 'Выберите груз',
             options: productsTarget.productTarget || [],
-            optionLabel: 'name',
+            optionLabel: 'cargoName',
             optionValue: 'id',
             min: 0,
             max: 0,
@@ -305,7 +305,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         auto: model.auto || '',
         placeFrom: model.placeFrom || '',
         placeTo: model.placeTo || '',
-        cargoId: model.cargoId || '',
+        cargoId: model.cargoId || model.id || '',
         ttn: model.ttn || 2,
         weight: model.weight || 2,
         amount: model.amount || 0,
@@ -316,8 +316,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     };
     console.log('data', dataForm)
 
-    const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
-    const acceptLabel = model && model.id ? 'Обновить' : 'Создать';
+    const titlePopUp = model && model.cargoId ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
+    const acceptLabel = model && model.cargoId ? 'Обновить' : 'Создать';
 
     confirmPopupService.openConfirmDialog({
         title: '',
