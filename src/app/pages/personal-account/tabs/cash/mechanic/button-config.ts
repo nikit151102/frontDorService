@@ -51,7 +51,6 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product) => product.status,
         },
         {
             label: 'Изменить',
@@ -60,7 +59,6 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
             isEditData: true,
-            condition: (product) => product.status,
         },
         {
             label: 'Подписать',
@@ -85,8 +83,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             action: 'deleteInvoice',
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
-            messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
-            condition: (product) => product.status,
+            messagePopUp: 'Вы уверены, что хотите удалить фактуру?'
         },
     ],
     default: [

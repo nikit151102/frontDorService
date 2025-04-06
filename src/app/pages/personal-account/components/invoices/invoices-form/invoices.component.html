@@ -4,9 +4,11 @@
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true"
-        [header]="'Редактирование фактуры (' + selectedInvoice?.partner?.shortName + ' - ' + selectedInvoice?.partner?.fullName + ')'"
-        (onHide)="onDialogClose()">
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'Фактуры (' + 
+    (selectedInvoice?.partner?.shortName || '') + 
+    (selectedInvoice?.partner?.shortName && selectedInvoice?.partner?.fullName ? ' - ' : '') + 
+    (selectedInvoice?.partner?.fullName || '') + 
+    ')'" (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <div style="display: flex; gap: 15px;">
@@ -126,8 +128,8 @@
                 <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     label="Изменить Контрагента" icon="pi pi-check" (click)="editPartner()"></button>
 
-                <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton label="Закрыть"
-                    (click)="onDialogClose()"></button>
+                <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton
+                    label="Закрыть" (click)="onDialogClose()"></button>
             </p-footer>
         </div>
     </p-dialog>
