@@ -49,9 +49,9 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
         },
         {
             name: 'manufacturer',
-            label: 'Наименование',
+            label: 'Поставщик',
             type: 'text',
-            placeholder: 'Введите номер',
+            placeholder: 'Введите поставщика',
             options: [],
             optionLabel: '',
             optionValue: '',
@@ -60,9 +60,9 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
         },
         {
             name: 'expenseSum',
-            label: 'Расход',
-            type: 'text',
-            placeholder: 'Введите расход',
+            label: 'Сумма',
+            type: 'number',
+            placeholder: 'Введите сумму',
             options: [],
             optionLabel: '',
             optionValue: '',
@@ -93,8 +93,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 
     const data = {
         dateTime: model.dateTime,
-        type: 2,
-        DocPaymentType: model.DocPaymentType,
+        type: model.type,
+        docPaymentType: model.docPaymentType,
         manufacturer: model.manufacturer,
         productList: [{
             productTargetId: model.productTargetId || '',
@@ -151,6 +151,6 @@ export const MODEL = {
     number: '',
     expenseSum: '',
     incomeSum: '',
-    type: 2,
-    DocPaymentType: 2
+    type: 1,
+    docPaymentType: 2
 };
