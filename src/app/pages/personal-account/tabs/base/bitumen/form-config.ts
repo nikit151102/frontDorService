@@ -64,7 +64,7 @@ export function getFormArrivalSets(productsTarget:FormDataSources): InvoiceConfi
             type: 'dropdown',
             placeholder: 'Выберите груз',
             options: productsTarget.productTarget || [],
-            optionLabel: 'name',
+            optionLabel: 'CargoName',
             optionValue: 'id',
             min: 0,
             max: 0,
