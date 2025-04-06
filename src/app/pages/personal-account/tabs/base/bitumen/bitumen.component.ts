@@ -104,7 +104,7 @@ export class BitumenComponent implements OnInit {
 
     this.generalFormService.setService(this.bitumenService);
 
-    this.loadData('/api/Entities/ProductTarget/Filter')
+    this.loadData('/api/Entities/Cargo/Filter')
       .then((productTarget) => {
         const dataSources = {
           productTarget: productTarget.data

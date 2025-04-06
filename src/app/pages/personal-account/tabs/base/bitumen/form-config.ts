@@ -35,7 +35,7 @@ export function getFormArrivalSets(productsTarget:FormDataSources): InvoiceConfi
         },
         {
             name: 'placeFrom',
-            label: 'Откула',
+            label: 'Откуда',
             type: 'text',
             placeholder: '',
             options: [],
@@ -187,7 +187,7 @@ export function getFormExpenseSets(productsTarget:FormDataSources): InvoiceConfi
         },
         {
             name: 'placeFrom',
-            label: 'Откула',
+            label: 'Откуда',
             type: 'text',
             placeholder: '',
             options: [],
