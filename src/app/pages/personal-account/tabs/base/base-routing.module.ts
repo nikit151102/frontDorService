@@ -4,9 +4,10 @@ import { BaseComponent } from './base.component';
 
 const routes: Routes = [
   {
-    path: '', component: BaseComponent,
-    children:[
-
+    path: '',
+    component: BaseComponent,
+    children: [
+     
     ]
   }
 ];
@@ -15,4 +16,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class BaseTabRoutingModule { }
+export class BaseTabRoutingModule {}

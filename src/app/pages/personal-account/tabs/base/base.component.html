@@ -1,0 +1,8 @@
+<div class="container">
+  <app-base-menu (selectTab)="onSelectTab($event)"></app-base-menu>
+
+  <ng-container *ngIf="selectedTab == '349143'">
+    <app-bitumen></app-bitumen>
+  </ng-container>
+  
+</div>

@@ -1,6 +1,6 @@
 <div class="counterparties-list">
     <ul>
-        <li *ngFor="let item of items" (click)="hasAccess(item.access) && select(item.name)"
+        <li *ngFor="let item of items" (click)="hasAccess(item.access) && select(item)"
             [class.disabled]="!hasAccess(item.access)">
             <div class="counterparty-item" [class.disabled]="!hasAccess(item.access)">
                 <div style="display: flex; flex-direction: column; align-items: flex-end;">

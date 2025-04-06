@@ -58,17 +58,17 @@ export class InvoicesContentService {
     });
   }
 
-  saveInvoice(invoice: any): Observable<any> {
+  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoice.id}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, invoice, {
+      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -77,9 +77,9 @@ export class InvoicesContentService {
     }
   }
 
-  deleteInvoice(id: string): Observable<void> {
+  deleteInvoice(id: string, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/${endpoint}/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -87,7 +87,7 @@ export class InvoicesContentService {
     });
   }
 
-  sendingVerification(invoice: any, status: any): Observable<void> {
+  sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     const headers = new HttpHeaders({
@@ -99,7 +99,7 @@ export class InvoicesContentService {
       invoice.status = status;
     }
 
-    return this.http.patch<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/SendToCheck/${invoice.id}`, invoice, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/${endpoint}/SendToCheck/${invoice.id}`, invoice, { headers });
   }
 
   getCheckers() {

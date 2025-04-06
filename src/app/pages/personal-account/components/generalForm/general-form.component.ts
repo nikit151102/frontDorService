@@ -69,16 +69,30 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       this.cdr.detectChanges();
     }
   }
+  groupedFields:any;
+  groupFieldsByRow() {
+    this.groupedFields = {};
+    for (const field of this.config.fields) {
+      const group = field.rowGroup || 'default';
+      if (!this.groupedFields[group]) {
+        this.groupedFields[group] = [];
+      }
+      this.groupedFields[group].push(field);
+    }
 
+  }
   ngOnInit(): void {
 
     this.generalFormService.getConfig().subscribe((config: any) => {
       this.config = config;
       this.initializeModel(config);
+      this.groupFieldsByRow();
+      console.log('config',config)
     });
 
     this.generalFormService.getModel().subscribe((model: any) => {
       this.model = model;
+      console.log('model',model)
     });
 
     const currentRole = this.jwtService.getDecodedToken().email;

@@ -61,6 +61,7 @@ export interface InvoiceField {
     optionValue: string;
     min: number;
     max: number;
+    rowGroup?:string
     onChange?: (value: any, model: any) => void;
 }
 

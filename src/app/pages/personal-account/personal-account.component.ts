@@ -28,6 +28,7 @@ export class PersonalAccountComponent  implements OnInit {
         !currentPath.includes('/reference') && 
         !currentPath.includes('/accountant') && 
         !currentPath.includes('/cash') &&
+        !currentPath.includes('/base') &&
         !currentPath.includes('/profile')) {
       this.showGreeting = true;  
       this.router.navigate(['loading'], { relativeTo: this.route });

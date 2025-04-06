@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 import { CommonModule } from '@angular/common';
 
@@ -10,10 +10,11 @@ import { CommonModule } from '@angular/common';
 })
 export class BaseMenuComponent implements OnInit {
 
+  @Output() selectTab = new EventEmitter<any>();
   selectedName: string = '';
   items: any[] = [
-    { name: 'Битум', access: '' },
-    { name: 'Ячейки', access: '' }
+    { code: '349143', name: 'Битум', access: '' },
+    { code: '810632', name: 'Ячейки', access: '' }
   ];
 
   constructor(private jwtService: JwtService) { }
@@ -39,8 +40,9 @@ export class BaseMenuComponent implements OnInit {
     return !access || this.decodedRole.includes(access);
   }
 
-  select(name: string): void {
-    this.selectedName = name;
+  select(item: any): void {
+    this.selectedName = item.name;
+    this.selectTab.emit(item);
   }
 
 }
