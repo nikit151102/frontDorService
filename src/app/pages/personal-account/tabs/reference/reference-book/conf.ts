@@ -54,6 +54,19 @@ export const referenceConfig = [
         ],
     },
     {
+        typeId: '103825',
+        endpoint: 'api/Entities/Cargo',
+        pageTitle: 'Грузы',
+        tableColumns: [
+            { label: 'Код', field: 'code', type: 'string', width: '33%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '33%' },
+        ],
+        formFields: [
+            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Наименование', field: 'name', type: 'text', visible: true },
+        ],
+    },
+    {
         typeId: '925812',
         endpoint: 'api/Entities/Storage',
         pageTitle: 'Назначение товара',
