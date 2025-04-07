@@ -87,7 +87,7 @@
                 <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
                     (dblclick)="isEditInvoice = false; getInvoiceById(product)"
                     (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
-                    <ng-container *ngIf="col.field === 'dateTime'; else normalField">
+                    <ng-container *ngIf="(col.field === 'dateTime' || col.field === 'date'); else normalField">
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
                     <ng-template #normalField>
