@@ -95,7 +95,10 @@
                             [ngClass]="getStatusClass(product[col.field])" class="status-tag">
                             {{ getStatusLabel(product[col.field]) }}
                         </span>
-                        <span *ngIf="col.field !== 'invoiceStatus' && col.field !== 'status'">
+                        <span *ngIf="col.field === 'paymentType' ">
+                            {{ transform(product[col.field]) }}
+                        </span>
+                        <span *ngIf="col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
                             {{ product[col.field] }}
                         </span>
                     </ng-template>

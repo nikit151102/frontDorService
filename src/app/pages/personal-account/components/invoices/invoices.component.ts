@@ -155,7 +155,16 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.cdRef.detectChanges();
   }
 
+  private paymentTypes = [
+    { label: 'Нал', value: 0 },
+    { label: 'Без нал', value: 1 },
+    { label: 'Без нал без НДС', value: 2 }
+  ];
 
+  transform(value: number): string {
+    const found = this.paymentTypes.find(pt => pt.value === value);
+    return found ? found.label : '';
+  }
 
   openPaymentModal() {
     this.invoicePaymentService.selectInvoiceId = this.selectInvoiceId;
