@@ -6,8 +6,13 @@
         <div class="popup-body">
             <div class="p-field p-col-12" style="    display: flex; flex-direction: column;">
                 <label for="dateTime">Дата</label>
-                <p-calendar id="dateTime" [(ngModel)]="dateTime" [showTime]="false"
-                   ></p-calendar>
+                   <p-calendar 
+                   id="dateTime" 
+                   [(ngModel)]="dateTime" 
+                   [showTime]="false"
+                   dateFormat="dd-mm-yy"
+                   (onInput)="onDateInput($event)">
+                 </p-calendar>
             </div>
 
             <div class="p-field p-col-12" style="    max-width: 225px;">

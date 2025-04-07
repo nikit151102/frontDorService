@@ -57,4 +57,7 @@ export class InvoicesEditPartnerPopUpComponent implements OnInit {
   closePopup() {
     this.invoicesEditPartnerPopUpService.closeConfirmDialog();
   }
+
+
+  
 }

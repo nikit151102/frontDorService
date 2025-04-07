@@ -156,6 +156,28 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     })
   }
 
+  onDateInput(event: any) {
+    let value = event.target.value;
+    value = value.replace(/[,\.]/g, '-');
+    let date = this.parseDate(value);
+    if (date) {
+      this.selectedInvoice.dateTime = date;
+    }
+  }
+  parseDate(value: string): Date | null {
+    const parts = value.split('-');
+    if (parts.length === 3) {
+      const day = parseInt(parts[0], 10);
+      const month = parseInt(parts[1], 10) - 1;
+      const year = parseInt(parts[2], 10);
+      const date = new Date(year, month, day);
+      if (date.getDate() === day && date.getMonth() === month && date.getFullYear() === year) {
+        return date;
+      }
+    }
+    return null; 
+  }
+
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
       this.invoiceId = Object.values(this.invoiceId).join('');

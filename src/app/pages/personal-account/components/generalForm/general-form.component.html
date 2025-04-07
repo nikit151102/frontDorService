@@ -18,9 +18,14 @@
                         <app-custom-input *ngSwitchCase="'text'" [(ngModel)]="model[field.name]" [disabled]="!isEdit"
                             [placeholder]="field.placeholder"></app-custom-input>
 
-                        <p-calendar *ngSwitchCase="'date'" [id]="field.name" [(ngModel)]="model[field.name]"
-                            [showTime]="false" [disabled]="!isEdit"></p-calendar>
-
+                        <p-calendar *ngSwitchCase="'date'" 
+                        [id]="field.name" 
+                        [(ngModel)]="model[field.name]"
+                            [showTime]="false" 
+                            [disabled]="!isEdit"
+                            dateFormat="dd-mm-yy"
+                            (onInput)="onDateInput($event, field.name)"
+                            ></p-calendar>
                         <app-custom-dropdown *ngSwitchCase="'dropdown'" [options]="field.options"
                             [optionLabel]="field.optionLabel" [optionValue]="field.optionValue"
                             [(selected)]="model[field.name]"
