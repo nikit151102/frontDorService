@@ -96,26 +96,43 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   }
   
   
-
   private patchModelWithData(data: any): void {
     if (!this.config?.fields) {
       console.warn('Конфигурация или поля не определены');
       return;
     }
+    
     for (const field of this.config.fields) {
+      console.log(`Обрабатываем поле: ${field.name}`);
+      
       if (data.hasOwnProperty(field.name)) {
         if (field.name === 'id') {
           this.model['id'] = data['id'];
         } else {
-          this.model[field.name] = data[field.name];
+          if (field.type === 'date') {
+            const dateValue = data[field.name];
+            if (dateValue) {
+              if (typeof dateValue === 'string') {
+                this.model[field.name] = new Date(dateValue);
+              } else if (typeof dateValue === 'number') {
+                this.model[field.name] = new Date(dateValue);
+              } else {
+                this.model[field.name] = dateValue;
+              }
+              console.log('Патчим поле dateTime со значением:', this.model[field.name]);
+            }
+          } else {
+            this.model[field.name] = data[field.name];
+          }
         }
       } else {
         console.warn(`⚠️ Поле "${field.name}" отсутствует в данных`);
       }
     }
-
+  
     console.log('✅ Финальная модель после патча:', this.model);
   }
+  
 
 
 
