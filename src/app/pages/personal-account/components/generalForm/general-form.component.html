@@ -1,14 +1,14 @@
 <button pButton label="Создать" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true"
-        [header]="'фактуры (' + 
-  (selectedInvoice?.partner?.shortName || '') + 
-  (selectedInvoice?.partner?.shortName && selectedInvoice?.partner?.fullName ? ' - ' : '') + 
-  (selectedInvoice?.partner?.fullName || '') + 
-')'"
-
-        (onHide)="onDialogClose()">
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'фактуры' + 
+    ((selectedInvoice?.partner?.shortName || selectedInvoice?.partner?.fullName) 
+      ? (' (' + 
+        (selectedInvoice?.partner?.shortName || '') + 
+        (selectedInvoice?.partner?.shortName && selectedInvoice?.partner?.fullName ? ' - ' : '') + 
+        (selectedInvoice?.partner?.fullName || '') + 
+        ')') 
+      : '')" (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
                 <ng-container *ngFor="let field of config.fields">
@@ -18,14 +18,9 @@
                         <app-custom-input *ngSwitchCase="'text'" [(ngModel)]="model[field.name]" [disabled]="!isEdit"
                             [placeholder]="field.placeholder"></app-custom-input>
 
-                        <p-calendar *ngSwitchCase="'date'" 
-                        [id]="field.name" 
-                        [(ngModel)]="model[field.name]"
-                            [showTime]="false" 
-                            [disabled]="!isEdit"
-                            dateFormat="dd-mm-yy"
-                            (onInput)="onDateInput($event, field.name)"
-                            ></p-calendar>
+                        <p-calendar *ngSwitchCase="'date'" [id]="field.name" [(ngModel)]="model[field.name]"
+                            [showTime]="false" [disabled]="!isEdit" dateFormat="dd-mm-yy"
+                            (onInput)="onDateInput($event, field.name)"></p-calendar>
                         <app-custom-dropdown *ngSwitchCase="'dropdown'" [options]="field.options"
                             [optionLabel]="field.optionLabel" [optionValue]="field.optionValue"
                             [(selected)]="model[field.name]"

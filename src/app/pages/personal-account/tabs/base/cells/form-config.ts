@@ -314,7 +314,9 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
     };
-    console.log('data', dataForm)
+    if (!model.cargoId) {
+        delete dataForm.cargoId;
+    }
 
     const titlePopUp = model && model.cargoId ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
     const acceptLabel = model && model.cargoId ? 'Обновить' : 'Создать';

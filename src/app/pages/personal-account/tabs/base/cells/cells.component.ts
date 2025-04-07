@@ -90,7 +90,7 @@ export class CellsComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.switchComponent('arrival', 0);
+    this.switchComponent('arrival', 2);
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 

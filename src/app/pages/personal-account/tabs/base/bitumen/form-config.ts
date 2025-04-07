@@ -3,303 +3,303 @@ import { InvoiceConfig } from "../../../../../interfaces/common.interface";
 
 interface FormDataSources {
     productTarget: any[];
-  }
-
-  
-export function getFormArrivalSets(productsTarget:FormDataSources): InvoiceConfig {
-    return {
-    fields: [
-        {
-            name: 'dateTime',
-            label: 'Дата',
-            type: 'date',
-            placeholder: 'Выберите дату',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'auto',
-            label: 'Авто',
-            type: 'text',
-            placeholder: 'Введите автомобиль',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'placeFrom',
-            label: 'Откуда',
-            type: 'text',
-            placeholder: '',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'group1'
-        },
-        {
-            name: 'placeTo',
-            label: 'Куда слил',
-            type: 'text',
-            placeholder: '',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'group1'
-        },
-        
-        {
-            name: 'cargoId',
-            label: 'Груз',
-            type: 'dropdown',
-            placeholder: 'Выберите груз',
-            options: productsTarget.productTarget || [],
-            optionLabel: 'cargoName',
-            optionValue: 'id',
-            min: 0,
-            max: 0,
-            rowGroup: 'single',
-            onChange: (selectedId: string, model: any) => {
-                console.log('Выбрано груза с id:', selectedId);
-                model['cargoId'] = selectedId; 
-                console.log('model',model)
-              },
-        },
-        {
-            name: 'ttn',
-            label: 'ТТН',
-            type: 'number',
-            placeholder: 'Введите ТТН',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'weight',
-            label: 'Тоннаж',
-            type: 'number',
-            placeholder: 'Введите тоннаж',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'amount',
-            label: 'Цена',
-            type: 'number',
-            placeholder: 'Введите цену',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'paymentType',
-            label: 'Форма оплаты',
-            type: 'dropdown',
-            placeholder: 'Форма оплаты',
-            options: [{label: 'Нал', value: 0},
-                {label: 'Без нал', value: 1},
-                {label: 'Без нал без НДС', value: 2}
-            ],
-            optionLabel: 'label',
-            optionValue: 'value',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },        
-        {
-            name: 'comment',
-            label: 'Комментарий',
-            type: 'text',
-            placeholder: 'Введите комментарий',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        }
-    ],
-    buttons: [
-        {
-            label: 'Сохранить и отправить',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, true, sendClose),
-        },
-        {
-            label: 'Черновик',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, false, sendClose),
-        },
-        {
-            label: 'Отменить',
-            action: (model: any) => {
-            },
-        },
-    ],
 }
+
+
+export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConfig {
+    return {
+        fields: [
+            {
+                name: 'dateTime',
+                label: 'Дата',
+                type: 'date',
+                placeholder: 'Выберите дату',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'auto',
+                label: 'Авто',
+                type: 'text',
+                placeholder: 'Введите автомобиль',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'placeFrom',
+                label: 'Откуда',
+                type: 'text',
+                placeholder: '',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'group1'
+            },
+            {
+                name: 'placeTo',
+                label: 'Куда слил',
+                type: 'text',
+                placeholder: '',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'group1'
+            },
+
+            {
+                name: 'cargoId',
+                label: 'Груз',
+                type: 'dropdown',
+                placeholder: 'Выберите груз',
+                options: productsTarget.productTarget || [],
+                optionLabel: 'cargoName',
+                optionValue: 'id',
+                min: 0,
+                max: 0,
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано груза с id:', selectedId);
+                    model['cargoId'] = selectedId;
+                    console.log('model', model)
+                },
+            },
+            {
+                name: 'ttn',
+                label: 'ТТН',
+                type: 'number',
+                placeholder: 'Введите ТТН',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'weight',
+                label: 'Тоннаж',
+                type: 'number',
+                placeholder: 'Введите тоннаж',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'amount',
+                label: 'Цена',
+                type: 'number',
+                placeholder: 'Введите цену',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'paymentType',
+                label: 'Форма оплаты',
+                type: 'dropdown',
+                placeholder: 'Форма оплаты',
+                options: [{ label: 'Нал', value: 0 },
+                { label: 'Без нал', value: 1 },
+                { label: 'Без нал без НДС', value: 2 }
+                ],
+                optionLabel: 'label',
+                optionValue: 'value',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'comment',
+                label: 'Комментарий',
+                type: 'text',
+                placeholder: 'Введите комментарий',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            }
+        ],
+        buttons: [
+            {
+                label: 'Сохранить и отправить',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Черновик',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+            },
+            {
+                label: 'Отменить',
+                action: (model: any) => {
+                },
+            },
+        ],
+    }
 };
 
 
-export function getFormExpenseSets(productsTarget:FormDataSources): InvoiceConfig {
+export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConfig {
     return {
-    fields: [
-        {
-            name: 'dateTime',
-            label: 'Дата',
-            type: 'date',
-            placeholder: 'Выберите дату',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'auto',
-            label: 'Авто',
-            type: 'text',
-            placeholder: 'Введите автомобиль',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'placeFrom',
-            label: 'Откуда',
-            type: 'text',
-            placeholder: '',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'group1'
-        },
-        {
-            name: 'placeTo',
-            label: 'Кому',
-            type: 'text',
-            placeholder: '',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'group1'
-        },
-        
-        {
-            name: 'cargoId',
-            label: 'Груз',
-            type: 'dropdown',
-            placeholder: 'Выберите груз',
-            options: productsTarget.productTarget || [],
-            optionLabel: 'cargoName',
-            optionValue: 'id',
-            min: 0,
-            max: 0,
-            rowGroup: 'single',
-            onChange: (selectedId: string, model: any) => {
-                console.log('Выбрано груза с id:', selectedId);
-                model['cargoId'] = selectedId; 
-                console.log('model',model)
-              },
-        },
-        {
-            name: 'weight',
-            label: 'Тоннаж',
-            type: 'number',
-            placeholder: 'Введите тоннаж',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'amount',
-            label: 'Цена',
-            type: 'number',
-            placeholder: 'Введите цену',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },
-        {
-            name: 'paymentType',
-            label: 'Форма оплаты',
-            type: 'dropdown',
-            placeholder: 'Форма оплаты',
-            options: [{label: 'Нал', value: 0},
-                {label: 'Без нал', value: 1},
-                {label: 'Без нал без НДС', value: 2}
-            ],
-            optionLabel: 'label',
-            optionValue: 'value',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        },        
-        {
-            name: 'comment',
-            label: 'Комментарий',
-            type: 'text',
-            placeholder: 'Введите цену',
-            options: [],
-            optionLabel: '',
-            optionValue: '',
-            min: 0,
-            max: 0,
-            rowGroup: 'single'
-        }
-    ],
-    buttons: [
-        {
-            label: 'Сохранить и отправить',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, true, sendClose),
-        },
-        {
-            label: 'Черновик',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, false, sendClose),
-        },
-        {
-            label: 'Отменить',
-            action: (model: any) => {
+        fields: [
+            {
+                name: 'dateTime',
+                label: 'Дата',
+                type: 'date',
+                placeholder: 'Выберите дату',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
             },
-        },
-    ],
-}
+            {
+                name: 'auto',
+                label: 'Авто',
+                type: 'text',
+                placeholder: 'Введите автомобиль',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'placeFrom',
+                label: 'Откуда',
+                type: 'text',
+                placeholder: '',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'group1'
+            },
+            {
+                name: 'placeTo',
+                label: 'Кому',
+                type: 'text',
+                placeholder: '',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'group1'
+            },
+
+            {
+                name: 'cargoId',
+                label: 'Груз',
+                type: 'dropdown',
+                placeholder: 'Выберите груз',
+                options: productsTarget.productTarget || [],
+                optionLabel: 'cargoName',
+                optionValue: 'id',
+                min: 0,
+                max: 0,
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано груза с id:', selectedId);
+                    model['cargoId'] = selectedId;
+                    console.log('model', model)
+                },
+            },
+            {
+                name: 'weight',
+                label: 'Тоннаж',
+                type: 'number',
+                placeholder: 'Введите тоннаж',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'amount',
+                label: 'Цена',
+                type: 'number',
+                placeholder: 'Введите цену',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'paymentType',
+                label: 'Форма оплаты',
+                type: 'dropdown',
+                placeholder: 'Форма оплаты',
+                options: [{ label: 'Нал', value: 0 },
+                { label: 'Без нал', value: 1 },
+                { label: 'Без нал без НДС', value: 2 }
+                ],
+                optionLabel: 'label',
+                optionValue: 'value',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            },
+            {
+                name: 'comment',
+                label: 'Комментарий',
+                type: 'text',
+                placeholder: 'Введите цену',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single'
+            }
+        ],
+        buttons: [
+            {
+                label: 'Сохранить и отправить',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Черновик',
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+            },
+            {
+                label: 'Отменить',
+                action: (model: any) => {
+                },
+            },
+        ],
+    }
 };
 
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
-    const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
-    console.log('modelmodelmodel',model)
+    const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
+    console.log('modelmodelmodel', model)
     let dataForm: any = {
         dateTime: model.dateTime || '',
         auto: model.auto || '',
@@ -314,6 +314,9 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
     };
+    if (!model.cargoId) {
+        delete dataForm.cargoId;
+    }
     if (model.hasOwnProperty('id')) {
         dataForm.id = model.id;
     }
@@ -327,10 +330,10 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         acceptLabel: acceptLabel,
         rejectLabel: 'Отмена',
         onAccept: () => {
-            
+
             invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument').subscribe(
                 (invoice: any) => {
-                    if(!send) {
+                    if (!send) {
                         invoicesService.addItemToStart(invoice.data);
                         sendClose();
                     }
@@ -340,10 +343,11 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     let verificationLevel = currentRole === '5' ? 2 : (currentRole === '1' ? 5 : null);
                     if (send) {
                         invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel, 'api/CommercialWork/ManagerDocument').subscribe(
-                            (data: any) => { invoicesService.addItemToStart(data.data);
+                            (data: any) => {
+                                invoicesService.addItemToStart(data.data);
                                 sendClose();
                             },
-                            (error:any) => {
+                            (error: any) => {
                                 console.error('Ошибка при отправке на проверку:', error);
                             }
                         );
@@ -369,6 +373,6 @@ export const MODEL = {
     amount: 0,
     managerDocType: 0,
     status: 0,
-    paymentType: 0, 
+    paymentType: 0,
     comment: '',
 };
