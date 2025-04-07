@@ -23,7 +23,7 @@ export class InvoicePaymentComponent implements OnInit {
   rejectLabel: string = 'Отмена';
   measurementUnit: any = [];
   productTarget: any = [];
-  dateTime: Date = new Date();
+  dateTime: Date | undefined = new Date();
   amount: number = 0;
 
   constructor(
@@ -67,6 +67,8 @@ export class InvoicePaymentComponent implements OnInit {
         this.invoicePaymentService.visibleModal(false)
         this.invoicesService.addItemToStart(data.documentMetadata.data);
         this.invoicesService.totalInfo = data.totalInfo;
+        this.dateTime = new Date();
+        this.amount = 0;
       },
       (error) => console.error('Ошибка при оплате:', error)
     );
