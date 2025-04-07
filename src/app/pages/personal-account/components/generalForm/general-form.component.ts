@@ -68,20 +68,40 @@ export class GeneralFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
       this.selectedInvoice = this.data;
-      this.patchModelWithData(this.data);
+  
+      if (this.config && this.areOptionsLoaded()) {
+        this.patchModelWithData(this.data);
+      } else {
+        const waitForConfig = setInterval(() => {
+          if (this.config && this.areOptionsLoaded()) {
+            clearInterval(waitForConfig);
+            this.patchModelWithData(this.data);
+            this.cdr.detectChanges(); 
+          }
+        }, 100);
+      }
     }
-
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
     }
   }
+
+  private areOptionsLoaded(): boolean {
+    return this.config?.fields.every(field => {
+      if (field.type === 'dropdown') {
+        return Array.isArray(field.options) && field.options.length > 0;
+      }
+      return true;
+    });
+  }
+  
+  
 
   private patchModelWithData(data: any): void {
     if (!this.config?.fields) {
       console.warn('Конфигурация или поля не определены');
       return;
     }
-    console.log('data', data)
     for (const field of this.config.fields) {
       if (data.hasOwnProperty(field.name)) {
         if (field.name === 'id') {
