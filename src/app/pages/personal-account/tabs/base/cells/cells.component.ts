@@ -33,7 +33,7 @@ export class CellsComponent implements OnInit {
   ];
 
   columnsArrivalData = [
-    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '12%' },
+    { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
     { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
     { field: 'placeTo', header: 'Организация', type: 'string', visible: true, width: '10%' },
