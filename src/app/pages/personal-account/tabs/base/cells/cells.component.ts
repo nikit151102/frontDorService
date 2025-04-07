@@ -51,6 +51,7 @@ export class CellsComponent implements OnInit {
     { field: 'ttn', header: 'ТТН', type: 'string', visible: true, width: '10%' },
     { field: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '8%' },
     { field: 'amount', header: 'Цена', type: 'string', visible: true, width: '8%' },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
   ];
 
 
@@ -79,6 +80,7 @@ export class CellsComponent implements OnInit {
       visible: true,
       width: '10%'
     },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
