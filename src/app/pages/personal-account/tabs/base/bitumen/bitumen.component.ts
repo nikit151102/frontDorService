@@ -90,6 +90,7 @@ export class BitumenComponent implements OnInit {
       visible: true,
       width: '10%'
     },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
