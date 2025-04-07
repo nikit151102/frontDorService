@@ -301,7 +301,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
 
     const dataForm = {
-        dateTime: model.dateTime || '',
+        date: model.dateTime || '',
         auto: model.auto || '',
         placeFrom: model.placeFrom || '',
         placeTo: model.placeTo || '',
