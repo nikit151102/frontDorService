@@ -39,7 +39,7 @@
   (selectedColumnsChange)="updateSelectedColumns($event)">
 </app-settings> -->
 
-    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData"> 
+    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData">
         {{counterpartyData?.shortName}}
         <span *ngIf="counterpartyData.fullName">
             -
@@ -101,6 +101,16 @@
                         {{ product[col.field] | date: 'dd-MM-yyyy' }}
                     </ng-container>
                     <ng-template #normalField>
+                        <ng-container *ngIf="col.field === 'number'">
+                            {{ product[col.field]}}
+                            <span *ngIf="product[col.field] == 1  && product[col.field] == 2" [ngClass]="{
+                                    'status-tag': true,
+                                    'status-rejected': col.field === 'drafted' && product[col.field] === 1,
+                                    'status-approved': col.field === 'drafted' && product[col.field] === 2
+                                }">
+                                Счёт
+                            </span>
+                        </ng-container>
                         <span *ngIf="col.field === 'invoiceStatus' || col.field === 'status'"
                             [ngClass]="getStatusClass(product[col.field])" class="status-tag">
                             {{ getStatusLabel(product[col.field]) }}
@@ -108,7 +118,8 @@
                         <span *ngIf="col.field === 'paymentType' ">
                             {{ transform(product[col.field]) }}
                         </span>
-                        <span *ngIf="col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
+                        <span
+                            *ngIf="col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
                             {{ product[col.field] }}
                         </span>
                     </ng-template>
@@ -165,5 +176,5 @@
 
 
 
-<app-invoice-payment [counterpartyId]="counterpartyId"  [paymentType]="paymentType"></app-invoice-payment>
-<app-score-form [counterpartyId]="counterpartyId" ></app-score-form>
+<app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType"></app-invoice-payment>
+<app-score-form [counterpartyId]="counterpartyId"></app-score-form>
