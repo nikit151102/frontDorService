@@ -52,7 +52,9 @@ export class PartnerMenuComponent {
     { label: 'Контрагент', value: 0 },
     { label: 'Сервис', value: 1 },
     { label: 'Физическое лицо', value: 2 },
-    { label: 'Юридическое лицо', value: 3 }
+    { label: 'Юридическое лицо', value: 3 },
+    { label: 'Прототип', value: 4 },
+    { label: 'Проект', value: 5 }
   ];
 
   constructor(
@@ -163,10 +165,10 @@ export class PartnerMenuComponent {
     });
   }
 
-  select(id: any, data:any) {
+  select(id: any, data: any) {
     this.selectedId = id;
-    this.selectCounterparty.emit({id: id, data: data});
-    console.log('id',id)
+    this.selectCounterparty.emit({ id: id, data: data });
+    console.log('id', id)
   }
 
   isEdit: boolean = true;
@@ -257,8 +259,13 @@ export class PartnerMenuComponent {
     } else {
       const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
-    formDataWithValueType.type = typeValue;
+      const typeValue = currentUrl.includes('/services')
+        ? 1
+        : currentUrl.includes('/projects')
+          ? 5
+          : 0;
+
+      formDataWithValueType.type = typeValue;
       this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
         (newCounterparty) => {
           this.counterparties.push(newCounterparty);

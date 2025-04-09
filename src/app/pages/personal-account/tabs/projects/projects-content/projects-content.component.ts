@@ -25,7 +25,7 @@ export class ProjectsContentComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.invoicesService.defaultFilters = [{
       field: 'Partner.Type',
-      values: [0],
+      values: [5],
       type: 1
     }]
 

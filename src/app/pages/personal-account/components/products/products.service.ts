@@ -52,7 +52,12 @@ export class ProductsService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+    const typeValue = currentUrl.includes('/services')
+    ? 1
+    : currentUrl.includes('/projects')
+      ? 5
+      : 0;
+  
 
     let defaultFilter = {
       field: 'DocInvoice.Partner.Type',
