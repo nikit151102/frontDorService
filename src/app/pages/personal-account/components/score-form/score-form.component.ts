@@ -9,7 +9,7 @@ import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-inp
 
 @Component({
   selector: 'app-score-form',
-  imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule,CustomInputComponent],
+  imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule, CustomInputComponent],
   templateUrl: './score-form.component.html',
   styleUrl: './score-form.component.scss'
 })
@@ -17,7 +17,7 @@ export class ScoreFormComponent implements OnInit {
   @Input() counterpartyId: string = '';
   visible: boolean = false;
   message: string = '';
-  acceptLabel: string = 'Сохранить';
+  acceptLabel: string = 'Черновик';
   rejectLabel: string = 'Отмена';
   measurementUnit: any = [];
   productTarget: any = [];
@@ -44,7 +44,7 @@ export class ScoreFormComponent implements OnInit {
 
   }
 
-  onAccept() {
+  onAccept(callback?: (invoice: any) => void) {
     const data = {
       number: this.numberScope,
       dateTime: this.dateTime,
@@ -69,6 +69,7 @@ export class ScoreFormComponent implements OnInit {
         this.amount = 0;
         this.numberScope = '';
         this.name = '';
+        return data.documentMetadata.data;
       },
       (error) => console.error('Ошибка при оплате:', error)
     );
@@ -112,6 +113,30 @@ export class ScoreFormComponent implements OnInit {
       }
     }
     return null;
+  }
+
+  sendingVerification() {
+
+  }
+
+
+
+  saveAndSendInvoice() {
+    this.onAccept((invoice: any) => {
+      this.sendingInvoice(invoice, 2);
+    });
+  }
+
+  sendingInvoice(invoice: string, status: number) {
+    this.scoreFormService.sendingVerification(invoice, status).subscribe(
+      (updatedInvoice: any) => {
+        this.invoicesService.updateActiveData(updatedInvoice.data)
+        this.closePopup();
+      },
+      error => {
+        console.error('Ошибка при отправке на проверку:', error);
+      }
+    );
   }
 
 }

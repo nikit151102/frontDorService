@@ -41,4 +41,18 @@ export class ScoreFormService {
     });
   }
 
+  sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    if(status){
+      invoice.status = status;
+    }
+
+    return this.http.patch<void>(`${environment.apiUrl}/${endpoint}/SendToCheck/${invoice.id}`, invoice, { headers });
+  }
 }
