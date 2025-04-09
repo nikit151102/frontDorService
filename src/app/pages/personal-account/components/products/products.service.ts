@@ -58,6 +58,17 @@ export class ProductsService {
       ? 5
       : 0;
   
+      const hasAccountTypeFilter = this.queryData.filters.some(
+        (filter: any) => filter.field === 'DocInvoice.DocAccountType'
+      );
+      
+      if (!hasAccountTypeFilter) {
+        this.queryData.filters.push({
+          field: 'DocInvoice.DocAccountType',
+          values: [0],
+          type: 1,
+        });
+      }
 
     let defaultFilter = {
       field: 'DocInvoice.Partner.Type',
@@ -65,6 +76,7 @@ export class ProductsService {
       type: 1
     }
 
+    
     const filterExists = this.queryData.filters.some(filter =>
       filter.field === defaultFilter.field &&
       JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&

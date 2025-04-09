@@ -102,6 +102,18 @@ export class InvoicesService {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     }
 
+    const hasAccountTypeFilter = this.queryData.filters.some(
+      (filter: any) => filter.field === 'DocInvoice.DocAccountType'
+    );
+    
+    if (!hasAccountTypeFilter) {
+      this.queryData.filters.push({
+        field: 'DocInvoice.DocAccountType',
+        values: [0, 1],
+        type: 1,
+      });
+    }
+
     if (!this.queryData.sorts) {
       this.queryData.sorts = [];
     }
