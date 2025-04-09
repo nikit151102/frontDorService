@@ -47,6 +47,7 @@ import { InvoicesContentService } from '../../tabs/partners/invoices-content/inv
 })
 export class GeneralFormComponent implements OnInit, OnChanges {
   @Input() data: any;
+  @Input() label: string = 'Создать';
   config!: InvoiceConfig;
   service: any;
   model: Record<string, any> = {};

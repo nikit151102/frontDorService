@@ -22,6 +22,8 @@ import { ToastService } from '../../../../services/toast.service';
 import { InvoicePaymentComponent } from '../invoice-payment/invoice-payment.component';
 import { InvoicePaymentService } from '../invoice-payment/invoice-payment.service';
 import { GeneralFormComponent } from '../generalForm/general-form.component';
+import { ScoreFormComponent } from '../score-form/score-form.component';
+import { ScoreFormService } from '../score-form/score-form.service';
 
 @Component({
   selector: 'app-invoices',
@@ -39,7 +41,8 @@ import { GeneralFormComponent } from '../generalForm/general-form.component';
     MenuModule,
     InvoicesFormComponent,
     InvoicePaymentComponent,
-    GeneralFormComponent
+    GeneralFormComponent,
+    ScoreFormComponent
     // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
@@ -95,7 +98,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private cdRef: ChangeDetectorRef,
     private jwtService: JwtService,
     public invoicePaymentService: InvoicePaymentService, 
-    private el: ElementRef, private renderer: Renderer2) { }
+    private el: ElementRef, private renderer: Renderer2, 
+    private scoreFormService:ScoreFormService) { }
 
   ngOnInit() {
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
@@ -171,6 +175,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicePaymentService.selectInvoiceFullName = this.counterpartyData?.fullName;
     this.invoicePaymentService.selectInvoiceShortName = this.counterpartyData?.shortName;
     this.invoicePaymentService.visibleModal(true)
+  }
+
+  openScopeModal(){
+    this.scoreFormService.selectInvoiceId = this.selectInvoiceId;
+    this.scoreFormService.selectInvoiceFullName = this.counterpartyData?.fullName;
+    this.scoreFormService.selectInvoiceShortName = this.counterpartyData?.shortName;
+    this.scoreFormService.visibleModal(true)
   }
 
   updateColumnVisibility() {

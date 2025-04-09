@@ -1,0 +1,38 @@
+<div class="overlay" *ngIf="visible">
+    <div class="popup">
+        <div class="popup-header">
+            <span>Счёт ({{scoreFormService.selectInvoiceShortName}} - {{scoreFormService.selectInvoiceFullName}})</span>
+        </div>
+        <div class="popup-body">
+            <div class="p-field p-col-12">
+                <label for="number">Номер счёта</label>
+                <app-custom-input [(ngModel)]="numberScope" 
+                    placeholder="Введите номер фактуры"></app-custom-input>
+            </div>
+            <div class="p-field p-col-12" style="    display: flex; flex-direction: column;">
+                <label for="dateTime">Дата</label>
+                   <p-calendar 
+                   id="dateTime" 
+                   [(ngModel)]="dateTime" 
+                   [showTime]="false"
+                   dateFormat="dd-mm-yy"
+                   (onInput)="onDateInput($event)">
+                 </p-calendar>
+            </div>
+            <div class="p-field p-col-12">
+                <label for="number">Наименование</label>
+                <app-custom-input [(ngModel)]="name" 
+                    placeholder="Введите номер фактуры"></app-custom-input>
+            </div>
+            <div class="p-field p-col-12" style="    max-width: 225px;">
+                <label for="dateTime">Сумма</label>
+                <app-custom-input-number [(ngModel)]="amount"  [min]="0">
+                </app-custom-input-number>
+            </div>
+        </div>
+        <div class="popup-footer">
+            <button class="btn reject" (click)="closePopup()">{{ rejectLabel }}</button>
+            <button class="btn accept" (click)="onAccept()">{{ acceptLabel }}</button>
+        </div>
+    </div>
+</div>

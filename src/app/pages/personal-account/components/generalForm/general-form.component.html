@@ -1,4 +1,4 @@
-<button pButton label="Создать" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
+<button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
     <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'фактуры' + 
