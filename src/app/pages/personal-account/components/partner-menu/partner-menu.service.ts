@@ -25,7 +25,7 @@ export class PartnerMenuService {
       'Authorization': `Bearer ${token}`
     });
   }
-  
+
   queryData: any = { filters: [], sorts: [] }
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -38,14 +38,18 @@ export class PartnerMenuService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : (currentUrl.includes('/project') ? 2 : 0);
- 
-  this.queryData.filters = this.queryData.filters.filter((filter: any) => filter.field !== 'type');
+    const typeValue = currentUrl.includes('/services')
+      ? 1
+      : currentUrl.includes('/projects')
+        ? 5
+        : 0;
 
-  this.queryData.filters.unshift({ field: 'type', values: [typeValue], type: 1 });
+    this.queryData.filters = this.queryData.filters.filter((filter: any) => filter.field !== 'type');
+
+    this.queryData.filters.unshift({ field: 'type', values: [typeValue], type: 1 });
 
 
-    return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData, 
+    return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData,
       { headers: this.getHeaders() })
   }
 
@@ -62,12 +66,12 @@ export class PartnerMenuService {
     );
   }
 
-  getCounterpartyItem(id:string){
+  getCounterpartyItem(id: string) {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     return this.http.get<void>(`${this.apiUrl}api/CommercialWork/Partner/${id}`,
       { headers: this.getHeaders() }
     );
-    
+
   }
 
   // Редактировать контрагента
@@ -77,7 +81,7 @@ export class PartnerMenuService {
       { headers: this.getHeaders() });
   }
 
-  
+
   sendingVerification(invoice: any, status: any): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
@@ -86,7 +90,7 @@ export class PartnerMenuService {
       'Authorization': `Bearer ${token}`
     });
 
-    if(status){
+    if (status) {
       status.editStatus = invoice
     }
 

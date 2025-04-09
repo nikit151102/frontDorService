@@ -1,7 +1,7 @@
 export const environment = {
     // apiUrl: 'https://localhost:5001',
-    // apiUrl: 'https://vm-c486a4cd.na4u.ru:5001',
-    apiUrl: 'https://26.199.30.53:5001',
+    apiUrl: 'https://vm-c486a4cd.na4u.ru:5001',
+    // apiUrl: 'https://26.199.30.53:5001',
     token: 'YXV0aFRva2Vu'
 };
 
