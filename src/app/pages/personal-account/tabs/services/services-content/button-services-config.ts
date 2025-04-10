@@ -34,7 +34,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите внести изменения?',
             isEditData: true,
-            condition: (product, idCurrentUser) => product.status === 0 || product.status === 4,
+            condition: (product, idCurrentUser) => product.status === 0 || product.status === 4 && product.docAccountType == 0,
         },
         {
             label: 'Отправить',
@@ -52,6 +52,24 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
             condition: (product, idCurrentUser) => product.status === 0 || product.status === 4,
+        },
+        {
+            label: 'Изменить',
+            action: 'editScopeData',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите изменить счет?',
+            status: 5,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 ,
+        },
+        {
+            label: 'Создать фактуру',
+            action: 'createInvoiceFromAccount',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите создать счет?',
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 ,
+            // && product.creatorId == idCurrentUser
         }
     ],
     director: [
@@ -97,6 +115,24 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
             condition: (product, idCurrentUser) => product.status,
         },
+        {
+            label: 'Изменить',
+            action: 'editScopeData',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите изменить счет?',
+            status: 5,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 ,
+        },
+        {
+            label: 'Создать фактуру',
+            action: 'createInvoiceFromAccount',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите создать счет?',
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 ,
+            // && product.creatorId == idCurrentUser
+        }
     ],
     default: [
         {

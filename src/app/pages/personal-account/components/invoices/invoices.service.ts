@@ -103,12 +103,12 @@ export class InvoicesService {
     }
 
     const hasAccountTypeFilter = this.queryData.filters.some(
-      (filter: any) => filter.field === 'DocInvoice.DocAccountType'
+      (filter: any) => filter.field === 'DocAccountType'
     );
     
     if (!hasAccountTypeFilter) {
       this.queryData.filters.push({
-        field: 'DocInvoice.DocAccountType',
+        field: 'DocAccountType',
         values: [0, 1],
         type: 1,
       });
