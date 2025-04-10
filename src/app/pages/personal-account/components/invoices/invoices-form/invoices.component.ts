@@ -89,10 +89,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-        
+
         if (Array.isArray(this.invoiceId)) {
           this.invoiceId = this.invoiceId.join('');
-          
+
           this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
         }
         console.log('this.invoiceId this.invoiceId ', this.invoiceId)
@@ -174,7 +174,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         return date;
       }
     }
-    return null; 
+    return null;
   }
 
 
@@ -184,8 +184,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     name: '',
     amount: 0
   };
-  
-  isScope:boolean = false;
+
+  isScope: boolean = false;
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
       this.invoiceId = Object.values(this.invoiceId).join('');
@@ -196,11 +196,11 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       if (value.data.draft != null) {
         this.selectedInvoice = value.data.draft;
         this.isScope = true;
-      
+
         if (!this.selectScope) {
           this.selectScope = {};
         }
-      
+
         this.selectScope.number = value.data.number;
         this.selectScope.date = value.data.dateTime ? new Date(value.data.dateTime) : null;
         this.selectScope.name = value.data.productList?.[0]?.name || '';
@@ -209,7 +209,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         this.selectedInvoice = value.data;
         this.isScope = false;
       }
-      
+
 
       this.selectedInvoice.dateTime = new Date(value.data.dateTime);
       this.selectedInvoice.tax = taxes.find(tx => tx.value === value.data.tax);
@@ -668,7 +668,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
   }
 
-
+  acceptAccountDraft() {
+    this.invoiceService.acceptAccountDraft(this.selectedInvoice.id).subscribe((data: any) => {
+      this.productsService.removeItemById(this.selectedInvoice.id);
+      this.productsService.addItemToStart(data.documentMetadata.data)
+    })
+  }
 
 
 }
