@@ -87,7 +87,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
             isEditData: true,
-            condition: (product, idCurrentUser) => product.status,
+            condition: (product, idCurrentUser) => product.status && product.docAccountType == 0,
         },
         {
             label: 'Подписать',
@@ -126,7 +126,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Создать фактуру',
-            action: 'getInvoiceById',
+            action: 'createInvoiceFromAccount',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите создать счет?',
