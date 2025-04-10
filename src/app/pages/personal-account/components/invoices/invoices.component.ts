@@ -49,7 +49,7 @@ import { ScoreFormService } from '../score-form/score-form.service';
   styleUrl: './invoices.component.scss'
 })
 export class InvoicesComponent implements OnChanges, OnInit {
-  @Input() tableWidth: string = 'calc(100vw - 336px)'; 
+  @Input() tableWidth: string = 'calc(100vw - 336px)';
   @Input() counterpartyId!: any;
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
@@ -59,13 +59,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
   @Input() generalForm: boolean = false;
-  @Input() defaultFilter:any;
+  @Input() defaultFilter: any;
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
 
   ngOnChanges(changes: SimpleChanges) {
-    
+
     if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
@@ -85,7 +85,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   selectedProduct: any;
-
+  idCurrentUser: any;
   currentRole: any;
   selectedColumns: string[] = [];
 
@@ -97,15 +97,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
     private jwtService: JwtService,
-    public invoicePaymentService: InvoicePaymentService, 
-    private el: ElementRef, private renderer: Renderer2, 
-    private scoreFormService:ScoreFormService) { }
+    public invoicePaymentService: InvoicePaymentService,
+    private el: ElementRef, private renderer: Renderer2,
+    private scoreFormService: ScoreFormService) { }
 
   ngOnInit() {
+
+    this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
-  
+
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
-    console.log('this.currentRolethis.currentRole',this.currentRole)
+    console.log('this.currentRolethis.currentRole', this.currentRole)
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
       this.cdRef.detectChanges();
@@ -118,7 +120,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @HostBinding('style.--table-width') get cssVariable() {
     return this.tableWidth;
   }
-  
+
   updateSelectedColumns(columns: string[]) {
     this.selectedColumns = columns;
     this.updateColumnVisibility();
@@ -177,11 +179,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicePaymentService.visibleModal(true)
   }
 
-  openScopeModal(){
+  openScopeModal() {
     this.scoreFormService.selectInvoiceId = this.selectInvoiceId;
     this.scoreFormService.selectInvoiceFullName = this.counterpartyData?.fullName;
     this.scoreFormService.selectInvoiceShortName = this.counterpartyData?.shortName;
-    this.scoreFormService.visibleModal(true)
+    this.dataSelectScope = null;
+    this.scoreFormService.visibleModal(true);
   }
 
   updateColumnVisibility() {
@@ -194,6 +197,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
     return column.visible;
   }
 
+
+  dataSelectScope: any;
+
+  editScopeData(selectData: any) {
+    this.openScopeModal();
+    this.dataSelectScope = selectData;
+  }
 
   getTotalValue(columnIndex: number): any {
     if (!this.invoicesService.totalInfo) return null;
@@ -252,7 +262,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     return Math.round(num * 100) / 100;
   }
 
-  
+
   updateInvoice(invoice: any) {
     this.selectInvoice = invoice;
   }
@@ -267,15 +277,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-  
+
           if ('cargoId' in invoice) {
             transformed.id = invoice.cargoId;
             delete transformed.cargoId;
           }
-  
+
           return transformed;
         };
-  
+
         if (response.documentMetadata && response.documentMetadata.data) {
           this.invoices = response.documentMetadata.data.map(mapInvoice);
         } else if (response.data) {
@@ -283,7 +293,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         } else {
           this.invoices = [];
         }
-  
+
         console.log('invoices', this.invoices);
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
@@ -293,13 +303,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
       }
     );
   }
-  
 
-  
-  
+
+
+
 
   deleteInvoice(invoiceId: any) {
-    console.log('invoiceId',invoiceId)
+    console.log('invoiceId', invoiceId)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
@@ -307,13 +317,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
       rejectLabel: 'Отмена',
       onAccept: () => {
         let endpoint;
-        if(endpoint != '/api/CommercialWork/DocInvoice'){
+        if (endpoint != '/api/CommercialWork/DocInvoice') {
           endpoint = this.endpoint;
-        }else{
+        } else {
           endpoint = '/api/CommercialWork/DocInvoice';
 
         }
-        
+
         this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
           () => {
             this.invoicesService.removeItemById(invoiceId.id);
@@ -349,20 +359,20 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   selectInvoiceId: any;
-  selectData:any;
+  selectData: any;
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice',invoice)
-    if(this.generalForm){
+    console.log('invoice', invoice)
+    if (this.generalForm) {
       this.selectData = { ...invoice };
-      console.log('generalForm invoice',invoice)
-    }else{
+      console.log('generalForm invoice', invoice)
+    } else {
       this.selectInvoiceId = invoice.id;
       this.selectInvoiceId = { ...invoice.id };
 
     }
-    
+
   }
 
 
@@ -379,7 +389,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
 
-
+createInvoiceFromAccount(product:any){
+  this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data:any)=>{
+    this.getInvoiceById(product.id)
+  })
+}
 
   contextMenuVisible = false;
   contextMenuX = 0;

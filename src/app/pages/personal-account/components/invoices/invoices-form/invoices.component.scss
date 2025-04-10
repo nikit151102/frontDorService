@@ -409,3 +409,15 @@ textarea {
 :host ::ng-deep .p-datepicker-header {
     background: #fff;
 }
+
+
+.form-scope-header{
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.form-scope {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}

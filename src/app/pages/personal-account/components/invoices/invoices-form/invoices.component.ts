@@ -57,7 +57,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   measurementUnits: any[] = [];
   productTargets: any[] = [];
-
   adjustmentOptions = adjustmentOptions;
   columns = columns;
   types = types;

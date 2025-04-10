@@ -108,11 +108,11 @@
                     <ng-template #normalField>
                         <ng-container *ngIf="col.field === 'number'">
                             {{ product[col.field]}}
-                            <span *ngIf="product[col.field] == 1  && product[col.field] == 2" [ngClass]="{
+                            <span *ngIf="product['docAccountType'] == 1  || product['docAccountType'] == 2" [ngClass]="{
                                     'status-tag': true,
-                                    'status-rejected': col.field === 'drafted' && product[col.field] === 1,
-                                    'status-approved': col.field === 'drafted' && product[col.field] === 2
-                                }">
+                                    'status-rejected': col.field === 'number' && product['docAccountType'] === 1,
+                                    'status-approved': col.field === 'number' && product['docAccountType'] === 2
+                                }" style="font-size: 13px; padding: 6px">
                                 Счёт
                             </span>
                         </ng-container>
@@ -137,7 +137,7 @@
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
                                 <ng-container *ngFor="let button of getButtonSet()">
                                     <button class="btn btn-details"
-                                        *ngIf="button.condition ? button.condition(product) : true"
+                                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
                                         [ngClass]="button.class" (click)="handleButtonClick(button, product)"
                                         [title]="button.titlePopUp">
                                         {{ button.label }}
@@ -172,7 +172,7 @@
 <div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
 
     <ng-container *ngFor="let button of getButtonSet()">
-        <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct) : true"
+        <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
             [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
             {{ button.label }}
         </button>
@@ -182,4 +182,4 @@
 
 
 <app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType"></app-invoice-payment>
-<app-score-form [counterpartyId]="counterpartyId"></app-score-form>
+<app-score-form [counterpartyId]="counterpartyId" [data]="dataSelectScope"></app-score-form>

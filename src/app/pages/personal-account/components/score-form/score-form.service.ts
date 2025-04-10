@@ -41,6 +41,16 @@ export class ScoreFormService {
     });
   }
 
+  setEdit(data:any): Observable<any[]> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    return this.http.put<any[]>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${data.id}`, data, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }),
+    });
+  }
+
   sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 

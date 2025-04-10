@@ -119,6 +119,16 @@ export class InvoicesContentService {
 
     return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
   }
+  docInvoiceFromAccount(id:any){
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/DocInvoiceFromAccount/${id}`, {}, { headers });
+  }
 
 
   measurementUnits$ = new BehaviorSubject<any[]>([]);

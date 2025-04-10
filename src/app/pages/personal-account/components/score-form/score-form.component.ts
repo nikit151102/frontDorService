@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { InvoicesService } from '../invoices/invoices.service';
 import { ScoreFormService } from './score-form.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
+import { JwtService } from '../../../../services/jwt.service';
 
 @Component({
   selector: 'app-score-form',
@@ -13,7 +14,8 @@ import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-inp
   templateUrl: './score-form.component.html',
   styleUrl: './score-form.component.scss'
 })
-export class ScoreFormComponent implements OnInit {
+export class ScoreFormComponent implements OnInit, OnChanges  {
+  @Input() data: any;
   @Input() counterpartyId: string = '';
   visible: boolean = false;
   message: string = '';
@@ -25,14 +27,23 @@ export class ScoreFormComponent implements OnInit {
   amount: number = 0;
   numberScope: string = '';
   name: string = '';
+  currentRole:any;
 
   constructor(
     private cdr: ChangeDetectorRef,
     public scoreFormService: ScoreFormService,
-    private invoicesService: InvoicesService
+    private invoicesService: InvoicesService,
+    private jwtService: JwtService
   ) { }
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] && this.data) {
+      this.fillFormWithData(this.data);
+    }
+  }
+  
   ngOnInit() {
+    this.currentRole = this.jwtService.getDecodedToken().email
     this.scoreFormService.visible$.subscribe((value: boolean) => {
       this.visible = value;
       console.log('Popup visibility:', value);
@@ -42,6 +53,13 @@ export class ScoreFormComponent implements OnInit {
     this.loadData('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
     this.loadData('/api/Entities/ProductTarget/Filter', 'productTarget');
 
+  }
+
+  fillFormWithData(data: any) {
+    this.numberScope = data.number || '';
+    this.dateTime = data.dateTime ? new Date(data.dateTime) : new Date();
+    this.name = data.productList?.[0]?.name || '';
+    this.amount = data.productList?.[0]?.amount || 0;
   }
 
   onAccept(callback?: (invoice: any) => void) {
@@ -74,6 +92,38 @@ export class ScoreFormComponent implements OnInit {
       (error) => console.error('Ошибка при оплате:', error)
     );
   }
+
+  onAcceptEdit() {
+    const data = {
+      id: this.data.id,
+      number: this.numberScope,
+      dateTime: this.dateTime,
+      type: 1,
+      partnerId: (this.counterpartyId === '00000000-0000-0000-0000-000000000001')
+        ? '00000000-0000-0000-0000-000000000000'
+        : this.counterpartyId,
+      productList: [{
+        name: this.name,
+        quantity: 1,
+        amount: this.amount,
+        sumAmount: this.amount
+      }]
+    };
+
+    this.scoreFormService.setEdit(data).subscribe(
+      (data: any) => {
+        this.scoreFormService.visibleModal(false)
+        this.invoicesService.updateActiveData(data.documentMetadata.data);
+        this.invoicesService.totalInfo = data.totalInfo;
+        this.dateTime = new Date();
+        this.amount = 0;
+        this.numberScope = '';
+        this.name = '';
+      },
+      (error) => console.error('Ошибка при оплате:', error)
+    );
+  }
+
 
   closePopup() {
     this.scoreFormService.visibleModal(false);
