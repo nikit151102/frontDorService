@@ -186,6 +186,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   };
 
   isScope: boolean = false;
+  idScope:any;
+
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
       this.invoiceId = Object.values(this.invoiceId).join('');
@@ -193,6 +195,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
     console.log('this.invoiceId this.invoiceId ', this.invoiceId)
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
+      this.idScope = value.data.id;
       if (value.data.draft != null) {
         this.selectedInvoice = value.data.draft;
         this.isScope = true;
@@ -669,6 +672,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
   acceptAccountDraft() {
+    // this.idScope
     this.invoiceService.acceptAccountDraft(this.selectedInvoice.id).subscribe((data: any) => {
       this.productsService.removeItemById(this.selectedInvoice.id);
       this.productsService.addItemToStart(data.documentMetadata.data)
