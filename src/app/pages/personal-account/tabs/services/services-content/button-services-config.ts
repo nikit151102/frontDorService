@@ -126,7 +126,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Создать фактуру',
-            action: 'createInvoiceFromAccount',
+            action: 'getInvoiceById',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите создать счет?',
