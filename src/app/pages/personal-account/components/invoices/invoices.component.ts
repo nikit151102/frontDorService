@@ -363,14 +363,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice', invoice)
-    if (this.generalForm) {
-      this.selectData = { ...invoice };
-      console.log('generalForm invoice', invoice)
-    } else {
-      this.selectInvoiceId = invoice.id;
-      this.selectInvoiceId = { ...invoice.id };
+    if (invoice.docAccountType == 0) {
+      if (this.generalForm) {
+        this.selectData = { ...invoice };
+        console.log('generalForm invoice', invoice)
+      } else {
+        this.selectInvoiceId = invoice.id;
+        this.selectInvoiceId = { ...invoice.id };
 
+      }
+    } else {
+      this.editScopeData(invoice);
     }
 
   }
@@ -389,11 +392,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
 
-createInvoiceFromAccount(product:any){
-  this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data:any)=>{
-    this.getInvoiceById(product.id)
-  })
-}
+  createInvoiceFromAccount(product: any) {
+    this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
+      this.getInvoiceById(product.id)
+    })
+  }
 
   contextMenuVisible = false;
   contextMenuX = 0;

@@ -126,7 +126,7 @@
                 </div>
 
 
-                <ng-container>
+                <ng-container *ngIf="isScope">
                     <div class="form-container" style="max-width: 350px; padding-top: 0;">
                         <div class="form-scope-header">
                             <span>Счёт</span>
@@ -134,7 +134,7 @@
                         <div class="form-scope">
                             <div class="p-field p-col-12">
                                 <label for="number">Номер счёта</label>
-                                <app-custom-input 
+                                <app-custom-input [(ngModel)]="selectScope.number"
                                     placeholder="Введите номер фактуры"></app-custom-input>
                             </div>
                             <div class="p-field p-col-12" style="    display: flex; flex-direction: column;">
@@ -143,17 +143,18 @@
                                    id="dateTime" 
                                    [showTime]="false"
                                    dateFormat="dd-mm-yy"
-                                   (onInput)="onDateInput($event)">
+                                   [(ngModel)]="selectScope.date">
                                  </p-calendar>
                             </div>
                             <div class="p-field p-col-12">
                                 <label for="number">Наименование</label>
                                 <app-custom-input 
+                                [(ngModel)]="selectScope.name"
                                     placeholder="Введите номер фактуры"></app-custom-input>
                             </div>
                             <div class="p-field p-col-12" style="    max-width: 225px;">
                                 <label for="dateTime">Сумма</label>
-                                <app-custom-input-number   [min]="0">
+                                <app-custom-input-number   [min]="0" [(ngModel)]="selectScope.amount">
                                 </app-custom-input-number>
                             </div>
                         </div>

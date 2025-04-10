@@ -177,16 +177,39 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     return null; 
   }
 
+
+  selectScope: any = {
+    number: '',
+    date: null,
+    name: '',
+    amount: 0
+  };
+  
+  isScope:boolean = false;
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
       this.invoiceId = Object.values(this.invoiceId).join('');
-      
       this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
     }
     console.log('this.invoiceId this.invoiceId ', this.invoiceId)
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
-
-      this.selectedInvoice = value.data;
+      if (value.data.draft != null) {
+        this.selectedInvoice = value.data.draft;
+        this.isScope = true;
+      
+        if (!this.selectScope) {
+          this.selectScope = {};
+        }
+      
+        this.selectScope.number = value.data.number;
+        this.selectScope.date = value.data.dateTime ? new Date(value.data.dateTime) : null;
+        this.selectScope.name = value.data.productList?.[0]?.name || '';
+        this.selectScope.amount = value.data.productList?.[0]?.amount || 0;
+      } else {
+        this.selectedInvoice = value.data;
+        this.isScope = false;
+      }
+      
 
       this.selectedInvoice.dateTime = new Date(value.data.dateTime);
       this.selectedInvoice.tax = taxes.find(tx => tx.value === value.data.tax);

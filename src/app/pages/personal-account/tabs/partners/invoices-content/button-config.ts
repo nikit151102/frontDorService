@@ -89,8 +89,16 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product, idCurrentUser) => product.status,
+            condition: (product, idCurrentUser) => product.status && (product.docAccountType == 0),
         },
+        {
+            label: 'Подробнее',
+            action: 'editScopeData',
+            class: 'btn-details',
+            isEditData: false,
+            condition: (product, idCurrentUser) => product.status && (product.docAccountType == 1 || product.docAccountType == 2),
+        },
+        
         {
             label: 'Изменить',
             action: 'getInvoiceById',
@@ -127,7 +135,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             condition: (product, idCurrentUser) => product.status,
         },
         {
-            label: 'Изменить счет',
+            label: 'Изменить',
             action: 'editScopeData',
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
