@@ -633,7 +633,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
 
-
+  newIncoice:boolean = false;
   createNewInvoice() {
     this.selectedInvoice = {
       dateTime: new Date().toISOString(),
@@ -648,7 +648,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
     this.type = types?.length ? types[0].value : 0;
     this.isEdit = true;
-
+this.newIncoice = true;
     this.addProduct();
   }
 
@@ -656,6 +656,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   onDialogClose() {
     this.selectedInvoice = null;
+
+    this.newIncoice = false
   }
 
   calculatingAmount(): number {
