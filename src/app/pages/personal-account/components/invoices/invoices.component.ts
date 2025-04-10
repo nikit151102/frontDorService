@@ -363,12 +363,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    if (invoice.docAccountType == 0) {
+    if (true) {
       if (this.generalForm) {
         this.selectData = { ...invoice };
         console.log('generalForm invoice', invoice)
       } else {
-        this.selectInvoiceId = invoice.id;
         this.selectInvoiceId = { ...invoice.id };
 
       }
@@ -394,7 +393,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   createInvoiceFromAccount(product: any) {
     this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
-      this.getInvoiceById(product.id)
+      this.getInvoiceById(product)
     })
   }
 
