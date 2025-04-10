@@ -71,17 +71,6 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             status: 3,
             condition: (product, idCurrentUser) => product.status === 1,
         },
-        {
-            label: 'Изменить счет',
-            action: 'editScopeData',
-            class: 'btn-send',
-            titlePopUp: 'Подтверждение отклонения',
-            messagePopUp: 'Вы уверены, что хотите изменить счет?',
-            status: 3,
-            condition: (product, idCurrentUser) => product.status === 1 && (product.docAccountType == 1 || product.docAccountType == 2) ,
-        },
-
-        
     ],
     director: [
         {

@@ -313,8 +313,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
-
-
   editInvoice(id: string) {
     this.invoiceService.getInvoiceById(id).subscribe(
       (invoice) => {
@@ -484,6 +482,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
 
   }
+
 
 
   saveInvoice(callback?: (invoice: any) => void) {
