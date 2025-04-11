@@ -690,9 +690,8 @@ this.newIncoice = true;
   }
 
   acceptAccountDraft() {
-    // this.idScope
     this.invoiceService.acceptAccountDraft(this.selectedInvoice.id).subscribe((data: any) => {
-      this.productsService.removeItemById(this.selectedInvoice.id);
+      this.productsService.removeItemById(this.idScope);
       this.productsService.addItemToStart(data.documentMetadata.data)
     })
   }

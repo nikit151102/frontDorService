@@ -59,7 +59,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите создать счет?',
-            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 ,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null ,
             // && product.creatorId == idCurrentUser
         }
     ],
@@ -121,7 +121,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-send',
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите создать счет?',
-            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 ,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null ,
             // && product.creatorId == idCurrentUser
         }
     ],

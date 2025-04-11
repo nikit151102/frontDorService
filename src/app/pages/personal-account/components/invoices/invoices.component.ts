@@ -395,12 +395,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
         console.log('generalForm invoice', invoice)
       } else {
         this.selectInvoiceId = { ...invoice.id };
-
       }
+    } else if(invoice.draft != null) {
+      this.selectInvoiceId = { ...invoice.id };
     } else {
       this.editScopeData(invoice);
     }
-
   }
 
 
