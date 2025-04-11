@@ -419,7 +419,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   createInvoiceFromAccount(product: any) {
     this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
-      this.getInvoiceById(data.createInvoiceFromAccount.data)
+      this.getInvoiceById(data.documentMetadata.data)
     })
   }
 
