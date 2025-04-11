@@ -349,8 +349,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
         this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status).subscribe(
-          () => {
+          (response: any) => {
             this.toastService.showSuccess('Отправка', 'Счет-фактура успешно отправлена');
+            this.invoicesService.updateActiveData(response.data);
           },
           (error) => {
             console.error('Error deleting invoice', error);

@@ -130,7 +130,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите изменить счет?',
             status: 5,
-            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 ,
+            condition: (product, idCurrentUser) => product.docAccountType != 0 ,
         },
         {
             label: 'Создать фактуру',

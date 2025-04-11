@@ -53,6 +53,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyName!: any;
   @Input() counterpartyId: any;
   @Input() isEditInvoice: any;
+  visibleFieldsButton = ['Принять', 'Отклонить', 'Подписать', 'Удалить'];
 
   @Input() buttons: any[] = [];
   @Output() buttonClicked = new EventEmitter<{ button: ButtonConfig; product: any }>();

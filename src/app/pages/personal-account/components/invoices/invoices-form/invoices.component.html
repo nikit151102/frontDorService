@@ -174,22 +174,25 @@
                 <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
                     label="Подписать" icon="pi pi-check" (click)="acceptAccountDraft()"></button>
               
+                    <ng-container *ngFor="let button of buttons">
+                        <button
+                          class="btn btn-details"
+                          *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
+                                  && (!button.label || visibleFieldsButton.includes(button.label))"
+                          [ngClass]="button.class"
+                          (click)="onButtonClick(button)"
+                          [title]="button.titlePopUp">
+                          {{ button.label }}
+                        </button>
+                      </ng-container>
+                      
                     <!-- <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
                     label="Изменить Контрагента" icon="pi pi-check" (click)="editPartner()"></button> -->
 
                 <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton
                     label="Закрыть" (click)="onDialogClose()"></button>
             </p-footer>
-            <!-- <ng-container *ngFor="let button of buttons">
-                <button
-                  class="btn btn-details"
-                  *ngIf="button.condition ? button.condition(selectedInvoice, null) : true"
-                  [ngClass]="button.class"
-                  (click)="onButtonClick(button)"
-                  [title]="button.titlePopUp">
-                  {{ button.label }}
-                </button>
-              </ng-container> -->
+           
               
         </div>
     </p-dialog>
