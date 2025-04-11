@@ -102,11 +102,11 @@
                     (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
                     <ng-container
                         *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
-                        <ng-container *ngIf="product['paymentDateTime'] == null">
-                            {{ product[col.field] | date: 'dd-MM-yyyy' }}
-                        </ng-container>
                         <ng-container *ngIf="product['paymentDateTime'] && product['paymentDateTime'] != null">
                             {{ product['paymentDateTime'] | date: 'dd-MM-yyyy' }}
+                        </ng-container>
+                        <ng-container *ngIf="!product['paymentDateTime'] || product['paymentDateTime'] == null">
+                            {{ product[col.field] | date: 'dd-MM-yyyy' }}
                         </ng-container>
                     </ng-container>
                     <ng-template #normalField>
