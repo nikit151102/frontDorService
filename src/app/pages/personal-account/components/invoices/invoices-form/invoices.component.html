@@ -87,6 +87,7 @@
                         <div *ngFor="let product of selectedInvoice.productList; let i = index" class="product-row">
                             <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
                                 placeholder="Введите название товара"></app-custom-input>
+                                
                             <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit" [min]="1"
                                 (ngModelChange)="onQuantityOrAmountChange(product); onQuantityOrSumAmountChange(product)">
                             </app-custom-input-number>
@@ -179,6 +180,17 @@
                 <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton
                     label="Закрыть" (click)="onDialogClose()"></button>
             </p-footer>
+            <!-- <ng-container *ngFor="let button of buttons">
+                <button
+                  class="btn btn-details"
+                  *ngIf="button.condition ? button.condition(selectedInvoice, null) : true"
+                  [ngClass]="button.class"
+                  (click)="onButtonClick(button)"
+                  [title]="button.titlePopUp">
+                  {{ button.label }}
+                </button>
+              </ng-container> -->
+              
         </div>
     </p-dialog>
 

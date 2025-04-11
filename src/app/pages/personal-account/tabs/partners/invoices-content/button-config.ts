@@ -60,7 +60,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение принятия',
             messagePopUp: 'Вы уверены, что хотите отправить фактуру директору на подпись?',
             status: 2,
-            condition: (product, idCurrentUser) => product.status === 1,
+            condition: (product, idCurrentUser) => product.status === 1 || product.status === 4,
         },
         {
             label: 'Отклонить',
@@ -69,7 +69,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить фактуру?',
             status: 3,
-            condition: (product, idCurrentUser) => product.status === 1,
+            condition: (product, idCurrentUser) => product.status === 1 || product.status === 4,
         },
     ],
     director: [

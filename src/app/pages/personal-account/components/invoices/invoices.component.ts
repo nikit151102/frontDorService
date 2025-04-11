@@ -345,7 +345,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        this.invoiceService.sendingVerification(invoice, status).subscribe(
+
+
+
+        this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status).subscribe(
           () => {
             this.toastService.showSuccess('Отправка', 'Счет-фактура успешно отправлена');
           },
@@ -358,12 +361,34 @@ export class InvoicesComponent implements OnChanges, OnInit {
     });
   }
 
+  private transformToSecondFormat(source: any): any {
+    return {
+      changeDateTime: source.changeDateTime,
+      comment: source.comment,
+      createDateTime: source.createDateTime,
+      creatorId: source.creatorId,
+      docAccountType: source.docAccountType,
+      drafted: source.drafted,
+      expenseSum: source.expenseSum,
+      id: source.id,
+      incomeSum: source.incomeSum,
+      notifyStatus: source.notifyStatus,
+      number: source.number,
+      partnerId: source.partner?.id ?? source.partnerId ?? null,
+      paymentDateTime: source.paymentDateTime,
+      status: source.status,
+      type: source.type
+    };
+  }
+
+  
+
   selectInvoiceId: any;
   selectData: any;
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    if (true) {
+    if (invoice.docAccountType == 0) {
       if (this.generalForm) {
         this.selectData = { ...invoice };
         console.log('generalForm invoice', invoice)

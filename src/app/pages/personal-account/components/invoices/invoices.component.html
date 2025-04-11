@@ -1,7 +1,10 @@
 <div style=" display: flex; gap: 10px;">
     <ng-container *ngIf="!generalForm">
         <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
-            [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice"></app-invoices-form>
+            [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
+            (buttonClicked)="handleButtonClick($event.button, $event.product)">
+        </app-invoices-form>
+
     </ng-container>
     <ng-container *ngIf="generalForm">
         <general-form [data]="selectData" style="margin-top: 20px;"></general-form>
@@ -97,7 +100,8 @@
                 <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
                     (dblclick)="isEditInvoice = false; getInvoiceById(product)"
                     (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
-                    <ng-container *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
+                    <ng-container
+                        *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
                         <ng-container *ngIf="product['paymentDateTime'] == null">
                             {{ product[col.field] | date: 'dd-MM-yyyy' }}
                         </ng-container>
@@ -110,8 +114,8 @@
                             {{ product[col.field]}}
                             <span *ngIf="product['docAccountType'] == 1  || product['docAccountType'] == 2" [ngClass]="{
                                     'status-tag': true,
-                                    'status-rejected': col.field === 'number' && product['docAccountType'] === 1,
-                                    'status-approved': col.field === 'number' && product['docAccountType'] === 2
+                                    'status-rejected':  product['drafted'] != 1,
+                                    'status-approved':  product['drafted'] == 1
                                 }" style="font-size: 13px; padding: 6px">
                                 Счёт
                             </span>
@@ -172,8 +176,9 @@
 <div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
 
     <ng-container *ngFor="let button of getButtonSet()">
-        <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
-            [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
+        <button class="btn btn-details"
+            *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true" [ngClass]="button.class"
+            (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
             {{ button.label }}
         </button>
     </ng-container>

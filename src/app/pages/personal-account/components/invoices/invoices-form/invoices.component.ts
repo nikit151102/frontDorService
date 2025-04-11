@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -22,6 +22,7 @@ import { ToastService } from '../../../../../services/toast.service';
 import { PartnerMenuService } from '../../partner-menu/partner-menu.service';
 import { InvoicesEditPartnerPopUpComponent } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.component';
 import { InvoicesEditPartnerPopUpService } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.service';
+import { ButtonConfig } from '../../partner-menu/button-config';
 
 @Component({
   selector: 'app-invoices-form',
@@ -53,6 +54,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyId: any;
   @Input() isEditInvoice: any;
 
+  @Input() buttons: any[] = [];
+  @Output() buttonClicked = new EventEmitter<{ button: ButtonConfig; product: any }>();
+  
   visibleCheckPersonId: boolean = true;
 
   measurementUnits: any[] = [];
@@ -110,6 +114,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       }
     }
 
+  }
+
+  onButtonClick(button: ButtonConfig) {
+    this.buttonClicked.emit({ button, product: this.selectedInvoice });
+    this.selectedInvoice = null;
+    this.selectScope = null;
   }
 
   ngOnInit() {
@@ -259,18 +269,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
-  onAmountChange(value: any, index: number) {
-    console.log('value', value)
-    console.log('this.type', this.type)
-    const updatedProducts = [...this.selectedInvoice.productList]; // Создаем новый массив
-    if (this.type !== 1 || this.selectedInvoice.expenseSum < 0) {
-      updatedProducts[index].amount = `-${value}`;
-    } else {
-      updatedProducts[index].amount = value;
-    }
 
-    this.selectedInvoice.productList = updatedProducts; // Обновляем массив, чтобы Angular заметил изменения
-  }
 
 
   adjustmentType: number | null = null;
@@ -431,39 +430,55 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   onQuantityOrAmountChange(product: any) {
     if (product.quantity != null && product.amount != null) {
-      product.sumAmount = product.quantity * product.amount;
-
-      if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
-        product.sumAmount = -Math.abs(product.sumAmount);
-      }
-
-      if (this.type === 0) {
-        product.sumAmount = -Math.abs(product.sumAmount);
-        product.amount = -Math.abs(product.amount);
-      }
+     
+        product.sumAmount = product.quantity * product.amount;
+  
+        if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
+          product.sumAmount = -Math.abs(product.sumAmount);
+        }
+  
+        if (this.type === 0) {
+          product.sumAmount = -Math.abs(product.sumAmount);
+          product.amount = -Math.abs(product.amount);
+        }
+    
     }
+  }
+  
+  onAmountChange(value: any, index: number) {
+    console.log('value', value)
+    console.log('this.type', this.type)
+    const updatedProducts = [...this.selectedInvoice.productList]; // Создаем новый массив
+    if (this.type !== 1 || this.selectedInvoice.expenseSum < 0) {
+      updatedProducts[index].amount = `-${value}`;
+    } else {
+      updatedProducts[index].amount = value;
+    }
+
+    this.selectedInvoice.productList = updatedProducts; // Обновляем массив, чтобы Angular заметил изменения
   }
 
 
   onQuantityOrSumAmountChange(product: any) {
     if (product.quantity != null && product.sumAmount != null) {
+
       if (product.quantity !== 0) {
         product.amount = product.sumAmount / product.quantity;
-
+  
         if ((product.sumAmount < 0 && product.quantity > 0) || (product.sumAmount > 0 && product.quantity < 0)) {
           product.amount = -Math.abs(product.amount);
         }
-
+  
         if (this.type === 0) {
           product.sumAmount = -Math.abs(product.sumAmount);
           product.amount = -Math.abs(product.amount);
         }
-
       } else {
         product.amount = 0;
       }
     }
   }
+  
 
 
 
