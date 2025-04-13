@@ -143,7 +143,7 @@ export class InvoicesService {
       url = `${environment.apiUrl}/${this.endpointGetData}`;
     }
     else{
-      url = `${environment.apiUrl}/${this.endpoint}/${id}`;
+      url = `${environment.apiUrl}/${this.endpoint}/Filter/${id}`;
     }
     return this.http.post<any>( url, this.queryData, {
       headers: new HttpHeaders({

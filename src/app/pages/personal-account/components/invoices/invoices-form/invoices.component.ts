@@ -97,7 +97,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-
+        console.log('buttons',this.buttons)
         if (Array.isArray(this.invoiceId)) {
           this.invoiceId = this.invoiceId.join('');
 
@@ -230,6 +230,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           this.drafts = value.data.drafts;
           this.sumAmountDelta = value.data.sumAmountDelta;
           this.setDataScope(value.data);
+          this.selectedInvoice = value.data;
         } else{
           this.drafts = value.data.account.drafts;
           this.selectedInvoice = value.data;

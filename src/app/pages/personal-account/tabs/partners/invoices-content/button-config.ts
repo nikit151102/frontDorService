@@ -91,7 +91,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
         },
         {
             label: 'Подробнее',
-            action: 'editScopeData',
+            action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
             condition: (product, idCurrentUser) => product.status && (product.docAccountType == 1 || product.docAccountType == 2),
@@ -150,6 +150,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null ,
             // && product.creatorId == idCurrentUser
         }
+        
     ],
     default: [
         {

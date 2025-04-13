@@ -146,15 +146,20 @@
                     *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice || currentRole != 1"
                     pButton label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
 
-                <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
-                    label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button>
+                    
+                <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
+                    label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button> -->
 
                 <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
                     label="Подписать" icon="pi pi-check" (click)="acceptAccountDraft()"></button>
+                    
+                    <button
+                    *ngIf="selectedInvoice.docAccountType != 0"
+                    pButton label="Изменить" icon="pi pi-check" (click)="saveInvoice()"></button>
 
                 <ng-container *ngFor="let button of buttons">
                     <button class="btn btn-details" *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
-                                  && (!button.label || visibleFieldsButton.includes(button.label))"
+                                  && (visibleFieldsButton.includes(button.label))"
                         [ngClass]="button.class" (click)="onButtonClick(button)" [title]="button.titlePopUp">
                         {{ button.label }}
                     </button>
