@@ -9,11 +9,12 @@
             <div class="counterparty-item">
                 <div class="inforation">
                     <div class="item-info">
+                        
                         <div class="item-row">
                             <span class="item-value">{{ item.number }}</span>
                         </div>
                         <div class="item-row">
-                            <span class="item-value">{{ item.date | date: 'dd.MM.yyyy' }}</span>
+                            <span class="item-value">{{ item.dateTime | date: 'dd.MM.yyyy' }}</span>
                         </div>
                     </div>
                     <div class="item-info">
@@ -23,12 +24,14 @@
                             </span>
                         </div>
                         <div class="item-row">
-                            <span class="item-value">{{ item.sumAmount | number:'1.2-2' }} ₽</span>
+                            <span class="item-value"> ₽ {{ item.expenseSum }}</span>
                         </div>
                     </div>
                 </div>
 
             </div>
+
         </li>
     </ul>
 </div>
+
