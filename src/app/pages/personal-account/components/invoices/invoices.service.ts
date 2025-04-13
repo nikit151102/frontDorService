@@ -35,7 +35,7 @@ export class InvoicesService {
   endpointGetData: string| null = null;
 
 
-  private dataSubject = new BehaviorSubject<any>(null);
+  private dataSubject = new BehaviorSubject<any[]>([]);
   activData$ = this.dataSubject.asObservable();
 
   setActiveData(tab: any) {

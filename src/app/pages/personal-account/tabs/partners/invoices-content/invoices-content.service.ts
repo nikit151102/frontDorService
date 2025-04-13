@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../../../../environment';
+import { Router } from '@angular/router';
 
 interface Product {
   productName: string;
@@ -27,7 +28,7 @@ interface DocInvoice {
 })
 export class InvoicesContentService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router:Router) { }
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -75,6 +76,11 @@ export class InvoicesContentService {
         }),
       });
     } else {
+      const currentUrl = this.router.url;
+      const typeValue = currentUrl.includes('/services') ? 1 : 0;
+
+      invoice.type = typeValue;
+      
       return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
