@@ -7,6 +7,7 @@ import { InvoicesService } from '../invoices/invoices.service';
 import { ScoreFormService } from './score-form.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 import { JwtService } from '../../../../services/jwt.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-score-form',
@@ -33,7 +34,8 @@ export class ScoreFormComponent implements OnInit, OnChanges  {
     private cdr: ChangeDetectorRef,
     public scoreFormService: ScoreFormService,
     private invoicesService: InvoicesService,
-    private jwtService: JwtService
+    private jwtService: JwtService,
+    private router:Router
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -64,7 +66,8 @@ export class ScoreFormComponent implements OnInit, OnChanges  {
   }
 
   onAccept(callback?: (invoice: any) => void) {
-    const data = {
+    
+    let data: any = {
       number: this.numberScope,
       dateTime: this.dateTime,
       type: 1,
@@ -78,6 +81,13 @@ export class ScoreFormComponent implements OnInit, OnChanges  {
         sumAmount: this.amount
       }]
     };
+
+    
+    const currentUrl = this.router.url;
+    const typeValue = currentUrl.includes('/cash') ? 1 : 0;
+    if(typeValue == 1){
+      data.docPaymentType = 3;
+    }
 
     this.scoreFormService.setCreate(data).subscribe(
       (data: any) => {
