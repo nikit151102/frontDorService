@@ -15,8 +15,7 @@ export class ListInvoicesComponent implements OnInit {
   selectedName: string = '';
 
   @Input() drafts: any[] = [];
-  // @Input() sumAmountDelta: any;
-  sumAmountDelta: any = 124;
+  @Input() sumAmountDelta: any;
 
   constructor() { }
 
