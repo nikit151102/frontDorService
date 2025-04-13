@@ -225,7 +225,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     console.log('this.invoiceId this.invoiceId ', this.invoiceId)
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       this.idScope = value.data.id;
-      if (value.data.drafts != null && value.data.account != null) {
+      if (value.data.drafts != null) {
         if(value.data.account == null){
           this.drafts = value.data.drafts;
           this.sumAmountDelta = value.data.sumAmountDelta;
@@ -253,11 +253,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       }
 
 
-      this.selectedInvoice.dateTime = new Date(value.data.dateTime);
-      this.selectedInvoice.tax = taxes.find(tx => tx.value === value.data.tax);
-
-      this.selectedInvoice.checkPersonId = value.data.checkPerson.id;
-
+      if (!this.selectedInvoice) {
+        this.selectedInvoice = {};
+      }
+      
+      this.selectedInvoice.dateTime = value?.data?.dateTime ? new Date(value.data.dateTime) : null;
+      this.selectedInvoice.tax = taxes?.find(tx => tx.value === value?.data?.tax) || null;
+      this.selectedInvoice.checkPersonId = value?.data?.checkPerson?.id || null;
+      
       if (this.selectedInvoice.expenseSum == 0 && this.selectedInvoice.incomeSum < 0) {
         this.adjustmentType = 2; // -
         this.type = 0;
@@ -279,14 +282,18 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
 
-  setDataScope(value: any){
+  setDataScope(value: any) {
+    if (!this.selectScope) {
+      this.selectScope = {};
+    }
+  
     this.selectScope.id = value.id;
     this.selectScope.number = value.number;
     this.selectScope.date = value.dateTime ? new Date(value.dateTime) : null;
     this.selectScope.name = value.productList?.[0]?.name || '';
     this.selectScope.amount = value.productList?.[0]?.amount || 0;
-  
   }
+  
 
   getStatusLabel(value: number): string {
     const status = statuses.find(status => status.value === value);
