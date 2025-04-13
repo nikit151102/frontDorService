@@ -126,13 +126,15 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.selectScope = null;
   }
 
+  currentRole: any;
+
   ngOnInit() {
     this.drafts = []
     this.isScope = false;
     this.sumAmountDelta = null;
     
-    let currentRole = this.jwtService.getDecodedToken().email;
-    if (currentRole == '3') {
+    this.currentRole = this.jwtService.getDecodedToken().email;
+    if (this.currentRole == '3') {
       this.visibleCheckPersonId = false;
     }
     this.invoiceService.getCheckers().subscribe((values: any) => {

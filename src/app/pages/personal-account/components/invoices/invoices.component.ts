@@ -399,7 +399,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
           this.selectInvoiceId = { ...data.data.id };
           this.isEditInvoice = true;
         }
-      } else if(data.data.draft != null) {
+      } else if(data.data.drafts != null) {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
