@@ -278,6 +278,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   setDataScope(value: any){
+    this.selectScope.id = value.id;
     this.selectScope.number = value.number;
     this.selectScope.date = value.dateTime ? new Date(value.dateTime) : null;
     this.selectScope.name = value.productList?.[0]?.name || '';
@@ -736,11 +737,23 @@ this.newIncoice = true;
   }
 
   acceptAccountDraft() {
-    this.invoiceService.acceptAccountDraft(this.selectedInvoice.id).subscribe((data: any) => {
-      this.productsService.removeItemById(this.idScope);
-      this.productsService.addItemToStart(data.documentMetadata.data)
-    })
+    let data: any = null;
+  
+    if (this.selectScope && this.selectScope.amount > this.calculatingAmount()) {
+      data = { expenseSum: this.calculatingAmount() };
+    }
+  
+    this.invoiceService.acceptAccountDraft(this.selectedInvoice.id, data).subscribe((response: any) => {
+      if(data != null){
+        this.productsService.updateFieldById(this.selectScope.id,'expenseSum', data.expenseSum)
+      }
+      if(this.selectScope && this.selectScope.id && data == null){
+        this.productsService.removeItemById(this.selectScope.id);
+      }
+      this.productsService.addItemToStart(response.documentMetadata.data);
+    });
   }
+  
 
 
 }

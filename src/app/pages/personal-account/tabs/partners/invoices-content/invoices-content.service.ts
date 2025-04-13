@@ -132,16 +132,23 @@ export class InvoicesContentService {
   }
 
 
-  acceptAccountDraft(id: any) {
+  acceptAccountDraft(id: any, data: any = null) {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-
+  
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-
-    return this.http.post<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/AcceptAccountDraft/${id}`, {}, { headers });
+  
+    const body = data !== null ? data : {};
+  
+    return this.http.post<void>(
+      `${environment.apiUrl}/api/CommercialWork/DocInvoice/AcceptAccountDraft/${id}`,
+      body,
+      { headers }
+    );
   }
+  
 
 
   measurementUnits$ = new BehaviorSubject<any[]>([]);

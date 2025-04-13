@@ -64,6 +64,21 @@ export class InvoicesService {
     }
   }
 
+  updateFieldById(id: any, field: string, value: any) {
+    const currentData = this.getActiveData();
+  
+    if (Array.isArray(currentData)) {
+      const updatedArray = currentData.map(item => {
+        if (item.id === id && item.hasOwnProperty(field)) {
+          return { ...item, [field]: value };
+        }
+        return item;
+      });
+  
+      this.dataSubject.next(updatedArray);
+    }
+  }  
+
   removeItemById(id: any) {
     const currentData = this.getActiveData();
 
