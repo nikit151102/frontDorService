@@ -216,6 +216,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   
   drafts: any = [];
   sumAmountDelta: any;
+oldInvoice: any;
 
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
@@ -230,12 +231,15 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           this.drafts = value.data.drafts;
           this.sumAmountDelta = value.data.sumAmountDelta;
           this.setDataScope(value.data);
+          this.oldInvoice = value.data;
           this.selectedInvoice = value.data;
         } else{
           this.drafts = value.data.account.drafts;
           this.selectedInvoice = value.data;
+          this.oldInvoice = value.data;
           this.sumAmountDelta = value.data.account.sumAmountDelta;
           this.setDataScope(value.data.account);
+          
         }
 
         this.isScope = true;
@@ -243,11 +247,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         if (!this.selectScope) {
           this.selectScope = {};
         }
-
-       
-      
-      
       } else {
+        this.oldInvoice = null;
         this.selectedInvoice = value.data;
         this.isScope = false;
         this.drafts = [];
@@ -576,6 +577,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         }
 
         console.log('this.selectedInvoice', this.selectedInvoice);
+
+
+
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
@@ -752,7 +756,14 @@ this.newIncoice = true;
     if (this.selectScope && this.selectScope.amount > this.calculatingAmount()) {
       data = { expenseSum: this.calculatingAmount() };
     }
-  
+    
+    if (
+      this.oldInvoice &&
+      JSON.stringify(this.oldInvoice) !== JSON.stringify(this.selectedInvoice)
+    ) {
+      data = this.selectedInvoice;
+    }
+    
     this.invoiceService.acceptAccountDraft(this.selectedInvoice.id, data).subscribe((response: any) => {
       if(data != null){
         this.productsService.updateFieldById(this.selectScope.id,'expenseSum', data.expenseSum)
