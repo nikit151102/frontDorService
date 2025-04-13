@@ -46,12 +46,9 @@ export class InvoicePaymentComponent implements OnInit {
 
   onAccept() {
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
-    const data = {
+    let data: any = {
       dateTime: this.dateTime,
       type: 1,
-      partnerId: (this.counterpartyId === '00000000-0000-0000-0000-000000000001')
-        ? '00000000-0000-0000-0000-000000000000'
-        : this.counterpartyId,
       docPaymentType: this.paymentType,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
@@ -61,6 +58,11 @@ export class InvoicePaymentComponent implements OnInit {
         sumAmount: this.amount
       }]
     };
+
+    const isNullId = ['00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001'].includes(this.counterpartyId);
+    if (!isNullId) {
+      data.partnerId = this.counterpartyId;
+    }
 
     this.invoicePaymentService.setPayment(data).subscribe(
       (data: any) => {

@@ -426,6 +426,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
   createInvoiceFromAccount(product: any) {
     this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
       this.getInvoiceById(data.documentMetadata.data)
+    },
+    (error) => {
+      console.error('Error deleting invoice', error);
+      this.toastService.showError('Ошибка', error.error.Message);
     })
   }
 

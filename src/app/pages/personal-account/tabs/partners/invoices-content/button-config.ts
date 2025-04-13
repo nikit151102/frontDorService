@@ -104,7 +104,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
             isEditData: true,
-            condition: (product, idCurrentUser) => product.status && product.docAccountType == 0 ,
+            condition: (product, idCurrentUser) => product.docAccountType == 0 ,
         },
         {
             label: 'Подписать',
