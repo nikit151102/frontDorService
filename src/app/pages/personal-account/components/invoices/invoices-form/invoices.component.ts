@@ -19,10 +19,11 @@ import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-n
 import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { ToastService } from '../../../../../services/toast.service';
-import { PartnerMenuService } from '../../partner-menu/partner-menu.service';
 import { InvoicesEditPartnerPopUpComponent } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.component';
 import { InvoicesEditPartnerPopUpService } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.service';
 import { ButtonConfig } from '../../partner-menu/button-config';
+import { InfoScopeComponent } from './info-scope/info-scope.component';
+import { ListInvoicesComponent } from './list-invoices/list-invoices.component';
 
 @Component({
   selector: 'app-invoices-form',
@@ -42,7 +43,9 @@ import { ButtonConfig } from '../../partner-menu/button-config';
     CustomDropdownComponent,
     CustomInputNumberComponent,
     CustomInputComponent,
-    InvoicesEditPartnerPopUpComponent
+    InvoicesEditPartnerPopUpComponent,
+    InfoScopeComponent,
+    ListInvoicesComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
@@ -124,6 +127,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
+    this.drafts = []
+    this.isScope = false;
+    this.sumAmountDelta = null;
+    
     let currentRole = this.jwtService.getDecodedToken().email;
     if (currentRole == '3') {
       this.visibleCheckPersonId = false;
@@ -199,6 +206,15 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   isScope: boolean = false;
   idScope:any;
 
+  onInvoiceSelected(item: any) {
+   this.invoiceId = item.id;
+   this.loadInvoice();
+  }
+  
+  
+  drafts: any = [];
+  sumAmountDelta: any;
+
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
       this.invoiceId = Object.values(this.invoiceId).join('');
@@ -207,21 +223,31 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     console.log('this.invoiceId this.invoiceId ', this.invoiceId)
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       this.idScope = value.data.id;
-      if (value.data.draft != null) {
-        this.selectedInvoice = value.data.draft;
+      if (value.data.drafts != null && value.data.account != null) {
+        if(value.data.account == null){
+          this.drafts = value.data.drafts;
+          this.sumAmountDelta = value.data.sumAmountDelta;
+          this.setDataScope(value.data);
+        } else{
+          this.drafts = value.data.account.drafts;
+          this.selectedInvoice = value.data;
+          this.sumAmountDelta = value.data.account.sumAmountDelta;
+          this.setDataScope(value.data.account);
+        }
+
         this.isScope = true;
 
         if (!this.selectScope) {
           this.selectScope = {};
         }
 
-        this.selectScope.number = value.data.number;
-        this.selectScope.date = value.data.dateTime ? new Date(value.data.dateTime) : null;
-        this.selectScope.name = value.data.productList?.[0]?.name || '';
-        this.selectScope.amount = value.data.productList?.[0]?.amount || 0;
+       
+      
+      
       } else {
         this.selectedInvoice = value.data;
         this.isScope = false;
+        this.drafts = [];
       }
 
 
@@ -248,6 +274,15 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       }
     })
 
+  }
+
+
+  setDataScope(value: any){
+    this.selectScope.number = value.number;
+    this.selectScope.date = value.dateTime ? new Date(value.dateTime) : null;
+    this.selectScope.name = value.productList?.[0]?.name || '';
+    this.selectScope.amount = value.productList?.[0]?.amount || 0;
+  
   }
 
   getStatusLabel(value: number): string {
@@ -552,7 +587,18 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
             return updatedProduct;
           })
         };
+        
+        if (this.selectedInvoice.drafts) {
+          delete this.selectedInvoice.drafts;
+        }
 
+        if (this.selectedInvoice.account) {
+          delete this.selectedInvoice.account;
+        }
+
+        if (this.selectedInvoice.sumAmountDelta) {
+          delete this.selectedInvoice.sumAmountDelta;
+        }
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {

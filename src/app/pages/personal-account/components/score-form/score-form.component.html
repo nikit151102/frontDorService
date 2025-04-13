@@ -1,7 +1,7 @@
 <div class="overlay" *ngIf="visible">
     <div class="popup">
         <div class="popup-header">
-            <span>Счёт ({{scoreFormService.selectInvoiceShortName}} - {{scoreFormService.selectInvoiceFullName}})</span>
+            <span>Счёт ({{data?.partner?.shortName}} - {{data?.partner?.fullName}})</span>
         </div>
         <div class="popup-body">
             <div class="p-field p-col-12">

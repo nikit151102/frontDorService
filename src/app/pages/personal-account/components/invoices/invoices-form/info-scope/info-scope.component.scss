@@ -1,0 +1,30 @@
+.form-container {
+    max-width: 100%;
+    padding: 0;
+}
+
+.form-scope-header {
+    font-size: 22px;
+    font-weight: 600;
+    padding-bottom: 15px;
+}
+
+.form-scope {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+}
+
+.section {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+    gap: 10px;
+}
+
+:host ::ng-deep .p-datepicker {
+    position: relative;
+    display: inline-flex;
+    max-width: 100%;
+    width: 100%;
+}

@@ -39,6 +39,7 @@ export class ScoreFormComponent implements OnInit, OnChanges  {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
       this.fillFormWithData(this.data);
+      console.log('this.data',this.data)
     }
   }
   
