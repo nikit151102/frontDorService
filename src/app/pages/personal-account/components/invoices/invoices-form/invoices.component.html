@@ -150,8 +150,8 @@
                 <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
                     label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button> -->
 
-                <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
-                    label="Подписать" icon="pi pi-check" (click)="acceptAccountDraft()"></button>
+                <button *ngIf="selectedInvoice.docAccountType != 0" pButton
+                    label="Подписать фактуру" icon="pi pi-check" (click)="acceptAccountDraft()"></button>
                     
                     <button
                     *ngIf="selectedInvoice.docAccountType != 0"
