@@ -23,7 +23,7 @@ export class MechanicComponent implements OnInit {
   paymentType: number = 2;
   columnsInvoices = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
-    { field: 'productTarget.name', fieldView: 'productTarget.name', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'name', header: 'Наименование', type: 'string', visible: true, width: '15%', isFilter: false },
     { field: 'manufacturer', fieldView: 'manufacturer', header: 'Поставщик', type: 'string', visible: true, width: '15%', isFilter: false },
     { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
