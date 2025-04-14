@@ -5,6 +5,7 @@ import { CalendarModule } from 'primeng/calendar';
 import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoicesService } from '../invoices/invoices.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoice-payment',
@@ -29,7 +30,8 @@ export class InvoicePaymentComponent implements OnInit {
   constructor(
     private cdr: ChangeDetectorRef,
     public invoicePaymentService: InvoicePaymentService,
-    private invoicesService: InvoicesService
+    private invoicesService: InvoicesService,
+    private router:Router
   ) { }
 
   ngOnInit() {
@@ -45,10 +47,13 @@ export class InvoicePaymentComponent implements OnInit {
   }
 
   onAccept() {
+
+    const currentUrl = this.router.url;
+    const typeValue = currentUrl.includes('/cash') ? 0 : 1;
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
     let data: any = {
       dateTime: this.dateTime,
-      type: 0,
+      type: typeValue,
       docPaymentType: this.paymentType,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
