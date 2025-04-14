@@ -48,7 +48,7 @@ export class InvoicePaymentComponent implements OnInit {
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
     let data: any = {
       dateTime: this.dateTime,
-      type: 1,
+      type: 0,
       docPaymentType: this.paymentType,
       productList: [{
         // productTargetId: this.productTarget?.id || '',
