@@ -51,6 +51,8 @@ export class InvoicePaymentComponent implements OnInit {
     const currentUrl = this.router.url;
     const typeValue = currentUrl.includes('/cash') ? 0 : 1;
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
+   
+
     let data: any = {
       dateTime: this.dateTime,
       type: typeValue,
@@ -63,6 +65,15 @@ export class InvoicePaymentComponent implements OnInit {
         sumAmount: this.amount
       }]
     };
+
+
+    if (typeValue === 0) {
+      const antonCashFilter = this.invoicesService.defaultFilters.find(f => f.field === 'antonCashType');
+      
+      if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
+        data.antonCashType = antonCashFilter.values[0];
+      }
+    }
 
     const isNullId = ['00000000-0000-0000-0000-000000000000', '00000000-0000-0000-0000-000000000001'].includes(this.counterpartyId);
     if (!isNullId) {
