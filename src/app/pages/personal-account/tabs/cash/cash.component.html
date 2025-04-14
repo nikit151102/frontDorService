@@ -1,8 +1,10 @@
 <div class="container">
     <!-- Левое меню -->
-    <app-cash-menu ></app-cash-menu>
+    <app-cash-menu (selectedNameChange)="onNameSelected($event)"></app-cash-menu>
+
     <!-- Правая часть -->
-     <div class="right-content">
-        <app-mechanic></app-mechanic>
+    <div class="right-content">
+      <app-mechanic *ngIf="selectedCashType === 0"></app-mechanic>
+      <app-anton *ngIf="selectedCashType === 1"></app-anton>
      </div>
 </div>

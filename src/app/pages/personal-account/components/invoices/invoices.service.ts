@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../environment';
+import { Router } from '@angular/router';
 
 interface FilterDto {
   field?: string;
@@ -29,7 +30,7 @@ export class InvoicesService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router:Router) { }
 
   endpoint: string = '';
   endpointGetData: string| null = null;
@@ -117,11 +118,16 @@ export class InvoicesService {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     }
 
+
     const hasAccountTypeFilter = this.queryData.filters.some(
       (filter: any) => filter.field === 'DocAccountType'
     );
     
-    if (!hasAccountTypeFilter) {
+    const currentUrl = this.router.url;
+    const typeValue = currentUrl.includes('/cash') ? 1 : 0;
+
+
+    if (!hasAccountTypeFilter && typeValue != 1) {
       this.queryData.filters.push({
         field: 'DocAccountType',
         values: [0, 1],

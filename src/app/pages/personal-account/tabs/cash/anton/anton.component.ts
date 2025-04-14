@@ -1,23 +1,23 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { InvoicesComponent } from '../../../components/invoices/invoices.component';
-import { BUTTON_SETS } from './button-config';
-import { GeneralFormService } from '../../../components/generalForm/general-form.service';
-import { getFormSets, MODEL } from './form-config';
-import { MechanicActionsService } from './mechanic-actions.service';
 import { JwtService } from '../../../../../services/jwt.service';
+import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
+import { AntonService } from './anton.service';
+import { BUTTON_SETS } from './button-config';
+import { MODEL, getFormSets } from './form-config';
+import { CommonModule } from '@angular/common';
+import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 
 @Component({
-  selector: 'app-mechanic',
+  selector: 'app-anton',
   imports: [CommonModule, InvoicesComponent],
-  templateUrl: './mechanic.component.html',
-  styleUrl: './mechanic.component.scss'
+  templateUrl: './anton.component.html',
+  styleUrl: './anton.component.scss'
 })
-export class MechanicComponent implements OnInit {
+export class AntonComponent implements OnInit {
 
   constructor(private generalFormService: GeneralFormService,
-    private mechanicActionsService: MechanicActionsService,
+    private antonService: AntonService,
     private jwtService: JwtService,
     private invoicesService: InvoicesService) { }
   paymentType: number = 2;
@@ -43,18 +43,18 @@ export class MechanicComponent implements OnInit {
 
     // this.invoicesService.defaultFilters = [{
     //   field: 'DocPaymentType',
-    //   values: [2,3],
-    //   type:1
+    //   values: [2, 3],
+    //   type: 1
     // },
     // {
     //   field: 'antonCashType',
-    //   values: [0],
+    //   values: [1],
     //   type: 1
     // }]
 
     const currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.setModel(MODEL);
-    this.generalFormService.setService(this.mechanicActionsService);
+    this.generalFormService.setService(this.antonService);
     this.paymentType = currentRole === '3' ? 2 : 3;
     Promise.all([
       this.loadData('/api/Entities/ProductTarget/Filter')
@@ -66,7 +66,7 @@ export class MechanicComponent implements OnInit {
       const formSet = getFormSets(dataSources);
       this.generalFormService.setConfig(formSet);
       this.generalFormService.setModel(MODEL);
-      this.generalFormService.setService(this.mechanicActionsService);
+      this.generalFormService.setService(this.antonService);
       this.buttonConfigs = formSet.buttons;
     });
 
@@ -74,7 +74,7 @@ export class MechanicComponent implements OnInit {
 
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.mechanicActionsService.getProductsByEndpoint(apiEndpoint).subscribe(
+      this.antonService.getProductsByEndpoint(apiEndpoint).subscribe(
         (data: any) => resolve(data),
         (error) => {
           console.error('Ошибка загрузки данных с эндпоинта:', error);

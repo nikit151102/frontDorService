@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 
 @Component({
@@ -10,9 +10,12 @@ import { JwtService } from '../../../../../services/jwt.service';
 })
 export class CashMenuComponent implements OnInit {
 
+  @Output() selectedNameChange = new EventEmitter<string>();
+  
   selectedName: string = '';
   items: any[] = [
-    { name: 'Механик', access: '' }
+    { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
+    { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
   ];
 
   constructor(private jwtService: JwtService) { }
@@ -38,8 +41,9 @@ export class CashMenuComponent implements OnInit {
     return !access || this.decodedRole.includes(access);
   }
 
-  select(name: string): void {
-    this.selectedName = name;
+  select(item: any): void {
+    this.selectedName = item.name;
+    this.selectedNameChange.emit(item.antonCashType);
   }
 
 }
