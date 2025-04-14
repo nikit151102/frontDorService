@@ -231,15 +231,14 @@ oldInvoice: any;
           this.drafts = value.data.drafts;
           this.sumAmountDelta = value.data.sumAmountDelta;
           this.setDataScope(value.data);
-          this.oldInvoice = value.data;
+          this.oldInvoice = JSON.parse(JSON.stringify(value.data));
           this.selectedInvoice = value.data;
         } else{
           this.drafts = value.data.account.drafts;
           this.selectedInvoice = value.data;
-          this.oldInvoice = value.data;
+          this.oldInvoice = JSON.parse(JSON.stringify(value.data));
           this.sumAmountDelta = value.data.account.sumAmountDelta;
           this.setDataScope(value.data.account);
-          
         }
 
         this.isScope = true;
@@ -757,11 +756,14 @@ this.newIncoice = true;
       data = { expenseSum: this.calculatingAmount() };
     }
     
+
     if (
       this.oldInvoice &&
       JSON.stringify(this.oldInvoice) !== JSON.stringify(this.selectedInvoice)
     ) {
       data = this.selectedInvoice;
+      data.tax = data.tax?.value ?? data.tax;
+
     }
     
     this.invoiceService.acceptAccountDraft(this.selectedInvoice.id, data).subscribe((response: any) => {
