@@ -90,20 +90,16 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       const currentCounterpartyId = changes['counterpartyData'].currentValue;
       const previousCounterpartyId = changes['counterpartyData'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId && this.invoiceId != undefined) {
-        this.loadInvoice();
       }
     }
     if (changes['invoiceId']) {
       const currentCounterpartyId = changes['invoiceId'].currentValue;
       const previousCounterpartyId = changes['invoiceId'].previousValue;
       if (currentCounterpartyId !== previousCounterpartyId) {
-        console.log('buttons',this.buttons)
         if (Array.isArray(this.invoiceId)) {
           this.invoiceId = this.invoiceId.join('');
-
           this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
         }
-        console.log('this.invoiceId this.invoiceId ', this.invoiceId)
         if (this.invoiceId != null && this.invoiceId != undefined) {
           this.loadInvoice();
         }
@@ -166,12 +162,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
     this.invoiceService.measurementUnits$.subscribe((data: any) => {
       this.measurementUnits = data.data;
-      console.log('measurementUnits', this.measurementUnits)
     })
 
     this.invoiceService.productTargets$.subscribe((data: any) => {
       this.productTargets = data.data;
-      console.log('productTargets', this.productTargets)
     })
   }
 

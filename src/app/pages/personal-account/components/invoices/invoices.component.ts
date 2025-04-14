@@ -107,7 +107,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
 
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
-    console.log('this.currentRolethis.currentRole', this.currentRole)
+
     this.invoicesService.activData$.subscribe((data: any) => {
       this.invoices = data;
       this.cdRef.detectChanges();
