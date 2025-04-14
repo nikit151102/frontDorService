@@ -571,10 +571,10 @@ oldInvoice: any;
           };
         }
 
-        console.log('this.selectedInvoice', this.selectedInvoice);
+        console.log('this.selectedInvoice     cwcf', this.selectedInvoice);
 
 
-
+        
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: this.selectedInvoice.tax.value,
@@ -723,6 +723,7 @@ oldInvoice: any;
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
+      type: 1,
       tax: taxes?.length ? taxes[0] : 0,
       partnerId: this.counterpartyId,
       checkPersonId: this.checkers?.length ? this.checkers[0].id : '',

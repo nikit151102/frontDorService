@@ -76,9 +76,7 @@ export class InvoicesContentService {
         }),
       });
     } else {
-      const currentUrl = this.router.url;
-      const typeValue = currentUrl.includes('/services') ? 1 : 0;
-      invoice.type = typeValue;
+
       if(cashType != null){
         invoice.type = cashType;
       }
