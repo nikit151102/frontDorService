@@ -14,7 +14,7 @@ export class CashMenuComponent implements OnInit {
   
   selectedName: string = '';
   items: any[] = [
-    { name: 'Механик', access: '', antonCashType: 0},
+    { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
     { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
   ];
 
