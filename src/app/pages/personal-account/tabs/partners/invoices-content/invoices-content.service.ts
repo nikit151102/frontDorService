@@ -78,9 +78,7 @@ export class InvoicesContentService {
     } else {
       const currentUrl = this.router.url;
       const typeValue = currentUrl.includes('/services') ? 1 : 0;
-      if( typeValue == 1){
-        invoice.type = typeValue;
-      }
+      invoice.type = typeValue;
       if(cashType != null){
         invoice.type = cashType;
       }
