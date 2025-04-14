@@ -10,7 +10,7 @@
         <general-form [data]="selectData"></general-form>
     </ng-container>
 
-    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'">
+    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && typeValueRoute == true">
         <button (click)="openScopeModal()" style="    height: 36px;
      padding: 8px;
         background: #34d399;

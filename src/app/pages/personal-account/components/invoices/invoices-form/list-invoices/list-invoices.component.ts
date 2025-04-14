@@ -26,6 +26,7 @@ export class ListInvoicesComponent implements OnInit {
   select(item: any): void {
     this.selectedName = item.name;
     this.itemSelected.emit(item);
+    console.log('sumAmountDelta',this.sumAmountDelta)
   }
 
   getFormattedDelta(): string {

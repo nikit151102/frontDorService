@@ -24,6 +24,7 @@ import { InvoicePaymentService } from '../invoice-payment/invoice-payment.servic
 import { GeneralFormComponent } from '../generalForm/general-form.component';
 import { ScoreFormComponent } from '../score-form/score-form.component';
 import { ScoreFormService } from '../score-form/score-form.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoices',
@@ -88,6 +89,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   idCurrentUser: any;
   currentRole: any;
   selectedColumns: string[] = [];
+  typeValueRoute: boolean = true;
 
   constructor(private invoiceService: InvoicesContentService,
     private messageService: MessageService,
@@ -99,9 +101,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private jwtService: JwtService,
     public invoicePaymentService: InvoicePaymentService,
     private el: ElementRef, private renderer: Renderer2,
-    private scoreFormService: ScoreFormService) { }
+    private scoreFormService: ScoreFormService,
+    private router:Router) { }
 
   ngOnInit() {
+
+    const currentUrl = this.router.url;
+    this.typeValueRoute = currentUrl.includes('/cash') ? false : true;
+
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
