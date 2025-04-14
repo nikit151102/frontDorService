@@ -24,6 +24,7 @@ import { InvoicesEditPartnerPopUpService } from './invoices-edit-partner-pop-up/
 import { ButtonConfig } from '../../partner-menu/button-config';
 import { InfoScopeComponent } from './info-scope/info-scope.component';
 import { ListInvoicesComponent } from './list-invoices/list-invoices.component';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-invoices-form',
@@ -82,6 +83,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private productsService: InvoicesService,
     private jwtService: JwtService,
     private toastService: ToastService,
+    private router:Router,
     private invoicesEditPartnerPopUpService: InvoicesEditPartnerPopUpService
   ) { }
 
@@ -607,6 +609,18 @@ oldInvoice: any;
         if (this.selectedInvoice.sumAmountDelta) {
           delete this.selectedInvoice.sumAmountDelta;
         }
+
+        const currentUrl = this.router.url;
+        const typeAntonValue = currentUrl.includes('/cash') ? true : false;
+
+        if (typeAntonValue === true) {
+          const antonCashFilter = this.productsService.defaultFilters.find(f => f.field === 'antonCashType');
+          
+          if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
+            this.selectedInvoice.antonCashType = antonCashFilter.values[0];
+          }
+        }
+        
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
