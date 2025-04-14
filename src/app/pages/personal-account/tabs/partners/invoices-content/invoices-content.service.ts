@@ -59,7 +59,7 @@ export class InvoicesContentService {
     });
   }
 
-  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<any> {
+  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let invoiceid;
     console.log('invoice-----------------', invoice)
@@ -78,8 +78,11 @@ export class InvoicesContentService {
     } else {
       const currentUrl = this.router.url;
       const typeValue = currentUrl.includes('/services') ? 1 : 0;
-
       invoice.type = typeValue;
+      if(cashType != null){
+        invoice.type = cashType;
+      }
+      
       
       return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
         headers: new HttpHeaders({

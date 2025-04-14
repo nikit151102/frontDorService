@@ -93,7 +93,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 
     const data = {
         dateTime: model.dateTime,
-        type: model.type,
+        type: 1,
         docPaymentType: model.docPaymentType,
         manufacturer: model.manufacturer,
         productList: [{
@@ -114,7 +114,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         rejectLabel: 'Отмена',
         onAccept: () => {
             
-            invoiceService.saveInvoice(data).subscribe(
+            invoiceService.saveInvoice(data, 'api/CommercialWork/DocInvoice' , 1).subscribe(
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
                     if(!send) {

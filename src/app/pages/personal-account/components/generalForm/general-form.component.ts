@@ -190,7 +190,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       if (this.data && this.data.id) {
         this.model['id'] = this.data.id;
       };
-
+      console.log('his.model',this.model)
 
       action(this.model, dependencies, this.onDialogClose.bind(this));
     }
