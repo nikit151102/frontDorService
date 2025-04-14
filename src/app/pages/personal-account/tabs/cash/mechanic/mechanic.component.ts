@@ -33,8 +33,8 @@ export class MechanicComponent implements OnInit {
   ];
 
   totalInfoColumnInvoices = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
+    { columnNum: 4, value: 'totalExpenseSum' },
+    { columnNum: 5, value: 'totalIncomeSum' },
   ]
   productTarget: any;
   buttonConfigs: any;
