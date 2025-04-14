@@ -92,7 +92,7 @@
                                 <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
                                     placeholder="Введите название товара"></app-custom-input>
 
-                                <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit" [min]="1"
+                                <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit" [min]="0"
                                     (ngModelChange)="onQuantityOrAmountChange(product); onQuantityOrSumAmountChange(product)">
                                 </app-custom-input-number>
 
