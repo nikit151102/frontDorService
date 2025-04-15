@@ -609,17 +609,6 @@ oldInvoice: any;
         if (this.selectedInvoice.sumAmountDelta) {
           delete this.selectedInvoice.sumAmountDelta;
         }
-
-        const currentUrl = this.router.url;
-        const typeAntonValue = currentUrl.includes('/cash') ? true : false;
-
-        if (typeAntonValue === true) {
-          const antonCashFilter = this.productsService.defaultFilters.find(f => f.field === 'antonCashType');
-          
-          if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
-            this.selectedInvoice.antonCashType = antonCashFilter.values[0];
-          }
-        }
         
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(

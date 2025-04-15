@@ -91,7 +91,7 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
 
-    const data = {
+    let data = {
         dateTime: model.dateTime,
         type: 1,
         docPaymentType: model.docPaymentType,
@@ -103,7 +103,9 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
             amount: model.expenseSum
         }]
     };
-
+    
+    data = invoicesService.setTypeAnton(data)
+   
     const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
     const acceptLabel = model && model.id ? 'Обновить' : 'Создать';
 
@@ -152,5 +154,6 @@ export const MODEL = {
     expenseSum: '',
     incomeSum: '',
     type: 1,
-    docPaymentType: 2
+    docPaymentType: 2,
+    antonCashType: 0
 };

@@ -30,10 +30,10 @@ export class InvoicesService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];
-  constructor(private http: HttpClient, private router:Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   endpoint: string = '';
-  endpointGetData: string| null = null;
+  endpointGetData: string | null = null;
 
 
   private dataSubject = new BehaviorSubject<any[]>([]);
@@ -67,7 +67,7 @@ export class InvoicesService {
 
   updateFieldById(id: any, field: string, value: any) {
     const currentData = this.getActiveData();
-  
+
     if (Array.isArray(currentData)) {
       const updatedArray = currentData.map(item => {
         if (item.id === id && item.hasOwnProperty(field)) {
@@ -75,10 +75,10 @@ export class InvoicesService {
         }
         return item;
       });
-  
+
       this.dataSubject.next(updatedArray);
     }
-  }  
+  }
 
   removeItemById(id: any) {
     const currentData = this.getActiveData();
@@ -108,12 +108,30 @@ export class InvoicesService {
   }
 
 
+  setTypeAnton(data: any) {
+    const currentUrl = this.router.url;
+    const typeAntonValue = currentUrl.includes('/cash') ? true : false;
+
+    if (typeAntonValue === true) {
+      const antonCashFilter = this.defaultFilters.find(f => f.field === 'antonCashType');
+      console.log('antonCashFilter')
+      console.log('antonCashFilter', antonCashFilter)
+      if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
+        data.antonCashType = antonCashFilter.values[0];
+        console.log('antonCashFilter.values[0]', antonCashFilter.values[0])
+      }
+    }
+
+    return data
+
+  }
+
 
   getProductsByCounterparty(id: string): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.queryData.filters = this.queryData.filters || [];
 
-    console.log('this.defaultFilters[0]',this.defaultFilters)
+    console.log('this.defaultFilters[0]', this.defaultFilters)
     if (!this.queryData.filters.includes(this.defaultFilters[0])) {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
     }
@@ -122,7 +140,7 @@ export class InvoicesService {
     const hasAccountTypeFilter = this.queryData.filters.some(
       (filter: any) => filter.field === 'DocAccountType'
     );
-    
+
     const currentUrl = this.router.url;
     const typeValue = currentUrl.includes('/cash') ? 1 : 0;
 
@@ -145,13 +163,13 @@ export class InvoicesService {
       this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
     }
     let url
-    if(this.endpointGetData){
+    if (this.endpointGetData) {
       url = `${environment.apiUrl}/${this.endpointGetData}`;
     }
-    else{
+    else {
       url = `${environment.apiUrl}/${this.endpoint}/Filter/${id}`;
     }
-    return this.http.post<any>( url, this.queryData, {
+    return this.http.post<any>(url, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
