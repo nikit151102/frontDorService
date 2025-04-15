@@ -16,6 +16,7 @@ export class CashMenuComponent implements OnInit {
   items: any[] = [
     { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
     { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
+    { name: 'Дима', access: 'DimaAccess', antonCashType: 2 },
   ];
 
   constructor(private jwtService: JwtService) { }

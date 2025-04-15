@@ -35,6 +35,7 @@ export class MechanicComponent implements OnInit {
   totalInfoColumnInvoices = [
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
+    { columnNum: 6, value: 'totalSaldoInverse'}
   ]
   productTarget: any;
   buttonConfigs: any;

@@ -6,7 +6,6 @@ export const referenceConfig = [
         tableColumns: [
             { label: 'Фамилия', field: 'lastName', type: 'string', width: '20%' },
             { label: 'Имя', field: 'firstName' , type: 'string', width: '20%' },
-            { label: 'Отчество', field: 'patronymic', type: 'string', width: '20%' },
             { label: 'Должность', field: 'position.name', type: 'string', width: '40%' },
         ],
         formFields: [
@@ -14,10 +13,9 @@ export const referenceConfig = [
             { label: 'Имя', field: 'firstName', type: 'text', visible: true },
             { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
             { label: 'Должность', field: 'positionId', type: 'dropdown', endpoint: 'api/Entities/Position/Filter', visible: true },
-            { label: 'Права доступа', field: 'permissionIds', type: 'checkboxes', endpoint: 'api/Entities/Position/Filter', visible: true },
+            { label: 'Пароль', field: 'password', type: 'text',  visible: true },
             { label: 'userName', field: 'userName', type: 'text',  visible: false },
             { label: 'email', field: 'email', type: 'text',  visible: false },
-            { label: 'password', field: 'password', type: 'text',  visible: false },
             { label: 'isMailSend', field: 'isMailSend', type: 'boolean',  visible: false },
         ],
     },
@@ -41,16 +39,14 @@ export const referenceConfig = [
     {
         typeId: '495142',
         endpoint: 'api/Entities/ProductTarget',
-        pageTitle: 'Склады',
+        pageTitle: 'Назначение товара',
         tableColumns: [
-            { label: 'Код', field: 'code', type: 'string', width: '33%' },
-            { label: 'Наименование', field: 'name', type: 'string', width: '33%' },
-            { label: 'Короткое наименование', field: 'shortName', type: 'string', width: '34%' },
+            { label: 'Код', field: 'code', type: 'string', width: '48%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '48%' },
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true},
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
-            { label: 'Короткое наименование', field: 'shortName', type: 'text', visible: true },
         ],
     },
     {

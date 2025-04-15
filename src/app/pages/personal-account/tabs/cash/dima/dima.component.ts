@@ -1,23 +1,23 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
-import { AntonService } from './anton.service';
 import { BUTTON_SETS } from './button-config';
+import { DimaService } from './dima.service';
 import { MODEL, getFormSets } from './form-config';
-import { CommonModule } from '@angular/common';
-import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 
 @Component({
-  selector: 'app-anton',
+  selector: 'app-dima',
   imports: [CommonModule, InvoicesComponent],
-  templateUrl: './anton.component.html',
-  styleUrl: './anton.component.scss'
+  templateUrl: './dima.component.html',
+  styleUrl: './dima.component.scss'
 })
-export class AntonComponent implements OnInit {
+export class DimaComponent implements OnInit {
 
   constructor(private generalFormService: GeneralFormService,
-    private antonService: AntonService,
+    private dimaService: DimaService,
     private jwtService: JwtService,
     private invoicesService: InvoicesService) { }
   paymentType: number = 2;
@@ -55,7 +55,7 @@ export class AntonComponent implements OnInit {
 
     const currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.setModel(MODEL);
-    this.generalFormService.setService(this.antonService);
+    this.generalFormService.setService(this.dimaService);
     this.paymentType = currentRole === '3' ? 2 : 3;
     Promise.all([
       this.loadData('/api/Entities/ProductTarget/Filter')
@@ -67,7 +67,7 @@ export class AntonComponent implements OnInit {
       const formSet = getFormSets(dataSources);
       this.generalFormService.setConfig(formSet);
       this.generalFormService.setModel(MODEL);
-      this.generalFormService.setService(this.antonService);
+      this.generalFormService.setService(this.dimaService);
       this.buttonConfigs = formSet.buttons;
     });
 
@@ -75,7 +75,7 @@ export class AntonComponent implements OnInit {
 
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.antonService.getProductsByEndpoint(apiEndpoint).subscribe(
+      this.dimaService.getProductsByEndpoint(apiEndpoint).subscribe(
         (data: any) => resolve(data),
         (error) => {
           console.error('Ошибка загрузки данных с эндпоинта:', error);

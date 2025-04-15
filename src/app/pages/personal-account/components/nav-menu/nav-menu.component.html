@@ -1,4 +1,4 @@
-<div style="display: flex;     justify-content: space-between;     background: #f4f4f9;     border-radius: 8px; padding: 5px;     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);" >
+<div style="display: flex;     justify-content: space-between;     background: #f4f4f9;     border-radius: 8px; padding: 5px;   align-items: center;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);" >
     <nav class="nav-menu">
         <ul>
             <li *ngFor="let item of items">
@@ -29,14 +29,6 @@
     </nav>
     
     
-    <div class="navbar-profile" (click)="onProfileClick($event)">
-        <img src="5e227329363657_55ef8df90a1ca-no-bg-preview.png" alt="Profile" class="profile-pic" />
-        <div class="dropdown">
-            <div class="dropdown-content" *ngIf="isDropdownVisible">
-                <a (click)="execute('profile')">Профиль</a>
-                <a (click)="execute('exit')">Выйти</a>
-            </div>
-        </div>
-    </div>
+    <a (click)="execute('exit')" id="exit-btn">Выйти</a>
     
 </div>
