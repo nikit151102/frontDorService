@@ -631,6 +631,9 @@ oldInvoice: any;
         const typeValue = currentUrl.includes('/services') ? true : false;
         if(typeValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
+        const typeProjectsValue = currentUrl.includes('/projects') ? true : false;
+        if(typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
+
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
