@@ -266,6 +266,7 @@ oldInvoice: any;
         this.type = 0;
       } else {
         this.type = 1;
+  
       }
       if (value.data.productList) {
         this.selectedInvoice.productList = value.data.productList.map((product: any) => ({
@@ -321,6 +322,7 @@ oldInvoice: any;
   onTypeChange() {
     if (this.type === 0) {
       this.adjustmentType = 1;
+     
       this.onAdjustmentChange()
     } else {
       this.adjustmentType = null;
@@ -610,6 +612,10 @@ oldInvoice: any;
           delete this.selectedInvoice.sumAmountDelta;
         }
         
+        const currentUrl = this.router.url;
+        const typeValue = currentUrl.includes('/services') ? true : false;
+        if(typeValue == true && this.type == 1) this.selectedInvoice.type = 0;
+
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
           (invoice) => {
