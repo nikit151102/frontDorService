@@ -75,6 +75,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   selectedInvoice: any;
   checkers: any;
   isEdit: any;
+
+
+
   constructor(
     private invoiceService: InvoicesContentService,
     private confirmPopupService: ConfirmPopupService,
@@ -117,6 +120,18 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     }
 
   }
+
+  showComment: boolean = false;
+
+toggleComment() {
+  this.showComment = !this.showComment;
+
+  // Если скрываем и комментарий пустой — полностью убираем
+  if (!this.showComment && !this.selectedInvoice.comment) {
+    this.selectedInvoice.comment = '';
+  }
+}
+
 
   onButtonClick(button: ButtonConfig) {
     this.buttonClicked.emit({ button, product: this.selectedInvoice });

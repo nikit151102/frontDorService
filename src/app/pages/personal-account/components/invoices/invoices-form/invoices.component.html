@@ -68,15 +68,23 @@
                                 </div>
                             </div>
                         </div>
-
                         <div class="p-field p-col-12">
-                            <label for="comment">Комментарий</label>
-                            <textarea id="comment" [(ngModel)]="selectedInvoice.comment"></textarea>
+                            <a id="btn-togleComment" (click)="toggleComment()" *ngIf="!showComment || !selectedInvoice.comment">
+                                {{ showComment || selectedInvoice.comment ? 'Скрыть' : 'Добавить комментарий' }}
+                            </a>
+
+                            <label for="comment" *ngIf="showComment || selectedInvoice.comment" >Комментарий</label>
+
+
+                            <div *ngIf="showComment || selectedInvoice.comment">
+                                <textarea id="comment" [(ngModel)]="selectedInvoice.comment"></textarea>
+                            </div>
                         </div>
 
-
-                        <button *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit) || currentRole == 1" pButton
-                            icon="pi pi-pencil" class="btn-edit" (click)="addProduct()" label="Добавить"></button>
+                        <button
+                            *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit) || currentRole == 1"
+                            pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()"
+                            label="Добавить"></button>
 
                         <div class="product-list">
                             <div class="product-header">
@@ -146,21 +154,20 @@
                     *ngIf="(((selectedInvoice.status == 0 && currentRole != 1 ) || ( selectedInvoice.status == 3 && currentRole != 1 )) && isEdit && selectedInvoice.docAccountType == 0) || (newIncoice && currentRole != 1) || currentRole != 1"
                     pButton label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
 
-                    
+
                 <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
                     label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button> -->
 
-                <button *ngIf="selectedInvoice.docAccountType != 0" pButton
-                    label="Подписать фактуру" icon="pi pi-check" (click)="acceptAccountDraft()"></button>
-                    
-                    <button
-                    *ngIf="currentRole == 1"
-                    pButton label="Изменить" icon="pi pi-check" (click)="saveInvoice()"></button>
+                <button *ngIf="selectedInvoice.docAccountType != 0" pButton label="Подписать фактуру" icon="pi pi-check"
+                    (click)="acceptAccountDraft()"></button>
+
+                <button *ngIf="currentRole == 1" pButton label="Изменить" icon="pi pi-check"
+                    (click)="saveInvoice()"></button>
 
                 <ng-container *ngFor="let button of buttons">
                     <button class="btn btn-details" *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
-                                  && (visibleFieldsButton.includes(button.label))"
-                        [ngClass]="button.class" (click)="onButtonClick(button)" [title]="button.titlePopUp">
+                                  && (visibleFieldsButton.includes(button.label))" [ngClass]="button.class"
+                        (click)="onButtonClick(button)" [title]="button.titlePopUp">
                         {{ button.label }}
                     </button>
                 </ng-container>
