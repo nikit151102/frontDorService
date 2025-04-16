@@ -17,6 +17,7 @@ export class CashMenuComponent implements OnInit {
     { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
     { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
     { name: 'Дима', access: 'DimaAccess', antonCashType: 2 },
+    { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
   ];
 
   constructor(private jwtService: JwtService) { }

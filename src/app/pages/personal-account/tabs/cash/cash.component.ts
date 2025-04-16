@@ -5,10 +5,11 @@ import { CashMenuComponent } from './cash-menu/cash-menu.component';
 import { AntonComponent } from './anton/anton.component';
 import { InvoicesService } from '../../components/invoices/invoices.service';
 import { DimaComponent } from './dima/dima.component';
+import { EgorComponent } from './egor/egor.component';
 
 @Component({
   selector: 'app-cash',
-  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent],
+  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent,EgorComponent],
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })
