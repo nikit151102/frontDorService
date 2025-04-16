@@ -1,6 +1,0 @@
-<div class="container">
-    <!-- Левое меню -->
-    <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)" [typeCode]="5" [buttonConfigs]="getBUTTON_SETS()"></app-partner-menu>
-    <!-- Правая часть -->
-    <app-projects-content *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId" [counterpartyData]="selectedCounterparty" [notificationItem]="notificationsInvoices" style=" width: calc(100% - 290px)" ></app-projects-content>
-  </div>

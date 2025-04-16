@@ -61,7 +61,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   @Input() buttons: any[] = [];
   @Output() buttonClicked = new EventEmitter<{ button: ButtonConfig; product: any }>();
-  
+
   visibleCheckPersonId: boolean = true;
 
   measurementUnits: any[] = [];
@@ -86,7 +86,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private productsService: InvoicesService,
     private jwtService: JwtService,
     private toastService: ToastService,
-    private router:Router,
+    private router: Router,
     private invoicesEditPartnerPopUpService: InvoicesEditPartnerPopUpService
   ) { }
 
@@ -123,14 +123,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   showComment: boolean = false;
 
-toggleComment() {
-  this.showComment = !this.showComment;
+  toggleComment() {
+    this.showComment = !this.showComment;
 
-  // Если скрываем и комментарий пустой — полностью убираем
-  if (!this.showComment && !this.selectedInvoice.comment) {
-    this.selectedInvoice.comment = '';
+    // Если скрываем и комментарий пустой — полностью убираем
+    if (!this.showComment && !this.selectedInvoice.comment) {
+      this.selectedInvoice.comment = '';
+    }
   }
-}
 
 
   onButtonClick(button: ButtonConfig) {
@@ -140,12 +140,18 @@ toggleComment() {
   }
 
   currentRole: any;
+  isBtnDraft: boolean = false;
 
   ngOnInit() {
+
+    const currentUrl = this.router.url;
+    const typeValue = currentUrl.includes('/cash') ? 1 : 0;
+    this.isBtnDraft = typeValue === 1 ? false : true;
+
     this.drafts = []
     this.isScope = false;
     this.sumAmountDelta = null;
-    
+
     this.currentRole = this.jwtService.getDecodedToken().email;
     if (this.currentRole == '3') {
       this.visibleCheckPersonId = false;
@@ -217,17 +223,17 @@ toggleComment() {
   };
 
   isScope: boolean = false;
-  idScope:any;
+  idScope: any;
 
   onInvoiceSelected(item: any) {
-   this.invoiceId = item.id;
-   this.loadInvoice();
+    this.invoiceId = item.id;
+    this.loadInvoice();
   }
-  
-  
+
+
   drafts: any = [];
   sumAmountDelta: any;
-oldInvoice: any;
+  oldInvoice: any;
 
   loadInvoice() {
     if (typeof this.invoiceId === 'object') {
@@ -238,13 +244,13 @@ oldInvoice: any;
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       this.idScope = value.data.id;
       if (value.data.drafts != null) {
-        if(value.data.account == null){
+        if (value.data.account == null) {
           this.drafts = value.data.drafts;
           this.sumAmountDelta = value.data.sumAmountDelta;
           this.setDataScope(value.data);
           this.oldInvoice = JSON.parse(JSON.stringify(value.data));
           this.selectedInvoice = value.data;
-        } else{
+        } else {
           this.drafts = value.data.account.drafts;
           this.selectedInvoice = value.data;
           this.oldInvoice = JSON.parse(JSON.stringify(value.data));
@@ -268,11 +274,11 @@ oldInvoice: any;
       if (!this.selectedInvoice) {
         this.selectedInvoice = {};
       }
-      
+
       this.selectedInvoice.dateTime = value?.data?.dateTime ? new Date(value.data.dateTime) : null;
-      this.selectedInvoice.tax = taxes?.find(tx => tx.value === value?.data?.tax) || null;
+      this.selectedInvoice.tax = null;
       this.selectedInvoice.checkPersonId = value?.data?.checkPerson?.id || null;
-      
+
       if (this.selectedInvoice.expenseSum == 0 && this.selectedInvoice.incomeSum < 0) {
         this.adjustmentType = 2; // -
         this.type = 0;
@@ -281,7 +287,7 @@ oldInvoice: any;
         this.type = 0;
       } else {
         this.type = 1;
-  
+
       }
       if (value.data.productList) {
         this.selectedInvoice.productList = value.data.productList.map((product: any) => ({
@@ -299,14 +305,14 @@ oldInvoice: any;
     if (!this.selectScope) {
       this.selectScope = {};
     }
-  
+
     this.selectScope.id = value.id;
     this.selectScope.number = value.number;
     this.selectScope.date = value.dateTime ? new Date(value.dateTime) : null;
     this.selectScope.name = value.productList?.[0]?.name || '';
     this.selectScope.amount = value.productList?.[0]?.amount || 0;
   }
-  
+
 
   getStatusLabel(value: number): string {
     const status = statuses.find(status => status.value === value);
@@ -337,7 +343,7 @@ oldInvoice: any;
   onTypeChange() {
     if (this.type === 0) {
       this.adjustmentType = 1;
-     
+
       this.onAdjustmentChange()
     } else {
       this.adjustmentType = null;
@@ -381,21 +387,20 @@ oldInvoice: any;
         this.selectedInvoice = invoice.data;
         const typeObj = types.find(t => t.value === invoice.data.type);
 
-        const taxObj = taxes.find(t => t.value === invoice.data.tax);
         const formattedDate = invoice.data.dateTime ? new Date(invoice.data.dateTime) : null;
 
         if (this.calculatingAmount() < 0 && (this.adjustmentType === 1 || this.adjustmentType === 2)) {
           this.selectedInvoice = {
             ...invoice.data,
             type: this.adjustmentType === 2 ? 0 : 1,
-            tax: taxObj || null,
+            tax: null,
             dateTime: formattedDate || null
           };
         } else {
           this.selectedInvoice = {
             ...invoice.data,
             type: 1,
-            tax: taxObj || null,
+            tax: null,
             dateTime: formattedDate || null
           };
         }
@@ -490,21 +495,21 @@ oldInvoice: any;
 
   onQuantityOrAmountChange(product: any) {
     if (product.quantity != null && product.amount != null) {
-     
-        product.sumAmount = product.quantity * product.amount;
-  
-        if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
-          product.sumAmount = -Math.abs(product.sumAmount);
-        }
-  
-        if (this.type === 0) {
-          product.sumAmount = -Math.abs(product.sumAmount);
-          product.amount = -Math.abs(product.amount);
-        }
-    
+
+      product.sumAmount = product.quantity * product.amount;
+
+      if ((product.quantity < 0 && product.amount > 0) || (product.quantity > 0 && product.amount < 0)) {
+        product.sumAmount = -Math.abs(product.sumAmount);
+      }
+
+      if (this.type === 0) {
+        product.sumAmount = -Math.abs(product.sumAmount);
+        product.amount = -Math.abs(product.amount);
+      }
+
     }
   }
-  
+
   onAmountChange(value: any, index: number) {
     console.log('value', value)
     console.log('this.type', this.type)
@@ -524,11 +529,11 @@ oldInvoice: any;
 
       if (product.quantity !== 0) {
         product.amount = product.sumAmount / product.quantity;
-  
+
         if ((product.sumAmount < 0 && product.quantity > 0) || (product.sumAmount > 0 && product.quantity < 0)) {
           product.amount = -Math.abs(product.amount);
         }
-  
+
         if (this.type === 0) {
           product.sumAmount = -Math.abs(product.sumAmount);
           product.amount = -Math.abs(product.amount);
@@ -538,7 +543,7 @@ oldInvoice: any;
       }
     }
   }
-  
+
 
 
 
@@ -591,10 +596,10 @@ oldInvoice: any;
         console.log('this.selectedInvoice     cwcf', this.selectedInvoice);
 
 
-        
+
         this.selectedInvoice = {
           ...this.selectedInvoice,
-          tax: this.selectedInvoice.tax.value,
+          tax: null,
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
           productList: this.selectedInvoice.productList.map((product: any) => {
             const updatedProduct: any = {
@@ -614,7 +619,7 @@ oldInvoice: any;
             return updatedProduct;
           })
         };
-        
+
         if (this.selectedInvoice.drafts) {
           delete this.selectedInvoice.drafts;
         }
@@ -626,13 +631,13 @@ oldInvoice: any;
         if (this.selectedInvoice.sumAmountDelta) {
           delete this.selectedInvoice.sumAmountDelta;
         }
-        
+
         const currentUrl = this.router.url;
         const typeValue = currentUrl.includes('/services') ? true : false;
-        if(typeValue == true && this.type == 1) this.selectedInvoice.type = 0;
+        if (typeValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
         const typeProjectsValue = currentUrl.includes('/projects') ? true : false;
-        if(typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
+        if (typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
 
         this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
@@ -730,14 +735,14 @@ oldInvoice: any;
   }
 
 
-  newIncoice:boolean = false;
+  newIncoice: boolean = false;
   createNewInvoice() {
     this.selectedInvoice = {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
       type: 1,
-      tax: taxes?.length ? taxes[0] : 0,
+      tax: null,
       partnerId: this.counterpartyId,
       checkPersonId: this.checkers?.length ? this.checkers[0].id : '',
       comment: '',
@@ -746,7 +751,7 @@ oldInvoice: any;
 
     this.type = types?.length ? types[0].value : 0;
     this.isEdit = true;
-this.newIncoice = true;
+    this.newIncoice = true;
     this.addProduct();
   }
 
@@ -773,32 +778,32 @@ this.newIncoice = true;
 
   acceptAccountDraft() {
     let data: any = null;
-  
+
     if (this.selectScope && this.selectScope.amount > this.calculatingAmount()) {
       data = { expenseSum: this.calculatingAmount() };
     }
-    
+
 
     if (
       this.oldInvoice &&
       JSON.stringify(this.oldInvoice) !== JSON.stringify(this.selectedInvoice)
     ) {
       data = this.selectedInvoice;
-      data.tax = data.tax?.value ?? data.tax;
+      data.tax = null;
 
     }
-    
+
     this.invoiceService.acceptAccountDraft(this.selectedInvoice.id, data).subscribe((response: any) => {
-      if(data != null){
-        this.productsService.updateFieldById(this.selectScope.id,'expenseSum', data.expenseSum)
+      if (data != null) {
+        this.productsService.updateFieldById(this.selectScope.id, 'expenseSum', data.expenseSum)
       }
-      if(this.selectScope && this.selectScope.id && data == null){
+      if (this.selectScope && this.selectScope.id && data == null) {
         this.productsService.removeItemById(this.selectScope.id);
       }
       this.productsService.addItemToStart(response.documentMetadata.data);
     });
   }
-  
+
 
 
 }

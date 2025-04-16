@@ -12,9 +12,6 @@ const routes: Routes = [
         path: 'clients', loadChildren: () => import('./tabs/partners/partners.module').then(m => m.PartnersModule)
       },
       {
-        path: 'services', loadChildren: () => import('./tabs/services/services.module').then(m => m.ServicesModule)
-      },
-      {
         path: 'reference', loadChildren: () => import('./tabs/reference/reference.module').then(m => m.ReferenceModule)
       },
       {
@@ -22,9 +19,6 @@ const routes: Routes = [
       },
       {
         path: 'cash', loadChildren: () => import('./tabs/cash/cash.module').then(m => m.CashModule)
-      },
-      {
-        path: 'projects', loadChildren: () => import('./tabs/projects/projects.module').then(m => m.ProjectsModule)
       },
       {
         path: 'base', loadChildren: () => import('./tabs/base/base.module').then(m => m.BaseModule)

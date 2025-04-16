@@ -101,35 +101,23 @@
           </div>
         </div>
 
-        <!-- ОГРН -->
-        <div class="p-field">
-          <label for="ogrn">ОГРН</label>
-          <div class="field-wrapper">
-            <input id="ogrn" type="text" pInputText formControlName="ogrn" placeholder="Введите ОГРН" />
-            <small *ngIf="oldPrototype?.ogrn" class="text-muted old-value">Старое значение: {{ oldPrototype.ogrn
-              }}</small>
-          </div>
-        </div>
+        <div class="p-field p-col-12">
+          <label for="tax">Налог</label>
+          <p-dropdown
+          id="tax"
+          [style]="{ 'min-width': '120px', 'width': '100%' ,  'height': '36px', 'padding': '0'}"
+          [panelStyle]="{ 'width': '100%' }"
+          panelStyleClass="custom-dropdown-panel"
+          formControlName="tax"
+          [options]="taxes"
+          optionLabel="label"
+          [disabled]="!isEdit"
+          appendTo="body"
+          [scrollHeight]="'200px'"
+        ></p-dropdown>
+        
 
-        <!-- КПП -->
-        <div class="p-field">
-          <label for="kpp">КПП</label>
-          <div class="field-wrapper">
-            <input id="kpp" type="text" pInputText formControlName="kpp" placeholder="Введите КПП" />
-            <small *ngIf="oldPrototype?.kpp" class="text-muted old-value">Старое значение: {{ oldPrototype.kpp
-              }}</small>
-          </div>
-        </div>
-
-        <!-- Адрес -->
-        <div class="p-field">
-          <label for="address">Адрес</label>
-          <div class="field-wrapper">
-            <input id="address" type="text" pInputText formControlName="address" placeholder="Введите адрес" />
-            <small *ngIf="oldPrototype?.address" class="text-muted old-value">Старое значение: {{ oldPrototype.address
-              }}</small>
-          </div>
-        </div>
+      </div>
 
       </div>
 

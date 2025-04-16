@@ -14,6 +14,7 @@ import { JwtService } from '../../../../services/jwt.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 import { ToastService } from '../../../../services/toast.service';
 import { Router } from '@angular/router';
+import { taxes } from '../../../../services/data';
 
 interface Counterparty {
   id: number;
@@ -48,6 +49,8 @@ export class PartnerMenuComponent {
   selectedCounterparty: any | null = null;
   currentRole: any;
 
+  taxes = taxes;
+
   typeOptions: TypeOption[] = [
     { label: 'Контрагент', value: 0 },
     { label: 'Сервис', value: 1 },
@@ -56,6 +59,8 @@ export class PartnerMenuComponent {
     { label: 'Прототип', value: 4 },
     { label: 'Проект', value: 5 }
   ];
+
+  
 
   constructor(
     private partnerMenuService: PartnerMenuService,
@@ -158,9 +163,10 @@ export class PartnerMenuComponent {
       shortName: ['', Validators.required],
       fullName: ['', Validators.required],
       inn: ['', Validators.required],
-      ogrn: [''],
-      kpp: [''],
-      address: [''],
+      tax: [0],
+      ogrn: [null],
+      kpp: [null],
+      address: [null],
       type: [0]
     });
   }
@@ -186,12 +192,14 @@ export class PartnerMenuComponent {
           shortName: prototype.shortName,
           fullName: prototype.fullName,
           inn: prototype.inn,
-          ogrn: prototype.ogrn,
-          kpp: prototype.kpp,
-          address: prototype.address,
+          tax: taxes?.find(tx => tx.value === prototype.tax) || null,
+          ogrn: null,
+          kpp: null,
+          address: null,
           id: prototype.id,
           type: this.typeOptions.find(option => option.value === prototype.type)
         });
+
         this.toggleFormFields(this.isEdit);
       });
     } else {
@@ -215,6 +223,8 @@ export class PartnerMenuComponent {
     });
   }
 
+  
+
   onSubmit() {
 
     if (this.counterpartyForm.invalid) {
@@ -230,14 +240,14 @@ export class PartnerMenuComponent {
       return;
     }
 
-
     const formData = this.counterpartyForm.value;
-
+    
     const { type, ...rest } = formData;
 
     const formDataWithValueType = {
       ...rest,
-      type: type ? type.value : null
+      tax: formData.tax.value,
+      type: type ? type.value : 0
     };
 
     if (this.selectedCounterparty) {
@@ -257,15 +267,7 @@ export class PartnerMenuComponent {
         }
       );
     } else {
-      const currentUrl = this.router.url;
-
-      const typeValue = currentUrl.includes('/services')
-        ? 1
-        : currentUrl.includes('/projects')
-          ? 5
-          : 0;
-
-      formDataWithValueType.type = typeValue;
+      formDataWithValueType.type = 0;
       this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
         (newCounterparty) => {
           this.counterparties.push(newCounterparty);

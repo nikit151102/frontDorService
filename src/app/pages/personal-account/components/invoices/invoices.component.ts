@@ -17,7 +17,6 @@ import { ConfirmPopupService } from '../../../../components/confirm-popup/confir
 import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
 import { InvoicesService } from './invoices.service';
 import { JwtService } from '../../../../services/jwt.service';
-import { ButtonConfig } from '../../tabs/services/services-content/button-services-config';
 import { ToastService } from '../../../../services/toast.service';
 import { InvoicePaymentComponent } from '../invoice-payment/invoice-payment.component';
 import { InvoicePaymentService } from '../invoice-payment/invoice-payment.service';
@@ -25,6 +24,7 @@ import { GeneralFormComponent } from '../generalForm/general-form.component';
 import { ScoreFormComponent } from '../score-form/score-form.component';
 import { ScoreFormService } from '../score-form/score-form.service';
 import { Router } from '@angular/router';
+import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config';
 
 @Component({
   selector: 'app-invoices',
@@ -136,7 +136,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
       case '6':
-        return this.buttonConfigs['mechanic'];
+        return this.buttonConfigs['householdManager'];
       case '5':
         return this.buttonConfigs['householdManager'];
       case '4':

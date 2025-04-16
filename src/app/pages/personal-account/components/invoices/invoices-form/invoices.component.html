@@ -53,12 +53,6 @@
                                     </p-dropdown>
                                 </div>
 
-                                <div class="p-field p-col-12">
-                                    <label for="tax">Налог</label>
-                                    <p-dropdown [style]="{ 'min-width': '120px' }" id="tax"
-                                        [(ngModel)]="selectedInvoice.tax" [options]="taxes" optionLabel="label"
-                                        [disabled]="!isEdit"></p-dropdown>
-                                </div>
                                 <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
                                     <label for="checkPersonId">Проверяющий</label>
                                     <p-dropdown [style]="{ 'min-width': '150px' }" id="checkPersonId"
@@ -69,11 +63,12 @@
                             </div>
                         </div>
                         <div class="p-field p-col-12">
-                            <a id="btn-togleComment" (click)="toggleComment()" *ngIf="!showComment || !selectedInvoice.comment">
+                            <a id="btn-togleComment" (click)="toggleComment()"
+                                *ngIf="!showComment || !selectedInvoice.comment">
                                 {{ showComment || selectedInvoice.comment ? 'Скрыть' : 'Добавить комментарий' }}
                             </a>
 
-                            <label for="comment" *ngIf="showComment || selectedInvoice.comment" >Комментарий</label>
+                            <label for="comment" *ngIf="showComment || selectedInvoice.comment">Комментарий</label>
 
 
                             <div *ngIf="showComment || selectedInvoice.comment">
@@ -148,11 +143,15 @@
             </div>
             <p-footer>
                 <button
-                    *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice"
-                    pButton label="Черновик" icon="pi pi-check" (click)="saveInvoice()"></button>
+                    *ngIf="currentRole != 1 && (((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice) && isBtnDraft"
+                    pButton label="Черновик" icon="pi pi-check" (click)="saveInvoice()">
+                </button>
+
                 <button
-                    *ngIf="(((selectedInvoice.status == 0 && currentRole != 1 ) || ( selectedInvoice.status == 3 && currentRole != 1 )) && isEdit && selectedInvoice.docAccountType == 0) || (newIncoice && currentRole != 1) || currentRole != 1"
-                    pButton label="Сохранить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
+                    *ngIf="(((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice)"
+                    pButton [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'" icon="pi pi-check"
+                    (click)="saveAndSendInvoice()">
+                </button>
 
 
                 <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton

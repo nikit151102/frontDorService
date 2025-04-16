@@ -35,11 +35,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
   items: CustomMenuItem[] = [
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
-    { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess', notifyKey: 'servicesNotifyData' },
     { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
     { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
-    { label: 'Проекты', commandName: 'projects', access: 'ProjectsAccess' },
-    { label: 'База', commandName: 'base', access: 'BaseCargosAccess' },
+    { label: 'Логист', commandName: 'base', access: 'none' },
+    { label: 'Директор', commandName: 'base', access: 'none' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
   ];

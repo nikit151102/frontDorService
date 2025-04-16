@@ -1,6 +1,0 @@
-<div class="container">
-    <!-- Левое меню -->
-    <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)" [typeCode]="1" [buttonConfigs]="getBUTTON_SETS()" [title]="'сервис'"></app-partner-menu>
-    <!-- Правая часть -->
-    <app-services-content *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"></app-services-content>
-  </div>
