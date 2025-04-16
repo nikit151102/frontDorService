@@ -1,9 +1,11 @@
 .nav-menu {
-    background: #f4f4f9; 
+    z-index: 111;
+    position: relative;
+    background: #f4f4f9;
     padding: 12px;
-    border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-bottom: 20px;
+    // border-radius: 8px;
+    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    // margin-bottom: 0px;
 }
 
 ul {
@@ -11,7 +13,7 @@ ul {
     margin: 0;
     padding: 0;
     display: flex;
-    gap: 15px; 
+    gap: 15px;
 }
 
 li {
@@ -19,28 +21,28 @@ li {
 }
 
 button {
-    background: #ffffff; 
-    border: 1px solid #d1d1d1; 
+    background: #ffffff;
+    border: 1px solid #d1d1d1;
     padding: 10px 18px;
     border-radius: 5px;
     font-weight: 600;
-    color: #5c6bc0; 
+    color: #5c6bc0;
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s; 
+    transition: background-color 0.3s, color 0.3s;
 }
 
 button:hover {
-    background: #e0e0e0; 
-    color: #3f4e9f; 
+    background: #e0e0e0;
+    color: #3f4e9f;
 }
 
 button:focus {
     outline: none;
-    border-color: #5c6bc0; 
+    border-color: #5c6bc0;
 }
 
 button:disabled {
-    background: #e0e0e0; 
+    background: #e0e0e0;
     color: #a0a0a0;
     cursor: not-allowed;
     border: 1px solid #d1d1d1;
@@ -59,17 +61,17 @@ button:disabled {
     text-align: center;
     display: inline-block;
     position: absolute;
-    top: -6px;  
-    right: -6px; 
+    top: -6px;
+    right: -6px;
     min-width: 20px;
 }
 
 .notification-info {
-    background: #5959ff;  // Только непрочитанные
+    background: #5959ff; // Только непрочитанные
 }
 
 .notification-warning {
-    background: orange;  // Есть и непрочитанные, и требующие действия
+    background: orange; // Есть и непрочитанные, и требующие действия
 }
 
 .tooltip {
@@ -83,4 +85,82 @@ button:disabled {
     white-space: nowrap;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+
+
+
+
+
+.navbar-profile {
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.profile-pic {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-btn {
+    background-color: #333;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.dropdown-btn:hover {
+    background-color: #444;
+}
+
+.dropdown-content {
+    display: block;
+    position: absolute;
+    width: 150px;
+    top: 25px;
+    border-radius: 8px;
+    right: 0;
+    background-color: white;
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 150;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.dropdown-content a:hover {
+    background-color: #f1f1f1;
+    border-radius: 8px;
+}
+
+
+
+#exit-btn {
+    padding: 12px;
+    background: #ffffff;
+    height: 37px;
+    border: 1px solid #d1d1d1;
+    padding: 10px 18px;
+    border-radius: 5px;
+    font-weight: 600;
+    color: #5c6bc0;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+    display: flex;
+    align-items: center;
 }

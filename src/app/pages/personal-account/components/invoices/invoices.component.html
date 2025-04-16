@@ -1,15 +1,56 @@
-<app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
-    [isEditInvoice]="isEditInvoice"></app-invoices-form>
+<div style=" display: flex; gap: 10px;">
+    <ng-container *ngIf="!generalForm">
+        <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
+            [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
+            (buttonClicked)="handleButtonClick($event.button, $event.product)">
+        </app-invoices-form>
+
+    </ng-container>
+    <ng-container *ngIf="generalForm">
+        <general-form [data]="selectData"></general-form>
+    </ng-container>
+
+    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && typeValueRoute == true">
+        <button (click)="openScopeModal()" style="    height: 36px;
+     padding: 8px;
+        background: #34d399;
+        border: none;
+        color: #fff;
+        border-radius: 7px;">
+            Создать счёт
+        </button>
+    </ng-container>
+    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
+        <button (click)="openPaymentModal()" style=" height: 36px;
+     padding: 8px;
+        background: #34d399;
+        border: none;
+        color: #fff;
+        border-radius: 7px;">
+            Оплатить
+        </button>
+    </ng-container>
+
+</div>
+
+
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
 
-<app-settings 
+    <!-- <app-settings 
   [columns]="columns" 
   [selectedColumns]="selectedColumns" 
   (selectedColumnsChange)="updateSelectedColumns($event)">
-</app-settings>
+</app-settings> -->
 
+    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData">
+        {{counterpartyData?.shortName}}
+        <span *ngIf="counterpartyData.fullName">
+            -
+        </span>
+        {{counterpartyData?.fullName}}
+    </h2>
 </div>
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">
@@ -56,20 +97,40 @@
     </ng-template>
 
     <ng-template pTemplate="body" let-product>
-        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) "
-        >
+        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) ">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"  (dblclick)="isEditInvoice = false; getInvoiceById(product)"
-                (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
-                    <ng-container *ngIf="col.field === 'dateTime'; else normalField">
-                        {{ product[col.field] | date: 'dd-MM-yyyy' }}
+                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+                    (dblclick)="isEditInvoice = false; getInvoiceById(product)"
+                    (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
+                    <ng-container
+                        *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
+                        <ng-container *ngIf="product['paymentDateTime'] && product['paymentDateTime'] != null">
+                            {{ product['paymentDateTime'] | date: 'dd-MM-yyyy' }}
+                        </ng-container>
+                        <ng-container *ngIf="!product['paymentDateTime'] || product['paymentDateTime'] == null">
+                            {{ product[col.field] | date: 'dd-MM-yyyy' }}
+                        </ng-container>
                     </ng-container>
                     <ng-template #normalField>
+                        <ng-container *ngIf="col.field === 'number'">
+                            {{ product[col.field]}}
+                            <span *ngIf="product['docAccountType'] == 1  || product['docAccountType'] == 2" [ngClass]="{
+                                    'status-tag': true,
+                                    'status-rejected':  product['drafted'] != 1,
+                                    'status-approved':  product['drafted'] == 1
+                                }" style="font-size: 13px; padding: 6px">
+                                Счёт
+                            </span>
+                        </ng-container>
                         <span *ngIf="col.field === 'invoiceStatus' || col.field === 'status'"
                             [ngClass]="getStatusClass(product[col.field])" class="status-tag">
                             {{ getStatusLabel(product[col.field]) }}
                         </span>
-                        <span *ngIf="col.field !== 'invoiceStatus' && col.field !== 'status'">
+                        <span *ngIf="col.field === 'paymentType' ">
+                            {{ transform(product[col.field]) }}
+                        </span>
+                        <span
+                            *ngIf="col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
                             {{ product[col.field] }}
                         </span>
                     </ng-template>
@@ -82,7 +143,7 @@
                             <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
                                 <ng-container *ngFor="let button of getButtonSet()">
                                     <button class="btn btn-details"
-                                        *ngIf="button.condition ? button.condition(product) : true"
+                                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
                                         [ngClass]="button.class" (click)="handleButtonClick(button, product)"
                                         [title]="button.titlePopUp">
                                         {{ button.label }}
@@ -114,19 +175,18 @@
 
 
 <!-- Контекстное меню -->
-<div *ngIf="contextMenuVisible" 
-     class="context-menu" 
-     [style.top.px]="contextMenuY" 
-     [style.left.px]="contextMenuX">
-     
+<div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
+
     <ng-container *ngFor="let button of getButtonSet()">
         <button class="btn btn-details"
-            *ngIf="button.condition ? button.condition(selectedProduct) : true"
-            [ngClass]="button.class" 
-            (click)="handleButtonClick(button, selectedProduct)"
-            [title]="button.titlePopUp">
+            *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true" [ngClass]="button.class"
+            (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
             {{ button.label }}
         </button>
     </ng-container>
 </div>
 
+
+
+<app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType"></app-invoice-payment>
+<app-score-form [counterpartyId]="counterpartyId" [data]="dataSelectScope"></app-score-form>

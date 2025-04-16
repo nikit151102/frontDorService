@@ -122,6 +122,14 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       }
     } else {
       this.modalData = { ...item };
+
+      const field = 'positionId';
+      const positionField = 'position';
+
+      if (item.hasOwnProperty(positionField) && item[positionField]?.id !== undefined) {
+        this.modalData[field] = item[positionField].id;
+      }
+
       this.modalTitle = 'Редактировать запись';
       this.modalAction = 'Обновить';
       this.isModalOpen = true;

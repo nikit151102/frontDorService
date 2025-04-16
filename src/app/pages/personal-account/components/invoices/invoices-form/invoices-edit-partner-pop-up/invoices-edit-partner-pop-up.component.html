@@ -1,0 +1,22 @@
+<div class="overlay" *ngIf="visible$ | async">
+    <div class="popup">
+        <div class="popup-header">
+            <span>{{ title }}</span>
+        </div>
+
+        <div class="popup-body">
+            <div *ngFor="let partner of partners" class="partner-item" [class.selected]="selectedPartner === partner"
+                (click)="selectPartner(partner)">
+                <div class="full-name">{{ partner.fullName }}</div>
+                <div class="short-name">{{ partner.shortName }}</div>
+            </div>
+        </div>
+
+        <div class="popup-footer">
+            <button class="btn reject" (click)="closePopup()">{{ rejectLabel }}</button>
+            <button class="btn accept" *ngIf="selectedPartner" (click)="onAccept()">
+                {{ acceptLabel }}
+            </button>
+        </div>
+    </div>
+</div>

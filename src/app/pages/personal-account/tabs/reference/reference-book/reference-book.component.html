@@ -39,7 +39,7 @@
                     </th>
 
                 </ng-container>
-                <th></th>
+                <th style="width: 200px;"></th>
             </tr>
             <tr>
                 <ng-container *ngFor="let col of columns">
@@ -65,7 +65,7 @@
                     </td>
                 </ng-container>
                 <td class="invoice-cell actions-cell">
-                    <div class="dropdown" style="display: flex; flex-direction: column; gap: 5px;">
+                    <div class="dropdown" style="display: flex; flex-direction: column; gap: 5px; width: fit-content;">
                         <button class="btn btn-details" (click)="openEditModal(product)">
                             Изменить
                         </button>

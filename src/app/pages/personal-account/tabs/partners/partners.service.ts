@@ -36,7 +36,8 @@ export class PartnersService {
   
     connectToWebSocket(): void {
       const token = localStorage.getItem('YXV0aFRva2Vu');
-      const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=docInvoicePartnerTable`;
+      let apiUrl = environment.apiUrl.replace(/^https/, "wss");
+      const url = `${apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=docInvoicePartnerTable`;
       this.socket = new WebSocket(url);
   
       this.socket.onopen = () => {

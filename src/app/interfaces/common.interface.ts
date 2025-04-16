@@ -50,3 +50,29 @@ export interface DocInvoice {
     tax: number;
     productList: Product[];
 }
+
+export interface InvoiceField {
+    name: string;
+    label: string;
+    type: 'text' | 'date' | 'dropdown' | 'textarea' | 'number';
+    placeholder: string;
+    options: { label: string; value: any }[];
+    optionLabel: string;
+    optionValue: string;
+    min: number;
+    max: number;
+    rowGroup?:string
+    onChange?: (value: any, model: any) => void;
+}
+
+export interface InvoiceButton {
+    label: string;
+    icon?: string;
+    action: (model: any, dependencies: any, close: any ) => void;
+    disabled?: boolean;
+}
+
+export interface InvoiceConfig {
+    fields: InvoiceField[];
+    buttons: InvoiceButton[];
+}

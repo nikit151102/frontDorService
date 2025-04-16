@@ -14,6 +14,7 @@ import { InvoicesService } from '../../../components/invoices/invoices.service';
 })
 export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyId!: any;
+  @Input() counterpartyData!: any;
   @Input() notificationItem: any;
   selectedComponent: string = 'invoices';
 
@@ -34,7 +35,9 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['notificationItem']) {
       console.log('Notifications изменились:');
-      this.invoicesService.updateOrAddItem(this.notificationItem);
+      if(this.notificationItem.partner.id == this.counterpartyId){
+        this.invoicesService.updateOrAddItem(this.notificationItem);
+      }
     }
   }
 
@@ -47,20 +50,24 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   }
 
   columns = [
-    { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '18%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    { field: 'name', fieldView: 'name', header: 'Товар', type: 'string', visible: true, width: '20%' },
-    { field: 'quantity', fieldView: 'quantity', header: 'Количество', type: 'number', visible: true, width: '13%' },
-    { field: 'measurementUnit.Id', fieldView: 'measurementUnit', filterType: 10, searchType: 'measurementUnit.Name', header: 'Ед.изм', type: 'uuid', visible: true, width: '13%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
-    { field: 'amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '13%' },
+    { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'name', fieldView: 'name', header: 'Товар', type: 'string', visible: true, width: '17%' },
+    { field: 'quantity', fieldView: 'quantity', header: 'Количество', type: 'number', visible: true, width: '11%' },
+    { field: 'measurementUnit.Id', fieldView: 'measurementUnit', filterType: 10, searchType: 'measurementUnit.Name', header: 'Ед.изм', type: 'uuid', visible: true, width: '11%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
+    // { field: 'amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '11%' },
+    { field: 'sumAmount', fieldView: 'sumAmount', header: 'Общая сумма', type: 'number', visible: true, width: '11%' },
     { field: 'DocInvoice.Number', fieldView: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%', isFilter: false },
-    { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '14%' },
-    { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' }
+    { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '13%' },
+    { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' },
+    { field: 'DocInvoice.CreatorName', fieldView: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '16%' },
+    
   ];
 
 
   totalInfoColumn = [
     { columnNum: 2, value: 'totalExpenseSum' },
-    { columnNum: 4, value: 'totalIncomeSum' }
+    { columnNum: 4, value: 'totalIncomeSum' },
+    { columnNum: 7, value: 'totalSaldo' },
   ];
 
 
@@ -71,6 +78,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
+    { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
   ];
 
@@ -79,6 +87,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   totalInfoColumnInvoices = [
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
+    { columnNum: 3, value: 'totalSaldo' },
   ]
 
 

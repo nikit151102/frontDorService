@@ -1,0 +1,37 @@
+<div class="counterparties-list">
+    <div class="delta-status" *ngIf="sumAmountDelta !== undefined && sumAmountDelta !== null">
+        <span class="delta-text">
+            {{ getFormattedDelta() }}
+        </span>
+    </div>
+    <ul>
+        <li *ngFor="let item of drafts" (click)="select(item)">
+            <div class="counterparty-item">
+                <div class="inforation">
+                    <div class="item-info">
+                        
+                        <div class="item-row">
+                            <span class="item-value">{{ item.number }}</span>
+                        </div>
+                        <div class="item-row">
+                            <span class="item-value">{{ item.dateTime | date: 'dd.MM.yyyy' }}</span>
+                        </div>
+                    </div>
+                    <div class="item-info">
+                        <div class="item-status">
+                            <span [ngClass]="getStatusClass(item.status)" class="status-tag">
+                                {{ getStatusLabel(item.status) }}
+                            </span>
+                        </div>
+                        <div class="item-row">
+                            <span class="item-value"> ₽ {{ item.expenseSum }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </li>
+    </ul>
+</div>
+

@@ -10,33 +10,33 @@
   </div>
 
   <ul>
-    <li (click)="select('00000000-0000-0000-0000-000000000000')">
+    <li (click)="select('00000000-0000-0000-0000-000000000000', '')">
       <div class="counterparty-item">
         <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
       </div>
     </li>
 
     <li *ngFor="let counterparty of counterparties"
-      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id)"
+      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty)"
       [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
       <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
         <div style="       display: flex;
-              flex-direction: column;
-              align-items: flex-end;
-          ">
-          <span [class.active]="counterparty.id === selectedId">{{ counterparty.shortName }}</span>
+                flex-direction: column;
+                align-items: flex-end;
+            ">
+          <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName }}</span>
           <div class="status-tag">
             <span [ngClass]="{
-              'status-not-checked': counterparty.editStatus === 1,
-              'status-sent-for-check': counterparty.editStatus === 2,
-              'status-approved': counterparty.editStatus === 7,
-              'status-rejected': counterparty.editStatus === 3,
-              'status-deleted': counterparty.editStatus === 6,
-              'status-new-rejected': counterparty.editStatus === 4,  
-              'status-update-rejected': counterparty.editStatus === 5,
-              'status-active': counterparty.editStatus === 9 ,
-              'status-new-rej': counterparty.editStatus === 10
-          }" class="status-tag-text">
+                'status-not-checked': counterparty.editStatus === 1,
+                'status-sent-for-check': counterparty.editStatus === 2,
+                'status-approved': counterparty.editStatus === 7,
+                'status-rejected': counterparty.editStatus === 3,
+                'status-deleted': counterparty.editStatus === 6,
+                'status-new-rejected': counterparty.editStatus === 4,  
+                'status-update-rejected': counterparty.editStatus === 5,
+                'status-active': counterparty.editStatus === 9 ,
+                'status-new-rej': counterparty.editStatus === 10
+            }" class="status-tag-text">
               {{ getStatusLabel(counterparty.editStatus) }}
             </span>
           </div>
@@ -61,51 +61,86 @@
 
 
 
-  <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '400px' }">
-    <!-- <p-header>{{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}</p-header> -->
+  <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '600px'}">
+    <p-header>
+      <span class="pi pi-pencil"></span> {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
+    </p-header>
+
     <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
       <div class="p-fluid">
+
+        <!-- Краткое наименование -->
         <div class="p-field">
           <label for="shortName">Краткое наименование</label>
-          <input id="shortName" type="text" pInputText formControlName="shortName" />
+          <div class="field-wrapper">
+            <input id="shortName" type="text" pInputText formControlName="shortName"
+              placeholder="Введите краткое наименование" />
+            <small *ngIf="oldPrototype?.shortName" class="text-muted old-value">Старое значение: {{
+              oldPrototype.shortName }}</small>
+          </div>
         </div>
+
+        <!-- Полное наименование -->
         <div class="p-field">
           <label for="fullName">Полное наименование</label>
-          <input id="fullName" type="text" pInputText formControlName="fullName" />
+          <div class="field-wrapper">
+            <input id="fullName" type="text" pInputText formControlName="fullName"
+              placeholder="Введите полное наименование" />
+            <small *ngIf="oldPrototype?.fullName" class="text-muted old-value">Старое значение: {{ oldPrototype.fullName
+              }}</small>
+          </div>
         </div>
+
+        <!-- ИНН -->
         <div class="p-field">
           <label for="inn">ИНН</label>
-          <input id="inn" type="text" pInputText formControlName="inn" />
+          <div class="field-wrapper">
+            <input id="inn" type="text" pInputText formControlName="inn" placeholder="Введите ИНН" />
+            <small *ngIf="oldPrototype?.inn" class="text-muted old-value">Старое значение: {{ oldPrototype.inn
+              }}</small>
+          </div>
         </div>
+
+        <!-- ОГРН -->
         <div class="p-field">
           <label for="ogrn">ОГРН</label>
-          <input id="ogrn" type="text" pInputText formControlName="ogrn" />
+          <div class="field-wrapper">
+            <input id="ogrn" type="text" pInputText formControlName="ogrn" placeholder="Введите ОГРН" />
+            <small *ngIf="oldPrototype?.ogrn" class="text-muted old-value">Старое значение: {{ oldPrototype.ogrn
+              }}</small>
+          </div>
         </div>
+
+        <!-- КПП -->
         <div class="p-field">
           <label for="kpp">КПП</label>
-          <input id="kpp" type="text" pInputText formControlName="kpp" />
+          <div class="field-wrapper">
+            <input id="kpp" type="text" pInputText formControlName="kpp" placeholder="Введите КПП" />
+            <small *ngIf="oldPrototype?.kpp" class="text-muted old-value">Старое значение: {{ oldPrototype.kpp
+              }}</small>
+          </div>
         </div>
+
+        <!-- Адрес -->
         <div class="p-field">
           <label for="address">Адрес</label>
-          <input id="address" type="text" pInputText formControlName="address" />
+          <div class="field-wrapper">
+            <input id="address" type="text" pInputText formControlName="address" placeholder="Введите адрес" />
+            <small *ngIf="oldPrototype?.address" class="text-muted old-value">Старое значение: {{ oldPrototype.address
+              }}</small>
+          </div>
         </div>
-        <!-- <div class="p-field">
-                <label for="type">Тип</label>
-                <p-dropdown
-                  id="type"
-                  formControlName="type"
-                  [options]="typeOptions"
-                  optionLabel="label"
-                  placeholder="Выберите тип"
-                ></p-dropdown>
-              </div> -->
+
       </div>
+
       <p-footer>
-        <button type="button" pButton label="Отмена" icon="pi pi-times" (click)="display = false"></button>
-        <button type="submit" pButton label="Сохранить" icon="pi pi-check" *ngIf="this.isEdit == true"
-          [disabled]="counterpartyForm.invalid"></button>
+        <button type="button" pButton label="Отмена" icon="pi pi-times" class="p-button-secondary"
+          (click)="display = false"></button>
+        <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
+          class="p-button-primary"></button>
       </p-footer>
     </form>
   </p-dialog>
+
 
 </div>

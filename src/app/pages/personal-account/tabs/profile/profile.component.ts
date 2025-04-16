@@ -17,6 +17,7 @@ export class ProfileComponent implements OnInit {
 
   constructor(private profileService: ProfileService, private fb: FormBuilder) {
     this.profileForm = this.fb.group({
+      userName: [''],
       firstName: [''],
       lastName: [''],
       patronymic: [''],
@@ -43,8 +44,8 @@ export class ProfileComponent implements OnInit {
   }
 
   saveProfile() {
-    const updatedProfile = this.profileForm.value;
-
+    let updatedProfile = this.profileForm.value;
+    console.log('updatedProfile',updatedProfile)
     this.profileService.updateProfile(updatedProfile).subscribe({
       next: () => alert('Профиль успешно обновлен!'),
       error: () => alert('Ошибка обновления профиля!')

@@ -23,21 +23,24 @@ export class NavMenuService {
 
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    const url = `${environment.apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=menu`;
+    let apiUrl = environment.apiUrl.replace(/^https/, "wss");
+    const url = `${apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=menu`;
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
+      this.socket.send(JSON.stringify({ action: "GetInitialData" }));
     };
 
-    this.socket.onmessage = (event) => {
+    this.socket.onmessage = (event) => {    
       try {
         const data = JSON.parse(event.data);
         this.notificationsSubject.next(data);
         console.log("web-socket works:", data);
-      } catch (e) {
-        console.error('Error parsing WebSocket message:', e);
+      } catch {
+        console.warn("Received non-JSON message:", event.data);
       }
     };
+    
 
     this.socket.onerror = (error) => {
       console.error('WebSocket error:', error);

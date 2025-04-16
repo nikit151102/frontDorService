@@ -6,7 +6,7 @@ export interface ButtonConfig {
     status?: number;
     class: string;
     isEditData?: boolean;
-    condition?: (product: any) => boolean;
+    condition?: (product: any, idCurrentUser: any) => boolean;
 }
 
 export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
@@ -16,7 +16,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status,
         },
     ],
     mechanic: [
@@ -25,7 +25,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status,
         },
         {
             label: 'Изменить',
@@ -34,7 +34,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите внести изменения?',
             isEditData: true,
-            condition: (product) => product.status === 0 || product.status === 4,
+            condition: (product, idCurrentUser) => product.status === 0 || product.status === 4 && product.docAccountType == 0,
         },
         {
             label: 'Отправить',
@@ -43,7 +43,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отправки',
             messagePopUp: 'Вы уверены, что хотите отправить фактуру механику на проверку?',
             status: 2,
-            condition: (product) => product.status === 0 || product.status === 4,
+            condition: (product, idCurrentUser) => product.status === 0 || product.status === 4,
         },
         {
             label: 'Удалить',
@@ -51,7 +51,25 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
-            condition: (product) => product.status === 0 || product.status === 4,
+            condition: (product, idCurrentUser) => product.status === 0 || product.status === 4,
+        },
+        {
+            label: 'Изменить',
+            action: 'editScopeData',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите изменить счет?',
+            status: 5,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 ,
+        },
+        {
+            label: 'Создать фактуру',
+            action: 'createInvoiceFromAccount',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите создать счет?',
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null ,
+            // && product.creatorId == idCurrentUser
         }
     ],
     director: [
@@ -60,7 +78,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status,
         },
         {
             label: 'Изменить',
@@ -69,7 +87,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Редактирование фактуры',
             messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
             isEditData: true,
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status && product.docAccountType == 0,
         },
         {
             label: 'Подписать',
@@ -78,7 +96,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
             status: 5,
-            condition: (product) => product.status === 2,
+            condition: (product, idCurrentUser) => product.status === 2,
         },
         {
             label: 'Отклонить',
@@ -87,7 +105,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение отклонения',
             messagePopUp: 'Вы уверены, что хотите отклонить фактуру?',
             status: 4,
-            condition: (product) => product.status === 2,
+            condition: (product, idCurrentUser) => product.status === 2,
         },
         {
             label: 'Удалить',
@@ -95,8 +113,26 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-delete',
             titlePopUp: 'Подтверждение удаления',
             messagePopUp: 'Вы уверены, что хотите удалить фактуру?',
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status,
         },
+        {
+            label: 'Изменить',
+            action: 'editScopeData',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите изменить счет?',
+            status: 5,
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 ,
+        },
+        {
+            label: 'Создать фактуру',
+            action: 'createInvoiceFromAccount',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите создать счет?',
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null ,
+            // && product.creatorId == idCurrentUser
+        }
     ],
     default: [
         {
@@ -104,7 +140,7 @@ export const BUTTON_SERVICES_SETS: Record<string, ButtonConfig[]> = {
             action: 'getInvoiceById',
             class: 'btn-details',
             isEditData: false,
-            condition: (product) => product.status,
+            condition: (product, idCurrentUser) => product.status,
         }
     ]
 };

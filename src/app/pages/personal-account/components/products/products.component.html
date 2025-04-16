@@ -65,7 +65,7 @@
     </tbody>
 
     <tfoot>
-        <tr>
+        <tr style="  position: sticky; bottom: 0;">
             <ng-container *ngFor="let col of columns; let i = index">
                 <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
                     <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">

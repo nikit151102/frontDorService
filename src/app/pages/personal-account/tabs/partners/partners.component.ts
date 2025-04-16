@@ -14,6 +14,7 @@ export class PartnersComponent implements OnInit {
 
 
   selectedCounterpartyId: number | null = null;
+  selectedCounterparty: any;
   notificationsInvoices: any;
   notificationsPartners: any;
   constructor(private partnersService: PartnersService) { }
@@ -29,8 +30,10 @@ export class PartnersComponent implements OnInit {
     })
   }
 
-  onSelectCounterparty(id: number) {
-    this.selectedCounterpartyId = id;
+  onSelectCounterparty(data:{id: number, data: string}) {
+    console.log('data',data)
+    this.selectedCounterpartyId = data.id;
+    this.selectedCounterparty = data.data;
   }
 
   getBUTTON_SETS() {

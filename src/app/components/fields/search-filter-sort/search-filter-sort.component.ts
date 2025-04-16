@@ -111,8 +111,10 @@ export class SearchFilterSortComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside && this.inputWidth != '30px') {
-      this.isFilterOpen = false; // Обновляем флаг
+    if (!clickedInside ) {
+      this.isFilterOpen = false;
+    }
+    if (!clickedInside  && this.inputWidth != '30px') {
       this.inputWidth = '30px';
       this.bgColor = 'transparent';
       this.borderStyle = 'none';

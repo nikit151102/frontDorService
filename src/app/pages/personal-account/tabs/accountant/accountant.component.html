@@ -1,0 +1,6 @@
+<div class="container">
+  <app-partner-menu (selectCounterparty)="onSelectCounterparty($event)" [typeCode]="0" [buttonConfigs]="getBUTTON_SETS()"></app-partner-menu>
+  <app-invoices-content *ngIf="selectedCounterpartyId" [counterpartyId]="selectedCounterpartyId"
+    [counterpartyData]="selectedCounterparty" [notificationItem]="notificationsInvoices"
+    style=" width: calc(100%)"></app-invoices-content>
+</div>

@@ -1,0 +1,13 @@
+.container {
+    display: flex;
+    gap: 20px;
+}
+
+app-counterparties-list {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+.right-content{
+    width: calc(100% - 290px) !important
+}

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, OnDestroy, ChangeDetectorRef, HostListener } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { JwtService } from '../../../../services/jwt.service';
 import { TokenService } from '../../../../services/token.service';
@@ -34,10 +34,12 @@ interface NotifyData {
 export class NavMenuComponent implements OnInit, OnDestroy {
 
   items: CustomMenuItem[] = [
-    { label: 'Профиль', commandName: 'profile', access: '' },
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
     { label: 'Сервисы', commandName: 'services', access: 'ServicesAccess', notifyKey: 'servicesNotifyData' },
-    // { label: 'Нал', commandName: '', access: '', access: 'CashAccess },
+    { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
+    { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
+    { label: 'Проекты', commandName: 'projects', access: 'ProjectsAccess' },
+    { label: 'База', commandName: 'base', access: 'BaseCargosAccess' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
   ];
@@ -75,6 +77,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
   hasAccess(access: string): boolean {
     return !access || this.decodedRole.includes(access);
+    // return true
   }
 
   tooltipVisible = false;
@@ -151,4 +154,20 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   }
 
 
+
+
+  isDropdownVisible = false; 
+
+  onProfileClick(event: MouseEvent): void {
+    this.isDropdownVisible = !this.isDropdownVisible;  
+    event.stopPropagation(); 
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent): void {
+    const target = event.target as Element; 
+    if (target && !target.closest('.navbar-profile')) {
+      this.isDropdownVisible = false;
+    }
+  }
 }

@@ -52,7 +52,23 @@ export class ProductsService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+    const typeValue = currentUrl.includes('/services')
+    ? 1
+    : currentUrl.includes('/projects')
+      ? 5
+      : 0;
+  
+      const hasAccountTypeFilter = this.queryData.filters.some(
+        (filter: any) => filter.field === 'DocInvoice.DocAccountType'
+      );
+      
+      if (!hasAccountTypeFilter) {
+        this.queryData.filters.push({
+          field: 'DocInvoice.DocAccountType',
+          values: [0],
+          type: 1,
+        });
+      }
 
     let defaultFilter = {
       field: 'DocInvoice.Partner.Type',
@@ -60,6 +76,7 @@ export class ProductsService {
       type: 1
     }
 
+    
     const filterExists = this.queryData.filters.some(filter =>
       filter.field === defaultFilter.field &&
       JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
@@ -69,6 +86,24 @@ export class ProductsService {
     if (!filterExists) {
       this.queryData.filters.push(defaultFilter);
     }
+
+    if (!this.queryData.sorts) {
+      this.queryData.sorts = [];
+    }
+
+    const exists = this.queryData.sorts.some((sort) => sort.field === 'DocInvoice.DateTime');
+
+    if (!exists) {
+      this.queryData.sorts.push({ field: 'DocInvoice.DateTime', sortType: 0 });
+    }
+
+
+    const existsDocPaymentType = this.queryData.filters.some((sort) => sort.field === 'DocInvoice.DocPaymentType');
+
+    if (!existsDocPaymentType) {
+      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values:[0], type: 1 });
+    }
+
 
     return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
       headers: new HttpHeaders({
@@ -137,8 +172,13 @@ export class ProductsService {
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(
       (data) => {
-        this.products = data.documentMetadata.data;
+        this.products = data.documentMetadata.data.map((invoice:any) => ({
+          ...invoice,
+          sumAmount: invoice.sumAmount.toString().replace('.', ','),
+        }));
         this.totalInfo = data.totalInfo;
+        console.log('data',data)
+        console.log('products',this.products)
       },
       (error) => {
         console.error('Ошибка загрузки товаров:', error);

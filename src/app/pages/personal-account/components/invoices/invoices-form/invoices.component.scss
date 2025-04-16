@@ -1,3 +1,15 @@
+#content {
+    display: flex;
+    gap: 15px;
+}
+
+#btn-togleComment{
+    color: #203dab;
+    cursor: pointer;
+    width: fit-content;
+    font-size: 16px;
+}
+
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
@@ -25,11 +37,11 @@
 }
 
 .invoice-table tr:nth-child(even) {
-    background-color: #f9f9f9 !important; 
+    background-color: #f9f9f9 !important;
 }
 
 .invoice-table tr:nth-child(odd) {
-    background-color: #ffffff !important; 
+    background-color: #ffffff !important;
 }
 
 
@@ -136,7 +148,7 @@
     position: fixed;
     bottom: 0;
     padding-bottom: 10px;
-    background: transparent;
+    background: #fff;
     display: flex;
     flex-direction: row-reverse;
     gap: 15px;
@@ -206,7 +218,7 @@
 :host ::ng-deep p-dialog .p-datatable-table {
     position: relative;
     padding-bottom: 45px;
-    
+
 }
 
 :host ::ng-deep p-dialog .p-datatable-tfoot {
@@ -326,9 +338,11 @@
     gap: 10px;
 }
 
-.product-header, .product-row, .product-footer {
+.product-header,
+.product-row,
+.product-footer {
     display: grid;
-    grid-template-columns: 25% 10% 10% 20% 20% 10%;
+    grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
     gap: 10px;
     align-items: center;
 }
@@ -341,13 +355,15 @@
 
 .product-footer {
     position: sticky;
-    bottom: 0;
+    bottom: 26px;
+    height: 40px;
+    background: #fff;
     font-weight: bold;
     padding-top: 10px;
 }
 
 .product-row:nth-child(even) {
-    background-color: #f9f9f9; 
+    background-color: #f9f9f9;
 }
 
 .product-row:nth-child(odd) {
@@ -355,7 +371,7 @@
 }
 
 .product-row.editing {
-    background-color: #e0e0e0; 
+    background-color: #e0e0e0;
 }
 
 input {
@@ -380,8 +396,28 @@ input:focus {
 
 
 
-.text-warning{
+.text-warning {
     color: #ff1d1d;
     margin: 0;
     width: 150px;
+}
+
+
+textarea {
+    width: 100%;
+    height: 75px;
+    font-size: 14px;
+    background: rgb(255, 255, 255);
+    color: #101010;
+    border-radius: 6px;
+    resize: none;
+    overflow: auto;
+}
+
+:host ::ng-deep .p-datepicker .p-datepicker-panel {
+    background: #fff;
+}
+
+:host ::ng-deep .p-datepicker-header {
+    background: #fff;
 }

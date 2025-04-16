@@ -16,6 +16,8 @@ interface Counterparty {
 export class PartnerMenuService {
   private apiUrl = `${environment.apiUrl}/`;
 
+  partnersData: any;
+
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem(environment.token) || '';
     return new HttpHeaders({
@@ -23,7 +25,7 @@ export class PartnerMenuService {
       'Authorization': `Bearer ${token}`
     });
   }
-  
+
   queryData: any = { filters: [], sorts: [] }
 
   constructor(private http: HttpClient, private router: Router) { }
@@ -36,18 +38,18 @@ export class PartnerMenuService {
 
     const currentUrl = this.router.url;
 
-    const typeValue = currentUrl.includes('/services') ? 1 : 0;
+    const typeValue = currentUrl.includes('/services')
+      ? 1
+      : currentUrl.includes('/projects')
+        ? 5
+        : 0;
 
-    const hasTypeFilter = this.queryData.filters.some((filter:any) => filter.field === 'type');
+    this.queryData.filters = this.queryData.filters.filter((filter: any) => filter.field !== 'type');
 
-    if (!hasTypeFilter) {
-      this.queryData.filters = [
-        { field: 'type', values: [typeValue], type: 1 },
-        ...this.queryData.filters
-      ];
-    }
+    this.queryData.filters.unshift({ field: 'type', values: [typeValue], type: 1 });
 
-    return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData, 
+
+    return this.http.post<Counterparty[]>(`${this.apiUrl}api/CommercialWork/Partner/Filter`, this.queryData,
       { headers: this.getHeaders() })
   }
 
@@ -64,6 +66,14 @@ export class PartnerMenuService {
     );
   }
 
+  getCounterpartyItem(id: string) {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    return this.http.get<void>(`${this.apiUrl}api/CommercialWork/Partner/${id}`,
+      { headers: this.getHeaders() }
+    );
+
+  }
+
   // Редактировать контрагента
   editCounterparty(id: string, updatedCounterparty: Counterparty): Observable<Counterparty> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -71,7 +81,7 @@ export class PartnerMenuService {
       { headers: this.getHeaders() });
   }
 
-  
+
   sendingVerification(invoice: any, status: any): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
@@ -80,7 +90,7 @@ export class PartnerMenuService {
       'Authorization': `Bearer ${token}`
     });
 
-    if(status){
+    if (status) {
       status.editStatus = invoice
     }
 

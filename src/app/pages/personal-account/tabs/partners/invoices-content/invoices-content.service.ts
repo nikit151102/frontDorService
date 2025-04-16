@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../../../../environment';
+import { Router } from '@angular/router';
 
 interface Product {
   productName: string;
@@ -27,7 +28,7 @@ interface DocInvoice {
 })
 export class InvoicesContentService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private router:Router) { }
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -58,17 +59,30 @@ export class InvoicesContentService {
     });
   }
 
-  saveInvoice(invoice: any): Observable<any> {
+  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
+    let invoiceid;
+    console.log('invoice-----------------', invoice)
+    if (invoice.cargoId) {
+      invoiceid = invoice.cargoId;
+    } else {
+      invoiceid = invoice.id;
+    }
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${invoice.id}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
         }),
       });
     } else {
-      return this.http.post<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice`, invoice, {
+
+      if(cashType != null){
+        invoice.type = cashType;
+      }
+      
+      
+      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -77,9 +91,9 @@ export class InvoicesContentService {
     }
   }
 
-  deleteInvoice(id: string): Observable<void> {
+  deleteInvoice(id: string, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+    return this.http.delete<void>(`${environment.apiUrl}/${endpoint}/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
@@ -87,7 +101,7 @@ export class InvoicesContentService {
     });
   }
 
-  sendingVerification(invoice: any, status: any): Observable<void> {
+  sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     const headers = new HttpHeaders({
@@ -95,11 +109,11 @@ export class InvoicesContentService {
       'Authorization': `Bearer ${token}`
     });
 
-    if(status){
+    if (status) {
       invoice.status = status;
     }
 
-    return this.http.patch<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/SendToCheck/${invoice.id}`, invoice, { headers });
+    return this.http.patch<void>(`${environment.apiUrl}/${endpoint}/SendToCheck/${invoice.id}`, invoice, { headers });
   }
 
   getCheckers() {
@@ -113,66 +127,96 @@ export class InvoicesContentService {
     return this.http.get<void>(`${environment.apiUrl}/api/Supplier/GetCheckers`, { headers });
   }
 
+  docInvoiceFromAccount(id: any) {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<void>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/DocInvoiceFromAccount/${id}`, {}, { headers });
+  }
+
+
+  acceptAccountDraft(id: any, data: any = null) {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+  
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+  
+    const body = data !== null ? data : {};
+  
+    return this.http.post<void>(
+      `${environment.apiUrl}/api/CommercialWork/DocInvoice/AcceptAccountDraft/${id}`,
+      body,
+      { headers }
+    );
+  }
+  
+
 
   measurementUnits$ = new BehaviorSubject<any[]>([]);
 
- /** ✅ Получаем поток данных */
- getMeasurementUnits$(): Observable<any[]> {
-  return this.measurementUnits$.asObservable();
-}
-
-/** ✅ Устанавливаем данные */
-setMeasurementUnits(values: any[]) {
-  this.measurementUnits$.next(values);
-}
-
-/** ✅ Проверяем, есть ли данные */
-hasMeasurementUnits(): boolean {
-  return this.measurementUnits$.value.length > 0;
-}
-
-/** ✅ Загружаем данные с бэка */
-getMeasurementUnit(): Observable<any[]> {
-  if (this.hasMeasurementUnits()) {
-    return this.getMeasurementUnits$(); // Если уже есть данные, не запрашиваем бэкенд
+  /** ✅ Получаем поток данных */
+  getMeasurementUnits$(): Observable<any[]> {
+    return this.measurementUnits$.asObservable();
   }
 
-  const token = localStorage.getItem('YXV0aFRva2Vu');
-  const headers = new HttpHeaders({
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${token}`
-  });
-  
-  return this.http.post<any[]>(`${environment.apiUrl}/api/Entities/MeasurementUnit/Filter`, { filters: [], sorts: [] }, { headers })
-    .pipe(
-      tap(response => this.setMeasurementUnits(response)) // ✅ Сохраняем данные в BehaviorSubject
-    );
-}
+  /** ✅ Устанавливаем данные */
+  setMeasurementUnits(values: any[]) {
+    this.measurementUnits$.next(values);
+  }
+
+  /** ✅ Проверяем, есть ли данные */
+  hasMeasurementUnits(): boolean {
+    return this.measurementUnits$.value.length > 0;
+  }
+
+  /** ✅ Загружаем данные с бэка */
+  getMeasurementUnit(): Observable<any[]> {
+    if (this.hasMeasurementUnits()) {
+      return this.getMeasurementUnits$(); // Если уже есть данные, не запрашиваем бэкенд
+    }
+
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    return this.http.post<any[]>(`${environment.apiUrl}/api/Entities/MeasurementUnit/Filter`, { filters: [], sorts: [] }, { headers })
+      .pipe(
+        tap(response => this.setMeasurementUnits(response)) // ✅ Сохраняем данные в BehaviorSubject
+      );
+  }
 
 
 
 
   productTargets$ = new BehaviorSubject<any[]>([]);
 
- /** ✅ Получаем поток данных */
- getProductTargetsUnits$(): Observable<any[]> {
-  return this.productTargets$.asObservable();
-}
+  /** ✅ Получаем поток данных */
+  getProductTargetsUnits$(): Observable<any[]> {
+    return this.productTargets$.asObservable();
+  }
 
-/** ✅ Устанавливаем данные */
-setProductTargetsUnits(values: any[]) {
-  this.productTargets$.next(values);
-}
+  /** ✅ Устанавливаем данные */
+  setProductTargetsUnits(values: any[]) {
+    this.productTargets$.next(values);
+  }
 
-/** ✅ Проверяем, есть ли данные */
-hasProductTargetsUnits(): boolean {
-  return this.productTargets$.value.length > 0;
-}
+  /** ✅ Проверяем, есть ли данные */
+  hasProductTargetsUnits(): boolean {
+    return this.productTargets$.value.length > 0;
+  }
   getProductTarget(): Observable<any[]> {
     if (this.hasProductTargetsUnits()) {
       return this.getProductTargetsUnits$(); // Если уже есть данные, не запрашиваем бэкенд
     }
-  
+
     const token = localStorage.getItem('YXV0aFRva2Vu');
     const headers = new HttpHeaders({
       'Accept': 'application/json',
@@ -184,7 +228,7 @@ hasProductTargetsUnits(): boolean {
       );
   }
 
-  
+
 
 
   private socket!: WebSocket;

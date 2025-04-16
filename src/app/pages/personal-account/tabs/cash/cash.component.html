@@ -1,0 +1,13 @@
+<div class="container">
+  <!-- Левое меню -->
+  <app-cash-menu (selectedNameChange)="onNameSelected($event)"></app-cash-menu>
+
+  <!-- Правая часть -->
+  <div class="right-content">
+    <ng-container [ngSwitch]="selectedCashType">
+      <app-mechanic *ngSwitchCase="0"></app-mechanic>
+      <app-anton *ngSwitchCase="1"></app-anton>
+      <app-dima *ngSwitchCase="2"></app-dima>
+    </ng-container>
+  </div>
+</div>

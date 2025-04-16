@@ -12,9 +12,11 @@ import { ServicesContentComponent } from './services-content/services-content.co
 })
 export class ServicesComponent {
   selectedCounterpartyId: number | null = null;
+  selectedCounterpartyName: any;
 
-  onSelectCounterparty(id: number) {
-    this.selectedCounterpartyId = id;
+  onSelectCounterparty(data:{id: number, data: string}) {
+    this.selectedCounterpartyId = data.id;
+    this.selectedCounterpartyName = data.data;
   }
 
   getBUTTON_SETS() {

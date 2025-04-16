@@ -13,6 +13,7 @@ import { ButtonConfig } from './button-config';
 import { JwtService } from '../../../../services/jwt.service';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 import { ToastService } from '../../../../services/toast.service';
+import { Router } from '@angular/router';
 
 interface Counterparty {
   id: number;
@@ -34,7 +35,7 @@ interface TypeOption {
   styleUrl: './partner-menu.component.scss'
 })
 export class PartnerMenuComponent {
-  @Output() selectCounterparty = new EventEmitter<number>();
+  @Output() selectCounterparty = new EventEmitter<any>();
   @Input() typeCode: any;
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>
   @Input() title: string = 'контрагента'
@@ -51,7 +52,9 @@ export class PartnerMenuComponent {
     { label: 'Контрагент', value: 0 },
     { label: 'Сервис', value: 1 },
     { label: 'Физическое лицо', value: 2 },
-    { label: 'Юридическое лицо', value: 3 }
+    { label: 'Юридическое лицо', value: 3 },
+    { label: 'Прототип', value: 4 },
+    { label: 'Проект', value: 5 }
   ];
 
   constructor(
@@ -60,7 +63,8 @@ export class PartnerMenuComponent {
     private confirmPopupService: ConfirmPopupService,
     private partnerStatusService: PartnerStatusService,
     private jwtService: JwtService,
-    private toastService:ToastService
+    private toastService: ToastService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -91,8 +95,8 @@ export class PartnerMenuComponent {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
         this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
       } else if (button.isEditData == false || button.isEditData == true) {
-        this.isEdit = true;
-        console.log('button.isEditData', this.isEdit)
+        this.isEdit = button.isEditData;
+        // console.log('button.isEditData', this.isEdit)
         this[button.action](event, product);
 
       } else {
@@ -105,7 +109,7 @@ export class PartnerMenuComponent {
   }
 
   verificationPartner(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
-   
+
     this.confirmPopupService.openConfirmDialog({
       title: titlePopUp,
       message: messagePopUp,
@@ -115,11 +119,11 @@ export class PartnerMenuComponent {
 
         this.partnerMenuService.sendingVerification(titlePopUp, status).subscribe(
           () => {
-      
+
           },
           (error) => {
             console.error('Error deleting invoice', error);
-          
+
           }
         );
       }
@@ -131,8 +135,10 @@ export class PartnerMenuComponent {
     this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
         this.counterparties = data.data;
+
         this.sortCounterpartiesByStatus();
-        this.select('00000000-0000-0000-0000-000000000000');
+        this.partnerMenuService.partnersData = this.counterparties;
+        this.select('00000000-0000-0000-0000-000000000000', '');
       },
       (error: any) => {
         console.error('Ошибка загрузки контрагентов:', error);
@@ -159,48 +165,54 @@ export class PartnerMenuComponent {
     });
   }
 
-  select(id: any) {
+  select(id: any, data: any) {
     this.selectedId = id;
-    this.selectCounterparty.emit(id);
+    this.selectCounterparty.emit({ id: id, data: data });
+    console.log('id', id)
   }
 
-  isEdit: boolean = false;
+  isEdit: boolean = true;
+  oldPrototype: any;
 
   openDialog(event: MouseEvent, counterparty?: any) {
     event.stopPropagation();
     if (counterparty) {
-      this.selectedCounterparty = counterparty;
-
-      this.counterpartyForm.patchValue({
-        shortName: counterparty.shortName,
-        fullName: counterparty.fullName,
-        inn: counterparty.inn,
-        ogrn: counterparty.ogrn,
-        kpp: counterparty.kpp,
-        address: counterparty.address,
-        id: counterparty.id,
-        type: this.typeOptions.find(option => option.value === counterparty.type)
+      this.partnerMenuService.getCounterpartyItem(counterparty.id).subscribe((data: any) => {
+        const counterpartyData = data.data;
+        const prototype = counterpartyData.prototype || counterpartyData;
+        this.selectedCounterparty = prototype;
+        this.oldPrototype = counterpartyData.prototype ? counterpartyData : null;
+        this.counterpartyForm.patchValue({
+          shortName: prototype.shortName,
+          fullName: prototype.fullName,
+          inn: prototype.inn,
+          ogrn: prototype.ogrn,
+          kpp: prototype.kpp,
+          address: prototype.address,
+          id: prototype.id,
+          type: this.typeOptions.find(option => option.value === prototype.type)
+        });
+        this.toggleFormFields(this.isEdit);
       });
     } else {
       this.selectedCounterparty = null;
       this.counterpartyForm.reset();
+      this.toggleFormFields(this.isEdit);
     }
     this.display = true;
-    if (this.isEdit == false) {
-      this.counterpartyForm.controls['shortName'].disable();
-      this.counterpartyForm.controls['fullName'].disable();
-      this.counterpartyForm.controls['inn'].disable();
-      this.counterpartyForm.controls['ogrn'].disable();
-      this.counterpartyForm.controls['kpp'].disable();
-      this.counterpartyForm.controls['address'].disable();
-    } else {
-      this.counterpartyForm.controls['shortName'].enable();
-      this.counterpartyForm.controls['fullName'].enable();
-      this.counterpartyForm.controls['inn'].enable();
-      this.counterpartyForm.controls['ogrn'].enable();
-      this.counterpartyForm.controls['kpp'].enable();
-      this.counterpartyForm.controls['address'].enable();
-    }
+  }
+
+  // Метод для включения/выключения полей формы
+  private toggleFormFields(isEditable: boolean) {
+    const fields = ['shortName', 'fullName', 'inn', 'ogrn', 'kpp', 'address'];
+
+    fields.forEach(field => {
+      if (isEditable) {
+        this.counterpartyForm.controls[field].enable();
+      } else {
+        this.counterpartyForm.controls[field].disable();
+      }
+    });
   }
 
   onSubmit() {
@@ -219,46 +231,55 @@ export class PartnerMenuComponent {
     }
 
 
-      const formData = this.counterpartyForm.value;
+    const formData = this.counterpartyForm.value;
 
-      const { type, ...rest } = formData;
+    const { type, ...rest } = formData;
 
-      const formDataWithValueType = {
-        ...rest,
-        type: type ? type.value : null
-      };
+    const formDataWithValueType = {
+      ...rest,
+      type: type ? type.value : null
+    };
 
-      if (this.selectedCounterparty) {
-        this.partnerMenuService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
-          (updatedCounterparty) => {
-            const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
-            if (index !== -1) {
-              this.counterparties[index] = updatedCounterparty;
-              this.display = false;
-            }
-            this.toastService.showSuccess('Успех', 'Контрагент успешно отредактирован');
-            this.loadCounterparties();
-          },
-          (error) => {
-            console.error('Ошибка редактирования контрагента:', error)
-            this.toastService.showError('Ошибка', 'Ошибка редактирования контрагента');
-          } 
-        );
-      } else {
-        this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
-          (newCounterparty) => {
-            this.counterparties.push(newCounterparty);
+    if (this.selectedCounterparty) {
+      this.partnerMenuService.editCounterparty(this.selectedCounterparty.id, formDataWithValueType).subscribe(
+        (updatedCounterparty) => {
+          const index = this.counterparties.findIndex((c: Counterparty) => c.id === this.selectedCounterparty?.id);
+          if (index !== -1) {
+            this.counterparties[index] = updatedCounterparty;
             this.display = false;
-            this.loadCounterparties();
-            this.toastService.showSuccess('Успех', 'Контрагент успешно добавлен');
-          },
-          (error) => {
-            console.error('Ошибка добавления контрагента:', error);
-            this.toastService.showError('Ошибка', 'Ошибка добавления контрагента'); 
           }
+          this.toastService.showSuccess('Успех', 'Контрагент успешно отредактирован');
+          this.loadCounterparties();
+        },
+        (error) => {
+          console.error('Ошибка редактирования контрагента:', error)
+          this.toastService.showError('Ошибка', 'Ошибка редактирования контрагента');
+        }
+      );
+    } else {
+      const currentUrl = this.router.url;
 
-        );
-      }
+      const typeValue = currentUrl.includes('/services')
+        ? 1
+        : currentUrl.includes('/projects')
+          ? 5
+          : 0;
+
+      formDataWithValueType.type = typeValue;
+      this.partnerMenuService.addCounterparty(formDataWithValueType).subscribe(
+        (newCounterparty) => {
+          this.counterparties.push(newCounterparty);
+          this.display = false;
+          this.loadCounterparties();
+          this.toastService.showSuccess('Успех', 'Контрагент успешно добавлен');
+        },
+        (error) => {
+          console.error('Ошибка добавления контрагента:', error);
+          this.toastService.showError('Ошибка', 'Ошибка добавления контрагента');
+        }
+
+      );
+    }
   }
 
 
@@ -276,10 +297,10 @@ export class PartnerMenuComponent {
             this.toastService.showSuccess('Успех', 'Контрагент удален');
             this.loadCounterparties();
           },
-          (error) =>{
+          (error) => {
             console.error('Ошибка удаления контрагента:', error)
-            this.toastService.showError('Ошибка', 'Не удалось удалить контрагента'); 
-          } 
+            this.toastService.showError('Ошибка', 'Не удалось удалить контрагента');
+          }
         );
       }
     });
@@ -301,10 +322,17 @@ export class PartnerMenuComponent {
 
   // Работа со статусами
   isEditable(status: number): boolean {
-    return this.partnerStatusService.isEditable(status);
+    if (this.currentRole == 1) {
+      return false;
+
+    } else {
+      return this.partnerStatusService.isEditable(status);
+    }
   }
 
   getStatusLabel(status: number): string {
+    // console.log('status', status)
+    // console.log('this.partnerStatusService.getStatusLabel(status)', this.partnerStatusService.getStatusLabel(status))
     return this.partnerStatusService.getStatusLabel(status);
   }
 
@@ -313,7 +341,11 @@ export class PartnerMenuComponent {
   }
 
   isForbiddenStatus(status: number): boolean {
-    return this.partnerStatusService.isForbiddenStatus(status);
+    if (this.currentRole == 1) {
+      return false;
+    } else {
+      return this.partnerStatusService.isForbiddenStatus(status);
+    }
   }
 
 

@@ -57,7 +57,7 @@ export class UuidSearchFilterSortComponent {
       this.borderStyle = '1px solid #007BFF';
       this.isSearchOpen = true;
     } else {
-      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
+      setTimeout(() => { 
         this.inputWidth = '30px';
         this.bgColor = 'transparent';
         this.borderStyle = 'none';
@@ -68,17 +68,18 @@ export class UuidSearchFilterSortComponent {
 
 
   ngOnChanges() {
-    console.log('apiEndpointapiEndpoint',this.apiEndpoint)
+    console.log('apiEndpointapiEndpoint', this.apiEndpoint);
+  
     if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
-      
-      this.loadData();
+      this.loadData(); 
     }
+  
     if (this.enam != null) {
       this.products = this.enam;
-      console.log('products', this.products);
       this.endpointDataLoaded = true;
     }
   }
+  
 
   loadData() {
     this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
@@ -156,8 +157,10 @@ export class UuidSearchFilterSortComponent {
     @HostListener('document:click', ['$event'])
     onClickOutside(event: MouseEvent) {
       const clickedInside = this.elementRef.nativeElement.contains(event.target);
-      if (!clickedInside && this.inputWidth != '30px') {
+      if (!clickedInside ) {
         this.isFilterOpen = false;
+      }
+      if (!clickedInside  && this.inputWidth != '30px') {
         this.inputWidth = '30px';
         this.bgColor = 'transparent';
         this.borderStyle = 'none';
