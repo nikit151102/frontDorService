@@ -277,7 +277,7 @@ export class PartnerMenuComponent {
         },
         (error) => {
           console.error('Ошибка добавления контрагента:', error);
-          this.toastService.showError('Ошибка', 'Ошибка добавления контрагента');
+          this.toastService.showError('Ошибка', error.error.Message)
         }
 
       );
