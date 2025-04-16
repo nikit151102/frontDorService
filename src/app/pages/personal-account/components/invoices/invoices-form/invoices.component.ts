@@ -601,6 +601,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           ...this.selectedInvoice,
           tax: null,
           type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
+          checkPersonId: this.selectedInvoice.checkPersonId === "" ? null : this.selectedInvoice.checkPersonId,
           productList: this.selectedInvoice.productList.map((product: any) => {
             const updatedProduct: any = {
               ...product,
@@ -679,6 +680,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   AcceptEditPartner(idPartner: string) {
     this.selectedInvoice.partnerId = idPartner;
+    
     this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
       (invoice) => {
         console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
