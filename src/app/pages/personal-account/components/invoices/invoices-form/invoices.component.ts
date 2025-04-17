@@ -656,7 +656,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
               summary: 'Успех',
               detail: 'Счет сохранен'
             });
-            this.toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
+            this.toastService.showSuccess('Сохранение', invoice.documentMetadata.message);
             const invoiceId = invoice.documentMetadata.data.id;
             this.selectedInvoice = null;
             this.cdr.detectChanges();
