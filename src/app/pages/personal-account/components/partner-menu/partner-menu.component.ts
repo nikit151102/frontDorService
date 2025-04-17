@@ -60,7 +60,7 @@ export class PartnerMenuComponent {
     { label: 'Проект', value: 5 }
   ];
 
-  
+
 
   constructor(
     private partnerMenuService: PartnerMenuService,
@@ -93,9 +93,12 @@ export class PartnerMenuComponent {
   }
 
   [key: string]: any;
-  handleButtonClick(button: ButtonConfig, product: any, event?: Event) {
+  handleButtonClick(button: ButtonConfig, product: any, event: Event) {
+    event.stopPropagation();
     console.log('productproduct', product)
-
+    if (this.currentRole == 1) {
+      this.isEdit = true
+    }
     if (button.action && typeof this[button.action] === 'function') {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {
         this[button.action](event, product, button.status, button.titlePopUp, button.messagePopUp, event);
@@ -105,7 +108,6 @@ export class PartnerMenuComponent {
         this[button.action](event, product);
 
       } else {
-
         this[button.action](event, product);
       }
     } else {
@@ -223,7 +225,7 @@ export class PartnerMenuComponent {
     });
   }
 
-  
+
 
   onSubmit() {
 
@@ -241,7 +243,7 @@ export class PartnerMenuComponent {
     }
 
     const formData = this.counterpartyForm.value;
-    
+
     const { type, ...rest } = formData;
 
     const formDataWithValueType = {

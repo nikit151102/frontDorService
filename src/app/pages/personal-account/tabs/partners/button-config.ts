@@ -75,7 +75,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             label: 'Изменить',
             class: 'btn-edit',
             action: 'openDialog',
-            isEditData: false,
+            isEditData: true,
             condition: (product) => product.editStatus,
         },
         {
