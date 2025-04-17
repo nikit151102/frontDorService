@@ -122,10 +122,10 @@
       </div>
 
       <p-footer>
-        <button type="button" pButton label="Отмена" icon="pi pi-times" class="p-button-secondary"
+        <button type="button" pButton label="Закрыть" icon="pi pi-times" class="p-button-secondary"
           (click)="display = false"></button>
         <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
-          class="p-button-primary"></button>
+          class="p-button-primary" *ngIf="currentRole == 1"></button>
       </p-footer>
     </form>
   </p-dialog>

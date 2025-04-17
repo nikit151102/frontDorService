@@ -78,26 +78,28 @@ export class PartnerMenuComponent {
     this.loadCounterparties();
     this.initializeForm();
   }
-
   getButtonSet(): ButtonConfig[] {
     switch (this.currentRole) {
       case '2':
-        return this.buttonConfigs['supplier'];
+        return this.buttonConfigs['supplier'] || this.buttonConfigs['default'];
       case '3':
-        return this.buttonConfigs['mechanic'];
+        return this.buttonConfigs['mechanic'] || this.buttonConfigs['default'];
       case '1':
-        return this.buttonConfigs['director'];
+        return this.buttonConfigs['director'] || this.buttonConfigs['default'];
       default:
         return this.buttonConfigs['default'];
     }
   }
+  
 
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any, event: Event) {
     event.stopPropagation();
     console.log('productproduct', product)
     if (this.currentRole == 1) {
-      this.isEdit = true
+      this.isEdit = true;
+    } else {
+      this.isEdit = false;
     }
     if (button.action && typeof this[button.action] === 'function') {
       if (button.titlePopUp || button.messagePopUp || button.status !== undefined) {

@@ -90,9 +90,9 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
     default: [
         {
             label: 'Подробнее',
-            action: 'getInvoiceById',
+            action: 'openDialog',
             class: 'btn-details',
-            condition: (product) => product.editStatus !== 0 && product.editStatus !== 3,
+            condition: (product) => true
         }
     ]
 };
