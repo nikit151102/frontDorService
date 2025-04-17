@@ -49,9 +49,9 @@ export class InvoicesContentService {
       }),
     });
   }
-  getInvoiceById(id: string): Observable<any> {
+  getInvoiceById(id: string, endpoint: any = 'api/CommercialWork/DocInvoice'): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.get<any>(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+    return this.http.get<any>(`${environment.apiUrl}/${endpoint}/${id}`, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`

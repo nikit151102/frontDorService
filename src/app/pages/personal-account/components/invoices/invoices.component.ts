@@ -398,8 +398,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-
-    this.invoiceService.getInvoiceById(invoice.id).subscribe((data:any)=>{
+    console.log('invoice',invoice)
+    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data:any)=>{
       if (data.data.docAccountType == 0) {
         if (this.generalForm) {
           this.selectData = { ...data.data };
