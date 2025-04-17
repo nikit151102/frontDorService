@@ -95,7 +95,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-send',
             titlePopUp: 'Подтверждение отправки',
             messagePopUp: 'Вы уверены, что хотите отправить фактуру механику на проверку?',
-            status: 1,
+            status: 2,
             condition: (product, idCurrentUser) => product.status === 0 || product.status === 3,
         },
         {
@@ -130,7 +130,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-send',
             titlePopUp: 'Подтверждение отправки',
             messagePopUp: 'Вы уверены, что хотите отправить фактуру механику на проверку?',
-            status: 1,
+            status: 2,
             condition: (product, idCurrentUser) => product.status === 0 || product.status === 3,
         },
         {
@@ -165,7 +165,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-send',
             titlePopUp: 'Подтверждение отправки',
             messagePopUp: 'Вы уверены, что хотите отправить фактуру механику на проверку?',
-            status: 1,
+            status: 2,
             condition: (product, idCurrentUser) => product.status === 0 || product.status === 3,
         },
         {
