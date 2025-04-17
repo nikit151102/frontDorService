@@ -37,6 +37,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
     { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
     { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
+    { label: 'База', commandName: 'base', access: 'ManagerAccess' },
     { label: 'Логист', commandName: 'base', access: 'none' },
     { label: 'Директор', commandName: 'base', access: 'none' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
