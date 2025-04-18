@@ -309,7 +309,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         ttn: model.ttn || 0,
         weight: model.weight || 0,
         amount: model.amount || 0,
-        managerDocType: model.managerDocType || 0,
+        managerDocType: model.managerDocType || 2,
         status: model.status || 0,
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
@@ -318,7 +318,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         delete dataForm.cargoId;
     }
 
-    const titlePopUp = model && model.cargoId ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
+    const titlePopUp = model && model.cargoId ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать фактуру?';
     const acceptLabel = model && model.cargoId ? 'Обновить' : 'Создать';
 
     confirmPopupService.openConfirmDialog({
