@@ -126,26 +126,37 @@ export class CellsComponent implements OnInit {
   }
 
   defaultFilters: any;
-  switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
     this.invoicesService.queryData = { filters: [], sorts: [] };
     this.invoicesService.defaultFilters = [{
       field: 'ManagerDocType',
       values: [typeDocs],
       type: 1
     }];
+
     this.defaultFilters = { ...this.invoicesService.defaultFilters };
     this.currentComponent = type;
     this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-    const formSet = type === 'arrival'
-      ? getFormArrivalSets({ productTarget: this.productTarget })
-      : getFormExpenseSets({ productTarget: this.productTarget });
+    this.loadData('/api/Entities/Cargo/Filter')
+      .then((productTarget) => {
+        this.productTarget = productTarget.data;
+        const dataSources = { productTarget: this.productTarget };
 
-    MODEL.managerDocType = type === 'arrival' ? 0 : 1;
-    this.generalFormService.setModel(MODEL);
-    this.generalFormService.setConfig(formSet);
-    this.buttonConfigs = formSet.buttons;
+        const formSet = type === 'arrival'
+          ? getFormArrivalSets(dataSources)
+          : getFormExpenseSets(dataSources);
+
+        MODEL.managerDocType = type === 'arrival' ? 0 : 1;
+
+        this.generalFormService.setService(this.bitumenService);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+
+        this.buttonConfigs = formSet.buttons;
+      });
   }
+
 
   getButtonConfigs() {
     return BUTTON_SETS;
