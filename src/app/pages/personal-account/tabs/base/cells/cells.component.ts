@@ -149,7 +149,7 @@ switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
 
         MODEL.managerDocType = type === 'arrival' ? 0 : 1;
 
-        this.generalFormService.setService(this.bitumenService);
+        this.generalFormService.setService(this.cellsService);
         this.generalFormService.setConfig(formSet);
         this.generalFormService.setModel(MODEL);
 
