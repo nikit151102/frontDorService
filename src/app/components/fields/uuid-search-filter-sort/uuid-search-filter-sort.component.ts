@@ -28,7 +28,7 @@ export class UuidSearchFilterSortComponent {
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
   @Input() fieldNames: string = ''; // Массив полей для отображения в выпадающем списке
   @Input() Field: string = ''; 
-  @Input() enam: any;
+  @Input() enam: any = null;
   
   searchTerm: string = '';
   selectedFilters: any[] = [];
@@ -84,8 +84,8 @@ export class UuidSearchFilterSortComponent {
   loadData() {
     this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
       (data: any) => {
-        console.log('datdatadatadataa',data)
-        this.products = data.data;
+        console.log('uuidSearchFilterSortService',data)
+        this.products = data;
         this.endpointDataLoaded = true;
         console.log('Данные получены с эндпоинта:', this.products);
       },
