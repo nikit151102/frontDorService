@@ -10,7 +10,7 @@
         <general-form [data]="selectData"></general-form>
     </ng-container>
 
-    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && typeValueRoute == true">
+    <!-- <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && typeValueRoute == true">
         <button (click)="openScopeModal()" style="    height: 36px;
      padding: 8px;
         background: #34d399;
@@ -19,7 +19,7 @@
         border-radius: 7px;">
             Создать счёт
         </button>
-    </ng-container>
+    </ng-container> -->
     <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
         <button (click)="openPaymentModal()" style=" height: 36px;
      padding: 8px;
@@ -44,13 +44,20 @@
   (selectedColumnsChange)="updateSelectedColumns($event)">
 </app-settings> -->
 
-    <h2 style="color: #101010;  font-size: 17px;" *ngIf="counterpartyData">
-        {{counterpartyData?.shortName}}
-        <span *ngIf="counterpartyData.fullName">
-            -
+    <h2 *ngIf="counterpartyData" class="counterparty-title">
+        <span class="short-name">{{ counterpartyData.shortName }}</span>
+
+        <span *ngIf="counterpartyData.fullName" class="separator">-</span>
+
+        <span *ngIf="counterpartyData.fullName" class="full-name">
+            {{ counterpartyData.fullName }}
         </span>
-        {{counterpartyData?.fullName}}
+
+        <span *ngIf="getTaxValue(counterpartyData.tax)" class="tax-badge">
+            ({{ getTaxValue(counterpartyData.tax) }})
+        </span>
     </h2>
+
 </div>
 <p-table [value]="invoices" class="invoice-table">
     <ng-template pTemplate="header">

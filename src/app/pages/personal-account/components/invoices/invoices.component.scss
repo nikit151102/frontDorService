@@ -167,7 +167,42 @@
 
 
 
-
+.counterparty-title {
+    padding-top: 10px;
+    color: #101010;
+    font-size: 17px;
+    font-weight: 600;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+  }
+  
+  .short-name {
+    font-weight: bold;
+    color: #2c3e50;
+  }
+  
+  .full-name {
+    color: #555;
+    font-weight: normal;
+  }
+  
+  .separator {
+    color: #999;
+    margin: 0 4px;
+  }
+  
+  .tax-badge {
+    background: #f0f0f0;
+    color: #666;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 14px;
+    margin-left: 6px;
+    font-weight: normal;
+  }
 
 
 

@@ -1,24 +1,25 @@
 <div class="overlay" *ngIf="visible">
     <div class="popup">
         <div class="popup-header">
-            <span>Оплата ({{invoicePaymentService.selectInvoiceShortName}} - {{invoicePaymentService.selectInvoiceFullName}})</span>
+            <span>Оплата ({{invoicePaymentService.selectInvoiceShortName}} -
+                {{invoicePaymentService.selectInvoiceFullName}})</span>
         </div>
         <div class="popup-body">
             <div class="p-field p-col-12" style="    display: flex; flex-direction: column;">
                 <label for="dateTime">Дата</label>
-                   <p-calendar 
-                   id="dateTime" 
-                   [(ngModel)]="dateTime" 
-                   [showTime]="false"
-                   dateFormat="dd-mm-yy"
-                   (onInput)="onDateInput($event)">
-                 </p-calendar>
+                <p-calendar id="dateTime" [(ngModel)]="dateTime" [showTime]="false" dateFormat="dd-mm-yy"
+                    (onInput)="onDateInput($event)">
+                </p-calendar>
             </div>
 
             <div class="p-field p-col-12" style="    max-width: 225px;">
                 <label for="dateTime">Сумма оплаты</label>
-                <app-custom-input-number [(ngModel)]="amount"  [min]="0">
+                <app-custom-input-number [(ngModel)]="amount" [min]="0">
                 </app-custom-input-number>
+            </div>
+            <div class="p-field p-col-12" style="    max-width: 225px;">
+                <label for="dateTime">На основе</label>
+                <app-custom-input [(ngModel)]="number" placeholder="Заполните поле"></app-custom-input>
             </div>
         </div>
         <div class="popup-footer">

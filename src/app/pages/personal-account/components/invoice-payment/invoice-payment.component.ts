@@ -6,11 +6,12 @@ import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-numb
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoicesService } from '../invoices/invoices.service';
 import { Router } from '@angular/router';
+import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 
 @Component({
   selector: 'app-invoice-payment',
   standalone: true,
-  imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule, CustomInputComponent],
   templateUrl: './invoice-payment.component.html',
   styleUrls: ['./invoice-payment.component.scss']
 })
@@ -24,8 +25,9 @@ export class InvoicePaymentComponent implements OnInit {
   rejectLabel: string = 'Отмена';
   measurementUnit: any = [];
   productTarget: any = [];
-  dateTime: Date | undefined = new Date();
+  dateTime: Date | undefined = undefined;
   amount: number = 0;
+  number: string = '';
 
   constructor(
     private cdr: ChangeDetectorRef,
@@ -54,6 +56,7 @@ export class InvoicePaymentComponent implements OnInit {
    
 
     let data: any = {
+      number: this.number,
       dateTime: this.dateTime,
       type: typeValue,
       docPaymentType: this.paymentType,
@@ -87,6 +90,7 @@ export class InvoicePaymentComponent implements OnInit {
         this.invoicesService.totalInfo = data.totalInfo;
         this.dateTime = new Date();
         this.amount = 0;
+        this.number = '';
       },
       (error) => console.error('Ошибка при оплате:', error)
     );
@@ -118,6 +122,7 @@ export class InvoicePaymentComponent implements OnInit {
       this.dateTime = date;
     }
   }
+
   parseDate(value: string): Date | null {
     const parts = value.split('-');
     if (parts.length === 3) {

@@ -25,6 +25,7 @@ import { ScoreFormComponent } from '../score-form/score-form.component';
 import { ScoreFormService } from '../score-form/score-form.service';
 import { Router } from '@angular/router';
 import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config';
+import { taxes } from '../../../../services/data';
 
 @Component({
   selector: 'app-invoices',
@@ -64,7 +65,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
-
+  
+  getTaxValue(tax: any) {
+    const foundTax = taxes.find((item: any) => item.value === tax);
+    return foundTax ? foundTax.label : '';
+  }
   ngOnChanges(changes: SimpleChanges) {
 
     if (changes['defaultFilter']) {
