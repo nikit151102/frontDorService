@@ -240,7 +240,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.invoiceId = Object.values(this.invoiceId).join('');
       this.invoiceId = this.invoiceId.replace(/(\w{8})(\w{4})(\w{4})(\w{4})(\w{12})/, '$1-$2-$3-$4-$5');
     }
-    console.log('this.invoiceId this.invoiceId ', this.invoiceId)
+    console.log('this.invoiceId this.invoiceId ')
     this.invoiceService.getInvoiceById(this.invoiceId).subscribe((value: any) => {
       this.idScope = value.data.id;
       if (value.data.drafts != null) {
@@ -289,6 +289,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         this.type = 1;
 
       }
+
       if (value.data.productList) {
         this.selectedInvoice.productList = value.data.productList.map((product: any) => ({
           ...product,
@@ -743,7 +744,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       dateTime: new Date().toISOString(),
       number: '',
       status: 0,
-      type: 1,
+      type: 0,
       tax: null,
       partnerId: this.counterpartyId,
       checkPersonId: this.checkers?.length ? this.checkers[0].id : '',
@@ -755,6 +756,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.isEdit = true;
     this.newIncoice = true;
     this.addProduct();
+console.log('selectedInvoice')
   }
 
 
