@@ -48,6 +48,7 @@ export class PartnerMenuComponent {
   counterpartyForm!: FormGroup;
   selectedCounterparty: any | null = null;
   currentRole: any;
+  isNewItem: boolean = false;
 
   taxes = taxes;
 
@@ -286,6 +287,8 @@ export class PartnerMenuComponent {
 
       );
     }
+
+    this.isNewItem = false;
   }
 
 

@@ -1,7 +1,8 @@
 <div class="counterparties-list">
 
   <div class="settings">
-    <button class="add-button" (click)="isEdit = true; openDialog($event); ">Добавить {{title}}</button>
+    <button class="add-button" (click)="isEdit = true; isNewItem = true; openDialog($event); ">Добавить
+      {{title}}</button>
 
     <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" [placeholder]="'Найти...'"
       class="search-input">
@@ -24,7 +25,8 @@
                 flex-direction: column;
                 align-items: flex-end;
             ">
-          <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName }}</span>
+          <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName
+            }}</span>
           <div class="status-tag">
             <span [ngClass]="{
                 'status-not-checked': counterparty.editStatus === 1,
@@ -84,7 +86,7 @@
         <div class="p-field">
           <label for="fullName">Полное наименование</label>
           <div class="field-wrapper">
-            <input id="fullName" type="text" pInputText formControlName="fullName" 
+            <input id="fullName" type="text" pInputText formControlName="fullName"
               placeholder="Введите полное наименование" />
             <small *ngIf="oldPrototype?.fullName" class="text-muted old-value">Старое значение: {{ oldPrototype.fullName
               }}</small>
@@ -103,29 +105,21 @@
 
         <div class="p-field p-col-12">
           <label for="tax">Налог</label>
-          <p-dropdown
-          id="tax"
-          [style]="{ 'min-width': '120px', 'width': '100%' ,  'height': '36px', 'padding': '0'}"
-          [panelStyle]="{ 'width': '100%' }"
-          panelStyleClass="custom-dropdown-panel"
-          formControlName="tax"
-          [options]="taxes"
-          optionLabel="label"
-          [disabled]="!isEdit"
-          appendTo="body"
-          [scrollHeight]="'200px'"
-        ></p-dropdown>
-        
+          <p-dropdown id="tax" [style]="{ 'min-width': '120px', 'width': '100%' ,  'height': '36px', 'padding': '0'}"
+            [panelStyle]="{ 'width': '100%' }" panelStyleClass="custom-dropdown-panel" formControlName="tax"
+            [options]="taxes" optionLabel="label" [disabled]="!isEdit" appendTo="body"
+            [scrollHeight]="'200px'"></p-dropdown>
 
-      </div>
+
+        </div>
 
       </div>
 
       <p-footer>
         <button type="button" pButton label="Закрыть" icon="pi pi-times" class="p-button-secondary"
-          (click)="display = false"></button>
+          (click)="display = false; isNewItem = false;"></button>
         <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
-          class="p-button-primary"></button>
+          *ngIf="isNewItem ==true || currentRole == 1" class="p-button-primary"></button>
       </p-footer>
     </form>
   </p-dialog>
