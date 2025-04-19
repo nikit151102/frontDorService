@@ -339,8 +339,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
         }
 
         this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
-          () => {
+          (invoice:any) => {
             this.invoicesService.removeItemById(invoiceId.id);
+            this.invoicesService.totalInfo = invoice.data.totalInfo;
             this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
           },
           (error) => {
