@@ -44,14 +44,14 @@
           </div>
         </div>
         <div class="actions">
-          <div >
-            <span *ngIf="counterparty.totalSaldo" [ngClass]="{
-              'positive': counterparty.totalSaldo > 0,
-              'zero': counterparty.totalSaldo === 0,
-              'negative': counterparty.totalSaldo < 0
+          <div>
+            <span *ngIf="counterparty.partnerSaldoData && counterparty.partnerSaldoData.totalSaldo" [ngClass]="{
+              'positive': counterparty.partnerSaldoData.totalSaldo > 0,
+              'zero': counterparty.partnerSaldoData.totalSaldo === 0,
+              'negative': counterparty.partnerSaldoData.totalSaldo < 0
           }">
-            {{ formatSaldo(counterparty.totalSaldo) }}
-          </span>          
+              {{ formatSaldo(counterparty.partnerSaldoData.totalSaldo) }}
+            </span>
           </div>
           <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
           <div *ngIf="menuOpenFor === counterparty.id" class="menu">

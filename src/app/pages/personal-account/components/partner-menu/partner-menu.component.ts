@@ -140,21 +140,11 @@ export class PartnerMenuComponent {
     });
   }
 
-
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
-        const partnerSaldoData = data.partnerSaldoData;
-        let dataPartner = data.data;
-
-        const saldoMap = Array.isArray(partnerSaldoData)
-          ? new Map(partnerSaldoData.map((item: any) => [item.id, item.totalSaldo]))
-          : new Map();
-
-        this.counterparties = dataPartner.map((counterparty: any) => ({
-          ...counterparty,
-          totalSaldo: saldoMap.get(counterparty.id) ?? null,
-        }));
+     
+        this.counterparties = data.data;
 
         this.sortCounterpartiesByStatus();
         this.partnerMenuService.partnersData = this.counterparties;
