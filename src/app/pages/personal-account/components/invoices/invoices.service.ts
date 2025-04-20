@@ -30,7 +30,7 @@ interface QueryDto {
 
 export class InvoicesService {
 
-  queryData: QueryDto = { filters: [], sorts: [], page: 1, pageSize: 30 };
+  queryData: QueryDto = { filters: [], sorts: []};
   defaultFilters: FilterDto[] = [];
   constructor(private http: HttpClient, private router: Router) { }
 

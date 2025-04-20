@@ -306,9 +306,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
     this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(
-      this.counterpartyId,
-      this.currentPage,
-      this.pageSize
+      this.counterpartyId
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
