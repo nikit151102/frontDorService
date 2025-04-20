@@ -21,6 +21,7 @@ import { ToastService } from '../../../../services/toast.service';
 import { ProductsService } from '../products/products.service';
 import { InvoicesService } from '../invoices/invoices.service';
 import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'general-form',
@@ -64,12 +65,13 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     private productsService: ProductsService,
     private messageService: MessageService,
     private toastService: ToastService,
+    private router: Router,
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
       this.selectedInvoice = this.data;
-  
+
       if (this.config && this.areOptionsLoaded()) {
         this.patchModelWithData(this.data);
       } else {
@@ -77,7 +79,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
           if (this.config && this.areOptionsLoaded()) {
             clearInterval(waitForConfig);
             this.patchModelWithData(this.data);
-            this.cdr.detectChanges(); 
+            this.cdr.detectChanges();
           }
         }, 100);
       }
@@ -95,17 +97,16 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       return true;
     });
   }
-  
-  
+
+
   private patchModelWithData(data: any): void {
     if (!this.config?.fields) {
       console.warn('Конфигурация или поля не определены');
       return;
     }
-    
+
     for (const field of this.config.fields) {
       console.log(`Обрабатываем поле: ${field.name}`);
-      
       if (data.hasOwnProperty(field.name)) {
         if (field.name === 'id') {
           this.model['id'] = data['id'];
@@ -113,9 +114,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
           if (field.type === 'date') {
             const dateValue = data[field.name];
             if (dateValue) {
-              if (typeof dateValue === 'string') {
-                this.model[field.name] = new Date(dateValue);
-              } else if (typeof dateValue === 'number') {
+              if (typeof dateValue === 'string' || typeof dateValue === 'number') {
                 this.model[field.name] = new Date(dateValue);
               } else {
                 this.model[field.name] = dateValue;
@@ -130,10 +129,34 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         console.warn(`⚠️ Поле "${field.name}" отсутствует в данных`);
       }
     }
-  
+
+
+    const currentUrl = this.router.url;
+    if (currentUrl.includes('/cash')) {
+      // 🆕 Добавляем обработку productList
+      if (Array.isArray(data.productList) && data.productList.length > 0) {
+        const firstProduct = data.productList[0];
+        console.log('🛒 Первый продукт:', firstProduct);
+        
+        this.model['productTarget.Id'] = firstProduct.productTarget.id || '';
+        this.model['productName'] = firstProduct.name || '';
+        console.log('this.model',this.model)
+        // // Например: патчим в модель нужные поля
+        // this.model['productName'] = firstProduct.name || '';
+        // this.model['productAmount'] = firstProduct.amount || 0;
+        // this.model['productQuantity'] = firstProduct.quantity || 0;
+        // this.model['productDateTime'] = firstProduct.dateTime ? new Date(firstProduct.dateTime) : null;
+
+        // Можно ещё что-то, в зависимости от полей
+        // this.model['productTargetName'] = firstProduct.productTarget?.name || '';
+      }
+    }
+
+
+
     console.log('✅ Финальная модель после патча:', this.model);
   }
-  
+
 
 
 
@@ -190,7 +213,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       if (this.data && this.data.id) {
         this.model['id'] = this.data.id;
       };
-      console.log('his.model',this.model)
+      console.log('his.model', this.model)
 
       action(this.model, dependencies, this.onDialogClose.bind(this));
     }
@@ -203,13 +226,13 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.selectedInvoice = {};
-    this.model = this.generalFormService.getDataModel();
-    // if (this.config?.fields) {
-    //   this.config.fields.forEach(field => {
-    //     this.model[field.name] = field.type === 'dropdown' ? field.options?.[0]?.value : '';
-    //   });
-    // }
-
+    if (this.model) {
+      for (const key in this.model) {
+        if (this.model.hasOwnProperty(key)) {
+          this.model[key] = null;
+        }
+      }
+    }
   }
 
 
@@ -235,6 +258,6 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         return date;
       }
     }
-    return null; 
+    return null;
   }
 }

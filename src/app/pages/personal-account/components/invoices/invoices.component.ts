@@ -65,7 +65,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
-  
+
   getTaxValue(tax: any) {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
@@ -107,7 +107,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
-    private router:Router) { }
+    private router: Router) { }
 
   ngOnInit() {
 
@@ -201,6 +201,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.scoreFormService.visibleModal(true);
   }
 
+
   updateColumnVisibility() {
     this.columns.forEach((col: any) => {
       col.visible = this.selectedColumns.includes(col.field);
@@ -281,6 +282,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.selectInvoice = invoice;
   }
 
+
   loadInvoices() {
     this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
@@ -339,9 +341,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
         }
 
         this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
-          (invoice:any) => {
+          (invoice: any) => {
             this.invoicesService.removeItemById(invoiceId.id);
-            this.invoicesService.totalInfo = invoice.data.totalInfo;
+            this.invoicesService.totalInfo = invoice.totalInfo;
             this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
           },
           (error) => {
@@ -397,15 +399,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     };
   }
 
-  
+
 
   selectInvoiceId: any;
   selectData: any;
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice',invoice)
-    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data:any)=>{
+    console.log('invoice', invoice)
+    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
       if (data.data.docAccountType == 0) {
         if (this.generalForm) {
           this.selectData = { ...data.data };
@@ -414,14 +416,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
           this.selectInvoiceId = { ...data.data.id };
           this.isEditInvoice = true;
         }
-      } else if(data.data.drafts != null) {
+      } else if (data.data.drafts != null) {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
         this.editScopeData(data.data);
       }
     })
-    
+
   }
 
 
@@ -442,10 +444,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
       this.getInvoiceById(data.documentMetadata.data)
     },
-    (error) => {
-      console.error('Error deleting invoice', error);
-      this.toastService.showError('Ошибка', error.error.Message);
-    })
+      (error) => {
+        console.error('Error deleting invoice', error);
+        this.toastService.showError('Ошибка', error.error.Message);
+      })
   }
 
   contextMenuVisible = false;
