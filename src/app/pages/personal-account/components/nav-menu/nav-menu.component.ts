@@ -33,14 +33,24 @@ interface NotifyData {
 })
 export class NavMenuComponent implements OnInit, OnDestroy {
 
+  // items: CustomMenuItem[] = [
+  //   { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
+  //   { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
+  //   { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
+  //   { label: 'База', commandName: 'base', access: 'ManagerAccess' },
+  //   { label: 'Логист', commandName: 'base', access: 'none' },
+  //   { label: 'Директор', commandName: 'base', access: 'none' },
+  //   { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
+
+  // ];
   items: CustomMenuItem[] = [
-    { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
-    { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
-    { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
-    { label: 'База', commandName: 'base', access: 'ManagerAccess' },
+    { label: 'Контрагенты', commandName: 'clients', access: '', notifyKey: 'partnersNotifyData' },
+    { label: 'Бухгалтер', commandName: 'accountant', access: '', notifyKey: '' },
+    { label: 'Касса', commandName: 'cash', access: '' },
+    { label: 'База', commandName: 'base', access: '' },
     { label: 'Логист', commandName: 'base', access: 'none' },
     { label: 'Директор', commandName: 'base', access: 'none' },
-    { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
+    { label: 'Справочники', commandName: 'reference', access: '' }
 
   ];
   decodedRole: any[] = [];

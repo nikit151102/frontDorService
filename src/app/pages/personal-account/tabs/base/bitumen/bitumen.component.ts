@@ -122,6 +122,7 @@ export class BitumenComponent implements OnInit {
 
   defaultFilters: any;
   switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+    sessionStorage.setItem('managerDocType', String(typeDocs))
     this.invoicesService.queryData = { filters: [], sorts: [] };
     this.invoicesService.defaultFilters = [{
       field: 'ManagerDocType',

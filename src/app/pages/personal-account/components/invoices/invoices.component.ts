@@ -76,8 +76,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
-      this.invoicesService.totalInfo.totalPagesCount; 
+      this.invoicesService?.totalInfo?.totalPagesCount; 
       this.loadInvoices();
+      console.log('loadInvoices defaultFilter')
       console.log('counterpartyData', this.counterpartyData)
     }
     if (changes['counterpartyId']) {
@@ -85,11 +86,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
       this.loadInvoices();
+      console.log('loadInvoices counterpartyId')
       console.log('counterpartyData', this.counterpartyData)
     }
 
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
+      this.loadInvoices();
+      console.log('loadInvoices buttonConfigs')
     }
   }
 
@@ -313,12 +317,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-
-          if ('cargoId' in invoice) {
-            transformed.id = invoice.cargoId;
-            delete transformed.cargoId;
-          }
-
+        
           return transformed;
         };
 
@@ -329,8 +328,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
           newInvoices = response.data.map(mapInvoice);
         }
 
-        if (response.totalInfo) {
-          this.totalRecords = response.totalInfo.totalPagesCount * this.pageSize;
+        if (response.totalInfo && response.totalInfo?.totalPagesCount) {
+          this.totalRecords = response.totalInfo?.totalPagesCount * this.pageSize;
         }
        
         if (reset || this.currentPage === 0) {
@@ -338,7 +337,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
       } else {
           this.invoices = [...this.invoices, ...newInvoices];
       }
-
 
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
@@ -365,6 +363,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
   deleteInvoice(invoiceId: any) {
+    
     console.log('invoiceId', invoiceId)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
@@ -384,7 +383,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
           (invoice: any) => {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;
-            this.toastService.showSuccess('Удалено', invoice.documentMetadata.message);
+            this.toastService.showSuccess('Удалено', invoice.message);
             
           },
           (error) => {

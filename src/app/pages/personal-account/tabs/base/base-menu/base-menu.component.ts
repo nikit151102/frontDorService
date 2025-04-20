@@ -13,8 +13,8 @@ export class BaseMenuComponent implements OnInit {
   @Output() selectTab = new EventEmitter<any>();
   selectedName: string = '';
   items: any[] = [
-    { code: '349143', name: 'Битум', access: '' },
-    { code: '810632', name: 'Ячейки', access: '' }
+    { code: '349143', name: 'Битум', access: '', managerDocType: 0 },
+    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2}
   ];
 
   constructor(private jwtService: JwtService) { }

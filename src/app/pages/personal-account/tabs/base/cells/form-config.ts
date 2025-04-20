@@ -299,7 +299,7 @@ export function getFormExpenseSets(productsTarget:FormDataSources): InvoiceConfi
 
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService,invoicesService, messageService, toastService, jwtService } = dependencies;
-
+    const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
     const dataForm = {
         date: model.dateTime || '',
         auto: model.auto || '',
@@ -309,7 +309,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         ttn: model.ttn || 0,
         weight: model.weight || 0,
         amount: model.amount || 0,
-        managerDocType: model.managerDocType || 2,
+        managerDocType: managerDocTypeFromSession !== null ? Number(managerDocTypeFromSession) : (model.managerDocType || 2),
         status: model.status || 0,
         paymentType: model.paymentType || 0,
         comment: model.comment || '',

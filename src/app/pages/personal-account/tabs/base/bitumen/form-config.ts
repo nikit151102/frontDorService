@@ -299,7 +299,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
 
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
-    console.log('modelmodelmodel', model)
+   const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
     let dataForm: any = {
         date: model.dateTime || '',
         auto: model.auto || '',
@@ -309,7 +309,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         ttn: model.ttn || 0,
         weight: model.weight || 0,
         amount: model.amount || 0,
-        managerDocType: model.managerDocType || 0,
+        managerDocType: managerDocTypeFromSession !== null ? Number(managerDocTypeFromSession) : (model.managerDocType || 0),
         status: model.status || 0,
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
@@ -337,12 +337,12 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                         invoicesService.addItemToStart(invoice.data);
                         sendClose();
                     }
-                    toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
+                    toastService.showSuccess('Сохранение', invoice.message);
 
                     const currentRole = jwtService.getDecodedToken().email;
                     let verificationLevel = currentRole === '5' ? 2 : (currentRole === '1' ? 5 : null);
                     if (send) {
-                        invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel, 'api/CommercialWork/ManagerDocument').subscribe(
+                        invoiceService.sendingVerification(invoice.data, verificationLevel, 'api/CommercialWork/DocInvoice').subscribe(
                             (data: any) => {
                                 invoicesService.addItemToStart(data.data);
                                 sendClose();

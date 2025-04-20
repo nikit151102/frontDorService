@@ -126,7 +126,8 @@ export class CellsComponent implements OnInit {
   }
 
   defaultFilters: any;
-switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+  switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
+    sessionStorage.setItem('managerDocType', String(typeDocs))
     this.invoicesService.queryData = { filters: [], sorts: [] };
     this.invoicesService.defaultFilters = [{
       field: 'ManagerDocType',
@@ -147,7 +148,7 @@ switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
           ? getFormArrivalSets(dataSources)
           : getFormExpenseSets(dataSources);
 
-        MODEL.managerDocType = type === 'arrival' ? 0 : 1;
+        MODEL.managerDocType = type === 'arrival' ? 2 : 3;
 
         this.generalFormService.setService(this.cellsService);
         this.generalFormService.setConfig(formSet);

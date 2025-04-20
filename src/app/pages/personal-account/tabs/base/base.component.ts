@@ -18,5 +18,6 @@ export class BaseComponent {
   onSelectTab(selectTab: any){
     console.log('selectTab',selectTab)
     this.selectedTab = selectTab.code;
+    sessionStorage.setItem('managerDocType', selectTab.managerDocType)
   }
 }
