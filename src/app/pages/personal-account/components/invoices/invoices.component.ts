@@ -75,12 +75,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
+      this.currentPage = 0;
+      this.invoicesService.totalInfo.totalPagesCount; 
       this.loadInvoices();
       console.log('counterpartyData', this.counterpartyData)
     }
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
+      this.currentPage = 0;
       this.loadInvoices();
       console.log('counterpartyData', this.counterpartyData)
     }
@@ -282,10 +285,27 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.selectInvoice = invoice;
   }
 
+  loading = false;
+  totalRecords = 0;
+  pageSize = 30;
+  currentPage = 0;
 
-  loadInvoices() {
+  loadInvoices(reset = false) {
+    if (reset) {
+      this.currentPage = 0;
+      this.invoices = [];
+    }
+
+    if (this.loading) return;
+
+    this.loading = true;
+
     this.invoicesService.endpointGetData = this.endpointGetData;
-    this.invoicesService.getProductsByCounterparty(this.counterpartyId).subscribe(
+    this.invoicesService.getProductsByCounterparty(
+      this.counterpartyId,
+      this.currentPage,
+      this.pageSize
+    ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
           const transformed = {
@@ -302,24 +322,44 @@ export class InvoicesComponent implements OnChanges, OnInit {
           return transformed;
         };
 
+        let newInvoices = [];
         if (response.documentMetadata && response.documentMetadata.data) {
-          this.invoices = response.documentMetadata.data.map(mapInvoice);
+          newInvoices = response.documentMetadata.data.map(mapInvoice);
         } else if (response.data) {
-          this.invoices = response.data.map(mapInvoice);
-        } else {
-          this.invoices = [];
+          newInvoices = response.data.map(mapInvoice);
         }
 
-        console.log('invoices', this.invoices);
+        if (response.totalInfo) {
+          this.totalRecords = response.totalInfo.totalPagesCount * this.pageSize;
+        }
+       
+        if (reset || this.currentPage === 0) {
+          this.invoices = newInvoices;
+      } else {
+          this.invoices = [...this.invoices, ...newInvoices];
+      }
+
+
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
+
+        this.currentPage++;
+        this.loading = false;
       },
       (error) => {
         this.toastService.showError('Ошибка', 'Не удалось загрузить счета!');
+        this.loading = false;
       }
     );
   }
 
+  // Обработчик скроллинга
+  onLazyLoad(event: any) {
+    // Проверяем, достигли ли мы конца списка
+    if (this.invoices.length < this.totalRecords && !this.loading) {
+      this.loadInvoices();
+    }
+  }
 
 
 

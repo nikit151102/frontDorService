@@ -18,6 +18,8 @@ interface SortDto {
 interface QueryDto {
   filters?: FilterDto[];
   sorts?: SortDto[];
+  page?: any;
+  pageSize?: any
 }
 
 
@@ -28,7 +30,7 @@ interface QueryDto {
 
 export class InvoicesService {
 
-  queryData: QueryDto = { filters: [], sorts: [] };
+  queryData: QueryDto = { filters: [], sorts: [], page: 1, pageSize: 30 };
   defaultFilters: FilterDto[] = [];
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -127,7 +129,7 @@ export class InvoicesService {
   }
 
 
-  getProductsByCounterparty(id: string): Observable<any> {
+  getProductsByCounterparty(id: string, page: any = null, pageSize: any = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.queryData.filters = this.queryData.filters || [];
 
@@ -162,11 +164,15 @@ export class InvoicesService {
     if (!exists) {
       this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
     }
+
+    if(page){
+      this.queryData.page = page;
+    }
     let url
     if (this.endpointGetData) {
       url = `${environment.apiUrl}/${this.endpointGetData}`;
     }
-    else {
+    else {  
       url = `${environment.apiUrl}/${this.endpoint}/Filter/${id}`;
     }
     return this.http.post<any>(url, this.queryData, {

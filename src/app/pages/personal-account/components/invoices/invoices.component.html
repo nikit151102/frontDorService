@@ -59,7 +59,11 @@
     </h2>
 
 </div>
-<p-table [value]="invoices" class="invoice-table">
+<p-table [value]="invoices" class="invoice-table" 
+         (onLazyLoad)="onLazyLoad($event)" 
+         [rows]="pageSize" 
+         [lazy]="true"
+         [totalRecords]="totalRecords">
     <ng-template pTemplate="header">
         <tr>
             <ng-container *ngFor="let col of columns">
