@@ -91,7 +91,7 @@ export class PartnerMenuComponent {
         return this.buttonConfigs['default'];
     }
   }
-  
+
 
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any, event: Event) {
@@ -144,7 +144,17 @@ export class PartnerMenuComponent {
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
-        this.counterparties = data.data;
+        const partnerSaldoData = data.partnerSaldoData;
+        let dataPartner = data.data;
+
+        const saldoMap = Array.isArray(partnerSaldoData)
+          ? new Map(partnerSaldoData.map((item: any) => [item.id, item.totalSaldo]))
+          : new Map();
+
+        this.counterparties = dataPartner.map((counterparty: any) => ({
+          ...counterparty,
+          totalSaldo: saldoMap.get(counterparty.id) ?? null,
+        }));
 
         this.sortCounterpartiesByStatus();
         this.partnerMenuService.partnersData = this.counterparties;
@@ -157,6 +167,14 @@ export class PartnerMenuComponent {
     );
   }
 
+  formatSaldo(saldo: number): string | number {
+    if (saldo == null) {
+      return 0;
+    }
+    return saldo < 0 ? Math.abs(saldo) + '-'  : saldo;
+  }
+
+  
   sortCounterpartiesByStatus() {
     this.counterparties = this.partnerStatusService.sortByStatus(this.counterparties)
   }
