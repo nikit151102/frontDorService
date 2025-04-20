@@ -161,7 +161,7 @@ export class PartnerMenuComponent {
     if (saldo == null) {
       return 0;
     }
-    return saldo < 0 ? Math.abs(saldo) + '-'  : saldo;
+    return saldo < 0 ? Math.abs(saldo) + '-'  : saldo.toString();
   }
 
   
