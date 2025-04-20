@@ -384,11 +384,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
           (invoice: any) => {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;
-            this.toastService.showSuccess('Удалено', 'Счет-фактура удалена!');
+            this.toastService.showSuccess('Удалено', invoice.documentMetadata.message);
+            
           },
           (error) => {
-            console.error('Error deleting invoice', error);
-            this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактуру!');
+            this.toastService.showError('Ошибка', error.error.message);
           }
         );
       }
@@ -407,12 +407,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status).subscribe(
           (response: any) => {
-            this.toastService.showSuccess('Отправка', 'Счет-фактура успешно отправлена');
+            this.toastService.showSuccess('', invoice.message);
             this.invoicesService.updateActiveData(response.data);
           },
           (error) => {
             console.error('Error deleting invoice', error);
-            this.toastService.showError('Ошибка', 'Не удалось отправить счет-фактуру');
+            this.toastService.showError('Ошибка', error.error.message);
           }
         );
       }

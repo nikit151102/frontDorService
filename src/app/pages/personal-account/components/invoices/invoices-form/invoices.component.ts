@@ -654,11 +654,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
               this.productsService.addItemToStart(invoice.documentMetadata.data);
             }
             this.productsService.totalInfo = invoice.totalInfo;
-            this.messageService.add({
-              severity: 'success',
-              summary: 'Успех',
-              detail: 'Счет сохранен'
-            });
+
             this.toastService.showSuccess('Сохранение', invoice.documentMetadata.message);
             const invoiceId = invoice.documentMetadata.data.id;
             this.selectedInvoice = null;
@@ -670,7 +666,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           },
           (error) => {
             console.error('Ошибка при сохранении счета', error);
-            this.toastService.showError('Ошибка', error.Message);
+            this.toastService.showError('Ошибка', error.error.Message);
           }
         );
       }
@@ -703,7 +699,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       },
       (error) => {
         console.error('Ошибка при сохранении счета', error);
-        this.toastService.showError('Ошибка', error.Message);
+        this.toastService.showError('Ошибка', error.error.Message);
       }
     );
   }
@@ -722,6 +718,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       },
       error => {
         console.error('Ошибка при отправке на проверку:', error);
+        this.toastService.showError('Ошибка', error.error.message);
       }
     );
   }
