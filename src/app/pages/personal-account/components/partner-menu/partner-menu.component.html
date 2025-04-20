@@ -44,8 +44,8 @@
           </div>
         </div>
         <div class="actions">
-          <div class="">
-            <span [ngClass]="{
+          <div >
+            <span *ngIf="counterparty.totalSaldo" [ngClass]="{
               'positive': counterparty.totalSaldo > 0,
               'zero': counterparty.totalSaldo === 0,
               'negative': counterparty.totalSaldo < 0
