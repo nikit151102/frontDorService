@@ -120,7 +120,12 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
                     if(!send) {
-                        invoicesService.addItemToStart(invoice.documentMetadata.data);
+                        let item =invoice.documentMetadata.data;
+
+                        item.productTarget =  model.productTarget.name;
+                        item.name = item.productList[0].name;
+
+                        invoicesService.addItemToStart(item);
                         sendClose();
                     }
                     toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
@@ -129,7 +134,13 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     let verificationLevel = currentRole === '3' ? 2 : (currentRole === '1' ? 5 : null);
                     if (send) {
                         invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel).subscribe(
-                            (data: any) => { invoicesService.addItemToStart(data.data);
+                            (data: any) => { 
+                                let item = data.data;
+
+                                item.productTarget =  model.productTarget.name;
+                                item.name = item.productList[0].name;
+        
+                                invoicesService.addItemToStart(item);
                                 sendClose();
                             },
                             (error:any) => {
