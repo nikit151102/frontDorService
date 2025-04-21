@@ -13,18 +13,18 @@ export class CashMenuComponent implements OnInit {
   @Output() selectedNameChange = new EventEmitter<string>();
   
   selectedName: string = '';
-  // items: any[] = [
-  //   { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
-  //   { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
-  //   { name: 'Дима', access: 'DimaAccess', antonCashType: 2 },
-  //   { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
-  // ];
   items: any[] = [
-    { name: 'Механик', access: '', antonCashType: 0},
-    { name: 'Антон', access: '', antonCashType: 1 },
-    { name: 'Дима', access: '', antonCashType: 2 },
-    { name: 'Егор', access: '', antonCashType: 3 },
+    { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
+    { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
+    { name: 'Дима', access: 'DimaAccess', antonCashType: 2 },
+    { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
   ];
+  // items: any[] = [
+  //   { name: 'Механик', access: '', antonCashType: 0},
+  //   { name: 'Антон', access: '', antonCashType: 1 },
+  //   { name: 'Дима', access: '', antonCashType: 2 },
+  //   { name: 'Егор', access: '', antonCashType: 3 },
+  // ];
 
   constructor(private jwtService: JwtService) { }
 
