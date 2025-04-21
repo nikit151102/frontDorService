@@ -122,7 +122,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     if(!send) {
                         let item =invoice.documentMetadata.data
 
-                        item.productTarget =  model.productTarget.name;
+                        // item.productTarget =  model.productTarget.name;
                         item.name = item.productList[0].name;
 
                         invoicesService.addItemToStart(item);
@@ -137,7 +137,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                             (data: any) => {
                                 let item = data.data
 
-                                item.productTarget =  model.productTarget.name;
+                                // item.productTarget =  model.productTarget.name;
                                 item.name = item.productList[0].name;
         
                                 invoicesService.addItemToStart(item);
