@@ -94,7 +94,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     let data = {
         dateTime: model.dateTime,
         type: 1,
-        docPaymentType: model.docPaymentType,
+        docPaymentType: 2,
         manufacturer: model.manufacturer,
         productList: [{
             productTargetId: model.productTargetId || '',
