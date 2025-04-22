@@ -78,13 +78,13 @@ export const referenceConfig = [
         },
         pageTitle: 'Сотрудники',
         tableColumns: [
-            { label: 'Код', field: 'code', type: 'string', width: '20%' },
+            // { label: 'Код', field: 'code', type: 'string', width: '20%' },
             { label: 'ИНН', field: 'inn' , type: 'string', width: '20%' },
             { label: 'Наименование', field: 'name', type: 'string', width: '40%' },
             { label: 'Собственник', field: 'owner', type: 'string', width: '40%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true },
+            // { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'ИНН', field: 'inn', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
             { label: 'Собственник', field: 'owner', type: 'text', visible: true },
