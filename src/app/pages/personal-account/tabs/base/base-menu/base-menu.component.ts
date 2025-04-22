@@ -14,7 +14,9 @@ export class BaseMenuComponent implements OnInit {
   selectedName: string = '';
   items: any[] = [
     { code: '349143', name: 'Битум', access: '', managerDocType: 0 },
-    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2}
+    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2},
+    { code: '195630', name: 'Организации', access: '', managerDocType: null},
+    
   ];
 
   constructor(private jwtService: JwtService) { }

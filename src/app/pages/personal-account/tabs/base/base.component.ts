@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { BaseMenuComponent } from './base-menu/base-menu.component';
 import { BitumenComponent } from './bitumen/bitumen.component';
 import { CellsComponent } from './cells/cells.component';
+import { OrganizationComponent } from './organization/organization.component';
 
 @Component({
   selector: 'app-base',
-  imports: [CommonModule, BaseMenuComponent,BitumenComponent, CellsComponent],
+  imports: [CommonModule, BaseMenuComponent,BitumenComponent, CellsComponent, OrganizationComponent],
   templateUrl: './base.component.html',
   styleUrl: './base.component.scss'
 })
