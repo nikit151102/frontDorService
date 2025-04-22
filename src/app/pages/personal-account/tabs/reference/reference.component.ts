@@ -20,6 +20,7 @@ export class ReferenceComponent {
     { id: '925812' , label: 'Склады', command: () => this.executeReference('925812') },
     { id: '103825' , label: 'Грузы', command: () => this.executeReference('103825') },
     { id: '174208' , label: 'Карьеры', command: () => this.executeReference('174208') },
+    { id: '592034' , label: 'Хранилище', command: () => this.executeReference('592034') },
     
   ];
 

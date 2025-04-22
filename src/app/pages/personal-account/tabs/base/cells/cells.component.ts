@@ -101,13 +101,15 @@ export class CellsComponent implements OnInit {
     Promise.all([
       this.loadData('/api/Entities/Cargo/Filter'),
       this.loadData('/api/Entities/MiningQuarry/Filter'),
-      this.loadData('/api/Entities/Organization/Filter')
+      this.loadData('/api/Entities/Organization/Filter'),
+      this.loadData('/api/Entities/StorageArea/Filter')
     ])
-      .then(([productTarget, placeFroms, organization]) => {
+      .then(([productTarget, placeFroms, organization, storageArea]) => {
         const dataSources = {
           productTarget: productTarget.data,
           placeFroms: placeFroms.data,
-          organizations: organization.data
+          organizations: organization.data,
+          storageArea: storageArea.data
         };
 
 
@@ -157,13 +159,15 @@ export class CellsComponent implements OnInit {
       Promise.all([
         this.loadData('/api/Entities/Cargo/Filter'),
         this.loadData('/api/Entities/MiningQuarry/Filter'),
-        this.loadData('/api/Entities/Organization/Filter')
+        this.loadData('/api/Entities/Organization/Filter'),
+        this.loadData('/api/Entities/StorageArea/Filter')
       ])
-        .then(([productTarget, placeFroms, organization]) => {
+        .then(([productTarget, placeFroms, organization, storageArea]) => {
           const dataSources = {
             productTarget: productTarget.data,
             placeFroms: placeFroms.data,
-            organizations: organization.data
+            organizations: organization.data,
+            storageArea: storageArea.data
           };
 
 

@@ -5,6 +5,7 @@ interface FormDataSources {
     productTarget: any[];
     placeFroms: any[];
     organizations: any[];
+    storageArea: any[];
 }
 
 
@@ -57,7 +58,7 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                 label: 'Куда слили',
                 type: 'dropdown',
                 placeholder: 'Выберите запись',
-                options: productsTarget.organizations || [],
+                options: productsTarget.storageArea || [],
                 optionLabel: 'name',
                 optionValue: 'id',
                 min: 0,
@@ -69,7 +70,7 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                     console.log('model', model)
                 },
             },
-
+            
             {
                 name: 'cargoId',
                 label: 'Груз',
@@ -265,16 +266,21 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 },
             },
             {
-                name: 'placeTo',
+                name: 'placeToId',
                 label: 'Кому',
-                type: 'text',
-                placeholder: '',
-                options: [],
-                optionLabel: '',
-                optionValue: '',
+                type: 'dropdown',
+                placeholder: 'Выберите запись',
+                options: productsTarget.organizations || [],
+                optionLabel: 'name',
+                optionValue: 'id',
                 min: 0,
                 max: 0,
-                rowGroup: 'group1'
+                rowGroup: 'group1',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано куда слили с id:', selectedId);
+                    model['placeToId'] = selectedId;
+                    console.log('model', model)
+                },
             },
 
             {

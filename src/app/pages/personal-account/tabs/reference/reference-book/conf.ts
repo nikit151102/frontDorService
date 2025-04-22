@@ -89,5 +89,19 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
         ],
     },
+
+    {
+        typeId: '592034',
+        endpoint: 'api/Entities/StorageArea',
+        pageTitle: 'Хранилище',
+        tableColumns: [
+            { label: 'Код', field: 'code', type: 'string', width: '49%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
+        ],
+        formFields: [
+            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Наименование', field: 'name', type: 'text', visible: true },
+        ],
+    },
     
 ];
