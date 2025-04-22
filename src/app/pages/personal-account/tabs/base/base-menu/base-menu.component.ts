@@ -13,10 +13,9 @@ export class BaseMenuComponent implements OnInit {
   @Output() selectTab = new EventEmitter<any>();
   selectedName: string = '';
   items: any[] = [
-    { code: '349143', name: 'Битум', access: '', managerDocType: 0 },
-    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2},
-    { code: '195630', name: 'Организации', access: '', managerDocType: null},
-    
+    { code: '349143', name: 'Битум', access: '', managerDocType: 0, navigate: ['bitumen'] },
+    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2, navigate: [ 'cells'] },
+    { code: '195630', name: 'Организации', access: '', managerDocType: null, navigate: (item: any) => [ 'reference', item.code] },
   ];
 
   constructor(private jwtService: JwtService) { }

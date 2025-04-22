@@ -75,4 +75,19 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'storageName', type: 'text', visible: true },
         ],
     },
+
+    {
+        typeId: '174208',
+        endpoint: 'api/Entities/MiningQuarry',
+        pageTitle: 'Карьеры',
+        tableColumns: [
+            { label: 'Код', field: 'code', type: 'string', width: '49%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
+        ],
+        formFields: [
+            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Наименование', field: 'name', type: 'text', visible: true },
+        ],
+    },
+    
 ];

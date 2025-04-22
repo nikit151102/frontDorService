@@ -3,16 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
-import { MechanicActionsService } from '../../cash/mechanic/mechanic-actions.service';
-
 import { MODEL, getFormArrivalSets, getFormExpenseSets } from './form-config';
 import { BUTTON_SETS } from './button-config';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { BitumenService } from './bitumen.service';
+import { AdditionalDataComponent } from '../additional-data/additional-data.component';
+import { CONFIGPRODUCTS } from './products-conf';
 
 @Component({
   selector: 'app-bitumen',
-  imports: [CommonModule, InvoicesComponent],
+  imports: [CommonModule, InvoicesComponent, AdditionalDataComponent],
   templateUrl: './bitumen.component.html',
   styleUrl: './bitumen.component.scss'
 })
@@ -100,7 +100,7 @@ export class BitumenComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.switchComponent('arrival', 0);
+    this.switchComponent('arrival', 0, 'invoices');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 
@@ -120,39 +120,58 @@ export class BitumenComponent implements OnInit {
     });
   }
 
-  defaultFilters: any;
-  switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
-    sessionStorage.setItem('managerDocType', String(typeDocs))
-    this.invoicesService.queryData = { filters: [], sorts: [] };
-    this.invoicesService.defaultFilters = [{
-      field: 'ManagerDocType',
-      values: [typeDocs],
-      type: 1
-    }];
+  defaultFilters: any
+  typeComponent: string = 'invoices';
+  productsConf: any;
 
-    this.defaultFilters = { ...this.invoicesService.defaultFilters };
-    this.currentComponent = type;
-    this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+  switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
+    this.typeComponent = typeComponent;
+    if (typeComponent == 'invoices') {
+      sessionStorage.setItem('managerDocType', String(typeDocs))
+      this.invoicesService.queryData = { filters: [], sorts: [] };
+      this.invoicesService.defaultFilters = [{
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      }];
 
-    this.loadData('/api/Entities/Cargo/Filter')
-      .then((productTarget) => {
-        this.productTarget = productTarget.data;
-        const dataSources = { productTarget: this.productTarget };
+      this.defaultFilters = { ...this.invoicesService.defaultFilters };
+      this.currentComponent = type;
+      this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-        const formSet = type === 'arrival'
-          ? getFormArrivalSets(dataSources)
-          : getFormExpenseSets(dataSources);
+      Promise.all([
+        this.loadData('/api/Entities/Cargo/Filter'),
+        this.loadData('/api/Entities/MiningQuarry/Filter'),
+        this.loadData('/api/Entities/Organization/Filter')
+      ])
+        .then(([productTarget, placeFroms, organization]) => {
+          const dataSources = {
+            productTarget: productTarget.data,
+            placeFroms: placeFroms.data,
+            organizations: organization.data
+          };
 
-        MODEL.managerDocType = type === 'arrival' ? 0 : 1;
-
-        this.generalFormService.setService(this.bitumenService);
-        this.generalFormService.setConfig(formSet);
-        this.generalFormService.setModel(MODEL);
-
-        this.buttonConfigs = formSet.buttons;
-      });
+           const formSet = type === 'arrival'
+                    ? getFormArrivalSets(dataSources)
+                    : getFormExpenseSets(dataSources);
+          this.generalFormService.setConfig(formSet);
+          MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
+          this.generalFormService.setModel(MODEL);
+          this.generalFormService.setService(this.bitumenService);
+          this.buttonConfigs = formSet.buttons;
+        })
+        .catch(error => {
+          console.error('Error loading data:', error);
+        });
+    } else {
+      if (code !== null) {
+        const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
+        if (foundProduct) {
+          this.productsConf = foundProduct;
+        }
+      }
+    }
   }
-
 
   getButtonConfigs() {
     return BUTTON_SETS;

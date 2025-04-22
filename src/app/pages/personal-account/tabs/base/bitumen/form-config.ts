@@ -3,6 +3,8 @@ import { InvoiceConfig } from "../../../../../interfaces/common.interface";
 
 interface FormDataSources {
     productTarget: any[];
+    placeFroms: any[];
+    organizations: any[];
 }
 
 
@@ -34,30 +36,39 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'single'
             },
             {
-                name: 'placeFrom',
+                name: 'placeFromId',
                 label: 'Откуда',
-                type: 'text',
-                placeholder: '',
-                options: [],
-                optionLabel: '',
-                optionValue: '',
+                type: 'dropdown',
+                placeholder: 'Выберите запись',
+                options: productsTarget.placeFroms || [],
+                optionLabel: 'name',
+                optionValue: 'id',
                 min: 0,
                 max: 0,
-                rowGroup: 'group1'
+                rowGroup: 'group1',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано Откуда с id:', selectedId);
+                    model['placeFromId'] = selectedId;
+                    console.log('model', model)
+                },
             },
             {
-                name: 'placeTo',
-                label: 'Куда слил',
-                type: 'text',
-                placeholder: '',
-                options: [],
-                optionLabel: '',
-                optionValue: '',
+                name: 'placeToId',
+                label: 'Куда слили',
+                type: 'dropdown',
+                placeholder: 'Выберите запись',
+                options: productsTarget.organizations || [],
+                optionLabel: 'name',
+                optionValue: 'id',
                 min: 0,
                 max: 0,
-                rowGroup: 'group1'
+                rowGroup: 'group1',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано куда слили с id:', selectedId);
+                    model['placeToId'] = selectedId;
+                    console.log('model', model)
+                },
             },
-
             {
                 name: 'cargoId',
                 label: 'Груз',
@@ -97,7 +108,25 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                 optionValue: '',
                 min: 0,
                 max: 0,
-                rowGroup: 'single'
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['amount'] != null) {
+                        model['sumAmount'] = model['weight'] * model['amount'];
+                        if ((model['weight'] < 0 && model['amount'] > 0) || (model['weight'] > 0 && model['amount'] < 0)) {
+                            model['sumAmount'] = -Math.abs(model['sumAmount']);
+                        }
+                    }
+                    if (model['weight'] != null && model['sumAmount'] != null) {
+                        if (model['weight'] !== 0) {
+                            model['amount'] = model['sumAmount'] / model['weight'];
+                            if ((model['sumAmount'] < 0 && model['weight'] > 0) || (model['sumAmount'] > 0 && model['weight'] < 0)) {
+                                model['amount'] = -Math.abs(model['amount']);
+                            }
+                        } else {
+                            model['amount'] = 0;
+                        }
+                    }
+                },
             },
             {
                 name: 'amount',
@@ -109,7 +138,39 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                 optionValue: '',
                 min: 0,
                 max: 0,
-                rowGroup: 'single'
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['amount'] != null) {
+                        model['sumAmount'] = model['weight'] * model['amount'];
+                        if ((model['weight'] < 0 && model['amount'] > 0) || (model['weight'] > 0 && model['amount'] < 0)) {
+                            model['sumAmount'] = -Math.abs(model['sumAmount']);
+                        }
+                    }
+                },
+            },
+            {
+                name: 'sumAmount',
+                label: 'Сумма',
+                type: 'number',
+                placeholder: 'Введите сумму',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['sumAmount'] != null) {
+                        if (model['weight'] !== 0) {
+                            model['amount'] = model['sumAmount'] / model['weight'];
+                            if ((model['sumAmount'] < 0 && model['weight'] > 0) || (model['sumAmount'] > 0 && model['weight'] < 0)) {
+                                model['amount'] = -Math.abs(model['amount']);
+                            }
+                        } else {
+                            model['amount'] = 0;
+                        }
+                    }
+                },
             },
             {
                 name: 'paymentType',
@@ -117,8 +178,8 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
                 type: 'dropdown',
                 placeholder: 'Форма оплаты',
                 options: [{ label: 'Нал', value: 0 },
-                { label: 'Без нал', value: 1 },
-                { label: 'Без нал без НДС', value: 2 }
+                { label: 'НДС', value: 1 },
+                { label: 'без НДС', value: 2 }
                 ],
                 optionLabel: 'label',
                 optionValue: 'value',
@@ -186,16 +247,21 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'single'
             },
             {
-                name: 'placeFrom',
+                name: 'placeFromId',
                 label: 'Откуда',
-                type: 'text',
-                placeholder: '',
-                options: [],
-                optionLabel: '',
-                optionValue: '',
+                type: 'dropdown',
+                placeholder: 'Выберите запись',
+                options: productsTarget.placeFroms || [],
+                optionLabel: 'name',
+                optionValue: 'id',
                 min: 0,
                 max: 0,
-                rowGroup: 'group1'
+                rowGroup: 'group1',
+                onChange: (selectedId: string, model: any) => {
+                    console.log('Выбрано Откуда с id:', selectedId);
+                    model['placeFromId'] = selectedId;
+                    console.log('model', model)
+                },
             },
             {
                 name: 'placeTo',
@@ -237,7 +303,25 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 optionValue: '',
                 min: 0,
                 max: 0,
-                rowGroup: 'single'
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['amount'] != null) {
+                        model['sumAmount'] = model['weight'] * model['amount'];
+                        if ((model['weight'] < 0 && model['amount'] > 0) || (model['weight'] > 0 && model['amount'] < 0)) {
+                            model['sumAmount'] = -Math.abs(model['sumAmount']);
+                        }
+                    }
+                    if (model['weight'] != null && model['sumAmount'] != null) {
+                        if (model['weight'] !== 0) {
+                            model['amount'] = model['sumAmount'] / model['weight'];
+                            if ((model['sumAmount'] < 0 && model['weight'] > 0) || (model['sumAmount'] > 0 && model['weight'] < 0)) {
+                                model['amount'] = -Math.abs(model['amount']);
+                            }
+                        } else {
+                            model['amount'] = 0;
+                        }
+                    }
+                },
             },
             {
                 name: 'amount',
@@ -249,7 +333,39 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 optionValue: '',
                 min: 0,
                 max: 0,
-                rowGroup: 'single'
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['amount'] != null) {
+                        model['sumAmount'] = model['weight'] * model['amount'];
+                        if ((model['weight'] < 0 && model['amount'] > 0) || (model['weight'] > 0 && model['amount'] < 0)) {
+                            model['sumAmount'] = -Math.abs(model['sumAmount']);
+                        }
+                    }
+                },
+            },
+            {
+                name: 'sumAmount',
+                label: 'Сумма',
+                type: 'number',
+                placeholder: 'Введите сумму',
+                options: [],
+                optionLabel: '',
+                optionValue: '',
+                min: 0,
+                max: 0,
+                rowGroup: 'single',
+                onChange: (selectedId: string, model: any) => {
+                    if (model['weight'] != null && model['sumAmount'] != null) {
+                        if (model['weight'] !== 0) {
+                            model['amount'] = model['sumAmount'] / model['weight'];
+                            if ((model['sumAmount'] < 0 && model['weight'] > 0) || (model['sumAmount'] > 0 && model['weight'] < 0)) {
+                                model['amount'] = -Math.abs(model['amount']);
+                            }
+                        } else {
+                            model['amount'] = 0;
+                        }
+                    }
+                },
             },
             {
                 name: 'paymentType',
@@ -257,8 +373,8 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 type: 'dropdown',
                 placeholder: 'Форма оплаты',
                 options: [{ label: 'Нал', value: 0 },
-                { label: 'Без нал', value: 1 },
-                { label: 'Без нал без НДС', value: 2 }
+                { label: 'НДС', value: 1 },
+                { label: 'без НДС', value: 2 }
                 ],
                 optionLabel: 'label',
                 optionValue: 'value',
@@ -299,7 +415,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
 
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
-   const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
+    const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
     let dataForm: any = {
         date: model.dateTime || '',
         auto: model.auto || '',
@@ -371,6 +487,7 @@ export const MODEL = {
     ttn: 0,
     weight: 0,
     amount: 0,
+    sumAmount: 0,
     managerDocType: 0,
     status: 0,
     paymentType: 0,

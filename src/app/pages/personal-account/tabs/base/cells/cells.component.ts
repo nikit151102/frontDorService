@@ -7,10 +7,12 @@ import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { BUTTON_SETS } from '../bitumen/button-config';
 import { CellsService } from './cells.service';
 import { getFormArrivalSets, MODEL, getFormExpenseSets } from './form-config';
+import { CONFIGPRODUCTS } from './products-conf';
+import { AdditionalDataComponent } from '../additional-data/additional-data.component';
 
 @Component({
   selector: 'app-cells',
-  imports: [CommonModule, InvoicesComponent],
+  imports: [CommonModule, InvoicesComponent, AdditionalDataComponent],
   templateUrl: './cells.component.html',
   styleUrl: './cells.component.scss'
 })
@@ -25,6 +27,7 @@ export class CellsComponent implements OnInit {
 
   paymentType: number = 2;
   productTarget: any;
+  placeFroms: any;
   buttonConfigs: any;
 
   totalInfoColumnInvoices = [
@@ -88,19 +91,25 @@ export class CellsComponent implements OnInit {
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
 
-
   ngOnInit(): void {
-    this.switchComponent('arrival', 2);
+    this.switchComponent('arrival', 2, 'invoices');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 
     this.generalFormService.setService(this.cellsService);
 
-    this.loadData('/api/Entities/Cargo/Filter')
-      .then((productTarget) => {
+    Promise.all([
+      this.loadData('/api/Entities/Cargo/Filter'),
+      this.loadData('/api/Entities/MiningQuarry/Filter'),
+      this.loadData('/api/Entities/Organization/Filter')
+    ])
+      .then(([productTarget, placeFroms, organization]) => {
         const dataSources = {
-          productTarget: productTarget.data
+          productTarget: productTarget.data,
+          placeFroms: placeFroms.data,
+          organizations: organization.data
         };
+
 
         const formSet = getFormArrivalSets(dataSources);
         this.generalFormService.setConfig(formSet);
@@ -108,9 +117,10 @@ export class CellsComponent implements OnInit {
         this.generalFormService.setModel(MODEL);
         this.generalFormService.setService(this.cellsService);
         this.buttonConfigs = formSet.buttons;
+      })
+      .catch(error => {
+        console.error('Error loading data:', error);
       });
-
-
   }
 
   loadData(apiEndpoint: string): Promise<any> {
@@ -126,23 +136,36 @@ export class CellsComponent implements OnInit {
   }
 
   defaultFilters: any;
-  switchComponent(type: 'arrival' | 'expense', typeDocs: number) {
-    sessionStorage.setItem('managerDocType', String(typeDocs))
-    this.invoicesService.queryData = { filters: [], sorts: [] };
-    this.invoicesService.defaultFilters = [{
-      field: 'ManagerDocType',
-      values: [typeDocs],
-      type: 1
-    }];
+  typeComponent: string = 'invoices';
+  productsConf: any;
 
-    this.defaultFilters = { ...this.invoicesService.defaultFilters };
-    this.currentComponent = type;
-    this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+  switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
+    this.typeComponent = typeComponent;
+    if (typeComponent == 'invoices') {
+      sessionStorage.setItem('managerDocType', String(typeDocs))
+      this.invoicesService.queryData = { filters: [], sorts: [] };
+      this.invoicesService.defaultFilters = [{
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      }];
 
-    this.loadData('/api/Entities/Cargo/Filter')
-      .then((productTarget) => {
-        this.productTarget = productTarget.data;
-        const dataSources = { productTarget: this.productTarget };
+      this.defaultFilters = { ...this.invoicesService.defaultFilters };
+      this.currentComponent = type;
+      this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+
+      Promise.all([
+        this.loadData('/api/Entities/Cargo/Filter'),
+        this.loadData('/api/Entities/MiningQuarry/Filter'),
+        this.loadData('/api/Entities/Organization/Filter')
+      ])
+        .then(([productTarget, placeFroms, organization]) => {
+          const dataSources = {
+            productTarget: productTarget.data,
+            placeFroms: placeFroms.data,
+            organizations: organization.data
+          };
+
 
         const formSet = type === 'arrival'
           ? getFormArrivalSets(dataSources)
@@ -155,9 +178,18 @@ export class CellsComponent implements OnInit {
         this.generalFormService.setModel(MODEL);
 
         this.buttonConfigs = formSet.buttons;
+      }).catch(error => {
+        console.error('Ошибка загрузки данных:', error);
       });
+    } else {
+      if (code !== null) {
+        const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
+        if (foundProduct) {
+          this.productsConf = foundProduct;
+        }
+      }
+    }
   }
-
 
   getButtonConfigs() {
     return BUTTON_SETS;

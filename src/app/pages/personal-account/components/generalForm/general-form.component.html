@@ -27,8 +27,12 @@
                             (selectedChange)="field.onChange && field.onChange(model[field.name], model)"
                             [disabled]="!isEdit"></app-custom-dropdown>
 
-                        <app-custom-input-number *ngSwitchCase="'number'" [(ngModel)]="model[field.name]"
-                            [min]="field.min" [disabled]="!isEdit"></app-custom-input-number>
+                            <app-custom-input-number *ngSwitchCase="'number'" 
+                            [(ngModel)]="model[field.name]"
+                            [min]="field.min" 
+                            [disabled]="!isEdit" 
+                            (input)="field.onChange && field.onChange(model[field.name], model)">
+                        </app-custom-input-number>
 
                         <textarea *ngSwitchCase="'textarea'" [id]="field.name" [(ngModel)]="model[field.name]"
                             [disabled]="!isEdit"></textarea>

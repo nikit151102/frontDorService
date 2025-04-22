@@ -19,6 +19,7 @@ export class ReferenceComponent {
     { id: '915825' , label: 'Единицы измерения', command: () => this.executeReference('161283') },
     { id: '925812' , label: 'Склады', command: () => this.executeReference('925812') },
     { id: '103825' , label: 'Грузы', command: () => this.executeReference('103825') },
+    { id: '174208' , label: 'Карьеры', command: () => this.executeReference('174208') },
     
   ];
 
