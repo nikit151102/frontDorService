@@ -1,17 +1,18 @@
 export const CONFIGPRODUCTS: any = [
     {
         code: '184623',
-        endpoint: 'api/CommercialWork/ManagerDocument/Filter',
+        endpoint: 'api/CommercialWork/ManagerDocument/Remains',
+        defaultFilter: {
+            field: 'ManagerDocType',
+            values: [2, 3],
+            type: 1
+        },
         columns: [
-            { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
-            { field: 'name', fieldView: 'name', header: 'Товар', type: 'string', visible: true, width: '17%' },
-            { field: 'quantity', fieldView: 'quantity', header: 'Количество', type: 'number', visible: true, width: '11%' },
-            { field: 'measurementUnit.Id', fieldView: 'measurementUnit', filterType: 10, searchType: 'measurementUnit.Name', header: 'Ед.изм', type: 'uuid', visible: true, width: '11%', endpoint: '/api/Entities/MeasurementUnit/Filter' },
-            { field: 'sumAmount', fieldView: 'sumAmount', header: 'Общая сумма', type: 'number', visible: true, width: '11%' },
-            { field: 'DocInvoice.Number', fieldView: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%', isFilter: false },
-            { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '13%' },
-            { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' },
-            { field: 'DocInvoice.CreatorName', fieldView: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '16%' },
+            { field: 'Cargo.Id', fieldView: 'cargoName', filterType: 10, searchField: 'Cargo.Name', header: 'Груз', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/Cargo/Filter' },
+            { field: 'Weight', fieldView: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '18%' },
+            { field: 'Amount', fieldView: 'amount', header: 'Цена', type: 'number', visible: true, width: '18%' },
+            { field: 'SumAmount', fieldView: 'SumAmount', header: 'Сумма', type: 'number', visible: true, width: '18%' },
+            { field: 'PaymentType', fieldView: 'paymentType', header: 'Цена', type: 'number', visible: true, width: '18%' },
 
         ],
         totalInfoColumn: [
@@ -22,12 +23,18 @@ export const CONFIGPRODUCTS: any = [
     },
     {
         code: '936564',
-        endpoint: '',
+        defaultFilter: {
+            field: 'ManagerDocType',
+            values: [2, 3],
+            type: 1
+        },
+        endpoint: 'api/CommercialWork/ManagerDocument/Providers',
         columns: [
-            { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
-            { field: 'name', fieldView: 'name', header: 'Товар', type: 'string', visible: true, width: '17%' },
-            { field: 'quantity', fieldView: 'quantity', header: 'Количество', type: 'number', visible: true, width: '11%' },
-
+            { field: 'Cargo.Id', fieldView: 'cargoName', filterType: 10, searchField: 'Cargo.Name', header: 'Груз', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/Cargo/Filter' },
+            { field: 'Weight', fieldView: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '18%' },
+            { field: 'Amount', fieldView: 'amount', header: 'Цена', type: 'number', visible: true, width: '18%' },
+            { field: 'SumAmount', fieldView: 'SumAmount', header: 'Сумма', type: 'number', visible: true, width: '18%' },
+            { field: 'PaymentType', fieldView: 'paymentType', header: 'Цена', type: 'number', visible: true, width: '18%' },
         ],
         totalInfoColumn: [
             { columnNum: 2, value: 'totalExpenseSum' },

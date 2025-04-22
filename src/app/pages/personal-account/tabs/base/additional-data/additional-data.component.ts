@@ -35,7 +35,10 @@ export class AdditionalDataComponent implements OnChanges, OnInit {
       this.additionalDataService.endpoint = this.config.endpoint;
       this.endpoint = this.config.endpoint;
       this.columns = this.config.columns;
-      this.totalInfoColumn = this.config.totalInfoColumn
+      this.totalInfoColumn = this.config.totalInfoColumn;
+      this.additionalDataService.queryData.filters = [this.config.defaultFilter]
+      this.additionalDataService.defaultFilters = this.config.defaultFilter;
+      console.log('this.config.defaultFilter',this.config.defaultFilter)
       this.additionalDataService.loadProducts();
     }
   }
@@ -47,7 +50,10 @@ export class AdditionalDataComponent implements OnChanges, OnInit {
     this.additionalDataService.endpoint = this.config.endpoint;
     this.endpoint = this.config.endpoint;
     this.columns = this.config.columns;
-    this.totalInfoColumn = this.config.totalInfoColumn
+    this.totalInfoColumn = this.config.totalInfoColumn;
+    console.log('this.config.defaultFilter',this.config.defaultFilter)
+    this.additionalDataService.queryData.filters = [this.config.defaultFilter]
+    this.additionalDataService.defaultFilters = this.config.defaultFilter;
     this.additionalDataService.loadProducts();
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
@@ -82,6 +88,17 @@ export class AdditionalDataComponent implements OnChanges, OnInit {
     { label: 'Подписано', value: 5 },
     { label: 'Удалено', value: 6 }
   ];
+
+  private paymentTypes = [
+    { label: 'Нал', value: 0 },
+    { label: 'НДС', value: 1 },
+    { label: 'Без НДС', value: 2 }
+  ];
+
+  transformPaymentTypes(value: number): string {
+    const found = this.paymentTypes.find(pt => pt.value === value);
+    return found ? found.label : '';
+  }
 
   constructor(public additionalDataService: AdditionalDataService) { }
 

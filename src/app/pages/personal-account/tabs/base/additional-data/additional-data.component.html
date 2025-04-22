@@ -5,20 +5,27 @@
                 <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
                     <div style="display: flex; justify-content: space-between;" [style.width]="col.width">
                         <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
-                            (filterChange)="additionalDataService.onFilterChange($event)" (sortChange)="additionalDataService.onSortChange($event)">
+                            (filterChange)="additionalDataService.onFilterChange($event)"
+                            (sortChange)="additionalDataService.onSortChange($event)">
                         </app-search-filter-sort>
                         <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
-                            (filterChange)="additionalDataService.onFilterChange($event)" (sortChange)="additionalDataService.onSortChange($event)">
+                            (filterChange)="additionalDataService.onFilterChange($event)"
+                            (sortChange)="additionalDataService.onSortChange($event)">
                         </app-date-filter>
                         <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
-                            (filterChange)="additionalDataService.onFilterChange($event)" (sortChange)="additionalDataService.onSortChange($event)">
+                            (filterChange)="additionalDataService.onFilterChange($event)"
+                            (sortChange)="additionalDataService.onSortChange($event)">
                         </app-number-filter>
                         <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
-                            [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType" [searchField]="col.searchField"
-                            (filterChange)="additionalDataService.onFilterChange($event)" (sortChange)="additionalDataService.onSortChange($event)">
+                            [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType"
+                            [searchField]="col.searchField"
+                            (filterChange)="additionalDataService.onFilterChange($event)"
+                            (sortChange)="additionalDataService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
-                        <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"
-                            [Field]="col.field" [filterType]="1" (filterChange)="additionalDataService.onFilterChange($event)" (sortChange)="additionalDataService.onSortChange($event)">
+                        <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
+                            [enam]="statuses" [Field]="col.field" [filterType]="1"
+                            (filterChange)="additionalDataService.onFilterChange($event)"
+                            (sortChange)="additionalDataService.onSortChange($event)">
                         </app-uuid-search-filter-sort>
                     </div>
                 </th>
@@ -35,18 +42,26 @@
     <tbody>
         <tr *ngFor="let product of additionalDataService.products" class="invoice-row">
             <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width" (dblclick)="onRowDblClick($event, product, col.fieldView)">
+                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
+                    (dblclick)="onRowDblClick($event, product, col.fieldView)">
                     <ng-container *ngIf="col.fieldView === 'dateTime'; else normalField">
                         {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
                     </ng-container>
                     <ng-template #normalField>
-                        {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) : product[col.fieldView] }}
+                        <ng-container *ngIf="col.fieldView === 'paymentType'">
+                            {{transformPaymentTypes(product[col.fieldView])}}
+                        </ng-container>
+                        <ng-container *ngIf="col.fieldView != 'paymentType'">
+                            {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
+                            product[col.fieldView] }}
+                        </ng-container>
+
                     </ng-template>
                 </td>
             </ng-container>
             <td *ngIf="actions.length > 0">
                 <button *ngFor="let action of actions" (click)="onActionClick(action.action, product)">
-                  {{ action.label }}
+                    {{ action.label }}
                 </button>
             </td>
         </tr>
