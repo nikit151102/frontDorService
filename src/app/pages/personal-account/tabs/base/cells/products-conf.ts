@@ -16,9 +16,7 @@ export const CONFIGPRODUCTS: any = [
 
         ],
         totalInfoColumn: [
-            { columnNum: 2, value: 'totalExpenseSum' },
-            { columnNum: 4, value: 'totalIncomeSum' },
-            { columnNum: 7, value: 'totalSaldo' },
+            { columnNum: 3, value: 'TotalSums' },
         ]
     },
     {
@@ -37,9 +35,7 @@ export const CONFIGPRODUCTS: any = [
             { field: 'PaymentType', fieldView: 'paymentType', header: 'Цена', type: 'number', visible: true, width: '18%' },
         ],
         totalInfoColumn: [
-            { columnNum: 2, value: 'totalExpenseSum' },
-            { columnNum: 4, value: 'totalIncomeSum' },
-            { columnNum: 7, value: 'totalSaldo' },
+            { columnNum: 3, value: 'TotalSums' },
         ]
     }
 ]
