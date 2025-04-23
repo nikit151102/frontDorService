@@ -443,7 +443,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice', invoice)
+    console.log('invoice')
     this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
       if (data.data.docAccountType == 0) {
         if (this.generalForm) {
@@ -457,7 +457,16 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
-        this.editScopeData(data.data);
+        
+        const currentUrl = this.router.url;
+        let typeValueRoute = currentUrl.includes('/base') ? true : false;
+
+        if (this.generalForm && typeValueRoute == true) {
+          this.selectData = { ...data.data };
+          console.log('generalForm invoice', data.data)
+        } else {
+          this.editScopeData(data.data);
+        }
       }
     })
 
