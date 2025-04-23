@@ -13,7 +13,7 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
     return {
         fields: [
             {
-                name: 'dateTime',
+                name: 'date',
                 label: 'Дата',
                 type: 'date',
                 placeholder: 'Выберите дату',
@@ -224,7 +224,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
     return {
         fields: [
             {
-                name: 'dateTime',
+                name: 'date',
                 label: 'Дата',
                 type: 'date',
                 placeholder: 'Выберите дату',
@@ -423,7 +423,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
     const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
     let dataForm: any = {
-        date: model.dateTime || '',
+        date: model.date || '',
         auto: model.auto || '',
         placeFromId: model.placeFromId || '',
         placeToId: model.placeToId || null,
@@ -486,7 +486,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 }
 
 export const MODEL = {
-    dateTime: '',
+    date: '',
     auto: '',
     placeFromId: '',
     placeToId: '',
