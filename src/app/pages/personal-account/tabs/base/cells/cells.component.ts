@@ -39,7 +39,7 @@ export class CellsComponent implements OnInit {
     { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
     { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
-    { field: 'placeTo', header: 'Организация', type: 'string', visible: true, width: '10%' },
+    { field: 'organization', header: 'Кому', type: 'string', visible: true, width: '10%' },
     {
       field: 'cargoName',
       fieldView: 'cargoName',
@@ -63,7 +63,7 @@ export class CellsComponent implements OnInit {
     { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
     { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
-    { field: 'placeTo', header: 'Организация', type: 'string', visible: true, width: '10%' },
+    { field: 'organization', header: 'Кому', type: 'string', visible: true, width: '10%' },
     {
       field: 'cargoName',
       fieldView: 'cargoName',
