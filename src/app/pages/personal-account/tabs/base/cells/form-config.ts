@@ -428,7 +428,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         auto: model.auto || '',
         placeFromId: model.placeFromId || '',
         placeToId: model.placeToId || null,
-        organizationId:  model.organizations || null,
+        organizationId:  model.organizationId || null,
         cargoId: model.cargoId || model.id || '',
         ttn: model.ttn || 0,
         weight: model.weight || 0,
