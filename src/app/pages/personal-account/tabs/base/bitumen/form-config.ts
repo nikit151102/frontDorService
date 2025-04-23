@@ -425,8 +425,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     let dataForm: any = {
         date: model.dateTime || '',
         auto: model.auto || '',
-        placeFrom: model.placeFrom || '',
-        placeTo: model.placeTo || '',
+        placeFromId: model.placeFromId || '',
+        placeToId: model.placeToId || '',
         cargoId: model.cargoId || '',
         ttn: model.ttn || 0,
         weight: model.weight || 0,
@@ -487,8 +487,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 export const MODEL = {
     dateTime: '',
     auto: '',
-    placeFrom: '',
-    placeTo: '',
+    placeFromId: '',
+    placeToId: '',
     cargoId: '',
     ttn: 0,
     weight: 0,

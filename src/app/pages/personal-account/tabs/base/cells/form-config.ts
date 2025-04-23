@@ -426,8 +426,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     const dataForm = {
         date: model.dateTime || '',
         auto: model.auto || '',
-        placeFrom: model.placeFrom || '',
-        placeTo: model.placeTo || '',
+        placeFromId: model.placeFromId || '',
+        placeToId: model.placeToId || '',
         cargoId: model.cargoId || model.id || '',
         ttn: model.ttn || 0,
         weight: model.weight || 0,
