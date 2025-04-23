@@ -72,7 +72,7 @@ export class BitumenComponent implements OnInit {
     { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
     { field: 'placeTo', header: 'Кому', type: 'string', visible: true, width: '10%' },
     {
-      field: 'cargoId',
+      field: 'cargoName',
       fieldView: 'cargoName',
       filterType: 10,
       searchField: 'cargo.Name',
