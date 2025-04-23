@@ -53,6 +53,7 @@ export class BitumenComponent implements OnInit {
     { field: 'ttn', header: 'ТТН', type: 'string', visible: true, width: '10%' },
     { field: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '8%' },
     { field: 'amount', header: 'Цена', type: 'string', visible: true, width: '8%' },
+    { field: 'sumAmount', header: 'Сумма', type: 'string', visible: true, width: '8%' },
     {
       field: 'paymentType',
       header: 'Форма оплаты',
@@ -61,7 +62,7 @@ export class BitumenComponent implements OnInit {
       width: '10%'
     },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
+    // { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
 
@@ -83,6 +84,7 @@ export class BitumenComponent implements OnInit {
     },
     { field: 'weight', header: 'Тоннаж', type: 'string', visible: true, width: '8%' },
     { field: 'amount', header: 'Цена', type: 'string', visible: true, width: '8%' },
+    { field: 'sumAmount', header: 'Сумма', type: 'string', visible: true, width: '8%' },
     {
       field: 'paymentType',
       header: 'Форма оплаты',
@@ -91,7 +93,7 @@ export class BitumenComponent implements OnInit {
       width: '10%'
     },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
+    // { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
 

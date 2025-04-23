@@ -266,7 +266,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 },
             },
             {
-                name: 'placeToId',
+                name: 'organizationId',
                 label: 'Кому',
                 type: 'dropdown',
                 placeholder: 'Выберите запись',
@@ -278,7 +278,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'group1',
                 onChange: (selectedId: string, model: any) => {
                     console.log('Выбрано куда слили с id:', selectedId);
-                    model['placeToId'] = selectedId;
+                    model['organizationId'] = selectedId;
                     console.log('model', model)
                 },
             },
@@ -427,7 +427,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         date: model.dateTime || '',
         auto: model.auto || '',
         placeFromId: model.placeFromId || '',
-        placeToId: model.placeToId || '',
+        placeToId: model.placeToId || null,
+        organizationId:  model.organizations || null,
         cargoId: model.cargoId || model.id || '',
         ttn: model.ttn || 0,
         weight: model.weight || 0,
@@ -487,6 +488,7 @@ export const MODEL = {
     auto: '',
     placeFrom: '',
     placeTo: '',
+    organizationId: '',
     cargoId: '',
     ttn: 0,
     weight: 0,
