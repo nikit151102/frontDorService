@@ -25,7 +25,7 @@ interface QueryDto {
 
 
 @Injectable({
-  providedIn: 'any'
+  providedIn: 'root'
 })
 
 export class InvoicesService {
@@ -65,6 +65,30 @@ export class InvoicesService {
 
       this.dataSubject.next(updatedArray);
     }
+  }
+
+
+  addOrUpdateItem(newItem: any) {
+    console.log('Received new item:', newItem);
+    
+    const currentData = this.getActiveData();
+    console.log('Current data before update:', currentData);
+    
+    if (!Array.isArray(currentData)) {
+      console.log('Current data is not array, creating new array');
+      this.dataSubject.next([newItem]);
+      return;
+    }
+  
+    const filteredData = currentData.filter(item => {
+      console.log(`Comparing ${item?.id} with ${newItem.id}`);
+      return item.id !== newItem.id;
+    });
+    
+    const updatedData = [newItem, ...filteredData];
+    console.log('Updated data to emit:', updatedData);
+    
+    this.dataSubject.next(updatedData);
   }
 
   updateFieldById(id: any, field: string, value: any) {

@@ -26,6 +26,7 @@ import { ScoreFormService } from '../score-form/score-form.service';
 import { Router } from '@angular/router';
 import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config';
 import { taxes } from '../../../../services/data';
+import { PartnersService } from '../../tabs/partners/partners.service';
 
 @Component({
   selector: 'app-invoices',
@@ -95,6 +96,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.loadInvoices();
       console.log('loadInvoices buttonConfigs')
     }
+    this.partnersService.selectCounterpartyId = this.counterpartyId;
+    console.log('this.partnersService.selectCounterpartyId', this.partnersService.selectCounterpartyId)
   }
 
   selectedProduct: any;
@@ -114,13 +117,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
+    private partnersService:PartnersService,
     private router: Router) { }
 
   ngOnInit() {
 
     const currentUrl = this.router.url;
     this.typeValueRoute = currentUrl.includes('/cash') ? false : true;
-
+    console.log('this.invoicesService.counterpartyId',this.invoicesService.counterpartyId)
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
@@ -128,6 +132,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
 
     this.invoicesService.activData$.subscribe((data: any) => {
+      console.log('invoices', data)
       this.invoices = data;
       this.cdRef.detectChanges();
     })

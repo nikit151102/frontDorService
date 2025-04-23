@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { environment } from '../../../../../environment';
+import { InvoicesService } from '../../components/invoices/invoices.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PartnersService {
 
-  constructor() { }
+  constructor(public invoicesService: InvoicesService) { }
 
   
     private socket!: WebSocket;
@@ -33,7 +34,9 @@ export class PartnersService {
     getInvoices() {
       return this.invoicesSubject.value
     }
-  
+    
+    selectCounterpartyId: any;
+
     connectToWebSocket(): void {
       const token = localStorage.getItem('YXV0aFRva2Vu');
       let apiUrl = environment.apiUrl.replace(/^https/, "wss");
@@ -49,6 +52,12 @@ export class PartnersService {
           this.setPartners(data);
           this.setInvoices(data);
           console.log("web-socket works:", data);
+          console.log('data.partner.id',data.partner.id);
+          console.log('this.selectCounterpartyId',this.selectCounterpartyId)
+          if(this.selectCounterpartyId === data.partner.id){
+            console.log('current')
+            this.invoicesService.addOrUpdateItem(data);
+          }
         } catch (e) {
           console.error('Error parsing WebSocket message:', e);
         }
