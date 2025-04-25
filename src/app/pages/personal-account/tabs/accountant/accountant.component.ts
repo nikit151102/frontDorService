@@ -35,6 +35,7 @@ export class AccountantComponent implements OnInit {
     console.log('data', data)
     this.selectedCounterpartyId = data.id;
     this.selectedCounterparty = data.data;
+    this.accountantService.selectCounterpartyId = data.id;
   }
 
   getBUTTON_SETS() {
