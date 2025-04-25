@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MechanicComponent } from './mechanic/mechanic.component';
 import { CashMenuComponent } from './cash-menu/cash-menu.component';
 import { AntonComponent } from './anton/anton.component';
 import { InvoicesService } from '../../components/invoices/invoices.service';
 import { DimaComponent } from './dima/dima.component';
 import { EgorComponent } from './egor/egor.component';
+import { CashService } from './cash.service';
 
 @Component({
   selector: 'app-cash',
@@ -13,16 +14,20 @@ import { EgorComponent } from './egor/egor.component';
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })
-export class CashComponent {
+export class CashComponent implements OnInit{
 
 
   selectedCashType: number | null = null;
 
-  constructor(private invoicesService: InvoicesService) { }
+  constructor(private invoicesService: InvoicesService, private cashService:CashService) { }
+ 
+ 
+  ngOnInit(): void {
+    this.cashService.connectToWebSocket();
+  }
 
   onNameSelected(cashType: any) {
     this.selectedCashType = cashType;
-
     this.invoicesService.queryData.filters = [];
     this.invoicesService.defaultFilters = [];
 
