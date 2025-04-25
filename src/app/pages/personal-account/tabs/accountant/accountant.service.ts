@@ -40,7 +40,7 @@ export class AccountantService {
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let apiUrl = environment.apiUrl.replace(/^https/, "wss");
-    const url = `${apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=docInvoicePartnerTable`;
+    const url = `${apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=accountantPartnerTable`;
     this.socket = new WebSocket(url);
 
     this.socket.onopen = () => {
