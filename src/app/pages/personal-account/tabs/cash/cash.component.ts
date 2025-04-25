@@ -30,7 +30,7 @@ export class CashComponent implements OnInit{
     this.selectedCashType = cashType;
     this.invoicesService.queryData.filters = [];
     this.invoicesService.defaultFilters = [];
-
+    this.cashService.selectAntonCashType = cashType;
     const newFilters = [
       {
         field: 'DocPaymentType',

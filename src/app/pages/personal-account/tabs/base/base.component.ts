@@ -27,7 +27,7 @@ export class BaseComponent implements OnInit{
   
     this.selectedTab = selectTab.code;
     sessionStorage.setItem('managerDocType', selectTab.managerDocType);
-
+    this.baseService.selectManagerDocType = selectTab.managerDocType;
     let navigatePath;
   
     if (typeof selectTab.navigate === 'function') {
