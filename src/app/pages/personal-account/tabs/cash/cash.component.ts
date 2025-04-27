@@ -7,21 +7,22 @@ import { InvoicesService } from '../../components/invoices/invoices.service';
 import { DimaComponent } from './dima/dima.component';
 import { EgorComponent } from './egor/egor.component';
 import { CashService } from './cash.service';
+import { SupplierComponent } from './supplier/supplier.component';
 
 @Component({
   selector: 'app-cash',
-  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent,EgorComponent],
+  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent],
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })
-export class CashComponent implements OnInit{
+export class CashComponent implements OnInit {
 
 
   selectedCashType: number | null = null;
 
-  constructor(private invoicesService: InvoicesService, private cashService:CashService) { }
- 
- 
+  constructor(private invoicesService: InvoicesService, private cashService: CashService) { }
+
+
   ngOnInit(): void {
     this.cashService.connectToWebSocket();
   }
@@ -31,18 +32,26 @@ export class CashComponent implements OnInit{
     this.invoicesService.queryData.filters = [];
     this.invoicesService.defaultFilters = [];
     this.cashService.selectAntonCashType = cashType;
-    const newFilters = [
-      {
-        field: 'DocPaymentType',
-        values: [2, 3],
-        type: 1
-      },
-      {
-        field: 'antonCashType',
-        values: [cashType],
-        type: 1
-      }
-    ];
+    const newFilters = cashType === 4
+      ? [
+        {
+          field: 'antonCashType',
+          values: [cashType],
+          type: 1
+        }
+      ]
+      : [
+        {
+          field: 'DocPaymentType',
+          values: [2, 3],
+          type: 1
+        },
+        {
+          field: 'antonCashType',
+          values: [cashType],
+          type: 1
+        }
+      ];
 
     newFilters.forEach(newFilter => {
       const existingFilterIndex = this.invoicesService.defaultFilters.findIndex(existingFilter =>
