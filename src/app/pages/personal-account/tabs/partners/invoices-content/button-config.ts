@@ -209,6 +209,15 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             titlePopUp: 'Подтверждение подписи',
             messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
             status: 5,
+            condition: (product, idCurrentUser) => product.status === 0
+        },
+        {
+            label: 'Подписать',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение подписи',
+            messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
+            status: 5,
             condition: (product, idCurrentUser) => product.status === 2,
         },
         {
