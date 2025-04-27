@@ -4,6 +4,7 @@ import { PartnerMenuComponent } from '../../components/partner-menu/partner-menu
 import { InvoicesContentComponent } from './invoices-content/invoices-content.component';
 import { BUTTON_SETS } from './button-config'
 import { PartnersService } from './partners.service';
+import { InvoicesService } from '../../components/invoices/invoices.service';
 @Component({
   selector: 'app-partners',
   imports: [CommonModule, InvoicesContentComponent, PartnerMenuComponent],
@@ -17,7 +18,7 @@ export class PartnersComponent implements OnInit {
   selectedCounterparty: any;
   notificationsInvoices: any;
   notificationsPartners: any;
-  constructor(private partnersService: PartnersService) { }
+  constructor(private partnersService: PartnersService, private invoicesService:InvoicesService) { }
 
   ngOnInit(): void {
     this.partnersService.connectToWebSocket();
@@ -31,9 +32,11 @@ export class PartnersComponent implements OnInit {
   }
 
   onSelectCounterparty(data:{id: number, data: string}) {
-    console.log('data',data)
+    console.log('selectedCounterparty',data)
     this.selectedCounterpartyId = data.id;
     this.selectedCounterparty = data.data;
+    this.invoicesService.selectedCounterparty = data.data;
+    
   }
 
   getBUTTON_SETS() {

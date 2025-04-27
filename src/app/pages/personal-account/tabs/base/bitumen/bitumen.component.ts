@@ -160,6 +160,7 @@ export class BitumenComponent implements OnInit {
                     : getFormExpenseSets(dataSources);
           this.generalFormService.setConfig(formSet);
           MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
+          console.log('MODEL',MODEL)
           this.generalFormService.setModel(MODEL);
           this.generalFormService.setService(this.bitumenService);
           this.buttonConfigs = formSet.buttons;

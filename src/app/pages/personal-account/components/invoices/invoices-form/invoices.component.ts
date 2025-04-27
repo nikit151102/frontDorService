@@ -83,7 +83,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     private confirmPopupService: ConfirmPopupService,
     private messageService: MessageService,
     private cdr: ChangeDetectorRef,
-    private productsService: InvoicesService,
+    public productsService: InvoicesService,
     private jwtService: JwtService,
     private toastService: ToastService,
     private router: Router,
@@ -756,7 +756,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     this.isEdit = true;
     this.newIncoice = true;
     this.addProduct();
-console.log('selectedInvoice')
+
   }
 
 

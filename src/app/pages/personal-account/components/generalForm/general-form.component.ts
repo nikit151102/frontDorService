@@ -226,6 +226,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.selectedInvoice = {};
+    console.log('model', this.model)
     if (this.model) {
       for (const key in this.model) {
         if (this.model.hasOwnProperty(key)) {

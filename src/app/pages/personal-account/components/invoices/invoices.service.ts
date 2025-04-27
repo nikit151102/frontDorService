@@ -36,7 +36,7 @@ export class InvoicesService {
 
   endpoint: string = '';
   endpointGetData: string | null = null;
-
+  selectedCounterparty: any;
 
   private dataSubject = new BehaviorSubject<any[]>([]);
   activData$ = this.dataSubject.asObservable();
