@@ -4,12 +4,15 @@
 
 <ng-container *ngIf="selectedInvoice">
     <!-- Форма редактирования счета -->
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
+    <!-- <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
     [header]="'Фактуры (' + 
     (productsService.selectedCounterparty.shortName || '') + 
     (productsService.selectedCounterparty.shortName && productsService.selectedCounterparty.fullName ? ' - ' : '') + 
     (productsService.selectedCounterparty.fullName || '') + 
-    ')'" (onHide)="onDialogClose()">
+    ')'" (onHide)="onDialogClose()"> -->
+    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
+    [header]="'Фактуры (' + 
+    (productsService.selectedCounterparty.fullName || '') + ')н'" (onHide)="onDialogClose()">
         <div class="form-container">
             <div id="content">
                 <ng-container *ngIf="drafts && drafts.length > 0">
