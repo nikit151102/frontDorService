@@ -12,7 +12,7 @@
     ')'" (onHide)="onDialogClose()"> -->
     <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
     [header]="'Фактуры (' + 
-    (productsService.selectedCounterparty.fullName || '') + ')н'" (onHide)="onDialogClose()">
+    (productsService.selectedCounterparty.fullName || '') + ')'" (onHide)="onDialogClose()">
         <div class="form-container">
             <div id="content">
                 <ng-container *ngIf="drafts && drafts.length > 0">
