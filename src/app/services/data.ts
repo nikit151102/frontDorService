@@ -30,7 +30,7 @@ export const adjustmentOptions = [
 ];
 
 export const types = [
-    { label: 'Расход', value: 1 },
+    { label: 'Приход', value: 1 },
     { label: 'Коррекция', value: 0 }
 ];
 

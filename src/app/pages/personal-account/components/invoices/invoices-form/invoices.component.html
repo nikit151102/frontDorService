@@ -49,13 +49,13 @@
                                     </p-dropdown>
                                 </div>
 
-                                <div class="p-field p-col-12" *ngIf="type === 0 || selectedInvoice.expenseSum < 0">
+                                <!-- <div class="p-field p-col-12" *ngIf="type === 0 || selectedInvoice.expenseSum < 0">
                                     <label for="adjustmentType">Корректировка</label>
                                     <p-dropdown id="adjustmentType" [(ngModel)]="adjustmentType"
                                         [options]="adjustmentOptions" optionLabel="label" optionValue="value"
                                         (onChange)="onAdjustmentChange()" [disabled]="!isEdit">
                                     </p-dropdown>
-                                </div>
+                                </div> -->
 
                                 <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
                                     <label for="checkPersonId">Проверяющий</label>

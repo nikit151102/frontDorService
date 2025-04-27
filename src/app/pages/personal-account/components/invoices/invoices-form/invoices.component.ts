@@ -601,7 +601,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         this.selectedInvoice = {
           ...this.selectedInvoice,
           tax: null,
-          type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
+          // type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
+          type: 0,
           checkPersonId: (this.selectedInvoice.checkPersonId === "" || this.selectedInvoice.checkPersonId === "00000000-0000-0000-0000-000000000000") 
           ? null 
           : this.selectedInvoice.checkPersonId,      
