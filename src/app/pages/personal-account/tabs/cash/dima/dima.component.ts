@@ -26,12 +26,12 @@ export class DimaComponent implements OnInit {
     { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'name', header: 'Наименование', type: 'string', visible: true, width: '15%', isFilter: false },
     { field: 'manufacturer', fieldView: 'manufacturer', header: 'Поставщик', type: 'string', visible: true, width: '15%', isFilter: false },
-    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
-    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
+    { field: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
+    { field: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: false, width: '10%' },
   ];
-
+  
   totalInfoColumnInvoices = [
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
