@@ -10,9 +10,11 @@
     (productsService.selectedCounterparty.shortName && productsService.selectedCounterparty.fullName ? ' - ' : '') + 
     (productsService.selectedCounterparty.fullName || '') + 
     ')'" (onHide)="onDialogClose()"> -->
+
+    
     <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
-    [header]="'Фактуры (' + 
-    (productsService.selectedCounterparty.fullName || '') + ')'" (onHide)="onDialogClose()">
+    [header]="'Фактуры (' + (selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || '') + ')'" 
+     (onHide)="onDialogClose()">
         <div class="form-container">
             <div id="content">
                 <ng-container *ngIf="drafts && drafts.length > 0">

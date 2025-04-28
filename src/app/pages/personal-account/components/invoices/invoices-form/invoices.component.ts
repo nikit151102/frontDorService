@@ -752,7 +752,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       comment: '',
       productList: []
     };
-
+console.log("productsService.selectedCounterparty",this.productsService.selectedCounterparty)
     this.type = types?.length ? types[0].value : 0;
     this.isEdit = true;
     this.newIncoice = true;
