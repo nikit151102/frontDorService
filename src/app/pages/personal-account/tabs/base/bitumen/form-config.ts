@@ -463,7 +463,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     toastService.showSuccess('Сохранение', invoice.message);
 
                     const currentRole = jwtService.getDecodedToken().email;
-                    let verificationLevel = currentRole === '5' ? 2 : (currentRole === '1' ? 5 : null);
+                    // let verificationLevel = currentRole === '5' ? 2 : (currentRole === '1' ? 5 : null);
+                    let verificationLevel = currentRole === '1' ? 5 : 2;
                     if (send) {
                         invoiceService.sendingVerification(invoice.data, verificationLevel, 'api/CommercialWork/DocInvoice').subscribe(
                             (data: any) => {
