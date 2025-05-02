@@ -407,7 +407,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
 
-        this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status).subscribe(
+        this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status, this.endpoint).subscribe(
           (response: any) => {
             // this.toastService.showSuccess('', invoice.message);
             this.invoicesService.updateActiveData(response.data);
