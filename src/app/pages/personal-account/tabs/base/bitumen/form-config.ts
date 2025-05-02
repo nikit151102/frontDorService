@@ -444,8 +444,8 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         dataForm.id = model.id;
     }
 
-    const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
-    const acceptLabel = model && model.id ? 'Обновить' : 'Создать';
+    const titlePopUp = dataForm && dataForm.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
+    const acceptLabel = dataForm && dataForm.id ? 'Обновить' : 'Создать';
 
     confirmPopupService.openConfirmDialog({
         title: '',
