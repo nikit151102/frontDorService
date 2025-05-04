@@ -382,7 +382,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         }
 
-        this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
+        this.invoiceService.deleteInvoice(invoiceId, endpoint, this.invoicesService.defaultFilters).subscribe(
           (invoice: any) => {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;

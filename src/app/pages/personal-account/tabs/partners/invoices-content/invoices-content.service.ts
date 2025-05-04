@@ -91,14 +91,27 @@ export class InvoicesContentService {
     }
   }
 
-  deleteInvoice(id: string, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
+  deleteInvoice(
+    invoice: any,
+    endpoint: string = 'api/CommercialWork/DocInvoice',
+    filters: any
+  ): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/${endpoint}/${id}`, {
-      headers: new HttpHeaders({
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }),
-    });
+  
+    return this.http.request<void>(
+      'DELETE', 
+      `${environment.apiUrl}/${endpoint}/${invoice.id}`,
+      {
+        body: {
+          queryDto: filters,
+          entityDto: invoice
+        }, 
+        headers: new HttpHeaders({
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        })
+      }
+    );
   }
 
   sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
