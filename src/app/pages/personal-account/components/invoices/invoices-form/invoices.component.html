@@ -166,7 +166,7 @@
                 <button *ngIf="selectedInvoice.docAccountType != 0 && isScope" pButton label="Подписать фактуру" icon="pi pi-check"
                     (click)="acceptAccountDraft()"></button>
 
-                <button *ngIf="currentRole == 1" pButton label="Изменить" icon="pi pi-check"
+                <button *ngIf="currentRole == 1 && newIncoice == false" pButton label="Изменить" icon="pi pi-check"
                     (click)="saveInvoice()"></button>
 
                 <ng-container *ngFor="let button of buttons">
