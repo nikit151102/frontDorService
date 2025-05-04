@@ -77,7 +77,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
-      this.invoicesService?.totalInfo?.totalPagesCount; 
+      this.invoicesService?.totalInfo?.totalPagesCount;
       this.loadInvoices();
       console.log('loadInvoices defaultFilter')
       console.log('counterpartyData', this.counterpartyData)
@@ -117,14 +117,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
-    private partnersService:PartnersService,
+    private partnersService: PartnersService,
     private router: Router) { }
 
   ngOnInit() {
 
     const currentUrl = this.router.url;
     this.typeValueRoute = currentUrl.includes('/cash') ? false : true;
-    console.log('this.invoicesService.counterpartyId',this.invoicesService.counterpartyId)
+    console.log('this.invoicesService.counterpartyId', this.invoicesService.counterpartyId)
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
@@ -320,7 +320,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-        
+
           return transformed;
         };
 
@@ -334,12 +334,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.totalRecords = response.totalInfo?.totalPagesCount * this.pageSize;
         }
-       
+
         if (reset || this.currentPage === 0) {
           this.invoices = newInvoices;
-      } else {
+        } else {
           this.invoices = [...this.invoices, ...newInvoices];
-      }
+        }
 
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
@@ -366,7 +366,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
   deleteInvoice(invoiceId: any) {
-    
+
     console.log('invoiceId', invoiceId)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
@@ -387,7 +387,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;
             this.toastService.showSuccess('Удалено', invoice.message);
-            
+
           },
           (error) => {
             this.toastService.showError('Ошибка', error.error.message);
@@ -409,7 +409,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status, this.endpoint).subscribe(
           (response: any) => {
-            // this.toastService.showSuccess('', invoice.message);
             this.invoicesService.updateActiveData(response.data);
           },
           (error) => {
@@ -429,9 +428,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
       creatorId: source.creatorId,
       docAccountType: source.docAccountType,
       drafted: source.drafted,
-      expenseSum: source.expenseSum,
+      expenseSum: this.parseNumberWithComma(source.expenseSum),
+      incomeSum: this.parseNumberWithComma(source.incomeSum),
       id: source.id,
-      incomeSum: source.incomeSum,
       notifyStatus: source.notifyStatus,
       number: source.number,
       partnerId: source.partner?.id ?? source.partnerId ?? null,
@@ -441,6 +440,18 @@ export class InvoicesComponent implements OnChanges, OnInit {
     };
   }
 
+
+  private parseNumberWithComma(value: string | number | null | undefined): number | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (typeof value === 'number') {
+      return value;
+    }
+    const cleanedValue = value.replace(/\s/g, '').replace(/,/g, '.');
+    const parsed = parseFloat(cleanedValue);
+    return isNaN(parsed) ? null : parsed;
+  }
 
 
   selectInvoiceId: any;
@@ -462,7 +473,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
-        
+
         const currentUrl = this.router.url;
         let typeValueRoute = currentUrl.includes('/base') ? true : false;
 
