@@ -429,9 +429,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
       creatorId: source.creatorId,
       docAccountType: source.docAccountType,
       drafted: source.drafted,
-      expenseSum: source.expenseSum,
+      expenseSum: this.parseNumberWithComma(source.expenseSum),
       id: source.id,
-      incomeSum: source.incomeSum,
+      incomeSum: this.parseNumberWithComma(source.incomeSum),
       notifyStatus: source.notifyStatus,
       number: source.number,
       partnerId: source.partner?.id ?? source.partnerId ?? null,
@@ -439,6 +439,18 @@ export class InvoicesComponent implements OnChanges, OnInit {
       status: source.status,
       type: source.type
     };
+  }
+
+  private parseNumberWithComma(value: string | number | null | undefined): number | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (typeof value === 'number') {
+      return value;
+    }
+    const cleanedValue = value.replace(/\s/g, '').replace(/,/g, '.');
+    const parsed = parseFloat(cleanedValue);
+    return isNaN(parsed) ? null : parsed;
   }
 
 
