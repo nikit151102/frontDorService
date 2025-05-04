@@ -28,7 +28,7 @@ interface DocInvoice {
 })
 export class InvoicesContentService {
 
-  constructor(private http: HttpClient, private router:Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -69,25 +69,30 @@ export class InvoicesContentService {
       invoiceid = invoice.id;
     }
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, 
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
         {
           queryDto: filters,
           entityDto: invoice
         },
         {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }),
-      });
+          headers: new HttpHeaders({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }),
+        });
     } else {
 
-      if(cashType != null){
+      if (cashType != null) {
         invoice.type = cashType;
       }
-      
-      
-      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
+
+
+      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`,
+        {
+          queryDto: filters,
+          entityDto: invoice
+        }, 
+        {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -102,15 +107,15 @@ export class InvoicesContentService {
     filters: any
   ): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-  
+
     return this.http.request<void>(
-      'DELETE', 
+      'DELETE',
       `${environment.apiUrl}/${endpoint}/${invoice.id}`,
       {
         body: {
           queryDto: filters,
           entityDto: invoice
-        }, 
+        },
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
@@ -159,21 +164,21 @@ export class InvoicesContentService {
 
   acceptAccountDraft(id: any, data: any = null) {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-  
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
+
     const body = data !== null ? data : {};
-  
+
     return this.http.post<void>(
       `${environment.apiUrl}/api/CommercialWork/DocInvoice/AcceptAccountDraft/${id}`,
       body,
       { headers }
     );
   }
-  
+
 
 
   measurementUnits$ = new BehaviorSubject<any[]>([]);
