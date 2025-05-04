@@ -171,7 +171,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any) {
-    console.log('button.isEditDatabutton.isEditData', button.isEditData)
     if (button.action && typeof this[button.action] === 'function') {
       if ((button.titlePopUp || button.messagePopUp || button.status !== undefined) && button.isEditData != false && button.isEditData != true) {
         this[button.action](product, button.status, button.titlePopUp, button.messagePopUp);

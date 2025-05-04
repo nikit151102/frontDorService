@@ -171,7 +171,8 @@
 
                 <ng-container *ngFor="let button of buttons">
                     <button class="btn btn-details" *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
-                                  && (visibleFieldsButton.includes(button.label))" [ngClass]="button.class"
+                                  && (visibleFieldsButton.includes(button.label))
+                                  && (button.label !== 'Подписать' || !newIncoice)" [ngClass]="button.class"
                         (click)="onButtonClick(button)" [title]="button.titlePopUp">
                         {{ button.label }}
                     </button>
