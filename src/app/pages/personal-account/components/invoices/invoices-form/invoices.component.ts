@@ -727,13 +727,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   saveAndSendInvoice() {
-    console.log('1111')
     this.saveInvoice((invoice: any) => {
       let currentRole = this.jwtService.getDecodedToken().email;
-      if (currentRole == '3' || currentRole != '2') {
+      if ((currentRole == '3' || currentRole != '2' ) && currentRole != '1') {
         this.sendingInvoice(invoice, 2);
       } else if (currentRole == '2') {
         this.sendingInvoice(invoice, 1);
+      } else if (currentRole == '1') {
+        this.sendingInvoice(invoice, 5);
       }
     });
   }
