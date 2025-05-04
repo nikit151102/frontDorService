@@ -2,7 +2,7 @@
     <ng-container *ngIf="!generalForm">
         <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
             [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
-            (buttonClicked)="handleButtonClick($event.button, $event.product)">
+            (buttonClicked)="handleButtonClick($event.button, $event.product)"  [filters]="invoicesService.defaultFilters">
         </app-invoices-form>
 
     </ng-container>

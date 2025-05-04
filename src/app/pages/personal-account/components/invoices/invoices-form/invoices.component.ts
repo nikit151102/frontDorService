@@ -57,6 +57,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() counterpartyName!: any;
   @Input() counterpartyId: any;
   @Input() isEditInvoice: any;
+  @Input() filters: any;
   visibleFieldsButton = ['Принять', 'Отклонить', 'Подписать', 'Удалить'];
 
   @Input() buttons: any[] = [];
@@ -439,29 +440,29 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
 
-  deleteInvoice(id: string) {
+  // deleteInvoice(id: string) {
 
-    this.confirmPopupService.openConfirmDialog({
-      title: 'Подтверждение удаления',
-      message: 'Вы уверены, что хотите удалить счет-фактуру?',
-      acceptLabel: 'Удалить',
-      rejectLabel: 'Отмена',
-      onAccept: () => {
-        this.invoiceService.deleteInvoice(id).subscribe(
-          () => {
-            let invoices = this.productsService.getActiveData()
-            this.invoices = invoices.filter((inv: any) => inv.id !== id);
+  //   this.confirmPopupService.openConfirmDialog({
+  //     title: 'Подтверждение удаления',
+  //     message: 'Вы уверены, что хотите удалить счет-фактуру?',
+  //     acceptLabel: 'Удалить',
+  //     rejectLabel: 'Отмена',
+  //     onAccept: () => {
+  //       this.invoiceService.deleteInvoice(id).subscribe(
+  //         () => {
+  //           let invoices = this.productsService.getActiveData()
+  //           this.invoices = invoices.filter((inv: any) => inv.id !== id);
 
-            this.toastService.showSuccess('Удаление', 'Счет-фактура удалена');
-          },
-          (error) => {
-            console.error('Error deleting invoice', error);
-            this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактура');
-          }
-        );
-      }
-    });
-  }
+  //           this.toastService.showSuccess('Удаление', 'Счет-фактура удалена');
+  //         },
+  //         (error) => {
+  //           console.error('Error deleting invoice', error);
+  //           this.toastService.showError('Ошибка', 'Не удалось удалить счет-фактура');
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
 
   addProduct() {
     if (!this.selectedInvoice) {
@@ -645,7 +646,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         if (typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
 
-        this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+        this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
           (invoice) => {
             console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
 
@@ -681,7 +682,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   AcceptEditPartner(idPartner: string) {
     this.selectedInvoice.partnerId = idPartner;
     
-    this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
+    this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
       (invoice) => {
         console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
 

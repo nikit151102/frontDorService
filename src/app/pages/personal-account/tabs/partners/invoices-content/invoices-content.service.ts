@@ -59,7 +59,7 @@ export class InvoicesContentService {
     });
   }
 
-  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null): Observable<any> {
+  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let invoiceid;
     console.log('invoice-----------------', invoice)
@@ -69,7 +69,12 @@ export class InvoicesContentService {
       invoiceid = invoice.id;
     }
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, invoice, {
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, 
+        {
+          queryDto: filters,
+          entityDto: invoice
+        },
+        {
         headers: new HttpHeaders({
           'Accept': 'application/json',
           'Authorization': `Bearer ${token}`
