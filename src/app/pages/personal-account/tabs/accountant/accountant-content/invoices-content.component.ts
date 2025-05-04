@@ -29,7 +29,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     },
     {
       field: 'Status',
-      values: [5],
+      values: [5, 7],
       type: 1
     }]
 
