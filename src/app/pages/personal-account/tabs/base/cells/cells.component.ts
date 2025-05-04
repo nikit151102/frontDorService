@@ -111,7 +111,8 @@ export class CellsComponent implements OnInit {
           productTarget: productTarget.data,
           placeFroms: placeFroms.data,
           organizations: organization.data,
-          storageArea: storageArea.data
+          storageArea: storageArea.data,
+          filter: this.defaultFilters
         };
 
 
@@ -169,7 +170,8 @@ export class CellsComponent implements OnInit {
             productTarget: productTarget.data,
             placeFroms: placeFroms.data,
             organizations: organization.data,
-            storageArea: storageArea.data
+            storageArea: storageArea.data,
+            filter: this.defaultFilters
           };
 
 

@@ -6,6 +6,7 @@ interface FormDataSources {
     placeFroms: any[];
     organizations: any[];
     storageArea: any[];
+    filter: any;
 }
 
 
@@ -205,11 +206,11 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
         buttons: [
             {
                 label: 'Сохранить и отправить',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, productsTarget.filter),
             },
             {
                 label: 'Черновик',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, productsTarget.filter),
             },
             {
                 label: 'Отменить',
@@ -405,11 +406,11 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
         buttons: [
             {
                 label: 'Сохранить и отправить',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, productsTarget.filter),
             },
             {
                 label: 'Черновик',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, productsTarget.filter),
             },
             {
                 label: 'Отменить',
@@ -420,7 +421,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
     }
 };
 
-function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
+function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function, filter: any) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
     const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
     const dataForm = {
@@ -452,7 +453,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         rejectLabel: 'Отмена',
         onAccept: () => {
 
-            invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument').subscribe(
+            invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument', null, filter).subscribe(
                 (invoice: any) => {
                     if (!send) {
                         invoicesService.addItemToStart(invoice.data);

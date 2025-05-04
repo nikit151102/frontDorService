@@ -152,7 +152,8 @@ export class BitumenComponent implements OnInit {
             productTarget: productTarget.data,
             placeFroms: placeFroms.data,
             organizations: organization.data,
-            storageArea: storageArea.data
+            storageArea: storageArea.data,
+            filter: this.defaultFilters
           };
 
            const formSet = type === 'arrival'
