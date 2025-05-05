@@ -425,10 +425,10 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     let dataForm: any = {
         date: model.date || '',
         auto: model.auto || '',
-        placeFromId: model.placeFromId || '',
+        placeFromId: model.placeFromId || null,
         placeToId: model.placeToId || null,
         organizationId:  model.organizationId || null,
-        cargoId: model.cargoId || '',
+        cargoId: model.cargoId || null,
         ttn: model.ttn || 0,
         weight: model.weight || 0,
         amount: model.amount || 0,
