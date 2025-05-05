@@ -73,11 +73,11 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
   columnsInvoices = [
     { field: 'number', header: 'Номер', type: 'string', visible: true, width: '15%', isFilter: false },
-    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
-    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
-    { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
+    { field: 'expenseSum', header: 'Расход', type: 'number', visible: true, width: '15%' },
+    { field: 'incomeSum', header: 'Приход', type: 'number', visible: true, width: '15%' },
+    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' },
+    { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '15%' },
+    { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '15%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' }, // Ширина для кнопок
   ];
 

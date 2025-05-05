@@ -410,7 +410,7 @@
 
 :host ::ng-deep .p-datatable-tfoot {
     position: sticky;
-    bottom: 0;
+    bottom: -20px;
 }
 
 
@@ -458,7 +458,7 @@
 
 :host ::ng-deep .p-datatable-thead {
     position: sticky;
-    top: 0;
+    top: -15px;
     z-index: 99;
 }
 

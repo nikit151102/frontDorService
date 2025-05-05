@@ -1,8 +1,10 @@
 <div class="counterparties-list">
 
   <div class="settings">
-    <button class="add-button" (click)="isEdit = true; isNewItem = true; openDialog($event); ">Добавить
-      {{title}}</button>
+    <button class="add-button" title="Добавить контрагента"
+      (click)="isEdit = true; isNewItem = true; openDialog($event); ">
+      <img src="svgs/plus.svg" alt="">
+    </button>
 
     <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" [placeholder]="'Найти...'"
       class="search-input">
@@ -53,7 +55,9 @@
               {{ formatSaldo(counterparty.partnerSaldoData.totalSaldo) }}
             </span>
           </div>
-          <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">⚙️</button>
+          <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">
+            <img src="svgs/settings.svg" alt="Настройки" style="width: 24px;">
+          </button>
           <div *ngIf="menuOpenFor === counterparty.id" class="menu">
             <ng-container *ngFor="let button of getButtonSet()">
               <button class="menu-item" *ngIf="button.condition ? button.condition(counterparty) : true"
@@ -74,7 +78,10 @@
 
   <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '600px'}">
     <p-header>
-      <span class="pi pi-pencil"></span> {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
+      <span class="pi pi-pencil"></span> 
+      <span id="title-modal">
+        {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
+      </span>
     </p-header>
 
     <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
@@ -124,12 +131,12 @@
 
       </div>
 
-      <p-footer>
+      <div class="modal-btns">
         <button type="button" pButton label="Закрыть" icon="pi pi-times" class="p-button-secondary"
           (click)="display = false; isNewItem = false;"></button>
         <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
           *ngIf="isNewItem ==true || currentRole == 1" class="p-button-primary"></button>
-      </p-footer>
+      </div>
     </form>
   </p-dialog>
 

@@ -1,18 +1,18 @@
 /* Стиль для списка контрагентов */
 .counterparties-list {
-    width: 270px;
+    width: 320px;
     background: #f9f9f9;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    margin-top: 8px;
 }
 
 .add-button {
     background-color: #5c6bc0;
     color: white;
     border: none;
-    padding: 12px 20px;
-    margin-bottom: 20px;
+    padding: 8px 12px;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
@@ -25,9 +25,15 @@
     background-color: #3f4e9f;
 }
 
+
+.add-button img {
+    width: 24px;
+}
+
 .settings {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    gap: 5px;
 }
 
 ::ng-deep .custom-dropdown-panel {
@@ -145,22 +151,24 @@ li.disabled {
 
 span {
     &.positive {
-      color: #4c9706;
-      font-weight: bold;
+        color: #4c9706;
+        font-weight: bold;
     }
-  
+
     &.zero {
-      color: gray;
+        color: gray;
     }
-  
+
     &.negative {
-      color: rgb(248, 41, 41);
-      font-weight: bold;
+        color: rgb(248, 41, 41);
+        font-weight: bold;
     }
-  }
-  
+}
+
 
 .gear-btn {
+    display: flex;
+    justify-content: flex-start;
     background: transparent;
     border: none;
     font-size: 20px;
@@ -431,4 +439,20 @@ span {
     width: 100%;
     background: #fff !important;
     color: #101010 !important;
+}
+
+#title-modal{
+    font-size: 20px;
+}
+
+.modal-btns {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 15px;
+    padding-top: 20px;
+}
+
+.p-fluid{
+    margin-top: 25px;
 }
