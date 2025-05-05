@@ -155,12 +155,12 @@ export class BitumenComponent implements OnInit {
             storageArea: storageArea.data
           };
 
-           const formSet = type === 'arrival'
-                    ? getFormArrivalSets(dataSources)
-                    : getFormExpenseSets(dataSources);
+          const formSet = type === 'arrival'
+            ? getFormArrivalSets(dataSources)
+            : getFormExpenseSets(dataSources);
           this.generalFormService.setConfig(formSet);
           MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
-          console.log('MODEL',MODEL)
+          console.log('MODEL', MODEL)
           this.generalFormService.setModel(MODEL);
           this.generalFormService.setService(this.bitumenService);
           this.buttonConfigs = formSet.buttons;

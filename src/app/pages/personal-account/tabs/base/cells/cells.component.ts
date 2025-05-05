@@ -114,13 +114,16 @@ export class CellsComponent implements OnInit {
           storageArea: storageArea.data
         };
 
+         const formSet = this.currentComponent === 'arrival'
+            ? getFormArrivalSets(dataSources)
+            : getFormExpenseSets(dataSources);
 
-        const formSet = getFormArrivalSets(dataSources);
-        this.generalFormService.setConfig(formSet);
-        MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
-        this.generalFormService.setModel(MODEL);
-        this.generalFormService.setService(this.cellsService);
-        this.buttonConfigs = formSet.buttons;
+          this.generalFormService.setConfig(formSet);
+          MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
+          this.generalFormService.setModel(MODEL);
+          this.generalFormService.setService(this.cellsService);
+          this.buttonConfigs = formSet.buttons;
+        
       })
       .catch(error => {
         console.error('Error loading data:', error);

@@ -248,7 +248,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'single'
             },
             {
-                name: 'placeFromId',
+                name: 'placeToId',
                 label: 'Откуда',
                 type: 'dropdown',
                 placeholder: 'Выберите запись',
@@ -260,7 +260,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'group1',
                 onChange: (selectedId: string, model: any) => {
                     console.log('Выбрано Откуда с id:', selectedId);
-                    model['placeFromId'] = selectedId;
+                    model['placeToId'] = selectedId;
                     console.log('model', model)
                 },
             },
