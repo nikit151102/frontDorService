@@ -252,7 +252,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 label: 'Откуда',
                 type: 'dropdown',
                 placeholder: 'Выберите запись',
-                options: productsTarget.placeFroms || [],
+                options: productsTarget.storageArea || [],
                 optionLabel: 'name',
                 optionValue: 'id',
                 min: 0,
