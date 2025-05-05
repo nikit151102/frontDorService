@@ -489,9 +489,9 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 export const MODEL = {
     date: '',
     auto: '',
-    placeFromId: '',
-    placeToId: '',
-    organizationId: '',
+    placeFromId: null,
+    placeToId: null,
+    organizationId: null,
     cargoId: '',
     ttn: 0,
     weight: 0,
