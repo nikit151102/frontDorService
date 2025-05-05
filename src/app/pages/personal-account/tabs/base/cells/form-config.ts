@@ -249,11 +249,11 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
                 rowGroup: 'single'
             },
             {
-                name: 'placeFromId',
+                name: 'placeToId',
                 label: 'Откуда',
                 type: 'dropdown',
                 placeholder: 'Выберите запись',
-                options: productsTarget.placeFroms || [],
+                options: productsTarget.organizations || [],
                 optionLabel: 'name',
                 optionValue: 'id',
                 min: 0,
