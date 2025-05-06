@@ -177,6 +177,7 @@
     width: 100% !important;
     max-width: 1200px;
     height: 70% !important;
+    transition: all 0.3s ease;
 }
 
 :host ::ng-deep .p-inputtext,
