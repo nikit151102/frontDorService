@@ -354,7 +354,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   // Обработчик скроллинга
-  onLazyLoad(event: any) {
+  onLazyLoad(event: any) {  
     // Проверяем, достигли ли мы конца списка
     if (this.invoices.length < this.totalRecords && !this.loading) {
       this.loadInvoices();

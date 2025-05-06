@@ -11,10 +11,10 @@
     (productsService.selectedCounterparty.fullName || '') + 
     ')'" (onHide)="onDialogClose()"> -->
 
-    
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
-    [header]="'Фактуры (' + (selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || '') + ')'" 
-     (onHide)="onDialogClose()">
+
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
+        [header]="'Фактуры (' + (selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || '') + ')'"
+        (onHide)="onDialogClose($event)" >
         <div class="form-container">
             <div id="content">
                 <ng-container *ngIf="drafts && drafts.length > 0">
@@ -95,10 +95,10 @@
                                 <div>Общая сумма</div>
                                 <div>Единица измерения</div>
                                 <div>Назначение товара</div>
-                                <ng-container  *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3">
+                                <ng-container *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3">
                                     <div></div>
                                 </ng-container>
-                                
+
                             </div>
                             <div *ngFor="let product of selectedInvoice.productList; let i = index" class="product-row">
                                 <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
@@ -122,9 +122,10 @@
                                 <app-custom-dropdown [options]="productTargets" optionLabel="name" optionValue="id"
                                     [(selected)]="product.productTargetId" [disabled]="!isEdit">
                                 </app-custom-dropdown>
-                                <ng-container  *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
+                                <ng-container
+                                    *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
                                     <button pButton icon="pi pi-trash" class="btn-delete"
-                                    (click)="removeProduct(i)">Удалить</button>
+                                        (click)="removeProduct(i)">Удалить</button>
                                 </ng-container>
 
                             </div>
@@ -168,8 +169,8 @@
                 <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
                     label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button> -->
 
-                <button *ngIf="selectedInvoice.docAccountType != 0 && isScope" pButton label="Подписать фактуру" icon="pi pi-check"
-                    (click)="acceptAccountDraft()"></button>
+                <button *ngIf="selectedInvoice.docAccountType != 0 && isScope" pButton label="Подписать фактуру"
+                    icon="pi pi-check" (click)="acceptAccountDraft()"></button>
 
                 <button *ngIf="currentRole == 1 && newIncoice == false" pButton label="Изменить" icon="pi pi-check"
                     (click)="saveInvoice()"></button>
@@ -202,3 +203,22 @@
 <p-confirmDialog></p-confirmDialog>
 
 <app-invoices-edit-partner-pop-up (partnerSelected)="AcceptEditPartner($event)"></app-invoices-edit-partner-pop-up>
+
+
+
+<div class="custom-confirm-dialog" [class.visible]="showConfirmDialog">
+    <div class="dialog-content">
+        <div class="dialog-header">
+            <i class="pi pi-exclamation-triangle"></i>
+            <h3>Вы покидаете страницу с несохранёнными данными</h3>
+        </div>
+        <div class="dialog-body">
+            <p>У вас есть несохраненные изменения. Вы уверены, что хотите закрыть форму?</p>
+        </div>
+        <div class="dialog-footer">
+            <button class="btn-cancel" (click)="hideConfirmDialog()">Остаться</button>
+            <button class="btn-confirm" (click)="confirmCloseDialog()">Закрыть без сохранения</button>
+        </div>
+    </div>
+</div>
+

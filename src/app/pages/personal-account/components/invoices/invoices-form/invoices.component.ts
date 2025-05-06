@@ -75,8 +75,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   selectedInvoice: any;
   checkers: any;
   isEdit: any;
-
-
+  oldData: any;
+  dialogVisible: boolean = false;
 
   constructor(
     private invoiceService: InvoicesContentService,
@@ -287,7 +287,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         this.type = 0;
       } else {
         this.type = 1;
-
       }
 
       if (value.data.productList) {
@@ -297,9 +296,14 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           productTargetId: product.productTarget ? product.productTarget.id : null,
         }));
       }
+      this.oldData = structuredClone(this.selectedInvoice);
+      this.dialogVisible = true;
     })
 
   }
+
+
+
 
 
   setDataScope(value: any) {
@@ -603,9 +607,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           tax: null,
           // type: typeof this.selectedInvoice.type === 'object' ? this.selectedInvoice.type.value : this.selectedInvoice.type,
           type: 0,
-          checkPersonId: (this.selectedInvoice.checkPersonId === "" || this.selectedInvoice.checkPersonId === "00000000-0000-0000-0000-000000000000") 
-          ? null 
-          : this.selectedInvoice.checkPersonId,      
+          checkPersonId: (this.selectedInvoice.checkPersonId === "" || this.selectedInvoice.checkPersonId === "00000000-0000-0000-0000-000000000000")
+            ? null
+            : this.selectedInvoice.checkPersonId,
           productList: this.selectedInvoice.productList.map((product: any) => {
             const updatedProduct: any = {
               ...product,
@@ -680,7 +684,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   AcceptEditPartner(idPartner: string) {
     this.selectedInvoice.partnerId = idPartner;
-    
+
     this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
       (invoice) => {
         console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
@@ -729,7 +733,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   saveAndSendInvoice() {
     this.saveInvoice((invoice: any) => {
       let currentRole = this.jwtService.getDecodedToken().email;
-      if ((currentRole == '3' || currentRole != '2' ) && currentRole != '1') {
+      if ((currentRole == '3' || currentRole != '2') && currentRole != '1') {
         this.sendingInvoice(invoice, 2);
       } else if (currentRole == '2') {
         this.sendingInvoice(invoice, 1);
@@ -753,21 +757,53 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       comment: '',
       productList: []
     };
-console.log("productsService.selectedCounterparty",this.productsService.selectedCounterparty)
+    console.log("productsService.selectedCounterparty", this.productsService.selectedCounterparty)
     this.type = types?.length ? types[0].value : 0;
     this.isEdit = true;
     this.newIncoice = true;
     this.addProduct();
-
+    this.oldData = structuredClone(this.selectedInvoice);
+    this.dialogVisible = true;
   }
 
 
 
-  onDialogClose() {
+  onDialogClose(event: any = null) {
+    console.log('this.selectedInvoice', this.selectedInvoice)
+    console.log('this.oldData', this.oldData)
+    if (!this.deepEqual(this.selectedInvoice, this.oldData)) {
+      console.log(' Объекты отличаются')
+      this.dialogVisible = true;
+      this.showConfirmDialog = true;
+      if(event)
+      event.preventDefault();
+    } else {
+      this.selectedInvoice = null;
+      this.newIncoice = false;
+      this.showConfirmDialog = false;
+      this.dialogVisible = true;
+    }
+  }
+
+
+
+  showConfirmDialog = false;
+
+  hideConfirmDialog() {
+    this.showConfirmDialog = false;
+  }
+
+  confirmCloseDialog() {
+    this.showConfirmDialog = false;
     this.selectedInvoice = null;
-
-    this.newIncoice = false
+    this.newIncoice = false;
+    this.dialogVisible = true;
   }
+
+  deepEqual(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
 
   calculatingAmount(): number {
     if (this.selectedInvoice && this.selectedInvoice.productList.length > 0) {
