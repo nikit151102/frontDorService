@@ -307,10 +307,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (this.loading) return;
 
     this.loading = true;
-
+    console.log('currentPage', this.currentPage)
     this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(
-      this.counterpartyId
+      this.counterpartyId,
+      this.currentPage,
+      this.pageSize
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
@@ -355,10 +357,18 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   // Обработчик скроллинга
   onLazyLoad(event: any) {
-    // Проверяем, достигли ли мы конца списка
-    if (this.invoices.length < this.totalRecords && !this.loading) {
+    console.log('Lazy load triggered', {
+      invoicesLength: this.invoices.length,
+      totalRecords: this.totalRecords,
+      loading: this.loading
+  });
+  
+  // Проверяем, есть ли ещё данные для загрузки
+  const hasMoreData = this.totalRecords === 0 || this.invoices.length < this.totalRecords;
+  
+  if (hasMoreData && !this.loading) {
       this.loadInvoices();
-    }
+  }
   }
 
 

@@ -189,9 +189,14 @@ export class InvoicesService {
       this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
     }
 
-    if(page){
+    if (page !== undefined && page != null ){
       this.queryData.page = page;
     }
+
+    if(pageSize !== undefined && pageSize != null ){
+      this.queryData.pageSize = pageSize;
+    }
+    
     let url
     if (this.endpointGetData) {
       url = `${environment.apiUrl}/${this.endpointGetData}`;
