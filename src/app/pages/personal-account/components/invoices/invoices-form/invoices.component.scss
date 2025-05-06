@@ -3,7 +3,7 @@
     gap: 15px;
 }
 
-#btn-togleComment{
+#btn-togleComment {
     color: #203dab;
     cursor: pointer;
     width: fit-content;
@@ -174,8 +174,9 @@
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    width: 80% !important;
-    height: 80% !important;
+    width: 100% !important;
+    max-width: 1200px;
+    height: 70% !important;
 }
 
 :host ::ng-deep .p-inputtext,
@@ -336,6 +337,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+    overflow-y: scroll;
+    height: 55%;
 }
 
 .product-header,
@@ -351,6 +354,11 @@
     font-weight: bold;
     border-bottom: 2px solid #ccc;
     padding-bottom: 5px;
+    position: sticky;
+    top: 0;
+    z-index: 104;
+    background: #fff;
+    padding-left: 10px;
 }
 
 .product-footer {

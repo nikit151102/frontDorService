@@ -95,7 +95,10 @@
                                 <div>Общая сумма</div>
                                 <div>Единица измерения</div>
                                 <div>Назначение товара</div>
-                                <div *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3"></div>
+                                <ng-container  *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3">
+                                    <div></div>
+                                </ng-container>
+                                
                             </div>
                             <div *ngFor="let product of selectedInvoice.productList; let i = index" class="product-row">
                                 <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
@@ -119,9 +122,11 @@
                                 <app-custom-dropdown [options]="productTargets" optionLabel="name" optionValue="id"
                                     [(selected)]="product.productTargetId" [disabled]="!isEdit">
                                 </app-custom-dropdown>
-                                <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit"
-                                    pButton icon="pi pi-trash" class="btn-delete"
+                                <ng-container  *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
+                                    <button pButton icon="pi pi-trash" class="btn-delete"
                                     (click)="removeProduct(i)">Удалить</button>
+                                </ng-container>
+
                             </div>
                         </div>
 

@@ -102,8 +102,8 @@
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    width: 80% !important;
-    height: 80% !important;
+    width: 100% !important;
+    max-width: 650px;
 }
 
 :host ::ng-deep .p-inputtext,
