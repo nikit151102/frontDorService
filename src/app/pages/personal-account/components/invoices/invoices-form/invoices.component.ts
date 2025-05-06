@@ -25,6 +25,7 @@ import { ButtonConfig } from '../../partner-menu/button-config';
 import { InfoScopeComponent } from './info-scope/info-scope.component';
 import { ListInvoicesComponent } from './list-invoices/list-invoices.component';
 import { Router } from '@angular/router';
+import { UnsavedChangesDialogComponent } from '../../unsaved-changes-dialog/unsaved-changes-dialog.component';
 
 @Component({
   selector: 'app-invoices-form',
@@ -46,7 +47,8 @@ import { Router } from '@angular/router';
     CustomInputComponent,
     InvoicesEditPartnerPopUpComponent,
     InfoScopeComponent,
-    ListInvoicesComponent
+    ListInvoicesComponent,
+    UnsavedChangesDialogComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',

@@ -14,7 +14,7 @@
 
     <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
         [header]="'Фактуры (' + (selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || '') + ')'"
-        (onHide)="onDialogClose($event)" >
+        (onHide)="onDialogClose($event)">
         <div class="form-container">
             <div id="content">
                 <ng-container *ngIf="drafts && drafts.length > 0">
@@ -205,20 +205,5 @@
 <app-invoices-edit-partner-pop-up (partnerSelected)="AcceptEditPartner($event)"></app-invoices-edit-partner-pop-up>
 
 
-
-<div class="custom-confirm-dialog" [class.visible]="showConfirmDialog">
-    <div class="dialog-content">
-        <div class="dialog-header">
-            <i class="pi pi-exclamation-triangle"></i>
-            <h3>Вы покидаете страницу с несохранёнными данными</h3>
-        </div>
-        <div class="dialog-body">
-            <p>У вас есть несохраненные изменения. Вы уверены, что хотите закрыть форму?</p>
-        </div>
-        <div class="dialog-footer">
-            <button class="btn-cancel" (click)="hideConfirmDialog()">Остаться</button>
-            <button class="btn-confirm" (click)="confirmCloseDialog()">Закрыть без сохранения</button>
-        </div>
-    </div>
-</div>
-
+<app-unsaved-changes-dialog *ngIf="showConfirmDialog" (confirmClose)="confirmCloseDialog()"
+    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>

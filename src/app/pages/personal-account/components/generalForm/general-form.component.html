@@ -1,7 +1,7 @@
 <button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
-    <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" [header]="'фактуры' + 
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" [header]="'фактуры' + 
     ((selectedInvoice?.partner?.shortName || selectedInvoice?.partner?.fullName) 
       ? (' (' + 
         (selectedInvoice?.partner?.shortName || '') + 
@@ -27,10 +27,8 @@
                             (selectedChange)="field.onChange && field.onChange(model[field.name], model)"
                             [disabled]="!isEdit"></app-custom-dropdown>
 
-                            <app-custom-input-number *ngSwitchCase="'number'" 
-                            [(ngModel)]="model[field.name]"
-                            [min]="field.min" 
-                            [disabled]="!isEdit" 
+                        <app-custom-input-number *ngSwitchCase="'number'" [(ngModel)]="model[field.name]"
+                            [min]="field.min" [disabled]="!isEdit"
                             (input)="field.onChange && field.onChange(model[field.name], model)">
                         </app-custom-input-number>
 
@@ -41,7 +39,7 @@
             </div>
             <p-footer>
                 <button *ngFor="let button of config.buttons" pButton [label]="button.label"
-                    (click)="executeAction(button.action)" [disabled]="button.disabled">
+                    (click)="executeAction(button.label ,button.action)" [disabled]="button.disabled">
                 </button>
             </p-footer>
         </div>
@@ -49,3 +47,6 @@
 </ng-container>
 
 <p-confirmDialog></p-confirmDialog>
+
+<app-unsaved-changes-dialog *ngIf="showConfirmDialog" (confirmClose)="confirmCloseDialog()"
+    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>

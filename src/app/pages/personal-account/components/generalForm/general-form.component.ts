@@ -22,6 +22,7 @@ import { ProductsService } from '../products/products.service';
 import { InvoicesService } from '../invoices/invoices.service';
 import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
 import { Router } from '@angular/router';
+import { UnsavedChangesDialogComponent } from '../unsaved-changes-dialog/unsaved-changes-dialog.component';
 
 @Component({
   selector: 'general-form',
@@ -41,6 +42,7 @@ import { Router } from '@angular/router';
     CustomDropdownComponent,
     CustomInputNumberComponent,
     CustomInputComponent,
+    UnsavedChangesDialogComponent
   ],
   templateUrl: './general-form.component.html',
   styleUrl: './general-form.component.scss',
@@ -125,6 +127,8 @@ export class GeneralFormComponent implements OnInit, OnChanges {
             this.model[field.name] = data[field.name];
           }
         }
+        this.oldData = structuredClone(this.model);
+        this.dialogVisible = true;
       } else {
         console.warn(`⚠️ Поле "${field.name}" отсутствует в данных`);
       }
@@ -137,10 +141,10 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       if (Array.isArray(data.productList) && data.productList.length > 0) {
         const firstProduct = data.productList[0];
         console.log('🛒 Первый продукт:', firstProduct);
-        
+
         this.model['productTarget.Id'] = firstProduct.productTarget.id || '';
         this.model['productName'] = firstProduct.name || '';
-        console.log('this.model',this.model)
+        console.log('this.model', this.model)
         // // Например: патчим в модель нужные поля
         // this.model['productName'] = firstProduct.name || '';
         // this.model['productAmount'] = firstProduct.amount || 0;
@@ -199,7 +203,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     }
   }
 
-  executeAction(action: (model: any, dependencies: any, sendClose: any) => void): void {
+  executeAction(label: string, action: (model: any, dependencies: any, sendClose: any) => void): void {
     if (typeof action === 'function') {
       const dependencies = {
         confirmPopupService: this.confirmPopupService,
@@ -213,16 +217,47 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       if (this.data && this.data.id) {
         this.model['id'] = this.data.id;
       };
-      console.log('his.model', this.model)
+      if (label != 'Отменить') {
+        action(this.model, dependencies, this.onDialogClose.bind(this));
+      } else {
+        this.onDialogClose();
+      }
 
-      action(this.model, dependencies, this.onDialogClose.bind(this));
     }
   }
 
 
-  onDialogClose(): void {
-    this.selectedInvoice = null;
+  onDialogClose(event: any = null) {
+    if (!this.deepEqual(this.selectedInvoice, this.oldData)) {
+      this.dialogVisible = true;
+      this.showConfirmDialog = true;
+      if (event)
+        event.preventDefault();
+    } else {
+      this.selectedInvoice = null;
+      this.showConfirmDialog = false;
+      this.dialogVisible = false;
+    }
   }
+
+  showConfirmDialog: boolean = false;
+  dialogVisible: boolean = false;
+  oldData: any;
+
+  hideConfirmDialog() {
+    this.showConfirmDialog = false;
+  }
+
+  confirmCloseDialog() {
+    this.showConfirmDialog = false;
+    this.selectedInvoice = null;
+    this.dialogVisible = true;
+  }
+
+  deepEqual(obj1: any, obj2: any): boolean {
+    return JSON.stringify(obj1) === JSON.stringify(obj2);
+  }
+
 
   createNewInvoice(): void {
     this.selectedInvoice = {};
@@ -233,6 +268,8 @@ export class GeneralFormComponent implements OnInit, OnChanges {
           this.model[key] = null;
         }
       }
+      this.dialogVisible = true;
+      this.oldData = structuredClone(this.model);
     }
   }
 
