@@ -12,6 +12,7 @@ import { ProgressSpinnerService } from '../../../components/progress-spinner/pro
 import { CurrentUserService } from '../../../services/current-user.service';
 import { CustomInputComponent } from '../../../ui-kit/custom-input-auth/custom-input.component';
 import { NavMenuService } from '../../personal-account/components/nav-menu/nav-menu.service';
+import { environment } from '../../../../environment';
 
 @Component({
   selector: 'app-form-authorization',
@@ -26,7 +27,7 @@ export class FormAuthorizationComponent implements OnInit {
   signInForm: FormGroup;
   currentUser: boolean = false;
   dataCurrentUser: any;
-  private localStorageKey: string = 'ZW5jcnlwdGVkRW1haWw=';
+  private localStorageKey: string = 'YXV0aFRva2Vu';
   public isMenuVisible: boolean = false;
 
   constructor(private fb: FormBuilder,
@@ -36,8 +37,8 @@ export class FormAuthorizationComponent implements OnInit {
     private progressSpinnerService: ProgressSpinnerService,
     private toastService: ToastService,
     private cookieConsentService: CookieConsentService,
-    private currentUserService:CurrentUserService,
-    private navMenuService:NavMenuService
+    private currentUserService: CurrentUserService,
+    private navMenuService: NavMenuService
   ) {
     this.signInForm = this.fb.group({
       username: ['', Validators.required],
@@ -45,21 +46,17 @@ export class FormAuthorizationComponent implements OnInit {
     });
   }
 
-  private safeBtoa(input: string): string {
-    return btoa(unescape(encodeURIComponent(input)));
-  }
-
-  private safeAtob(input: string): string {
-    return decodeURIComponent(escape(atob(input)));
-  }
 
   ngOnInit() {
-    const encryptedEmail = localStorage.getItem(this.localStorageKey);
-    if (encryptedEmail) {
-      this.dataCurrentUser = JSON.parse(this.safeAtob(encryptedEmail));
-      this.signInForm.patchValue({ username: this.dataCurrentUser.email });
-      this.currentUser = true;
-      this.visibleBtns.emit(false);
+
+    const dataUser = localStorage.getItem(environment.userAuthData);
+    if (dataUser) {
+      this.dataCurrentUser = JSON.parse(dataUser);
+      if (this.dataCurrentUser && this.dataCurrentUser.token && this.dataCurrentUser.userName) {
+        this.currentUser = true;
+        this.visibleBtns.emit(false);
+        this.signInForm.patchValue({ username: this.dataCurrentUser.userName });
+      }
     }
 
     setTimeout(() => {
@@ -78,14 +75,6 @@ export class FormAuthorizationComponent implements OnInit {
     });
   }
 
-  goBack(): void {
-    this.router.navigateByUrl('/');
-  }
-
-  toggleMenu() {
-    this.isMenuVisible = !this.isMenuVisible;
-  }
-
   hideProfile() {
     this.signInForm.patchValue({ username: '' });
     localStorage.removeItem(this.localStorageKey);
@@ -94,17 +83,9 @@ export class FormAuthorizationComponent implements OnInit {
     this.isMenuVisible = false;
   }
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const menuElement = document.querySelector('.dropdownMenu');
-    if (menuElement && !menuElement.contains(event.target as Node)) {
-      this.isMenuVisible = false;
-    }
-  }
-
   onSignIn() {
     this.signInForm.markAllAsTouched();
-  
+
     if (this.signInForm.invalid) {
       if (this.signInForm.controls['username'].hasError('required')) {
         this.toastService.showWarn('Ошибка', 'Поле "Электронная почта" обязательно для заполнения');
@@ -117,7 +98,7 @@ export class FormAuthorizationComponent implements OnInit {
       }
       return;
     }
-  
+
     this.progressSpinnerService.show();
     const formData = this.signInForm.value;
     const Data = {
@@ -125,13 +106,14 @@ export class FormAuthorizationComponent implements OnInit {
       password: formData.password,
       email: ""
     };
-  
+
     this.AuthorizationService.signIn(Data).subscribe(
       (response) => {
         if (response.data.data) {
           this.tokenService.setToken(response.data.data.token);
           this.progressSpinnerService.hide();
           localStorage.setItem('VXNlcklk', response.data.data.id);
+          localStorage.setItem(environment.userAuthData, JSON.stringify(response.data.data));
           this.currentUserService.saveUser(response.data.data);
           this.router.navigate([`/${response.data.data.id}`]);
           this.navMenuService.setNotifications(response.notifyData);
@@ -145,7 +127,7 @@ export class FormAuthorizationComponent implements OnInit {
       }
     );
   }
-  
+
 
 
   handleKeyDown(event: KeyboardEvent): void {
@@ -153,15 +135,5 @@ export class FormAuthorizationComponent implements OnInit {
       this.onSignIn();
     }
   }
-
-  @Output() switch = new EventEmitter<string>();
-
-  goToRegister() {
-    this.switch.emit('register');
-  }
-
-  goToForgotPassword() {
-    this.switch.emit('forgot');
-  }
-
+  
 }

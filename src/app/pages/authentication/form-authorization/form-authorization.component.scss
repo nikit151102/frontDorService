@@ -1,6 +1,10 @@
 .container {
     padding: 20px;
 
+    h1 {
+        color: #101010;
+    }
+
     .headerBtns {
         display: flex;
         justify-content: space-between;
