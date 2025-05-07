@@ -6,12 +6,12 @@ import { NavMenuService } from './components/nav-menu/nav-menu.service';
 
 @Component({
   selector: 'app-personal-account',
-  imports: [RouterOutlet,NavMenuComponent],
+  imports: [RouterOutlet, NavMenuComponent],
   templateUrl: './personal-account.component.html',
   styleUrl: './personal-account.component.scss'
 })
-export class PersonalAccountComponent  implements OnInit {
-  showGreeting = false;  
+export class PersonalAccountComponent implements OnInit {
+  showGreeting = false;
 
   constructor(
     private router: Router,
@@ -21,26 +21,25 @@ export class PersonalAccountComponent  implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const currentPath = this.router.url; 
+    const fullPath = this.router.url;
+    const segments = fullPath.split('/');
 
-    if (!currentPath.includes('/clients') && 
-        !currentPath.includes('/services') && 
-        !currentPath.includes('/reference') && 
-        !currentPath.includes('/accountant') && 
-        !currentPath.includes('/cash') &&
-        !currentPath.includes('/base') &&
-        !currentPath.includes('/profile')) {
-      this.showGreeting = true;  
+    const rootTab = segments.find(segment =>
+      ['clients', 'services', 'reference', 'accountant', 'cash', 'base', 'profile'].includes(segment)
+    );
+
+    if (!rootTab) {
+      this.showGreeting = true;
       this.router.navigate(['loading'], { relativeTo: this.route });
       setTimeout(() => {
-        this.redirectToFirstAvailableTab();
-      }, 1500); 
+        this.checkAndRedirect();
+      }, 1500);
     } else {
-      this.redirectToFirstAvailableTab();
+      this.checkAndRedirect(rootTab);
     }
   }
 
-  private redirectToFirstAvailableTab() {
+  private checkAndRedirect(rootTab?: string) {
     const decodedToken = this.jwtService.getDecodedToken();
     if (!decodedToken || !decodedToken.role) {
       console.error('Ошибка: нет роли в токене!');
@@ -55,15 +54,22 @@ export class PersonalAccountComponent  implements OnInit {
       { path: 'services', access: 'ServicesAccess' },
       { path: 'reference', access: 'EntitiesAccess' },
       { path: 'accountant', access: 'AccountantAccess' },
+      { path: 'cash', access: 'CashAccess' },
+      { path: 'base', access: 'BaseAccess' },
       { path: 'profile', access: '' }
     ];
 
-    const firstAvailableTab = availableTabs.find(tab => !tab.access || userRoles.includes(tab.access));
+    if (rootTab) {
+      const rootTabConfig = availableTabs.find(tab => tab.path === rootTab);
+      if (rootTabConfig && (!rootTabConfig.access || userRoles.includes(rootTabConfig.access))) {
+        return;
+      }
+    }
 
+    const firstAvailableTab = availableTabs.find(tab => !tab.access || userRoles.includes(tab.access));
     if (firstAvailableTab) {
       this.router.navigate([firstAvailableTab.path], { relativeTo: this.route, replaceUrl: true });
     } else {
-      console.warn('Нет доступных вкладок!');
       this.router.navigate(['profile'], { relativeTo: this.route });
     }
   }
