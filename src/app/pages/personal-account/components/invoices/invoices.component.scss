@@ -1,11 +1,56 @@
+.table-container{
+    height: calc(100vh - 315px);
+    overflow-y: auto;
+}
+
+.table-container {
+  overflow-y: auto;
+  position: relative;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+thead {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background-color: white; 
+}
+
+tfoot {
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  background-color: white; 
+}
+
+thead th, tfoot td {
+  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+}
+
+.filter-row {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background-color: white;
+}
+
+.header-row {
+  position: sticky;
+  top: 40px; 
+  z-index: 10;
+  background-color: white;
+}
+
 .invoice-table {
     width: 100%;
     border-collapse: collapse;
     border-radius: 8px;
-    overflow: hidden;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     position: relative;
-    // position: absolute;
 }
 
 .invoice-table th {
@@ -245,11 +290,6 @@
 .btn-delete:focus {
     outline: none;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-}
-
-.invoice-table {
-    width: 100%;
-    margin-top: 20px;
 }
 
 .actionsBtn {

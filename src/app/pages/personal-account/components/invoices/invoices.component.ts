@@ -77,7 +77,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
-      this.invoicesService?.totalInfo?.totalPagesCount; 
+      this.invoicesService?.totalInfo?.totalPagesCount;
       this.loadInvoices();
       console.log('loadInvoices defaultFilter')
       console.log('counterpartyData', this.counterpartyData)
@@ -117,14 +117,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
-    private partnersService:PartnersService,
+    private partnersService: PartnersService,
     private router: Router) { }
 
   ngOnInit() {
 
     const currentUrl = this.router.url;
     this.typeValueRoute = currentUrl.includes('/cash') ? false : true;
-    console.log('this.invoicesService.counterpartyId',this.invoicesService.counterpartyId)
+    console.log('this.invoicesService.counterpartyId', this.invoicesService.counterpartyId)
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
@@ -295,6 +295,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
   loading = false;
   totalRecords = 0;
+  totalPages = null;
   pageSize = 30;
   currentPage = 0;
 
@@ -310,7 +311,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
     this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(
-      this.counterpartyId
+      this.counterpartyId,
+      this.currentPage,
+      this.pageSize
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
@@ -319,7 +322,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-        
+
           return transformed;
         };
 
@@ -333,16 +336,16 @@ export class InvoicesComponent implements OnChanges, OnInit {
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.totalRecords = response.totalInfo?.totalPagesCount * this.pageSize;
         }
-       
+
         if (reset || this.currentPage === 0) {
           this.invoices = newInvoices;
-      } else {
+        } else {
           this.invoices = [...this.invoices, ...newInvoices];
-      }
+        }
 
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
-
+        this.totalPages = response.totalPages;
         this.currentPage++;
         this.loading = false;
       },
@@ -353,20 +356,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
     );
   }
 
-  // Обработчик скроллинга
-  onLazyLoad(event: any) {  
-    // Проверяем, достигли ли мы конца списка
-    if (this.invoices.length < this.totalRecords && !this.loading) {
+  onScroll(event: any) {
+    const element = event.target;
+    const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
+
+    if (atBottom && this.totalPages && this.currentPage < this.totalPages) {
       this.loadInvoices();
     }
   }
 
 
-
-
   deleteInvoice(invoiceId: any) {
-    
-    console.log('invoiceId', invoiceId)
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
@@ -386,7 +386,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;
             this.toastService.showSuccess('Удалено', invoice.message);
-            
+
           },
           (error) => {
             this.toastService.showError('Ошибка', error.error.message);
@@ -473,7 +473,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
-        
+
         const currentUrl = this.router.url;
         let typeValueRoute = currentUrl.includes('/base') ? true : false;
 

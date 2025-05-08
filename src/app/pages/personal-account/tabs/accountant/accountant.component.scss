@@ -6,7 +6,7 @@
 
 app-invoices-content {
     width: calc(100% - 320px) !important;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: auto;
     scroll-behavior: smooth;
     background: #f8f9fa;

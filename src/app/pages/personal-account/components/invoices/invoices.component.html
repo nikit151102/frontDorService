@@ -11,16 +11,6 @@
         
     </ng-container>
 
-    <!-- <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && typeValueRoute == true">
-        <button (click)="openScopeModal()" style="    height: 36px;
-     padding: 8px;
-        background: #34d399;
-        border: none;
-        color: #fff;
-        border-radius: 7px;">
-            Создать счёт
-        </button>
-    </ng-container> -->
     <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
         <button (click)="openPaymentModal()" style=" height: 36px;
      padding: 8px;
@@ -39,12 +29,6 @@
     flex-direction: column;
     width: fit-content;">
 
-    <!-- <app-settings 
-  [columns]="columns" 
-  [selectedColumns]="selectedColumns" 
-  (selectedColumnsChange)="updateSelectedColumns($event)">
-</app-settings> -->
-
     <h2 *ngIf="counterpartyData" class="counterparty-title">
         <span class="short-name">{{ counterpartyData.shortName }}</span>
 
@@ -60,130 +44,128 @@
     </h2>
 
 </div>
-<p-table [value]="invoices" class="invoice-table" 
-         (onLazyLoad)="onLazyLoad($event)" 
-         [rows]="pageSize" 
-         [lazy]="true"
-         [totalRecords]="totalRecords">
-    <ng-template pTemplate="header">
-        <tr>
-            <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width">
-                    <div style="display: flex; justify-content: space-between;">
-                        <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
-                            (filterChange)="invoicesService.onFilterChange($event)"
-                            (sortChange)="invoicesService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
-                        </app-search-filter-sort>
 
-                        <!-- Аналогичные кнопки для других типов фильтров -->
-                        <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
-                            (filterChange)="invoicesService.onFilterChange($event)"
-                            (sortChange)="invoicesService.onSortChange($event)">
-                        </app-date-filter>
-
-                        <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
-                            (filterChange)="invoicesService.onFilterChange($event)"
-                            (sortChange)="invoicesService.onSortChange($event)">
-                        </app-number-filter>
-
-                        <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint"
-                            [fieldNames]="''" [enam]="null" [Field]="col.field"
-                            (filterChange)="invoicesService.onFilterChange($event)"
-                            (sortChange)="invoicesService.onSortChange($event)">
-                        </app-uuid-search-filter-sort>
-
-                        <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
-                            [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event)"
-                            (sortChange)="invoicesService.onSortChange($event)">
-                        </app-uuid-search-filter-sort>
-
-                    </div>
-                </th>
-            </ng-container>
+<div class="table-wrapper">
+<div class="table-container" (scroll)="onScroll($event)">
+    <table class="invoice-table">
+      <thead>
+        <tr class="filter-row">
+          <ng-container *ngFor="let col of columns">
+            <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width">
+              <div style="display: flex; justify-content: space-between;">
+                <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
+                  (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
+                </app-search-filter-sort>
+  
+                <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
+                  (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)">
+                </app-date-filter>
+  
+                <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
+                  (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)">
+                </app-number-filter>
+  
+                <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint"
+                  [fieldNames]="''" [enam]="null" [Field]="col.field"
+                  (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)">
+                </app-uuid-search-filter-sort>
+  
+                <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
+                  [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)">
+                </app-uuid-search-filter-sort>
+              </div>
+            </th>
+          </ng-container>
         </tr>
-        <tr>
-            <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
-            </ng-container>
+        <tr class="header-row">
+          <ng-container *ngFor="let col of columns">
+            <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
+          </ng-container>
         </tr>
-    </ng-template>
-
-    <ng-template pTemplate="body" let-product>
-        <tr class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product) ">
-            <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
-                    (dblclick)="isEditInvoice = false; getInvoiceById(product)"
-                    (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
-                    <ng-container
-                        *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
-                        <ng-container *ngIf="product['paymentDateTime'] && product['paymentDateTime'] != null">
-                            {{ product['paymentDateTime'] | date: 'dd-MM-yyyy' }}
-                        </ng-container>
-                        <ng-container *ngIf="!product['paymentDateTime'] || product['paymentDateTime'] == null">
-                            {{ product[col.field] | date: 'dd-MM-yyyy' }}
-                        </ng-container>
-                    </ng-container>
-                    <ng-template #normalField>
-                        <ng-container *ngIf="col.field === 'number'">
-                            {{ product[col.field]}}
-                            <span *ngIf="product['docAccountType'] == 1  || product['docAccountType'] == 2" [ngClass]="{
-                                    'status-tag': true,
-                                    'status-rejected':  product['drafted'] != 1,
-                                    'status-approved':  product['drafted'] == 1
-                                }" style="font-size: 13px; padding: 6px">
-                                Счёт
-                            </span>
-                        </ng-container>
-                        <span *ngIf="col.field === 'invoiceStatus' || col.field === 'status'"
-                            [ngClass]="getStatusClass(product[col.field])" class="status-tag">
-                            {{ getStatusLabel(product[col.field]) }}
-                        </span>
-                        <span *ngIf="col.field === 'paymentType' ">
-                            {{ transform(product[col.field]) }}
-                        </span>
-                        <span
-                            *ngIf="col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
-                            {{ product[col.field] }}
-                        </span>
-                    </ng-template>
-                </td>
-                <ng-container *ngIf="col.type === 'actions'">
-                    <td class="invoice-cell actions-cell">
-                        <div class="dropdown">
-                            <button class="btn btn-dropdown" style="color: #101010;"
-                                (click)="toggleDropdown(product.id)">⋮</button>
-                            <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
-                                <ng-container *ngFor="let button of getButtonSet()">
-                                    <button class="btn btn-details"
-                                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
-                                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
-                                        [title]="button.titlePopUp">
-                                        {{ button.label }}
-                                    </button>
-                                </ng-container>
-                            </div>
-                        </div>
-                    </td>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of invoices" class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product)">
+          <ng-container *ngFor="let col of columns">
+            <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+              (dblclick)="isEditInvoice = false; getInvoiceById(product)"
+              (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
+              <ng-container
+                *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
+                <ng-container *ngIf="product['paymentDateTime'] && product['paymentDateTime'] != null">
+                  {{ product['paymentDateTime'] | date: 'dd-MM-yyyy' }}
                 </ng-container>
-            </ng-container>
-        </tr>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <tr>
-            <ng-container *ngFor="let col of columns; let i = index">
-                <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
-                    <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
-                        {{ getTotalValue(i) }}
+                <ng-container *ngIf="!product['paymentDateTime'] || product['paymentDateTime'] == null">
+                  {{ product[col.field] | date: 'dd-MM-yyyy' }}
+                </ng-container>
+              </ng-container>
+              <ng-template #normalField>
+                <ng-container *ngIf="col.field === 'number'">
+                  {{ product[col.field]}}
+                  <span *ngIf="product['docAccountType'] == 1  || product['docAccountType'] == 2" [ngClass]="{
+                      'status-tag': true,
+                      'status-rejected':  product['drafted'] != 1,
+                      'status-approved':  product['drafted'] == 1
+                    }" style="font-size: 13px; padding: 6px">
+                    Счёт
+                  </span>
+                </ng-container>
+                <span *ngIf="col.field === 'invoiceStatus' || col.field === 'status'"
+                  [ngClass]="getStatusClass(product[col.field])" class="status-tag">
+                  {{ getStatusLabel(product[col.field]) }}
+                </span>
+                <span *ngIf="col.field === 'paymentType' ">
+                  {{ transform(product[col.field]) }}
+                </span>
+                <span
+                  *ngIf="col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
+                  {{ product[col.field] }}
+                </span>
+              </ng-template>
+            </td>
+            <ng-container *ngIf="col.type === 'actions'">
+              <td class="invoice-cell actions-cell">
+                <div class="dropdown">
+                  <button class="btn btn-dropdown" style="color: #101010;"
+                    (click)="toggleDropdown(product.id)">⋮</button>
+                  <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
+                    <ng-container *ngFor="let button of getButtonSet()">
+                      <button class="btn btn-details"
+                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
+                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
+                        [title]="button.titlePopUp">
+                        {{ button.label }}
+                      </button>
                     </ng-container>
-                    <ng-template #emptyCell></ng-template>
-                </td>
+                  </div>
+                </div>
+              </td>
             </ng-container>
-            <td></td>
-            <td></td>
+          </ng-container>
         </tr>
-    </ng-template>
-</p-table>
-
+      </tbody>
+      <tfoot>
+        <tr class="footer-row">
+          <ng-container *ngFor="let col of columns; let i = index">
+            <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
+              <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                {{ getTotalValue(i) }}
+              </ng-container>
+              <ng-template #emptyCell></ng-template>
+            </td>
+          </ng-container>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+  
+  </div>
+</div>
 
 
 <!-- Контекстное меню -->
