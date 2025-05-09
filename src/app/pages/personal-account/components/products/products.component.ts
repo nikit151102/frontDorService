@@ -89,7 +89,7 @@ export class ProductsComponent implements OnChanges, OnInit {
         } else {
           this.productsService.products = [...this.productsService.products, ...newInvoices];
         }
-
+        this.productsService.totalInfo = response.totalInfo;
         this.productsService.totalPages = response.totalPages;
         this.productsService.currentPage++;
         this.productsService.currentPage++
