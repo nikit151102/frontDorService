@@ -71,7 +71,10 @@ export class InvoicesContentService {
     if (invoice.id) {
       return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
         {
-          queryDto: filters,
+          queryDto: {
+            filters: filters,
+            sorts: []
+          },
           entityDto: invoice
         },
         {
@@ -89,15 +92,18 @@ export class InvoicesContentService {
 
       return this.http.post<any>(`${environment.apiUrl}/${endpoint}`,
         {
-          queryDto: filters,
+         queryDto: {
+            filters: filters,
+            sorts: []
+          },
           entityDto: invoice
-        }, 
+        },
         {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }),
-      });
+          headers: new HttpHeaders({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }),
+        });
     }
   }
 
@@ -113,7 +119,10 @@ export class InvoicesContentService {
       `${environment.apiUrl}/${endpoint}/${invoice.id}`,
       {
         body: {
-          queryDto: filters,
+          queryDto: {
+            filters: filters,
+            sorts: []
+          },
           entityDto: invoice
         },
         headers: new HttpHeaders({
