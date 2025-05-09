@@ -19,6 +19,8 @@ interface SortDto {
 interface QueryDto {
   filters?: FilterDto[];
   sorts?: SortDto[];
+  page?: any;
+  pageSize?: any
 }
 
 
@@ -45,7 +47,7 @@ export class ProductsService {
 
 
 
-  getProductsByCounterparty(id: string): Observable<any> {
+  getProductsByCounterparty(id: string, page: any = null, pageSize: any = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     this.queryData.filters = this.queryData.filters || [];
@@ -53,22 +55,22 @@ export class ProductsService {
     const currentUrl = this.router.url;
 
     const typeValue = currentUrl.includes('/services')
-    ? 1
-    : currentUrl.includes('/projects')
-      ? 5
-      : 0;
-  
-      const hasAccountTypeFilter = this.queryData.filters.some(
-        (filter: any) => filter.field === 'DocInvoice.DocAccountType'
-      );
-      
-      if (!hasAccountTypeFilter) {
-        this.queryData.filters.push({
-          field: 'DocInvoice.DocAccountType',
-          values: [0],
-          type: 1,
-        });
-      }
+      ? 1
+      : currentUrl.includes('/projects')
+        ? 5
+        : 0;
+
+    const hasAccountTypeFilter = this.queryData.filters.some(
+      (filter: any) => filter.field === 'DocInvoice.DocAccountType'
+    );
+
+    if (!hasAccountTypeFilter) {
+      this.queryData.filters.push({
+        field: 'DocInvoice.DocAccountType',
+        values: [0],
+        type: 1,
+      });
+    }
 
     let defaultFilter = {
       field: 'DocInvoice.Partner.Type',
@@ -76,7 +78,7 @@ export class ProductsService {
       type: 1
     }
 
-    
+
     const filterExists = this.queryData.filters.some(filter =>
       filter.field === defaultFilter.field &&
       JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
@@ -101,7 +103,15 @@ export class ProductsService {
     const existsDocPaymentType = this.queryData.filters.some((sort) => sort.field === 'DocInvoice.DocPaymentType');
 
     if (!existsDocPaymentType) {
-      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values:[0], type: 1 });
+      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values: [0], type: 1 });
+    }
+
+    if (page !== undefined && page !== null) {
+      this.queryData.page = page;
+    }
+
+    if (pageSize !== undefined && pageSize !== null) {
+      this.queryData.pageSize = pageSize;
     }
 
 
@@ -144,7 +154,7 @@ export class ProductsService {
 
     // Удаляем фильтр, если values стал пустым массивом или `[""]`
     this.queryData.filters = this.queryData.filters.filter(f => f.values && f.values.length > 0 && f.values[0] !== "");
-    
+    this.currentPage = 0;
     this.loadProducts()
     console.log('Обновленные фильтры:', this.queryData.filters);
   }
@@ -159,6 +169,7 @@ export class ProductsService {
     } else {
       this.queryData.sorts.push(sort); // Добавляем новую сортировку
     }
+    this.currentPage = 0;
     this.loadProducts();
     console.log('Обновленные сортировки:', this.queryData.sorts);
     console.log('Обновленные данные:', this.queryData);
@@ -169,16 +180,22 @@ export class ProductsService {
   products: any;
   totalInfo: any;
 
+  loading = false;
+  totalRecords = 0;
+  totalPages = null;
+  pageSize = 30;
+  currentPage = 0;
+
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(
       (data) => {
-        this.products = data.documentMetadata.data.map((invoice:any) => ({
+        this.products = data.documentMetadata.data.map((invoice: any) => ({
           ...invoice,
           sumAmount: invoice.sumAmount.toString().replace('.', ','),
         }));
         this.totalInfo = data.totalInfo;
-        console.log('data',data)
-        console.log('products',this.products)
+        console.log('data', data)
+        console.log('products', this.products)
       },
       (error) => {
         console.error('Ошибка загрузки товаров:', error);

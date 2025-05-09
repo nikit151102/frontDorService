@@ -1,48 +1,45 @@
-.table-container{
+.table-container {
     height: calc(100vh - 230px);
     overflow-y: auto;
-}
-
-.table-container {
-  overflow-y: auto;
-  position: relative;
+    position: relative;
 }
 
 table {
-  width: 100%;
-  border-collapse: collapse;
+    width: 100%;
+    border-collapse: collapse;
 }
 
 thead {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background-color: white; 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: white;
 }
 
 tfoot {
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
-  background-color: white; 
+    position: sticky;
+    bottom: 0;
+    z-index: 10;
+    background-color: white;
 }
 
-thead th, tfoot td {
-  box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
+thead th,
+tfoot td {
+    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
 }
 
 .filter-row {
-  position: sticky;
-  top: 0;
-  z-index: 20;
-  background-color: white;
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background-color: white;
 }
 
 .header-row {
-  position: sticky;
-  top: 40px; 
-  z-index: 10;
-  background-color: white;
+    position: sticky;
+    top: 40px;
+    z-index: 10;
+    background-color: white;
 }
 
 .invoice-table {
@@ -222,24 +219,24 @@ thead th, tfoot td {
     align-items: center;
     gap: 6px;
     flex-wrap: wrap;
-  }
-  
-  .short-name {
+}
+
+.short-name {
     font-weight: bold;
     color: #2c3e50;
-  }
-  
-  .full-name {
+}
+
+.full-name {
     color: #555;
     font-weight: normal;
-  }
-  
-  .separator {
+}
+
+.separator {
     color: #999;
     margin: 0 4px;
-  }
-  
-  .tax-badge {
+}
+
+.tax-badge {
     background: #f0f0f0;
     color: #666;
     padding: 2px 8px;
@@ -247,7 +244,7 @@ thead th, tfoot td {
     font-size: 14px;
     margin-left: 6px;
     font-weight: normal;
-  }
+}
 
 
 
@@ -389,8 +386,8 @@ thead th, tfoot td {
 
 /* Статус "Проведена" */
 .status-completed {
-    background-color: rgba(0, 188, 212, 0.1); 
-    color: #00bcd4; 
+    background-color: rgba(0, 188, 212, 0.1);
+    color: #00bcd4;
 }
 
 
@@ -439,7 +436,7 @@ thead th, tfoot td {
 
 :host ::ng-deep .p-datatable:not(.p-dialog .p-datatable) .p-datatable-table {
     // table-layout: fixed;
-    width: var(--table-width, calc(100vw - 336px)); 
+    width: var(--table-width, calc(100vw - 336px));
     position: absolute;
 }
 

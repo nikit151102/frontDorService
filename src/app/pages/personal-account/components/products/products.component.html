@@ -1,6 +1,6 @@
 <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyId]="counterpartyId"
     [isEditInvoice]="isEditInvoice"></app-invoices-form>
-    
+
 <div style="margin-bottom: 10px;  display: flex;
     flex-direction: column;
     width: fit-content;">
@@ -10,72 +10,87 @@
     </p-multiselect>
 </div>
 
-<table class="invoice-table">
-    <thead>
-        <tr>
-            <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                    <div style="display: flex; justify-content: space-between;" [style.width]="col.width">
-                        <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
-                            (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
-                        </app-search-filter-sort>
-                        <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
-                            (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
-                        </app-date-filter>
-                        <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
-                            (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
-                        </app-number-filter>
-                        <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
-                            [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType" [searchField]="col.searchField"
-                            (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
-                        </app-uuid-search-filter-sort>
-                        <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"
-                            [Field]="col.field" [filterType]="1" (filterChange)="productsService.onFilterChange($event)" (sortChange)="productsService.onSortChange($event)">
-                        </app-uuid-search-filter-sort>
-                    </div>
-                </th>
-            </ng-container>
-        </tr>
-        <tr>
-            <ng-container *ngFor="let col of columns">
-                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
-            </ng-container>
-            <th *ngIf="actions.length > 0">Действия</th>
-        </tr>
-    </thead>
 
-    <tbody>
-        <tr *ngFor="let product of productsService.products" class="invoice-row">
-            <ng-container *ngFor="let col of columns">
-                <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width" (dblclick)="onRowDblClick($event, product, col.fieldView)">
-                    <ng-container *ngIf="col.fieldView === 'dateTime'; else normalField">
-                        {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
-                    </ng-container>
-                    <ng-template #normalField>
-                        {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) : product[col.fieldView] }}
-                    </ng-template>
-                </td>
-            </ng-container>
-            <td *ngIf="actions.length > 0">
-                <button *ngFor="let action of actions" (click)="onActionClick(action.action, product)">
-                  {{ action.label }}
-                </button>
-            </td>
-        </tr>
-    </tbody>
+<div class="table-wrapper">
+    <div class="table-container" (scroll)="onScroll($event)">
 
-    <tfoot>
-        <tr style="  position: sticky; bottom: 0;">
-            <ng-container *ngFor="let col of columns; let i = index">
-                <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
-                    <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
-                        {{ getTotalValue(i) }}
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
+                            <div style="display: flex; justify-content: space-between;" [style.width]="col.width">
+                                <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
+                                    [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
+                                    (sortChange)="productsService.onSortChange($event)">
+                                </app-search-filter-sort>
+                                <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
+                                    (filterChange)="productsService.onFilterChange($event)"
+                                    (sortChange)="productsService.onSortChange($event)">
+                                </app-date-filter>
+                                <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
+                                    (filterChange)="productsService.onFilterChange($event)"
+                                    (sortChange)="productsService.onSortChange($event)">
+                                </app-number-filter>
+                                <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
+                                    [fieldNames]="'name'" [enam]="null" [Field]="col.field"
+                                    [filterType]="col.filterType" [searchField]="col.searchField"
+                                    (filterChange)="productsService.onFilterChange($event)"
+                                    (sortChange)="productsService.onSortChange($event)">
+                                </app-uuid-search-filter-sort>
+                                <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
+                                    [enam]="statuses" [Field]="col.field" [filterType]="1"
+                                    (filterChange)="productsService.onFilterChange($event)"
+                                    (sortChange)="productsService.onSortChange($event)">
+                                </app-uuid-search-filter-sort>
+                            </div>
+                        </th>
                     </ng-container>
-                    <ng-template #emptyCell></ng-template>
-                </td>
-            </ng-container>
-            <td></td>
-            <td></td>
-        </tr>
-    </tfoot>
-</table>
+                </tr>
+                <tr>
+                    <ng-container *ngFor="let col of columns">
+                        <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
+                    </ng-container>
+                    <th *ngIf="actions.length > 0">Действия</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let product of productsService.products" class="invoice-row">
+                    <ng-container *ngFor="let col of columns">
+                        <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
+                            (dblclick)="onRowDblClick($event, product, col.fieldView)">
+                            <ng-container *ngIf="col.fieldView === 'dateTime'; else normalField">
+                                {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
+                            </ng-container>
+                            <ng-template #normalField>
+                                {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
+                                product[col.fieldView] }}
+                            </ng-template>
+                        </td>
+                    </ng-container>
+                    <td *ngIf="actions.length > 0">
+                        <button *ngFor="let action of actions" (click)="onActionClick(action.action, product)">
+                            {{ action.label }}
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+
+            <tfoot>
+                <tr style="  position: sticky; bottom: 0;">
+                    <ng-container *ngFor="let col of columns; let i = index">
+                        <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
+                            <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                                {{ getTotalValue(i) }}
+                            </ng-container>
+                            <ng-template #emptyCell></ng-template>
+                        </td>
+                    </ng-container>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

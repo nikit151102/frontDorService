@@ -38,22 +38,90 @@ export class ProductsComponent implements OnChanges, OnInit {
     if (changes['counterpartyId']) {
       this.productsService.counterpartyId = this.counterpartyId;
       this.productsService.endpoint = this.endpoint;
-      this.productsService.loadProducts();
+      this.loadProducts();
     }
   }
 
   selectedProduct: any;
   selectedColumns: string[] = [];
 
+
+
+  loadProducts(reset = false) {
+    if (reset) {
+      this.productsService.currentPage = 0;
+      this.productsService.currentPage = 0
+      this.selectedProduct = [];
+    }
+
+    if (this.productsService.loading) return;
+
+    this.productsService.loading = true;
+
+    this.productsService.getProductsByCounterparty(
+      this.counterpartyId,
+      this.productsService.currentPage,
+      this.productsService.pageSize
+    ).subscribe(
+      (response) => {
+        const mapInvoice = (invoice: any) => {
+          const transformed = {
+            ...invoice,
+            expenseSum: invoice.expenseSum?.toString().replace('.', ','),
+            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
+          };
+
+          return transformed;
+        };
+
+        let newInvoices = [];
+        if (response.documentMetadata && response.documentMetadata.data) {
+          newInvoices = response.documentMetadata.data.map(mapInvoice);
+        } else if (response.data) {
+          newInvoices = response.data.map(mapInvoice);
+        }``
+
+        if (response.totalInfo && response.totalInfo?.totalPagesCount) {
+          this.productsService.totalRecords = response.totalInfo?.totalPagesCount * this.productsService.pageSize;
+        }
+
+        if (reset || this.productsService.currentPage === 0) {
+          this.selectedProduct = newInvoices;
+        } else {
+          this.selectedProduct = [...this.selectedProduct, ...newInvoices];
+        }
+
+        this.productsService.totalPages = response.totalPages;
+        this.productsService.currentPage++;
+        this.productsService.currentPage++
+        this.productsService.loading = false;
+      },
+      (error) => {
+        this.productsService.loading = false;
+      }
+    );
+  }
+
+
+  onScroll(event: any) {
+    const element = event.target;
+    const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
+
+    if (atBottom && this.productsService.totalPages && this.productsService.currentPage < this.productsService.totalPages) {
+      this.loadProducts();
+    }
+  }
+
+
   ngOnInit() {
     this.selectedColumns = this.columns.map((col: any) => col.field);
-    console.log('this.columns',this.columns)
+    console.log('this.columns', this.columns)
     this.updateColumnVisibility();
 
   }
 
   updateColumnVisibility() {
-    this.columns.forEach((col:any) => {
+    this.columns.forEach((col: any) => {
       col.visible = this.selectedColumns.includes(col.field);
     });
   }
@@ -66,7 +134,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   getTotalValue(columnIndex: number): any {
     if (!this.productsService.totalInfo) return null;
 
-    const column = this.totalInfoColumn.find((col:any) => col.columnNum === columnIndex);
+    const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
     const value = column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
 
     return typeof value === 'number' ? value.toString().replace('.', ',') : value;
@@ -88,43 +156,43 @@ export class ProductsComponent implements OnChanges, OnInit {
   getStatusLabel(value: number): string {
     return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';
   }
-  
+
 
 
   onActionClick(actionName: string, product: any) {
     if (this.productService && typeof this.productService[actionName] === 'function') {
-      this.productService[actionName](product); 
+      this.productService[actionName](product);
     } else {
       console.error(`Method ${actionName} does not exist on ProductsService`);
     }
   }
 
 
-  isEditInvoice:boolean = false;
+  isEditInvoice: boolean = false;
   selectInvoiceId: string = '';
 
   onRowDblClick(event: MouseEvent, product: any, field: string) {
 
     if (field == 'docInvoice') {
-      console.log('field',field)
+      console.log('field', field)
       this.isEditInvoice = false;
       this.selectInvoiceId = product.docInvoiceId;
     }
   }
 
-  
-  
-  dropdownVisible: { [key: string]: boolean } = {}; 
+
+
+  dropdownVisible: { [key: string]: boolean } = {};
 
   toggleDropdown(productId: string) {
-      Object.keys(this.dropdownVisible).forEach(id => {
-          if (id !== productId) this.dropdownVisible[id] = false;
-      });
-  
-      this.dropdownVisible[productId] = !this.dropdownVisible[productId];
-  }
-  
+    Object.keys(this.dropdownVisible).forEach(id => {
+      if (id !== productId) this.dropdownVisible[id] = false;
+    });
 
-  verificationInvoice(id:string, status:number){}
-  
+    this.dropdownVisible[productId] = !this.dropdownVisible[productId];
+  }
+
+
+  verificationInvoice(id: string, status: number) { }
+
 }
