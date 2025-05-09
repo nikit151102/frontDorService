@@ -88,7 +88,7 @@ export class InvoicePaymentComponent implements OnInit {
         this.invoicePaymentService.visibleModal(false)
         this.invoicesService.addItemToStart(data.documentMetadata.data);
         this.invoicesService.totalInfo = data.totalInfo;
-        this.dateTime = new Date();
+        this.dateTime = undefined;
         this.amount = 0;
         this.number = '';
       },
