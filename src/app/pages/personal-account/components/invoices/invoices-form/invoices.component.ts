@@ -731,8 +731,26 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
 
-
   saveAndSendInvoice() {
+    if (this.selectedInvoice && !this.selectedInvoice.id) {
+      const requiredFields = [
+        'number',
+        'dateTime',
+        'dateTime',
+        'status',
+        'type',
+        'productList',
+
+      ];
+
+      const isValid = this.validateInvoice(this.selectedInvoice, requiredFields);
+
+      if (!isValid) {
+        this.toastService.showWarn('Ошибка', 'Пожалуйста, заполните все обязательные поля');
+        return;
+      }
+    }
+
     this.saveInvoice((invoice: any) => {
       let currentRole = this.jwtService.getDecodedToken().email;
       if ((currentRole == '3' || currentRole != '2') && currentRole != '1') {
@@ -745,6 +763,38 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     });
   }
 
+  private validateInvoice(invoice: any, requiredFields: string[]): boolean {
+    for (const field of requiredFields) {
+      if (invoice[field] === null || invoice[field] === undefined || invoice[field] === '') {
+        console.error(`Обязательное поле ${field} не заполнено`);
+        return false;
+      }
+    }
+
+    if (invoice.productList && invoice.productList.length > 0) {
+      const productRequiredFields = [
+        'amount',
+        'date',
+        'measurementUnitId',
+        'name',
+        'productTargetId',
+        'quantity',
+        'sumAmount'
+      ];
+
+      for (const product of invoice.productList) {
+        for (const field of productRequiredFields) {
+          if (product[field] === null || product[field] === undefined ||
+            product[field] === '' || (typeof product[field] === 'number' && product[field] === 0)) {
+            return false;
+          }
+        }
+      }
+    } else {
+      return false;
+    }
+    return true;
+  }
 
   newIncoice: boolean = false;
   createNewInvoice() {
@@ -777,8 +827,8 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       console.log(' Объекты отличаются')
       this.dialogVisible = true;
       this.showConfirmDialog = true;
-      if(event)
-      event.preventDefault();
+      if (event)
+        event.preventDefault();
     } else {
       this.selectedInvoice = null;
       this.newIncoice = false;
