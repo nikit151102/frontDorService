@@ -19,8 +19,7 @@ import { InvoicesFormComponent } from '../invoices/invoices-form/invoices.compon
     NumberFilterComponent,
     UuidSearchFilterSortComponent,
     FormsModule,
-    MultiSelectModule,
-    InvoicesFormComponent
+    MultiSelectModule
   ],
   templateUrl: './products.component.html',
   styleUrl: './products.component.scss'
@@ -86,9 +85,9 @@ export class ProductsComponent implements OnChanges, OnInit {
         }
 
         if (reset || this.productsService.currentPage === 0) {
-          this.selectedProduct = newInvoices;
+          this.productsService.products = newInvoices;
         } else {
-          this.selectedProduct = [...this.selectedProduct, ...newInvoices];
+          this.productsService.products = [...this.productsService.products, ...newInvoices];
         }
 
         this.productsService.totalPages = response.totalPages;
