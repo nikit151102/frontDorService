@@ -422,12 +422,13 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
     const managerDocTypeFromSession = sessionStorage.getItem('managerDocType')
+
     let dataForm: any = {
         date: model.date || '',
         auto: model.auto || '',
         placeFromId: model.placeFromId || null,
         placeToId: model.placeToId || null,
-        organizationId:  model.organizationId || null,
+        organizationId: model.organizationId || null,
         cargoId: model.cargoId || null,
         ttn: model.ttn || 0,
         weight: model.weight || 0,
@@ -437,6 +438,41 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         paymentType: model.paymentType || 0,
         comment: model.comment || '',
     };
+
+    if (send) {
+        const requiredFields = [
+            'date',
+            'auto',
+            'placeFromId',
+            'placeToId',
+            'organizationId',
+            'cargoId',
+            'ttn',
+            'weight',
+            'amount',
+            'managerDocType',
+            'status',
+            'paymentType'
+        ];
+
+        for (const field of requiredFields) {
+            if (model[field] === null || model[field] === undefined || model[field] === '' ||
+                (typeof model[field] === 'number' && model[field] === 0)) {
+                toastService.showError('Ошибка', `Для отправки необходимо заполнить все обязательные поля`);
+                return;
+            }
+        }
+
+        // Проверка числовых полей на минимальные значения
+        const numericFields = ['ttn', 'weight', 'amount'];
+        for (const field of numericFields) {
+            if (model[field] !== undefined && model[field] !== null && model[field] < 0) {
+                toastService.showError('Ошибка', `Для отправки необходимо заполнить все обязательные поля`);
+                return;
+            }
+        }
+    }
+
     if (!model.cargoId) {
         delete dataForm.cargoId;
     }
