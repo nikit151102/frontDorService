@@ -25,7 +25,7 @@ interface QueryDto {
 
 
 
-@Injectable({ providedIn: 'any' })
+@Injectable({ providedIn: 'root' })
 export class ProductsService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
@@ -71,23 +71,33 @@ export class ProductsService {
         type: 1,
       });
     }
-
-    let defaultFilter = {
-      field: 'DocInvoice.Partner.Type',
-      values: [typeValue],
-      type: 1
-    }
-
-
-    const filterExists = this.queryData.filters.some(filter =>
-      filter.field === defaultFilter.field &&
-      JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
-      filter.type === defaultFilter.type
+console.log('defaultFiltersdefaultFilters', this.defaultFilters)
+console.log('this.queryData.filters',this.queryData.filters)
+    const hasAccountPartnerTypeFilter = this.queryData.filters.some(
+      (filter: any) => filter.field === 'DocInvoice.Partner.Type'
     );
 
-    if (!filterExists) {
-      this.queryData.filters.push(defaultFilter);
+    let defaultFilter: any;
+console.log('hasAccountPartnerTypeFilter',hasAccountPartnerTypeFilter)
+    if (!hasAccountPartnerTypeFilter) {
+      defaultFilter = {
+        field: 'DocInvoice.Partner.Type',
+        values: [typeValue],
+        type: 1
+      }
     }
+
+    
+
+    // const filterExists = this.queryData.filters.some(filter =>
+    //   filter.field === defaultFilter.field &&
+    //   JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
+    //   filter.type === defaultFilter.type
+    // );
+
+    // if (!filterExists) {
+    //   this.queryData.filters.push(defaultFilter);
+    // }
 
     if (!this.queryData.sorts) {
       this.queryData.sorts = [];

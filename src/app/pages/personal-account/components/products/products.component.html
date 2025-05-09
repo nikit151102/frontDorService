@@ -21,27 +21,27 @@
                         <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
                             <div style="display: flex; justify-content: space-between;" [style.width]="col.width">
                                 <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
-                                    [filterType]="1" (filterChange)="productsService.onFilterChange($event)"
-                                    (sortChange)="productsService.onSortChange($event)">
+                                    [filterType]="1" (filterChange)="productsServ.onFilterChange($event)"
+                                    (sortChange)="productsServ.onSortChange($event)">
                                 </app-search-filter-sort>
                                 <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
-                                    (filterChange)="productsService.onFilterChange($event)"
-                                    (sortChange)="productsService.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event)"
+                                    (sortChange)="productsServ.onSortChange($event)">
                                 </app-date-filter>
                                 <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
-                                    (filterChange)="productsService.onFilterChange($event)"
-                                    (sortChange)="productsService.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event)"
+                                    (sortChange)="productsServ.onSortChange($event)">
                                 </app-number-filter>
                                 <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
                                     [fieldNames]="'name'" [enam]="null" [Field]="col.field"
                                     [filterType]="col.filterType" [searchField]="col.searchField"
-                                    (filterChange)="productsService.onFilterChange($event)"
-                                    (sortChange)="productsService.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event)"
+                                    (sortChange)="productsServ.onSortChange($event)">
                                 </app-uuid-search-filter-sort>
                                 <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
                                     [enam]="statuses" [Field]="col.field" [filterType]="1"
-                                    (filterChange)="productsService.onFilterChange($event)"
-                                    (sortChange)="productsService.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event)"
+                                    (sortChange)="productsServ.onSortChange($event)">
                                 </app-uuid-search-filter-sort>
                             </div>
                         </th>
@@ -56,7 +56,7 @@
             </thead>
 
             <tbody>
-                <tr *ngFor="let product of productsService.products" class="invoice-row">
+                <tr *ngFor="let product of productsServ.products" class="invoice-row">
                     <ng-container *ngFor="let col of columns">
                         <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
                             (dblclick)="onRowDblClick($event, product, col.fieldView)">

@@ -32,12 +32,16 @@ export class ProductsComponent implements OnChanges, OnInit {
   @Input() totalInfoColumn: any;
   @Input() actions: { label: string, action: string }[] = []; // изменено на строку (название метода)
   @Input() productService!: any;
-
+  @Input() productsServ:any
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
-      this.productsService.counterpartyId = this.counterpartyId;
-      this.productsService.endpoint = this.endpoint;
-      this.loadProducts();
+      this.productsServ.counterpartyId = this.counterpartyId;
+      this.productsServ.endpoint = this.endpoint;
+ 
+
+      if(this.productsServ){
+ this.loadProducts();
+      }
     }
   }
 
@@ -48,21 +52,21 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   loadProducts(reset = false) {
     if (reset) {
-      this.productsService.currentPage = 0;
-      this.productsService.currentPage = 0
+      this.productsServ.currentPage = 0;
+      this.productsServ.currentPage = 0
       this.selectedProduct = [];
     }
 
-    if (this.productsService.loading) return;
+    if (this.productsServ.loading) return;
 
-    this.productsService.loading = true;
+    this.productsServ.loading = true;
 
-    this.productsService.getProductsByCounterparty(
+    this.productsServ.getProductsByCounterparty(
       this.counterpartyId,
-      this.productsService.currentPage,
-      this.productsService.pageSize
+      this.productsServ.currentPage,
+      this.productsServ.pageSize
     ).subscribe(
-      (response) => {
+      (response: any) => {
         const mapInvoice = (invoice: any) => {
           const transformed = {
             ...invoice,
@@ -81,22 +85,22 @@ export class ProductsComponent implements OnChanges, OnInit {
         }``
 
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
-          this.productsService.totalRecords = response.totalInfo?.totalPagesCount * this.productsService.pageSize;
+          this.productsServ.totalRecords = response.totalInfo?.totalPagesCount * this.productsServ.pageSize;
         }
 
-        if (reset || this.productsService.currentPage === 0) {
-          this.productsService.products = newInvoices;
+        if (reset || this.productsServ.currentPage === 0) {
+          this.productsServ.products = newInvoices;
         } else {
-          this.productsService.products = [...this.productsService.products, ...newInvoices];
+          this.productsServ.products = [...this.productsServ.products, ...newInvoices];
         }
-        this.productsService.totalInfo = response.totalInfo;
-        this.productsService.totalPages = response.totalPages;
-        this.productsService.currentPage++;
-        this.productsService.currentPage++
-        this.productsService.loading = false;
+        this.productsServ.totalInfo = response.totalInfo;
+        this.productsServ.totalPages = response.totalPages;
+        this.productsServ.currentPage++;
+        this.productsServ.currentPage++
+        this.productsServ.loading = false;
       },
-      (error) => {
-        this.productsService.loading = false;
+      (error: any) => {
+        this.productsServ.loading = false;
       }
     );
   }
@@ -106,7 +110,7 @@ export class ProductsComponent implements OnChanges, OnInit {
     const element = event.target;
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
 
-    if (atBottom && this.productsService.totalPages && this.productsService.currentPage < this.productsService.totalPages) {
+    if (atBottom && this.productsServ.totalPages && this.productsServ.currentPage < this.productsServ.totalPages) {
       this.loadProducts();
     }
   }
@@ -131,10 +135,10 @@ export class ProductsComponent implements OnChanges, OnInit {
 
 
   getTotalValue(columnIndex: number): any {
-    if (!this.productsService.totalInfo) return null;
+    if (!this.productsServ.totalInfo) return null;
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
-    const value = column ? this.productsService.totalInfo?.[column.value] ?? 0 : null;
+    const value = column ? this.productsServ.totalInfo?.[column.value] ?? 0 : null;
 
     return typeof value === 'number' ? value.toString().replace('.', ',') : value;
   }
@@ -149,7 +153,7 @@ export class ProductsComponent implements OnChanges, OnInit {
     { label: 'Удалено', value: 6 }
   ];
 
-  constructor(public productsService: ProductsService) { }
+  constructor() { }
 
 
   getStatusLabel(value: number): string {

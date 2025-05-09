@@ -5,6 +5,7 @@ import { ProductsComponent } from '../../../components/products/products.compone
 import { JwtService } from '../../../../../services/jwt.service';
 import { BUTTON_SETS } from './button-config';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
+import { ProductsService } from '../../../components/products/products.service';
 
 @Component({
   selector: 'app-invoices-content',
@@ -19,7 +20,8 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   selectedComponent: string = 'invoices';
 
   constructor(private jwtService: JwtService,
-    private invoicesService: InvoicesService
+    private invoicesService: InvoicesService,
+    public productsService:ProductsService
   ) { }
 
   ngOnInit(): void {
@@ -27,8 +29,26 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       field: 'Partner.Type',
       values: [0,1,5],
       type: 1
-    }]
+    },
+    {
+      field: 'DocPaymentType',
+      values: [0],
+      type: 1
+    },
+  ]
 
+    this.productsService.queryData.filters = [{
+      field: 'DocInvoice.Partner.Type',
+      values: [0,1,5],
+      type: 1
+    },
+  {
+      field: 'ManagerDocType',
+      values: [0],
+      type: 1
+    }
+  ]
+  
     this.jwtService.getDecodedToken()
   }
 

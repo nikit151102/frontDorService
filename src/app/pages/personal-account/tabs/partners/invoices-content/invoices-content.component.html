@@ -9,5 +9,5 @@
 </div>
 <div *ngIf="selectedComponent === 'products'">
     <app-products [counterpartyId]="counterpartyId" [columns]="columns" [totalInfoColumn]="totalInfoColumn"
-        [endpoint]="'api/CommercialWork/Product/Filter'"></app-products>
+        [endpoint]="'api/CommercialWork/Product/Filter'" [productsServ]="productsService"></app-products>
 </div>
