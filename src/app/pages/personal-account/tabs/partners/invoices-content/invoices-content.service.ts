@@ -69,10 +69,11 @@ export class InvoicesContentService {
       invoiceid = invoice.id;
     }
     if (invoice.id) {
+      
       return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
         {
           queryDto: {
-            filters: filters,
+            filters: [filters],
             sorts: []
           },
           entityDto: invoice
@@ -93,7 +94,7 @@ export class InvoicesContentService {
       return this.http.post<any>(`${environment.apiUrl}/${endpoint}`,
         {
          queryDto: {
-            filters: filters,
+            filters: [filters],
             sorts: []
           },
           entityDto: invoice
@@ -120,7 +121,7 @@ export class InvoicesContentService {
       {
         body: {
           queryDto: {
-            filters: filters,
+            filters: [filters],
             sorts: []
           },
           entityDto: invoice
