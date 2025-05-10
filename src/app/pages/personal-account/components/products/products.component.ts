@@ -96,7 +96,6 @@ export class ProductsComponent implements OnChanges, OnInit {
         this.productsServ.totalInfo = response.totalInfo;
         this.productsServ.totalPages = response.totalPages;
         this.productsServ.currentPage++;
-        this.productsServ.currentPage++
         this.productsServ.loading = false;
       },
       (error: any) => {
