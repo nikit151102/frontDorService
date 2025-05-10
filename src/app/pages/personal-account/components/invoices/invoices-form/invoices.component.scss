@@ -143,19 +143,6 @@
 }
 
 
-:host ::ng-deep  {
-    width: 90%;
-    position: fixed;
-    bottom: 0;
-    padding-bottom: 10px;
-    background: #fff;
-    display: flex;
-    flex-direction: row-reverse;
-    gap: 15px;
-    z-index: 999;
-}
-
-
 
 
 .invoice-table {
