@@ -11,12 +11,13 @@ import { JwtService } from '../../../../../services/jwt.service';
 export class CashMenuComponent implements OnInit {
 
   @Output() selectedNameChange = new EventEmitter<string>();
-  
+
   selectedName: string = '';
   items: any[] = [
-    { name: 'Механик', access: 'MechanicAccess', antonCashType: 0},
+    { name: 'Механик', access: 'MechanicAccess', antonCashType: 0 },
     { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
-    { name: 'Дима', access: 'DimaAccess', antonCashType: 2 },
+    { name: 'Дима', access: 'DimaAccess', antonCashType: 5 },
+    { name: 'Дима база', access: 'DimaAccess', antonCashType: 2 },
     { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
     { name: 'Снабженец', access: 'SupplierAccess', antonCashType: 4 },
   ];
