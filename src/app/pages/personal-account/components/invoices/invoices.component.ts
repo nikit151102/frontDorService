@@ -367,6 +367,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
   deleteInvoice(invoiceId: any) {
+<<<<<<< HEAD
+=======
+
+    console.log('invoiceId', invoiceId)
+>>>>>>> test-api-endpoints
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
@@ -381,7 +386,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         }
 
-        this.invoiceService.deleteInvoice(invoiceId.id, endpoint).subscribe(
+        this.invoiceService.deleteInvoice(invoiceId, endpoint, this.invoicesService.defaultFilters).subscribe(
           (invoice: any) => {
             this.invoicesService.removeItemById(invoiceId.id);
             this.invoicesService.totalInfo = invoice.totalInfo;
@@ -408,7 +413,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         this.invoiceService.sendingVerification(this.transformToSecondFormat(invoice), status, this.endpoint).subscribe(
           (response: any) => {
-            // this.toastService.showSuccess('', invoice.message);
             this.invoicesService.updateActiveData(response.data);
           },
           (error) => {
@@ -429,8 +433,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
       docAccountType: source.docAccountType,
       drafted: source.drafted,
       expenseSum: this.parseNumberWithComma(source.expenseSum),
+<<<<<<< HEAD
       id: source.id,
       incomeSum: this.parseNumberWithComma(source.incomeSum),
+=======
+      incomeSum: this.parseNumberWithComma(source.incomeSum),
+      id: source.id,
+>>>>>>> test-api-endpoints
       notifyStatus: source.notifyStatus,
       number: source.number,
       partnerId: source.partner?.id ?? source.partnerId ?? null,
@@ -452,6 +461,18 @@ export class InvoicesComponent implements OnChanges, OnInit {
     return isNaN(parsed) ? null : parsed;
   }
 
+
+  private parseNumberWithComma(value: string | number | null | undefined): number | null {
+    if (value === null || value === undefined) {
+      return null;
+    }
+    if (typeof value === 'number') {
+      return value;
+    }
+    const cleanedValue = value.replace(/\s/g, '').replace(/,/g, '.');
+    const parsed = parseFloat(cleanedValue);
+    return isNaN(parsed) ? null : parsed;
+  }
 
 
   selectInvoiceId: any;

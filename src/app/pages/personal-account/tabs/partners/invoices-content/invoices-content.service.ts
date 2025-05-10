@@ -28,7 +28,7 @@ interface DocInvoice {
 })
 export class InvoicesContentService {
 
-  constructor(private http: HttpClient, private router:Router) { }
+  constructor(private http: HttpClient, private router: Router) { }
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -59,46 +59,98 @@ export class InvoicesContentService {
     });
   }
 
-  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null): Observable<any> {
+  transformFilters(rawFilters: any): any[] {
+    try {
+      if (Array.isArray(rawFilters)) {
+        return rawFilters.filter(Boolean).map(filter =>
+          filter.field ? filter : Object.values(filter).find((f: any) => f?.field)
+        ).filter(Boolean);
+      }
+
+      if (rawFilters && typeof rawFilters === 'object') {
+        return Object.values(rawFilters)
+          .map((item: any) => item?.field ? item : Object.values(item || {}).find((f: any) => f?.field))
+          .filter(Boolean);
+      }
+      return [];
+    } catch (e) {
+      console.error('Error transforming filters:', e);
+      return [];
+    }
+  }
+
+  saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let invoiceid;
-    console.log('invoice-----------------', invoice)
     if (invoice.cargoId) {
       invoiceid = invoice.cargoId;
     } else {
       invoiceid = invoice.id;
     }
     if (invoice.id) {
-      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`, invoice, {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }),
-      });
+
+      return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
+        {
+          queryDto: {
+            filters: this.transformFilters(filters),
+            sorts: []
+          },
+          entityDto: invoice
+        },
+        {
+          headers: new HttpHeaders({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }),
+        });
     } else {
 
-      if(cashType != null){
+      if (cashType != null) {
         invoice.type = cashType;
       }
-      
-      
-      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`, invoice, {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }),
-      });
+
+
+      return this.http.post<any>(`${environment.apiUrl}/${endpoint}`,
+        {
+          queryDto: {
+            filters: this.transformFilters(filters),
+            sorts: []
+          },
+          entityDto: invoice
+        },
+        {
+          headers: new HttpHeaders({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }),
+        });
     }
   }
 
-  deleteInvoice(id: string, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
+  deleteInvoice(
+    invoice: any,
+    endpoint: string = 'api/CommercialWork/DocInvoice',
+    filters: any
+  ): Observable<void> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    return this.http.delete<void>(`${environment.apiUrl}/${endpoint}/${id}`, {
-      headers: new HttpHeaders({
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }),
-    });
+
+    return this.http.request<void>(
+      'DELETE',
+      `${environment.apiUrl}/${endpoint}/${invoice.id}`,
+      {
+        body: {
+          queryDto: {
+            filters: this.transformFilters(filters),
+            sorts: []
+          },
+          entityDto: invoice
+        },
+        headers: new HttpHeaders({
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        })
+      }
+    );
   }
 
   sendingVerification(invoice: any, status: any, endpoint: string = 'api/CommercialWork/DocInvoice'): Observable<void> {
@@ -141,21 +193,21 @@ export class InvoicesContentService {
 
   acceptAccountDraft(id: any, data: any = null) {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-  
+
     const headers = new HttpHeaders({
       'Accept': 'application/json',
       'Authorization': `Bearer ${token}`
     });
-  
+
     const body = data !== null ? data : {};
-  
+
     return this.http.post<void>(
       `${environment.apiUrl}/api/CommercialWork/DocInvoice/AcceptAccountDraft/${id}`,
       body,
       { headers }
     );
   }
-  
+
 
 
   measurementUnits$ = new BehaviorSubject<any[]>([]);

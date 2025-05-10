@@ -202,6 +202,15 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             condition: (product, idCurrentUser) => product.status === 2,
         },
         {
+            label: 'Подписать',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение подписи',
+            messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
+            status: 5,
+            condition: (product, idCurrentUser) => product.status === 0
+        },
+        {
             label: 'Удалить',
             action: 'deleteInvoice',
             class: 'btn-delete',

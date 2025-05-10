@@ -111,7 +111,8 @@ export class CellsComponent implements OnInit {
           productTarget: productTarget.data,
           placeFroms: placeFroms.data,
           organizations: organization.data,
-          storageArea: storageArea.data
+          storageArea: storageArea.data,
+          filter: this.defaultFilters
         };
 
          const formSet = this.currentComponent === 'arrival'
@@ -172,7 +173,8 @@ export class CellsComponent implements OnInit {
             productTarget: productTarget.data,
             placeFroms: placeFroms.data,
             organizations: organization.data,
-            storageArea: storageArea.data
+            storageArea: storageArea.data,
+            filter: this.defaultFilters
           };
 
 
