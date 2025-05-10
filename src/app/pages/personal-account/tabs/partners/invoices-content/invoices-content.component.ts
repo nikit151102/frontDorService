@@ -32,7 +32,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     },
     {
       field: 'DocPaymentType',
-      values: [0],
+      values: [0, 1],
       type: 1
     },
   ]
