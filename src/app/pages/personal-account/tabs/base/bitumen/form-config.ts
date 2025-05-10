@@ -203,15 +203,28 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
         ],
         buttons: [
             {
+                label: 'Изменить',
+                condition: (data, userRoleId) => data.id,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
                 label: 'Сохранить и отправить',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Сохранить',
+                condition: (data, userRoleId) => data != 0 && userRoleId == 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
             },
             {
                 label: 'Черновик',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
             },
             {
                 label: 'Отменить',
+                condition: (data, userRoleId) => true,
                 action: (model: any) => {
                 },
             },
@@ -403,15 +416,28 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
         ],
         buttons: [
             {
+                label: 'Изменить',
+                condition: (data, userRoleId) => data.id,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
                 label: 'Сохранить и отправить',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Сохранить',
+                condition: (data, userRoleId) => data != 0 && userRoleId == 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
             },
             {
                 label: 'Черновик',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
             },
             {
                 label: 'Отменить',
+                condition: (data, userRoleId) => true,
                 action: (model: any) => {
                 },
             },
@@ -445,30 +471,40 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
             'auto',
             'placeFromId',
             'placeToId',
-            'organizationId',
             'cargoId',
             'ttn',
             'weight',
-            'amount',
-            'managerDocType',
-            'status',
-            'paymentType'
+            'amount'
+        ];
+
+        const zeroAllowedFields = ['paymentType'];
+
+        const numericFields = [
+            { name: 'ttn', min: 0 },
+            { name: 'weight', min: 0 },
+            { name: 'amount', min: 0 }
         ];
 
         for (const field of requiredFields) {
-            if (model[field] === null || model[field] === undefined || model[field] === '' ||
-                (typeof model[field] === 'number' && model[field] === 0)) {
-                toastService.showError('Ошибка', `Для отправки необходимо заполнить все обязательные поля`);
+            const value = model[field];
+
+            if (value === null ||
+                value === undefined ||
+                value === '' ||
+                (typeof value === 'number' && value === 0 && !zeroAllowedFields.includes(field))) {
+                toastService.showError('Ошибка', `Поле "${field}" обязательно для заполнения`);
                 return;
             }
         }
 
-        // Проверка числовых полей на минимальные значения
-        const numericFields = ['ttn', 'weight', 'amount'];
         for (const field of numericFields) {
-            if (model[field] !== undefined && model[field] !== null && model[field] < 0) {
-                toastService.showError('Ошибка', `Для отправки необходимо заполнить все обязательные поля`);
-                return;
+            const value = model[field.name];
+
+            if (value !== null && value !== undefined) {
+                if (typeof value !== 'number' || value < field.min) {
+                    toastService.showError('Ошибка', `Поле "${field.name}" должно быть числом не менее ${field.min}`);
+                    return;
+                }
             }
         }
     }

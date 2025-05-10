@@ -70,6 +70,7 @@ export interface InvoiceButton {
     icon?: string;
     action: (model: any, dependencies: any, close: any ) => void;
     disabled?: boolean;
+    condition?: (model: any, userRoleId: any ) => boolean;
 }
 
 export interface InvoiceConfig {

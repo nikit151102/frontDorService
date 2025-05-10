@@ -38,9 +38,12 @@
                 </ng-container>
             </div>
             <p-footer>
-                <button *ngFor="let button of config.buttons" pButton [label]="button.label"
-                    (click)="executeAction(button.label ,button.action)" [disabled]="button.disabled">
+                <ng-container *ngFor="let button of config.buttons">
+                    <button pButton [label]="button.label" (click)="executeAction(button.label ,button.action)"
+                        [disabled]="button.disabled" *ngIf="(button.condition ? button.condition(selectedInvoice, currentRole) : true)"
+                    >
                 </button>
+                </ng-container>
             </p-footer>
         </div>
     </p-dialog>
@@ -48,5 +51,5 @@
 
 <p-confirmDialog></p-confirmDialog>
 
-<app-unsaved-changes-dialog *ngIf="showConfirmDialog" (confirmClose)="confirmCloseDialog()"
-    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>
+<app-unsaved-changes-dialog *ngIf=" showConfirmDialog" (confirmClose)="confirmCloseDialog()"
+                        (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>

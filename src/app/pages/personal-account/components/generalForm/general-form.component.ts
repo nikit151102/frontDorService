@@ -176,8 +176,10 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     }
 
   }
-  ngOnInit(): void {
 
+  currentRole: any;
+  ngOnInit(): void {
+    this.currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.getConfig().subscribe((config: any) => {
       this.config = config;
       this.initializeModel(config);
