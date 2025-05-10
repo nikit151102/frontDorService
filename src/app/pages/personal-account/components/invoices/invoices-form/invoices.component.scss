@@ -326,10 +326,8 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
-    overflow-y: scroll;
-    height: 55%;
-    z-index: 111;
-    position: absolute;
+    height: auto;
+
 }
 
 .product-header,
