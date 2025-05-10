@@ -72,13 +72,16 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
-      this.selectedInvoice = this.data;
 
-      if (this.config && this.areOptionsLoaded()) {
+      this.selectedInvoice = this.data;
+      console.log('this.areOptionsLoaded',this.areOptionsLoaded())
+      if (this.config) { 
+        //  && this.areOptionsLoaded()
         this.patchModelWithData(this.data);
       } else {
         const waitForConfig = setInterval(() => {
-          if (this.config && this.areOptionsLoaded()) {
+          if (this.config ) {
+            // && this.areOptionsLoaded()
             clearInterval(waitForConfig);
             this.patchModelWithData(this.data);
             this.cdr.detectChanges();
@@ -106,7 +109,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       console.warn('Конфигурация или поля не определены');
       return;
     }
-
+console.log('patchModelWithData')
     for (const field of this.config.fields) {
       console.log(`Обрабатываем поле: ${field.name}`);
       if (data.hasOwnProperty(field.name)) {
