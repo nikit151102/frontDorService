@@ -687,13 +687,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   AcceptEditPartner(idPartner: string) {
     this.selectedInvoice.partnerId = idPartner;
-<<<<<<< HEAD
-
-    this.invoiceService.saveInvoice(this.selectedInvoice).subscribe(
-=======
     
     this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
->>>>>>> test-api-endpoints
+
       (invoice) => {
         console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
 

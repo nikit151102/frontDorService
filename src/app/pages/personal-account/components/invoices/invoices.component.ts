@@ -367,11 +367,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
 
   deleteInvoice(invoiceId: any) {
-<<<<<<< HEAD
-=======
-
-    console.log('invoiceId', invoiceId)
->>>>>>> test-api-endpoints
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
@@ -433,13 +428,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
       docAccountType: source.docAccountType,
       drafted: source.drafted,
       expenseSum: this.parseNumberWithComma(source.expenseSum),
-<<<<<<< HEAD
       id: source.id,
       incomeSum: this.parseNumberWithComma(source.incomeSum),
-=======
-      incomeSum: this.parseNumberWithComma(source.incomeSum),
-      id: source.id,
->>>>>>> test-api-endpoints
       notifyStatus: source.notifyStatus,
       number: source.number,
       partnerId: source.partner?.id ?? source.partnerId ?? null,
@@ -447,18 +437,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
       status: source.status,
       type: source.type
     };
-  }
-
-  private parseNumberWithComma(value: string | number | null | undefined): number | null {
-    if (value === null || value === undefined) {
-      return null;
-    }
-    if (typeof value === 'number') {
-      return value;
-    }
-    const cleanedValue = value.replace(/\s/g, '').replace(/,/g, '.');
-    const parsed = parseFloat(cleanedValue);
-    return isNaN(parsed) ? null : parsed;
   }
 
 

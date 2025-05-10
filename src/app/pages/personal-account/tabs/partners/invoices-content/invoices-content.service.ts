@@ -80,6 +80,7 @@ export class InvoicesContentService {
   }
 
   saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
+   console.log('filtersfiltersfiltersfilters',filters)
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let invoiceid;
     if (invoice.cargoId) {

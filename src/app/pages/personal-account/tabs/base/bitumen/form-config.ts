@@ -206,30 +206,22 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [0] }]),
             },
             {
                 label: 'Сохранить и отправить',
-<<<<<<< HEAD
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [0] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [0] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
-=======
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, productsTarget.filter),
-            },
-            {
-                label: 'Черновик',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, productsTarget.filter),
->>>>>>> test-api-endpoints
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [0] }]),
             },
             {
                 label: 'Отменить',
@@ -427,30 +419,22 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [1] }]),
             },
             {
                 label: 'Сохранить и отправить',
-<<<<<<< HEAD
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [1] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [1] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
-=======
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, productsTarget.filter),
-            },
-            {
-                label: 'Черновик',
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, productsTarget.filter),
->>>>>>> test-api-endpoints
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [1] }]),
             },
             {
                 label: 'Отменить',
@@ -529,6 +513,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     if (!model.cargoId) {
         delete dataForm.cargoId;
     }
+    console.log('model model', model)
     if (model.hasOwnProperty('id')) {
         dataForm.id = model.id;
     }
@@ -542,20 +527,20 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         acceptLabel: acceptLabel,
         rejectLabel: 'Отмена',
         onAccept: () => {
-
+            console.log('filter', filter)
             invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument', null, filter).subscribe(
                 (invoice: any) => {
                     if (!send) {
-                        invoicesService.addItemToStart(invoice.data);
+                        invoicesService.addItemToStart(invoice.documentMetadata.data);
                         sendClose();
                     }
-                    toastService.showSuccess('Сохранение', invoice.message);
+                    toastService.showSuccess('Сохранение', invoice.documentMetadata.message);
 
                     const currentRole = jwtService.getDecodedToken().email;
                     // let verificationLevel = currentRole === '5' ? 2 : (currentRole === '1' ? 5 : null);
                     let verificationLevel = currentRole === '1' ? 5 : 2;
                     if (send) {
-                        invoiceService.sendingVerification(invoice.data, verificationLevel, 'api/CommercialWork/ManagerDocument').subscribe(
+                        invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel, 'api/CommercialWork/ManagerDocument').subscribe(
                             (data: any) => {
                                 invoicesService.addItemToStart(data.data);
                                 sendClose();
