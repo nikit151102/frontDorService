@@ -59,21 +59,40 @@ export class InvoicesContentService {
     });
   }
 
+  transformFilters(rawFilters: any): any[] {
+    try {
+      if (Array.isArray(rawFilters)) {
+        return rawFilters.filter(Boolean).map(filter =>
+          filter.field ? filter : Object.values(filter).find((f: any) => f?.field)
+        ).filter(Boolean);
+      }
+
+      if (rawFilters && typeof rawFilters === 'object') {
+        return Object.values(rawFilters)
+          .map((item: any) => item?.field ? item : Object.values(item || {}).find((f: any) => f?.field))
+          .filter(Boolean);
+      }
+      return [];
+    } catch (e) {
+      console.error('Error transforming filters:', e);
+      return [];
+    }
+  }
+
   saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let invoiceid;
-    console.log('invoice-----------------', invoice)
     if (invoice.cargoId) {
       invoiceid = invoice.cargoId;
     } else {
       invoiceid = invoice.id;
     }
     if (invoice.id) {
-      
+
       return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
         {
           queryDto: {
-            filters: [filters],
+            filters: this.transformFilters(filters),
             sorts: []
           },
           entityDto: invoice
@@ -93,8 +112,8 @@ export class InvoicesContentService {
 
       return this.http.post<any>(`${environment.apiUrl}/${endpoint}`,
         {
-         queryDto: {
-            filters: [filters],
+          queryDto: {
+            filters: this.transformFilters(filters),
             sorts: []
           },
           entityDto: invoice
@@ -121,7 +140,7 @@ export class InvoicesContentService {
       {
         body: {
           queryDto: {
-            filters: [filters],
+            filters: this.transformFilters(filters),
             sorts: []
           },
           entityDto: invoice
