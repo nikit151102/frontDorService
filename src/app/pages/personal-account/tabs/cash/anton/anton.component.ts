@@ -7,6 +7,7 @@ import { BUTTON_SETS } from './button-config';
 import { MODEL, getFormSets } from './form-config';
 import { CommonModule } from '@angular/common';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
+import { CacheReferenceService } from '../../../../../services/cache-reference.service';
 
 @Component({
   selector: 'app-anton',
@@ -19,7 +20,8 @@ export class AntonComponent implements OnInit {
   constructor(private generalFormService: GeneralFormService,
     private antonService: AntonService,
     private jwtService: JwtService,
-    private invoicesService: InvoicesService) { }
+    private invoicesService: InvoicesService,
+    private cacheService: CacheReferenceService) { }
   paymentType: number = 2;
   columnsInvoices = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
@@ -35,42 +37,54 @@ export class AntonComponent implements OnInit {
   totalInfoColumnInvoices = [
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
-    { columnNum: 6, value: 'totalSaldoInverse'}
+    { columnNum: 6, value: 'totalSaldoInverse' }
   ]
   productTarget: any;
   buttonConfigs: any;
 
   ngOnInit(): void {
-
-    // this.invoicesService.defaultFilters = [{
-    //   field: 'DocPaymentType',
-    //   values: [2, 3],
-    //   type: 1
-    // },
-    // {
-    //   field: 'antonCashType',
-    //   values: [1],
-    //   type: 1
-    // }]
-
     const currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.setModel(MODEL);
     this.generalFormService.setService(this.antonService);
     this.paymentType = currentRole === '3' ? 2 : 3;
-    Promise.all([
-      this.loadData('/api/Entities/ProductTarget/Filter')
-    ]).then(([productTarget]) => {
-      const dataSources = {
-        productTarget: productTarget.data
-      };
 
-      const formSet = getFormSets(dataSources);
-      this.generalFormService.setConfig(formSet);
-      this.generalFormService.setModel(MODEL);
-      this.generalFormService.setService(this.antonService);
-      this.buttonConfigs = formSet.buttons;
-    });
+    // Используем версию с кэшированием
+    this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
+      .then((productTarget) => {
+        const dataSources = {
+          productTarget: productTarget.data
+        };
 
+        const formSet = getFormSets(dataSources);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.antonService);
+        this.buttonConfigs = formSet.buttons;
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных:', error);
+      });
+  }
+
+  // Новый метод с кэшированием
+  async loadDataWithCache(apiEndpoint: string): Promise<any> {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+    if (cachedData) {
+      console.log('Используем кэшированные данные для', apiEndpoint);
+      return cachedData;
+    }кэширование
+
+    // 2. Если нет в кэше, загружаем с сервера
+    try {
+      const data = await this.loadData(apiEndpoint);
+      // 3. Сохраняем в кэш (TTL 1 час)
+      this.cacheService.set(apiEndpoint, data, 60 * 60 * 1000);
+      return data;
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      throw error;
+    }
   }
 
   loadData(apiEndpoint: string): Promise<any> {

@@ -7,6 +7,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { InvoicesService } from '../invoices/invoices.service';
 import { Router } from '@angular/router';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
+import { CacheReferenceService } from '../../../../services/cache-reference.service';
 
 @Component({
   selector: 'app-invoice-payment',
@@ -33,7 +34,8 @@ export class InvoicePaymentComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     public invoicePaymentService: InvoicePaymentService,
     private invoicesService: InvoicesService,
-    private router:Router
+    private router: Router,
+    private cacheService: CacheReferenceService
   ) { }
 
   ngOnInit() {
@@ -43,9 +45,46 @@ export class InvoicePaymentComponent implements OnInit {
       this.cdr.detectChanges();
     });
 
-    this.loadData('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
-    this.loadData('/api/Entities/ProductTarget/Filter', 'productTarget');
+    this.loadDataWithCache('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
+    this.loadDataWithCache('/api/Entities/ProductTarget/Filter', 'productTarget');
+  }
 
+  // Метод с кэшированием
+  loadDataWithCache(apiEndpoint: string, targetProperty: 'measurementUnit' | 'productTarget') {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+
+    if (cachedData) {
+      console.log('Используем данные из кэша для', apiEndpoint);
+      this.updateComponentData(cachedData, targetProperty);
+      return;
+    }
+
+    // 2. Если нет в кэше, загружаем с сервера
+    this.invoicePaymentService.getProductsByEndpoint(apiEndpoint).subscribe({
+      next: (response: any) => {
+        console.log('Данные получены с сервера для', apiEndpoint);
+
+        // 3. Сохраняем в кэш (TTL 1 час)
+        this.cacheService.set(apiEndpoint, response.data, 60 * 60 * 1000);
+
+        // 4. Обновляем компонент
+        this.updateComponentData(response.data, targetProperty);
+      },
+      error: (error) => {
+        console.error(`Ошибка загрузки ${targetProperty}:`, error);
+      }
+    });
+  }
+
+  // Мтод для обновления данных компонента
+  private updateComponentData(data: any, targetProperty: 'measurementUnit' | 'productTarget') {
+    if (targetProperty === 'measurementUnit') {
+      this.measurementUnit = data;
+    } else if (targetProperty === 'productTarget') {
+      this.productTarget = data;
+    }
+    this.cdr.detectChanges();
   }
 
   onAccept() {
@@ -53,7 +92,7 @@ export class InvoicePaymentComponent implements OnInit {
     const currentUrl = this.router.url;
     const typeValue = currentUrl.includes('/cash') ? 0 : 1;
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
-   
+
 
     let data: any = {
       number: this.number,
@@ -72,7 +111,7 @@ export class InvoicePaymentComponent implements OnInit {
 
     if (typeValue === 0) {
       const antonCashFilter = this.invoicesService.defaultFilters.find(f => f.field === 'antonCashType');
-      
+
       if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
         data.antonCashType = antonCashFilter.values[0];
       }
@@ -100,19 +139,6 @@ export class InvoicePaymentComponent implements OnInit {
     this.invoicePaymentService.visibleModal(false);
   }
 
-  loadData(apiEndpoint: string, targetProperty: 'measurementUnit' | 'productTarget') {
-    this.invoicePaymentService.getProductsByEndpoint(apiEndpoint).subscribe(
-      (response: any) => {
-        if (targetProperty === 'measurementUnit') {
-          this.measurementUnit = response.data;
-        } else if (targetProperty === 'productTarget') {
-          this.productTarget = response.data;
-        }
-        this.cdr.detectChanges();
-      },
-      (error) => console.error(`Ошибка загрузки ${targetProperty}:`, error)
-    );
-  }
 
   onDateInput(event: any) {
     let value = event.target.value;
@@ -134,7 +160,7 @@ export class InvoicePaymentComponent implements OnInit {
         return date;
       }
     }
-    return null; 
+    return null;
   }
-  
+
 }

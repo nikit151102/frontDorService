@@ -9,6 +9,6 @@ import { PersonalAccountPagesRoutingModule } from './personal-account-routing.mo
   imports: [
     CommonModule,
     PersonalAccountPagesRoutingModule
-  ]
+  ],
 })
 export class PersonalAccountModule { }

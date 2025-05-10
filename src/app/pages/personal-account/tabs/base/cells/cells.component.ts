@@ -9,6 +9,7 @@ import { CellsService } from './cells.service';
 import { getFormArrivalSets, MODEL, getFormExpenseSets } from './form-config';
 import { CONFIGPRODUCTS } from './products-conf';
 import { AdditionalDataComponent } from '../additional-data/additional-data.component';
+import { CacheReferenceService } from '../../../../../services/cache-reference.service';
 
 @Component({
   selector: 'app-cells',
@@ -22,7 +23,8 @@ export class CellsComponent implements OnInit {
     private generalFormService: GeneralFormService,
     private cellsService: CellsService,
     private jwtService: JwtService,
-    private invoicesService: InvoicesService
+    private invoicesService: InvoicesService,
+    private cacheService: CacheReferenceService
   ) { }
 
   paymentType: number = 2;
@@ -101,10 +103,10 @@ export class CellsComponent implements OnInit {
     this.generalFormService.setService(this.cellsService);
 
     Promise.all([
-      this.loadData('/api/Entities/Cargo/Filter'),
-      this.loadData('/api/Entities/MiningQuarry/Filter'),
-      this.loadData('/api/Entities/Organization/Filter'),
-      this.loadData('/api/Entities/StorageArea/Filter')
+      this.loadDataWithCache('/api/Entities/Cargo/Filter'),
+      this.loadDataWithCache('/api/Entities/MiningQuarry/Filter'),
+      this.loadDataWithCache('/api/Entities/Organization/Filter'),
+      this.loadDataWithCache('/api/Entities/StorageArea/Filter')
     ])
       .then(([productTarget, placeFroms, organization, storageArea]) => {
         const dataSources = {
@@ -115,20 +117,40 @@ export class CellsComponent implements OnInit {
           filter: this.defaultFilters
         };
 
-         const formSet = this.currentComponent === 'arrival'
-            ? getFormArrivalSets(dataSources)
-            : getFormExpenseSets(dataSources);
+        const formSet = this.currentComponent === 'arrival'
+          ? getFormArrivalSets(dataSources)
+          : getFormExpenseSets(dataSources);
 
-          this.generalFormService.setConfig(formSet);
-          MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
-          this.generalFormService.setModel(MODEL);
-          this.generalFormService.setService(this.cellsService);
-          this.buttonConfigs = formSet.buttons;
-        
+        this.generalFormService.setConfig(formSet);
+        MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
+        this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.cellsService);
+        this.buttonConfigs = formSet.buttons;
       })
       .catch(error => {
         console.error('Error loading data:', error);
       });
+  }
+
+  // Новый метод с кэшированием
+  async loadDataWithCache(apiEndpoint: string): Promise<any> {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+    if (cachedData) {
+      console.log('Используем кэш для', apiEndpoint);
+      return cachedData;
+    }
+
+    // 2. Если нет в кэше, загружаем с сервера
+    try {
+      const data = await this.loadData(apiEndpoint);
+      // 3. Сохраняем в кэш (TTL 1 час)
+      this.cacheService.set(apiEndpoint, data, 60 * 60 * 1000);
+      return data;
+    } catch (error) {
+      console.error('Ошибка загрузки данных:', error);
+      throw error;
+    }
   }
 
   loadData(apiEndpoint: string): Promise<any> {
@@ -147,60 +169,66 @@ export class CellsComponent implements OnInit {
   typeComponent: string = 'invoices';
   productsConf: any;
 
-  switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
+ async switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
     this.typeComponent = typeComponent;
     if (typeComponent == 'invoices') {
-      sessionStorage.setItem('managerDocType', String(typeDocs))
-      this.invoicesService.queryData = { filters: [], sorts: [] };
-      this.invoicesService.defaultFilters = [{
-        field: 'ManagerDocType',
-        values: [typeDocs],
-        type: 1
-      }];
+        sessionStorage.setItem('managerDocType', String(typeDocs));
+        this.invoicesService.queryData = { filters: [], sorts: [] };
+        this.invoicesService.defaultFilters = [{
+            field: 'ManagerDocType',
+            values: [typeDocs],
+            type: 1
+        }];
 
-      this.defaultFilters = { ...this.invoicesService.defaultFilters };
-      this.currentComponent = type;
-      this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+        this.defaultFilters = { ...this.invoicesService.defaultFilters };
+        this.currentComponent = type;
+        this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-      Promise.all([
-        this.loadData('/api/Entities/Cargo/Filter'),
-        this.loadData('/api/Entities/MiningQuarry/Filter'),
-        this.loadData('/api/Entities/Organization/Filter'),
-        this.loadData('/api/Entities/StorageArea/Filter')
-      ])
-        .then(([productTarget, placeFroms, organization, storageArea]) => {
-          const dataSources = {
-            productTarget: productTarget.data,
-            placeFroms: placeFroms.data,
-            organizations: organization.data,
-            storageArea: storageArea.data,
-            filter: this.defaultFilters
-          };
+        try {
+            // Массив эндпоинтов для загрузки
+            const endpoints = [
+                '/api/Entities/Cargo/Filter',
+                '/api/Entities/MiningQuarry/Filter',
+                '/api/Entities/Organization/Filter',
+                '/api/Entities/StorageArea/Filter'
+            ];
 
+            // Загружаем данные с кэшированием
+            const [productTarget, placeFroms, organization, storageArea] = await Promise.all(
+                endpoints.map(endpoint => this.loadDataWithCache(endpoint))
+            );
 
-        const formSet = type === 'arrival'
-          ? getFormArrivalSets(dataSources)
-          : getFormExpenseSets(dataSources);
+            const dataSources = {
+                productTarget: productTarget.data,
+                placeFroms: placeFroms.data,
+                organizations: organization.data,
+                storageArea: storageArea.data,
+                filter: this.defaultFilters
+            };
 
-        MODEL.managerDocType = type === 'arrival' ? 2 : 3;
+            const formSet = type === 'arrival'
+                ? getFormArrivalSets(dataSources)
+                : getFormExpenseSets(dataSources);
 
-        this.generalFormService.setService(this.cellsService);
-        this.generalFormService.setConfig(formSet);
-        this.generalFormService.setModel(MODEL);
+            MODEL.managerDocType = type === 'arrival' ? 2 : 3;
 
-        this.buttonConfigs = formSet.buttons;
-      }).catch(error => {
-        console.error('Ошибка загрузки данных:', error);
-      });
-    } else {
-      if (code !== null) {
-        const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
-        if (foundProduct) {
-          this.productsConf = foundProduct;
+            this.generalFormService.setService(this.cellsService);
+            this.generalFormService.setConfig(formSet);
+            this.generalFormService.setModel(MODEL);
+
+            this.buttonConfigs = formSet.buttons;
+        } catch (error) {
+            console.error('Ошибка загрузки данных:', error);
         }
-      }
+    } else {
+        if (code !== null) {
+            const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
+            if (foundProduct) {
+                this.productsConf = foundProduct;
+            }
+        }
     }
-  }
+}
 
   getButtonConfigs() {
     return BUTTON_SETS;

@@ -53,8 +53,8 @@ export class ScoreFormComponent implements OnInit, OnChanges  {
       this.cdr.detectChanges();
     });
 
-    this.loadData('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
-    this.loadData('/api/Entities/ProductTarget/Filter', 'productTarget');
+    // this.loadData('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
+    // this.loadData('/api/Entities/ProductTarget/Filter', 'productTarget');
 
   }
 

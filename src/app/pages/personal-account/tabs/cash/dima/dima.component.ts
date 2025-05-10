@@ -7,6 +7,7 @@ import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { BUTTON_SETS } from './button-config';
 import { DimaService } from './dima.service';
 import { MODEL, getFormSets } from './form-config';
+import { CacheReferenceService } from '../../../../../services/cache-reference.service';
 
 @Component({
   selector: 'app-dima',
@@ -19,7 +20,8 @@ export class DimaComponent implements OnInit {
   constructor(private generalFormService: GeneralFormService,
     private dimaService: DimaService,
     private jwtService: JwtService,
-    private invoicesService: InvoicesService) { }
+    private invoicesService: InvoicesService,
+    private cacheService: CacheReferenceService) { }
   paymentType: number = 2;
   columnsInvoices = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
@@ -31,11 +33,11 @@ export class DimaComponent implements OnInit {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     { field: 'actions', header: 'Действия', type: 'actions', visible: false, width: '10%' },
   ];
-  
+
   totalInfoColumnInvoices = [
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
-    { columnNum: 6, value: 'totalSaldoInverse'}
+    { columnNum: 6, value: 'totalSaldoInverse' }
   ]
   productTarget: any;
   buttonConfigs: any;
@@ -57,21 +59,46 @@ export class DimaComponent implements OnInit {
     this.generalFormService.setModel(MODEL);
     this.generalFormService.setService(this.dimaService);
     this.paymentType = currentRole === '3' ? 2 : 3;
-    Promise.all([
-      this.loadData('/api/Entities/ProductTarget/Filter')
-    ]).then(([productTarget]) => {
-      const dataSources = {
-        productTarget: productTarget.data
-      };
 
-      const formSet = getFormSets(dataSources);
-      this.generalFormService.setConfig(formSet);
-      this.generalFormService.setModel(MODEL);
-      this.generalFormService.setService(this.dimaService);
-      this.buttonConfigs = formSet.buttons;
-    });
+    // Используем версию с кэшированием
+    this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
+      .then((productTarget) => {
+        const dataSources = {
+          productTarget: productTarget.data
+        };
 
+        const formSet = getFormSets(dataSources);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.dimaService);
+        this.buttonConfigs = formSet.buttons;
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных:', error);
+      });
   }
+
+  // Новый метод с кэшированием
+  async loadDataWithCache(apiEndpoint: string): Promise<any> {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+    if (cachedData) {
+      console.log('Используем кэшированные данные для', apiEndpoint);
+      return cachedData;
+    }
+
+    // 2. Если нет в кэше, загружаем с сервера
+    try {
+      const data = await this.loadData(apiEndpoint);
+      // 3. Сохраняем в кэш (TTL 1 час)
+      this.cacheService.set(apiEndpoint, data, 60 * 60 * 1000);
+      return data;
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      throw error;
+    }
+  }
+
 
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {

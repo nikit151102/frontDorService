@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UuidSearchFilterSortService } from './uuid-search-filter-sort.service';
+import { CacheReferenceService } from '../../../services/cache-reference.service';
 
 interface FilterDto {
   field?: string;
@@ -27,9 +28,9 @@ export class UuidSearchFilterSortComponent {
   @Input() searchField: string = '';
   @Input() apiEndpoint: string = ''; // Эндпоинт для запроса
   @Input() fieldNames: string = ''; // Массив полей для отображения в выпадающем списке
-  @Input() Field: string = ''; 
+  @Input() Field: string = '';
   @Input() enam: any = null;
-  
+
   searchTerm: string = '';
   selectedFilters: any[] = [];
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -42,14 +43,15 @@ export class UuidSearchFilterSortComponent {
   endpointDataLoaded = false;
 
   constructor(private uuidSearchFilterSortService: UuidSearchFilterSortService,
-    private elementRef: ElementRef
+    private elementRef: ElementRef,
+    private cacheService: CacheReferenceService
   ) { }
 
   inputWidth: string = '30px';
   bgColor: string = 'transparent';
   borderStyle: string = 'none';
   isSearchOpen: boolean = false;
-  
+
   toggleSearch(isFocused: boolean) {
     if (isFocused) {
       this.inputWidth = '200px';
@@ -57,7 +59,7 @@ export class UuidSearchFilterSortComponent {
       this.borderStyle = '1px solid #007BFF';
       this.isSearchOpen = true;
     } else {
-      setTimeout(() => { 
+      setTimeout(() => {
         this.inputWidth = '30px';
         this.bgColor = 'transparent';
         this.borderStyle = 'none';
@@ -69,31 +71,54 @@ export class UuidSearchFilterSortComponent {
 
   ngOnChanges() {
     console.log('apiEndpointapiEndpoint', this.apiEndpoint);
-  
+
     if (this.apiEndpoint && !this.endpointDataLoaded && this.enam == null) {
-      this.loadData(); 
+      this.loadData();
     }
-  
+
     if (this.enam != null) {
       this.products = this.enam;
       this.endpointDataLoaded = true;
+      this.cacheService.set(this.apiEndpoint, this.enam);
     }
   }
-  
+
 
   loadData() {
-    this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe(
-      (data: any) => {
-        console.log('uuidSearchFilterSortService',data)
-        this.products = data;
-        this.endpointDataLoaded = true;
-        console.log('Данные получены с эндпоинта:', this.products);
-      },
-      (error) => {
-        console.error('Ошибка загрузки данных с эндпоинта:', error);
-      }
-    );
+  // 1. Проверяем кэш
+  const cachedData = this.cacheService.get(this.apiEndpoint);
+  
+  if (cachedData) {
+    this.products = cachedData;
+    this.endpointDataLoaded = true;
+    console.log('Данные получены из кэша:', this.products);
+    return;
   }
+
+  // 2. Проверяем, не идет ли уже загрузка
+  if (this.cacheService.isLoading(this.apiEndpoint)) {
+    return;
+  }
+
+  // 3. Устанавливаем флаг загрузки
+  this.cacheService.setLoading(this.apiEndpoint, true);
+
+  this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe({
+    next: (data: any) => {
+      console.log('Данные получены с сервера: loadData', data);
+      this.products = data;
+      this.endpointDataLoaded = true;
+      
+      // Сохраняем в кэш (5 минут TTL)
+      this.cacheService.set(this.apiEndpoint, data);
+      this.cacheService.setLoading(this.apiEndpoint, false);
+    },
+    error: (error) => {
+      console.error('Ошибка загрузки:', error);
+      this.cacheService.setLoading(this.apiEndpoint, false);
+    }
+  });
+}
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
@@ -105,7 +130,7 @@ export class UuidSearchFilterSortComponent {
       values: this.searchTerm ? [this.searchTerm] : [],
       type: 0
     };
-    
+
     this.filterChange.emit(filterDto);
   }
 
@@ -151,20 +176,20 @@ export class UuidSearchFilterSortComponent {
       values: [],
       type: this.filterType
     };
-    this.filterChange.emit(filterDto); 
+    this.filterChange.emit(filterDto);
   }
 
-    @HostListener('document:click', ['$event'])
-    onClickOutside(event: MouseEvent) {
-      const clickedInside = this.elementRef.nativeElement.contains(event.target);
-      if (!clickedInside ) {
-        this.isFilterOpen = false;
-      }
-      if (!clickedInside  && this.inputWidth != '30px') {
-        this.inputWidth = '30px';
-        this.bgColor = 'transparent';
-        this.borderStyle = 'none';
-        this.isSearchOpen = false;
-      }
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = this.elementRef.nativeElement.contains(event.target);
+    if (!clickedInside) {
+      this.isFilterOpen = false;
     }
+    if (!clickedInside && this.inputWidth != '30px') {
+      this.inputWidth = '30px';
+      this.bgColor = 'transparent';
+      this.borderStyle = 'none';
+      this.isSearchOpen = false;
+    }
+  }
 }

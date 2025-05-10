@@ -7,8 +7,10 @@ import { MessageService } from 'primeng/api';
 import { providePrimeNG } from 'primeng/config';
 import Aura from '@primeng/themes/aura';
 import { GlobalErrorHandlerService } from './error-handler.service';
+import { CacheReferenceService } from './services/cache-reference.service';
 export const appConfig: ApplicationConfig = {
   providers: [
+    { provide: CacheReferenceService, useClass: CacheReferenceService },
     importProvidersFrom([BrowserAnimationsModule, HttpClientModule]),
     MessageService,
     provideZoneChangeDetection({ eventCoalescing: true }),
