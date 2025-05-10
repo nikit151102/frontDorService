@@ -75,13 +75,11 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
       this.selectedInvoice = this.data;
       console.log('this.areOptionsLoaded',this.areOptionsLoaded())
-      if (this.config) { 
-        //  && this.areOptionsLoaded()
+      if (this.config && this.areOptionsLoaded()) {
         this.patchModelWithData(this.data);
       } else {
         const waitForConfig = setInterval(() => {
-          if (this.config ) {
-            // && this.areOptionsLoaded()
+          if (this.config && this.areOptionsLoaded()) {
             clearInterval(waitForConfig);
             this.patchModelWithData(this.data);
             this.cdr.detectChanges();
