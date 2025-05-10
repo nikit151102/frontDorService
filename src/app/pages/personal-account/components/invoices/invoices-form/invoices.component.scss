@@ -143,7 +143,7 @@
 }
 
 
-:host ::ng-deep p-footer {
+:host ::ng-deep  {
     width: 90%;
     position: fixed;
     bottom: 0;
@@ -152,6 +152,7 @@
     display: flex;
     flex-direction: row-reverse;
     gap: 15px;
+    z-index: 999;
 }
 
 
@@ -432,4 +433,3 @@ textarea {
 :host ::ng-deep .p-datepicker-header {
     background: #fff;
 }
-
