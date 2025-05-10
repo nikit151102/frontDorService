@@ -1,34 +1,33 @@
-<div style="display: flex;     justify-content: space-between;     background: #f4f4f9;     border-radius: 8px; padding: 5px;   align-items: center;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);" >
+<div
+    style="display: flex;     justify-content: space-between;     background: #f4f4f9;     border-radius: 8px; padding: 5px;   align-items: center;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
     <nav class="nav-menu">
         <ul>
             <li *ngFor="let item of items">
-                <button 
-                    (click)="execute(item.commandName || '')" 
-                    [disabled]="!hasAccess(item.access)"
+                <button (click)="execute(item.commandName || '')" [disabled]="!hasAccess(item.access)"
                     style="position: relative;">
                     {{ item.label }}
-                    
+
                     <!-- Кружок уведомлений -->
-                    <span 
-                        *ngIf="shouldShowNotification(item.notifyKey)" 
-                        class="notification-badge" 
+                    <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge"
                         [ngClass]="getNotificationClass(item.notifyKey)"
-                        (mouseenter)="showTooltip(item.notifyKey, $event)" 
-                        (mouseleave)="hideTooltip()">
+                        (mouseenter)="showTooltip(item.notifyKey, $event)" (mouseleave)="hideTooltip()">
                         {{ getNotificationCount(item.notifyKey) }}
                     </span>
                 </button>
-                
-                 <!-- Всплывающая подсказка с деталями -->
-                 <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
+
+                <!-- Всплывающая подсказка с деталями -->
+                <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
                     <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
                     <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
                 </div>
             </li>
         </ul>
     </nav>
-    
-    
-    <a (click)="execute('exit')" id="exit-btn">Выйти</a>
-    
+
+
+    <div style="display: flex; gap: 10px;">
+        <a (click)="refreshReference()" id="exit-btn">Обновить</a>
+        <a (click)="execute('exit')" id="exit-btn">Выйти</a>
+
+    </div>
 </div>

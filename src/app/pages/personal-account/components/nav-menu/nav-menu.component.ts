@@ -5,6 +5,8 @@ import { JwtService } from '../../../../services/jwt.service';
 import { TokenService } from '../../../../services/token.service';
 import { NavMenuService } from './nav-menu.service';
 import { Subscription } from 'rxjs';
+import { CacheReferenceService } from '../../../../services/cache-reference.service';
+import { ToastService } from '../../../../services/toast.service';
 
 interface CustomMenuItem {
   label: string;
@@ -60,7 +62,11 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   constructor(private activatedRoute: ActivatedRoute,
     private jwtService: JwtService, private router: Router,
     private cdr: ChangeDetectorRef,
-    private tokenService: TokenService, private navMenuService: NavMenuService) { }
+    private tokenService: TokenService,
+    private navMenuService: NavMenuService,
+    private cacheService: CacheReferenceService,
+    private toastService: ToastService
+  ) { }
 
   ngOnInit(): void {
     const decodedToken = this.jwtService.getDecodedToken();
@@ -166,18 +172,49 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
 
 
-  isDropdownVisible = false; 
+  isDropdownVisible = false;
 
   onProfileClick(event: MouseEvent): void {
-    this.isDropdownVisible = !this.isDropdownVisible;  
-    event.stopPropagation(); 
+    this.isDropdownVisible = !this.isDropdownVisible;
+    event.stopPropagation();
   }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent): void {
-    const target = event.target as Element; 
+    const target = event.target as Element;
     if (target && !target.closest('.navbar-profile')) {
       this.isDropdownVisible = false;
     }
   }
+
+  refreshReference() {
+    this.toastService.showSuccess('Обновление справочников', 'Начато обновление данных...');
+
+    this.cacheService.refreshAllCachedData().subscribe({
+      next: (results) => {
+        console.log('Обновленные данные:', results);
+
+        if (results.length > 0) {
+          this.toastService.showSuccess(
+            'Обновление завершено',
+            `Успешно обновлено ${results.length} справочников`
+          );
+        } else {
+          this.toastService.showSuccess(
+            'Нет данных для обновления',
+            'Не найдено закэшированных справочников'
+          );
+        }
+      },
+      error: (err) => {
+        console.error('Ошибка при обновлении данных:', err);
+
+        this.toastService.showError(
+          'Ошибка обновления',
+          'Произошла ошибка при обновлении справочников'
+        );
+      }
+    });
+  }
+
 }

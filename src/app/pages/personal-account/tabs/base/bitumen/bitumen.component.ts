@@ -104,6 +104,8 @@ export class BitumenComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const cachedEndpoints = this.cacheService.getAllCachedEndpoints();
+console.log('Все закэшированные эндпоинты:', cachedEndpoints);
     this.switchComponent('arrival', 0, 'invoices');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
