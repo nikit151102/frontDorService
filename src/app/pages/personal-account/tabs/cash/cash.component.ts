@@ -9,6 +9,15 @@ import { EgorComponent } from './egor/egor.component';
 import { CashService } from './cash.service';
 import { SupplierComponent } from './supplier/supplier.component';
 
+enum CashType {
+  MECHANIC = 'Механик',
+  ANTON = 'Антон',
+  DIMA_BASE = 'Дима (база)',
+  EGOR = 'Егор',
+  SUPPLIER = 'Снабженец',
+  DIMA = 'Дима'
+}
+
 @Component({
   selector: 'app-cash',
   imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent],
@@ -19,9 +28,21 @@ export class CashComponent implements OnInit {
 
 
   selectedCashType: number | null = null;
+  titleTab: string = '';
 
   constructor(private invoicesService: InvoicesService, private cashService: CashService) { }
 
+  getTitleTab(): string {
+    switch (this.selectedCashType) {
+      case 0: return CashType.MECHANIC;
+      case 1: return CashType.ANTON;
+      case 2: return CashType.DIMA_BASE;
+      case 3: return CashType.EGOR;
+      case 4: return CashType.SUPPLIER;
+      case 5: return CashType.DIMA;
+      default: return 'Неизвестная вкладка';
+    }
+  }
 
   ngOnInit(): void {
     this.cashService.connectToWebSocket();

@@ -1,6 +1,6 @@
 <div class="container">
-
-    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)">Создать запись</button>
+    <span style="color: #101010c7; font-size: 20px;">База > Организации</span>
+    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)" style="    margin: 20px 0;">Создать запись</button>
     <p-table [value]="data" class="invoice-table">
         <ng-template pTemplate="header">
             <tr>
@@ -90,11 +90,13 @@
                 <div class="form-group-container" [ngClass]="{'two-columns': formFields.length > 4}">
                     <div class="form-group" *ngFor="let field of formFields">
                         <label *ngIf="field.visible == true" [for]="field.field ">{{ field.label }}:</label>
-                        <input *ngIf="field.type === 'text' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
-                            name="{{ field.field }}" class="form-control" required type="text" />
+                        <input *ngIf="field.type === 'text' && field.visible == true" id="{{ field.field }}"
+                            [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
+                            type="text" />
 
-                        <input *ngIf="field.type === 'date' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
-                            name="{{ field.field }}" class="form-control" required type="date" />
+                        <input *ngIf="field.type === 'date' && field.visible == true" id="{{ field.field }}"
+                            [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
+                            type="date" />
 
                         <input *ngIf="field.type === 'number' && field.visible == true" id="{{ field.field }}"
                             [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required

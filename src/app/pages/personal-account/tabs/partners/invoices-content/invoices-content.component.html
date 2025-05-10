@@ -1,11 +1,13 @@
+<span style="color: #101010c7; font-size: 20px;">Контрагенты</span>
 <div class="menu">
     <button class="menu-item" (click)="showComponent('invoices')">Фактуры</button>
     <button class="menu-item" (click)="showComponent('products')">Товары</button>
 </div>
 
 <div *ngIf="selectedComponent === 'invoices'">
-    <app-invoices [counterpartyId]="counterpartyId" [counterpartyData]="counterpartyData" [columns]="columnsInvoices" [buttonConfigs]="getButtonConfigs()"
-        [totalInfoColumn]="totalInfoColumnInvoices" [endpoint]="'api/CommercialWork/DocInvoice'"></app-invoices>
+    <app-invoices [counterpartyId]="counterpartyId" [counterpartyData]="counterpartyData" [columns]="columnsInvoices"
+        [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="totalInfoColumnInvoices"
+        [endpoint]="'api/CommercialWork/DocInvoice'"></app-invoices>
 </div>
 <div *ngIf="selectedComponent === 'products'">
     <app-products [counterpartyId]="counterpartyId" [columns]="columns" [totalInfoColumn]="totalInfoColumn"

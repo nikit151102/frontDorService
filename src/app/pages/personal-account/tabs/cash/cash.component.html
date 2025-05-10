@@ -4,13 +4,14 @@
 
   <!-- Правая часть -->
   <div class="right-content">
+    <span style="color: #101010c7; font-size: 20px;">Касса <ng-container *ngIf="selectedCashType != null"> > {{ getTitleTab() }} </ng-container> </span>
     <ng-container [ngSwitch]="selectedCashType">
-      <app-mechanic *ngSwitchCase="0"></app-mechanic>
-      <app-anton *ngSwitchCase="1"></app-anton>
-      <app-dima *ngSwitchCase="2"></app-dima>
-      <app-egor *ngSwitchCase="3"></app-egor>
-      <app-supplier *ngSwitchCase="4"></app-supplier>
-      <app-dima *ngSwitchCase="5"></app-dima>
+      <app-mechanic *ngSwitchCase="0"></app-mechanic> <!-- Механик -->
+      <app-anton *ngSwitchCase="1"></app-anton> <!-- Антон -->
+      <app-dima *ngSwitchCase="2"></app-dima> <!-- Дима база -->
+      <app-egor *ngSwitchCase="3"></app-egor> <!-- Егор -->
+      <app-supplier *ngSwitchCase="4"></app-supplier> <!-- Снабженец -->
+      <app-dima *ngSwitchCase="5"></app-dima> <!-- Дима -->
     </ng-container>
   </div>
 </div>

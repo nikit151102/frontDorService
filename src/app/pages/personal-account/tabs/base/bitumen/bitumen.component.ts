@@ -24,7 +24,7 @@ export class BitumenComponent implements OnInit {
     private bitumenService: BitumenService,
     private jwtService: JwtService,
     private invoicesService: InvoicesService,
-    private cacheService:CacheReferenceService
+    private cacheService: CacheReferenceService
   ) { }
 
   paymentType: number = 2;
@@ -105,8 +105,8 @@ export class BitumenComponent implements OnInit {
 
   ngOnInit(): void {
     const cachedEndpoints = this.cacheService.getAllCachedEndpoints();
-console.log('Все закэшированные эндпоинты:', cachedEndpoints);
-    this.switchComponent('arrival', 0, 'invoices');
+    console.log('Все закэшированные эндпоинты:', cachedEndpoints);
+    this.switchComponent('arrival', 0, 'invoices', null ,'Приход');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 
@@ -129,113 +129,115 @@ console.log('Все закэшированные эндпоинты:', cachedEnd
   defaultFilters: any
   typeComponent: string = 'invoices';
   productsConf: any;
+  titleTab: any;
 
- async switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
-  this.typeComponent = typeComponent;
-  
-  if (typeComponent == 'invoices') {
-    sessionStorage.setItem('managerDocType', String(typeDocs));
-    this.invoicesService.queryData = { filters: [], sorts: [] };
-    this.invoicesService.defaultFilters = [{
-      field: 'ManagerDocType',
-      values: [typeDocs],
-      type: 1
-    }];
+  async switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null, title: any) {
+    this.typeComponent = typeComponent;
+    this.titleTab = title;
 
-    this.defaultFilters = { ...this.invoicesService.defaultFilters };
-    this.currentComponent = type;
-    this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+    if (typeComponent == 'invoices') {
+      sessionStorage.setItem('managerDocType', String(typeDocs));
+      this.invoicesService.queryData = { filters: [], sorts: [] };
+      this.invoicesService.defaultFilters = [{
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      }];
 
-    // Проверяем кэш для каждого эндпоинта
-    const endpoints = [
-      '/api/Entities/Cargo/Filter',
-      '/api/Entities/MiningQuarry/Filter',
-      '/api/Entities/Organization/Filter',
-      '/api/Entities/StorageArea/Filter'
-    ];
+      this.defaultFilters = { ...this.invoicesService.defaultFilters };
+      this.currentComponent = type;
+      this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-    try {
-      // Проверяем кэш для всех эндпоинтов
-      const cachedData = await this.checkCacheForEndpoints(endpoints);
-      
-      if (cachedData.allCached) {
-        // Все данные есть в кэше
-        console.log('Используем данные из кэша');
-        this.processData(cachedData.results, type);
-      } else {
-        // Загружаем отсутствующие данные
-        console.log('Загружаем отсутствующие данные с сервера');
-        const freshData = await Promise.all(
-          endpoints.map((endpoint, index) => 
-            cachedData.results[index] 
-              ? Promise.resolve(cachedData.results[index]) 
-              : this.loadData(endpoint)
-          )
-        );
-        
-        // Сохраняем новые данные в кэш
-        freshData.forEach((data, index) => {
-          if (!cachedData.results[index] && data) {
-            this.cacheService.set(endpoints[index], data);
-          }
-        });
-        
-        this.processData(freshData, type);
+      // Проверяем кэш для каждого эндпоинта
+      const endpoints = [
+        '/api/Entities/Cargo/Filter',
+        '/api/Entities/MiningQuarry/Filter',
+        '/api/Entities/Organization/Filter',
+        '/api/Entities/StorageArea/Filter'
+      ];
+
+      try {
+        // Проверяем кэш для всех эндпоинтов
+        const cachedData = await this.checkCacheForEndpoints(endpoints);
+
+        if (cachedData.allCached) {
+          // Все данные есть в кэше
+          console.log('Используем данные из кэша');
+          this.processData(cachedData.results, type);
+        } else {
+          // Загружаем отсутствующие данные
+          console.log('Загружаем отсутствующие данные с сервера');
+          const freshData = await Promise.all(
+            endpoints.map((endpoint, index) =>
+              cachedData.results[index]
+                ? Promise.resolve(cachedData.results[index])
+                : this.loadData(endpoint)
+            )
+          );
+
+          // Сохраняем новые данные в кэш
+          freshData.forEach((data, index) => {
+            if (!cachedData.results[index] && data) {
+              this.cacheService.set(endpoints[index], data);
+            }
+          });
+
+          this.processData(freshData, type);
+        }
+      } catch (error) {
+        console.error('Error loading data:', error);
       }
-    } catch (error) {
-      console.error('Error loading data:', error);
-    }
-  } else {
-    if (code !== null) {
-      const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
-      if (foundProduct) {
-        this.productsConf = foundProduct;
-      }
-    }
-  }
-}
-
-// Проверяет кэш для всех эндпоинтов
-private async checkCacheForEndpoints(endpoints: string[]): Promise<{allCached: boolean, results: any[]}> {
-  const results = [];
-  let allCached = true;
-
-  for (const endpoint of endpoints) {
-    const cached = this.cacheService.get(endpoint);
-    if (cached) {
-      results.push(cached);
     } else {
-      results.push(null);
-      allCached = false;
+      if (code !== null) {
+        const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
+        if (foundProduct) {
+          this.productsConf = foundProduct;
+        }
+      }
     }
   }
 
-  return { allCached, results };
-}
+  // Проверяет кэш для всех эндпоинтов
+  private async checkCacheForEndpoints(endpoints: string[]): Promise<{ allCached: boolean, results: any[] }> {
+    const results = [];
+    let allCached = true;
 
-// Обрабатывает данные (из кэша или сервера)
-private processData(dataResults: any[], type: 'arrival' | 'expense') {
-  const [productTarget, placeFroms, organization, storageArea] = dataResults.map(res => res?.data || res);
+    for (const endpoint of endpoints) {
+      const cached = this.cacheService.get(endpoint);
+      if (cached) {
+        results.push(cached);
+      } else {
+        results.push(null);
+        allCached = false;
+      }
+    }
 
-  const dataSources = {
-    productTarget: productTarget,
-    placeFroms: placeFroms,
-    organizations: organization,
-    storageArea: storageArea,
-    filter: this.defaultFilters
-  };
+    return { allCached, results };
+  }
 
-  const formSet = type === 'arrival'
-    ? getFormArrivalSets(dataSources)
-    : getFormExpenseSets(dataSources);
-  
-  this.generalFormService.setConfig(formSet);
-  MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
-  console.log('MODEL', MODEL);
-  this.generalFormService.setModel(MODEL);
-  this.generalFormService.setService(this.bitumenService);
-  this.buttonConfigs = formSet.buttons;
-}
+  // Обрабатывает данные (из кэша или сервера)
+  private processData(dataResults: any[], type: 'arrival' | 'expense') {
+    const [productTarget, placeFroms, organization, storageArea] = dataResults.map(res => res?.data || res);
+
+    const dataSources = {
+      productTarget: productTarget,
+      placeFroms: placeFroms,
+      organizations: organization,
+      storageArea: storageArea,
+      filter: this.defaultFilters
+    };
+
+    const formSet = type === 'arrival'
+      ? getFormArrivalSets(dataSources)
+      : getFormExpenseSets(dataSources);
+
+    this.generalFormService.setConfig(formSet);
+    MODEL.managerDocType = this.currentComponent === 'arrival' ? 0 : 1;
+    console.log('MODEL', MODEL);
+    this.generalFormService.setModel(MODEL);
+    this.generalFormService.setService(this.bitumenService);
+    this.buttonConfigs = formSet.buttons;
+  }
 
   getButtonConfigs() {
     return BUTTON_SETS;

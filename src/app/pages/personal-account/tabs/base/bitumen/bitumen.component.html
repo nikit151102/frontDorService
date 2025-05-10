@@ -1,8 +1,9 @@
+<span style="color: #101010c7; font-size: 20px;">База > Битум > {{titleTab}}</span>
 <div class="menu">
-  <button class="menu-item" (click)="switchComponent('arrival', 0, 'invoices')">Приход</button>
-  <button class="menu-item" (click)="switchComponent('expense', 1, 'invoices')">Расход</button>
-  <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '184623')">Остатки</button>
-  <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '936564')">Поставщики</button>
+  <button class="menu-item" (click)="switchComponent('arrival', 0, 'invoices', null ,'Приход')">Приход</button>
+  <button class="menu-item" (click)="switchComponent('expense', 1, 'invoices', null, 'Расход')">Расход</button>
+  <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '184623', 'Остатки')">Остатки</button>
+  <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '936564', 'Поставщики')">Поставщики</button>
 </div>
 
 <ng-container *ngIf="typeComponent == 'invoices'">

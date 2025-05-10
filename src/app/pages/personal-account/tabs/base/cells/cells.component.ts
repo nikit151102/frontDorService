@@ -96,7 +96,7 @@ export class CellsComponent implements OnInit {
   currentColumns: any = this.columnsArrivalData;
 
   ngOnInit(): void {
-    this.switchComponent('arrival', 2, 'invoices');
+    this.switchComponent('arrival', 2, 'invoices', null, 'Приход');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 
@@ -168,67 +168,68 @@ export class CellsComponent implements OnInit {
   defaultFilters: any;
   typeComponent: string = 'invoices';
   productsConf: any;
-
- async switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null) {
+  titleTab: any;
+  async switchComponent(type: 'arrival' | 'expense', typeDocs: number, typeComponent: string, code: any = null, title: any) {
     this.typeComponent = typeComponent;
+    this.titleTab = title;
     if (typeComponent == 'invoices') {
-        sessionStorage.setItem('managerDocType', String(typeDocs));
-        this.invoicesService.queryData = { filters: [], sorts: [] };
-        this.invoicesService.defaultFilters = [{
-            field: 'ManagerDocType',
-            values: [typeDocs],
-            type: 1
-        }];
+      sessionStorage.setItem('managerDocType', String(typeDocs));
+      this.invoicesService.queryData = { filters: [], sorts: [] };
+      this.invoicesService.defaultFilters = [{
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      }];
 
-        this.defaultFilters = { ...this.invoicesService.defaultFilters };
-        this.currentComponent = type;
-        this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+      this.defaultFilters = { ...this.invoicesService.defaultFilters };
+      this.currentComponent = type;
+      this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
-        try {
-            // Массив эндпоинтов для загрузки
-            const endpoints = [
-                '/api/Entities/Cargo/Filter',
-                '/api/Entities/MiningQuarry/Filter',
-                '/api/Entities/Organization/Filter',
-                '/api/Entities/StorageArea/Filter'
-            ];
+      try {
+        // Массив эндпоинтов для загрузки
+        const endpoints = [
+          '/api/Entities/Cargo/Filter',
+          '/api/Entities/MiningQuarry/Filter',
+          '/api/Entities/Organization/Filter',
+          '/api/Entities/StorageArea/Filter'
+        ];
 
-            // Загружаем данные с кэшированием
-            const [productTarget, placeFroms, organization, storageArea] = await Promise.all(
-                endpoints.map(endpoint => this.loadDataWithCache(endpoint))
-            );
+        // Загружаем данные с кэшированием
+        const [productTarget, placeFroms, organization, storageArea] = await Promise.all(
+          endpoints.map(endpoint => this.loadDataWithCache(endpoint))
+        );
 
-            const dataSources = {
-                productTarget: productTarget.data,
-                placeFroms: placeFroms.data,
-                organizations: organization.data,
-                storageArea: storageArea.data,
-                filter: this.defaultFilters
-            };
+        const dataSources = {
+          productTarget: productTarget.data,
+          placeFroms: placeFroms.data,
+          organizations: organization.data,
+          storageArea: storageArea.data,
+          filter: this.defaultFilters
+        };
 
-            const formSet = type === 'arrival'
-                ? getFormArrivalSets(dataSources)
-                : getFormExpenseSets(dataSources);
+        const formSet = type === 'arrival'
+          ? getFormArrivalSets(dataSources)
+          : getFormExpenseSets(dataSources);
 
-            MODEL.managerDocType = type === 'arrival' ? 2 : 3;
+        MODEL.managerDocType = type === 'arrival' ? 2 : 3;
 
-            this.generalFormService.setService(this.cellsService);
-            this.generalFormService.setConfig(formSet);
-            this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.cellsService);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
 
-            this.buttonConfigs = formSet.buttons;
-        } catch (error) {
-            console.error('Ошибка загрузки данных:', error);
-        }
+        this.buttonConfigs = formSet.buttons;
+      } catch (error) {
+        console.error('Ошибка загрузки данных:', error);
+      }
     } else {
-        if (code !== null) {
-            const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
-            if (foundProduct) {
-                this.productsConf = foundProduct;
-            }
+      if (code !== null) {
+        const foundProduct = CONFIGPRODUCTS.find((product: any) => product.code === code);
+        if (foundProduct) {
+          this.productsConf = foundProduct;
         }
+      }
     }
-}
+  }
 
   getButtonConfigs() {
     return BUTTON_SETS;
