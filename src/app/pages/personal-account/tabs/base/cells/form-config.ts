@@ -215,7 +215,7 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
             },
             {
                 label: 'Сохранить',
-                condition: (data, userRoleId) => data != 0 && userRoleId == 1,
+                condition: (data, userRoleId) => !data.id && userRoleId == 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
             },
             {
@@ -428,7 +428,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
             },
             {
                 label: 'Сохранить',
-                condition: (data, userRoleId) => data != 0 && userRoleId == 1,
+                condition: (data, userRoleId) => !data.id && userRoleId == 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
             },
             {

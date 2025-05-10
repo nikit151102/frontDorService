@@ -71,20 +71,33 @@ export function getFormSets(productsTarget:FormDataSources): InvoiceConfig {
         }
     ],
     buttons: [
-        {
-            label: 'Сохранить и отправить',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, true, sendClose),
-        },
-        {
-            label: 'Черновик',
-            action: (model: any, dependencies: any, sendClose:any) => handleSaveAndSend(model, dependencies, false, sendClose),
-        },
-        {
-            label: 'Отменить',
-            action: (model: any) => {
+            {
+                label: 'Изменить',
+                condition: (data, userRoleId) => data.id,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
             },
-        },
-    ],
+            {
+                label: 'Сохранить и отправить',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Сохранить',
+                condition: (data, userRoleId) => !data.id && userRoleId == 1,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+            },
+            {
+                label: 'Черновик',
+                condition: (data, userRoleId) => !data.id && userRoleId != 1,
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+            },
+            {
+                label: 'Отменить',
+                condition: (data, userRoleId) => true,
+                action: (model: any) => {
+                },
+            },
+        ],
 }
 };
 
