@@ -73,7 +73,7 @@ export class AntonComponent implements OnInit {
     if (cachedData) {
       console.log('Используем кэшированные данные для', apiEndpoint);
       return cachedData;
-    }кэширование
+    }
 
     // 2. Если нет в кэше, загружаем с сервера
     try {
