@@ -404,6 +404,40 @@ export class InvoicesComponent implements OnChanges, OnInit {
     });
   }
 
+  // verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
+  //   this.confirmPopupService.openConfirmDialog({
+  //     title: titlePopUp,
+  //     message: messagePopUp,
+  //     acceptLabel: 'Отправить',
+  //     rejectLabel: 'Отмена',
+  //     onAccept: () => {
+
+  //       this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((response: any) => {
+
+  //         const isFormValid = this.validateFormFields(response.data);
+
+  //         if ((isFormValid && this.modelForm) || !this.modelForm) {
+  //           this.invoiceService.sendingVerification(
+  //             this.transformToSecondFormat(invoice),
+  //             status,
+  //             this.endpoint
+  //           ).subscribe(
+  //             (verificationResponse: any) => {
+  //               this.invoicesService.updateActiveData(verificationResponse.data);
+  //             },
+  //             (error) => {
+  //               console.error('Error deleting invoice', error);
+  //               this.toastService.showError('Ошибка', error.error.message);
+  //             }
+  //           );
+  //         } else {
+  //           this.toastService.showError('Ошибка', 'Не все обязательные поля заполнены');
+  //         }
+  //       });
+  //     }
+  //   });
+  // }
+
   verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
     this.confirmPopupService.openConfirmDialog({
       title: titlePopUp,
@@ -412,12 +446,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       rejectLabel: 'Отмена',
       onAccept: () => {
 
-        this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((response: any) => {
-
-          const isFormValid = this.validateFormFields(response.data);
-
-          if ((isFormValid && this.modelForm) || !this.modelForm) {
-            this.invoiceService.sendingVerification(
+       this.invoiceService.sendingVerification(
               this.transformToSecondFormat(invoice),
               status,
               this.endpoint
@@ -430,68 +459,65 @@ export class InvoicesComponent implements OnChanges, OnInit {
                 this.toastService.showError('Ошибка', error.error.message);
               }
             );
-          } else {
-            this.toastService.showError('Ошибка', 'Не все обязательные поля заполнены');
-          }
-        });
       }
     });
   }
-validateFormFields(data: any): boolean {
-  for (const fieldPath of this.modelForm) {
-    const parts = fieldPath.split('.');
-    let current = data;
-    let isValid = true;
 
-    for (let i = 0; i < parts.length; i++) {
-      const part = parts[i];
-      
-      if (current[part] === null || current[part] === undefined) {
-        console.warn(`Поле ${fieldPath} не заполнено (${part} отсутствует)`);
-        isValid = false;
-        break;
-      }
-      
-      current = current[part];
+  validateFormFields(data: any): boolean {
+    for (const fieldPath of this.modelForm) {
+      const parts = fieldPath.split('.');
+      let current = data;
+      let isValid = true;
 
-      if (Array.isArray(current) && i < parts.length - 1) {
-        const nextPart = parts[i+1];
-        const allItemsValid = current.every(item => 
-          item[nextPart] !== null && 
-          item[nextPart] !== undefined && 
-          item[nextPart] !== ''
-        );
-        
-        if (!allItemsValid) {
-          console.warn(`Поле ${fieldPath} не заполнено в одном из элементов массива`);
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+
+        if (current[part] === null || current[part] === undefined) {
+          console.warn(`Поле ${fieldPath} не заполнено (${part} отсутствует)`);
           isValid = false;
           break;
         }
-        
-        break;
+
+        current = current[part];
+
+        if (Array.isArray(current) && i < parts.length - 1) {
+          const nextPart = parts[i + 1];
+          const allItemsValid = current.every(item =>
+            item[nextPart] !== null &&
+            item[nextPart] !== undefined &&
+            item[nextPart] !== ''
+          );
+
+          if (!allItemsValid) {
+            console.warn(`Поле ${fieldPath} не заполнено в одном из элементов массива`);
+            isValid = false;
+            break;
+          }
+
+          break;
+        }
+      }
+
+      if (isValid && !Array.isArray(current)) {
+        const value = current;
+        if (value === null || value === undefined || value === '') {
+          console.warn(`Поле ${fieldPath} не заполнено`);
+          isValid = false;
+        }
+
+        if (fieldPath.toLowerCase().includes('date') && isNaN(new Date(value).getTime())) {
+          console.warn(`Поле ${fieldPath} содержит невалидную дату`);
+          isValid = false;
+        }
+      }
+
+      if (!isValid) {
+        return false;
       }
     }
 
-    if (isValid && !Array.isArray(current)) {
-      const value = current;
-      if (value === null || value === undefined || value === '') {
-        console.warn(`Поле ${fieldPath} не заполнено`);
-        isValid = false;
-      }
-      
-      if (fieldPath.toLowerCase().includes('date') && isNaN(new Date(value).getTime())) {
-        console.warn(`Поле ${fieldPath} содержит невалидную дату`);
-        isValid = false;
-      }
-    }
-
-    if (!isValid) {
-      return false;
-    }
+    return true;
   }
-
-  return true;
-}
 
   private transformToSecondFormat(source: any): any {
     return {
