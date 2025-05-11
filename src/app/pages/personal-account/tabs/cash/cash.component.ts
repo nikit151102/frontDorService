@@ -8,6 +8,7 @@ import { DimaComponent } from './dima/dima.component';
 import { EgorComponent } from './egor/egor.component';
 import { CashService } from './cash.service';
 import { SupplierComponent } from './supplier/supplier.component';
+import { DimaBaseComponent } from './dimaBase/dima.component';
 
 enum CashType {
   MECHANIC = 'Механик',
@@ -20,7 +21,7 @@ enum CashType {
 
 @Component({
   selector: 'app-cash',
-  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent],
+  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent, DimaBaseComponent],
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })

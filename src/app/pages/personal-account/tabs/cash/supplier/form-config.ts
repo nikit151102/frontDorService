@@ -74,22 +74,22 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "antonCashType", type: 1, values: [4] }]),
             },
             {
                 label: 'Сохранить и отправить',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [4] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [4] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "antonCashType", type: 1, values: [4] }]),
             },
             {
                 label: 'Отменить',
@@ -110,7 +110,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         docPaymentType: 2,
         manufacturer: model.manufacturer,
         productList: [{
-            productTargetId: model.productTargetId || null,
+            productTargetId: model.productTargetId || '',
             quantity: 1,
             name: model.productName,
             amount: model.expenseSum
@@ -119,7 +119,6 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
     if (model.hasOwnProperty('id')) {
         data.id = model.id;
     }
-    console.log('datadata', data)
     data = invoicesService.setTypeAnton(data)
 
     const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
@@ -136,7 +135,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
                     if (!send) {
-                        let item = invoice.documentMetadata.data;
+                        let item = invoice.documentMetadata.data
 
                         // item.productTarget =  model.productTarget.name;
                         item.name = item.productList[0].name;
@@ -151,13 +150,12 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     if (send) {
                         invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel).subscribe(
                             (data: any) => {
-                                let item = data.data;
+                                let item = data.data
 
                                 // item.productTarget =  model.productTarget.name;
                                 item.name = item.productList[0].name;
 
                                 invoicesService.addItemToStart(item);
-
                                 sendClose();
                             },
                             (error: any) => {
@@ -182,6 +180,5 @@ export const MODEL = {
     expenseSum: '',
     incomeSum: '',
     type: 1,
-    docPaymentType: 2,
-    antonCashType: 0
+    docPaymentType: 2
 };

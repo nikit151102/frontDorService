@@ -1,24 +1,24 @@
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { BUTTON_SETS } from './button-config';
+import { DimaService } from './dima.service';
 import { MODEL, getFormSets } from './form-config';
-import { SupplierService } from './supplier.service';
-import { CommonModule } from '@angular/common';
-import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { CacheReferenceService } from '../../../../../services/cache-reference.service';
 
 @Component({
-  selector: 'app-supplier',
+  selector: 'app-dima-base',
   imports: [CommonModule, InvoicesComponent],
-  templateUrl: './supplier.component.html',
-  styleUrl: './supplier.component.scss'
+  templateUrl: './dima.component.html',
+  styleUrl: './dima.component.scss'
 })
-export class SupplierComponent implements OnInit {
+export class DimaBaseComponent implements OnInit {
 
   constructor(private generalFormService: GeneralFormService,
-    private supplierService: SupplierService,
+    private dimaService: DimaService,
     private jwtService: JwtService,
     private invoicesService: InvoicesService,
     private cacheService: CacheReferenceService) { }
@@ -57,51 +57,53 @@ export class SupplierComponent implements OnInit {
 
     const currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.setModel(MODEL);
-    this.generalFormService.setService(this.supplierService);
+    this.generalFormService.setService(this.dimaService);
     this.paymentType = currentRole === '3' ? 2 : 3;
-     // Используем версию с кэшированием
-        this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
-          .then((productTarget) => {
-            const dataSources = {
-              productTarget: productTarget
-            };
-    
-            const formSet = getFormSets(dataSources);
-            this.generalFormService.setConfig(formSet);
-            this.generalFormService.setModel(MODEL);
-            this.generalFormService.setService(this.supplierService);
-            this.buttonConfigs = formSet.buttons;
-          })
-          .catch(error => {
-            console.error('Ошибка при загрузке данных:', error);
-          });
-      }
-    
-      // Новый метод с кэшированием
-      async loadDataWithCache(apiEndpoint: string): Promise<any> {
-        // 1. Проверяем кэш
-        const cachedData = this.cacheService.get(apiEndpoint);
-        if (cachedData) {
-          console.log('Используем кэшированные данные для', apiEndpoint);
-          return cachedData;
-        }
-    
-        // 2. Если нет в кэше, загружаем с сервера
-        try {
-          const data = await this.loadData(apiEndpoint);
-          // 3. Сохраняем в кэш (TTL 1 час)
-          this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
-          return data.data;
-        } catch (error) {
-          console.error('Ошибка при загрузке данных:', error);
-          throw error;
-        }
-      }
-    
+
+    // Используем версию с кэшированием
+    this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
+      .then((productTarget) => {
+        const dataSources = {
+          productTarget: productTarget
+        };
+
+        const formSet = getFormSets(dataSources);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.dimaService);
+        this.buttonConfigs = formSet.buttons;
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных:', error);
+      });
+  }
+
+  // Новый метод с кэшированием
+  async loadDataWithCache(apiEndpoint: string): Promise<any> {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+    if (cachedData) {
+      console.log('Используем кэшированные данные для', apiEndpoint);
+      return cachedData;
+    }
+
+    // 2. Если нет в кэше, загружаем с сервера
+    try {
+      const data = await this.loadData(apiEndpoint);
+      console.log('data',data)
+      // 3. Сохраняем в кэш (TTL 1 час)
+      this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
+      return data.data;
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      throw error;
+    }
+  }
+
 
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.supplierService.getProductsByEndpoint(apiEndpoint).subscribe(
+      this.dimaService.getProductsByEndpoint(apiEndpoint).subscribe(
         (data: any) => resolve(data),
         (error) => {
           console.error('Ошибка загрузки данных с эндпоинта:', error);

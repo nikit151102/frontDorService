@@ -74,22 +74,22 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "antonCashType", type: 1, values: [3] }]),
             },
             {
                 label: 'Сохранить и отправить',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [3] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [3] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "antonCashType", type: 1, values: [3] }]),
             },
             {
                 label: 'Отменить',
@@ -101,7 +101,7 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
     }
 };
 
-function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
+function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function, filter: any) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
 
     let data: any = {
@@ -131,7 +131,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         rejectLabel: 'Отмена',
         onAccept: () => {
 
-            invoiceService.saveInvoice(data, 'api/CommercialWork/DocInvoice', 1).subscribe(
+            invoiceService.saveInvoice(data, 'api/CommercialWork/DocInvoice', 1, filter).subscribe(
                 (invoice: any) => {
                     console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
                     if (!send) {

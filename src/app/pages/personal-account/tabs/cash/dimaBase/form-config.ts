@@ -74,22 +74,22 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [2]}]),
             },
             {
                 label: 'Сохранить и отправить',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [2]}]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "antonCashType", type: 1, values: [2]}]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [5]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "antonCashType", type: 1, values: [2]}]),
             },
             {
                 label: 'Отменить',
