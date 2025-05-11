@@ -7,10 +7,11 @@
 <div *ngIf="selectedComponent === 'invoices'">
     <app-invoices [selectedComponent]="selectedComponent" [counterpartyId]="counterpartyId"
         [counterpartyData]="counterpartyData" [columns]="columnsInvoices" [buttonConfigs]="getButtonConfigs()"
-        [totalInfoColumn]="totalInfoColumnInvoices" [endpoint]="'api/CommercialWork/DocInvoice'"></app-invoices>
+        [totalInfoColumn]="totalInfoColumnInvoices" [endpoint]="'api/CommercialWork/DocInvoice'" [modelForm]="['dateTime','number','productList.name','productList.quantity','productList.amount','productList.sumAmount','productList.measurementUnit', 'status']"></app-invoices>
 </div>
 <div *ngIf="selectedComponent === 'products'">
     <app-products [counterpartyId]="counterpartyId" [selectedComponent]="selectedComponent" [columns]="columns"
         [totalInfoColumn]="totalInfoColumn" [endpoint]="'api/CommercialWork/Product/Filter'"
         [productsServ]="productsService"></app-products>
 </div>
+

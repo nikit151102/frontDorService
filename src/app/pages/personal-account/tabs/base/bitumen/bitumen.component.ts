@@ -107,11 +107,13 @@ export class BitumenComponent implements OnInit {
     // { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
+  formFieldArrival = ['amount', 'auto', 'cargoName', 'date', 'placeFromId', 'placeToId', 'sumAmount', 'ttn', 'weight', 'paymentType']
+  formFieldExpense = ['amount', 'auto', 'cargoName', 'date', 'organizationId', 'placeToId', 'sumAmount', 'weight']
 
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
   currentTotalInfo: any = this.totalInfoColumnArrival;
-
+  currentFormField: any = this.formFieldArrival;
 
   ngOnInit(): void {
     const cachedEndpoints = this.cacheService.getAllCachedEndpoints();
@@ -169,7 +171,7 @@ export class BitumenComponent implements OnInit {
       this.currentComponent = type;
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
       this.currentTotalInfo = type === 'arrival' ? this.totalInfoColumnArrival : this.totalInfoColumnExpense;
-
+      this.currentFormField = type === 'arrival' ? this.formFieldArrival : this.formFieldExpense;
       // Проверяем кэш для каждого эндпоинта
       const endpoints = [
         '/api/Entities/Cargo/Filter',

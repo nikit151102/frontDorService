@@ -3,17 +3,19 @@
   <button class="menu-item" (click)="switchComponent('arrival', 0, 'invoices', null ,'Приход')">Приход</button>
   <button class="menu-item" (click)="switchComponent('expense', 1, 'invoices', null, 'Расход')">Расход</button>
   <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '184623', 'Остатки')">Остатки</button>
-  <button class="menu-item" (click)="switchComponent('expense', 1, 'products', '936564', 'Поставщики')">Поставщики</button>
+  <button class="menu-item"
+    (click)="switchComponent('expense', 1, 'products', '936564', 'Поставщики')">Поставщики</button>
 </div>
 
 <ng-container *ngIf="typeComponent == 'invoices'">
   <app-invoices [counterpartyId]="'00000000-0000-0000-0000-000000000000'" [columns]="currentColumns"
     [paymentType]="paymentType" [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="currentTotalInfo"
     [generalForm]="true" [endpoint]="'api/CommercialWork/ManagerDocument'"
-    [endpointGetData]="'api/CommercialWork/ManagerDocument/Filter'" [defaultFilter]="defaultFilters">
+    [endpointGetData]="'api/CommercialWork/ManagerDocument/Filter'" [defaultFilter]="defaultFilters"
+    [modelForm]="currentFormField">
   </app-invoices>
 </ng-container>
 <ng-container *ngIf="typeComponent == 'products'">
-  <app-additional-data  [config]="productsConf">
+  <app-additional-data [config]="productsConf">
   </app-additional-data>
 </ng-container>

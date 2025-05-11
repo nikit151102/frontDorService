@@ -1,5 +1,5 @@
 <span style="color: #101010c7; font-size: 20px;">Бухгалтер</span>
 <app-invoices [counterpartyId]="counterpartyId" [counterpartyData]="counterpartyData" [columns]="columnsInvoices"
     [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="totalInfoColumnInvoices"
-    [endpoint]="'api/CommercialWork/DocInvoice'"></app-invoices>
+    [endpoint]="'api/CommercialWork/DocInvoice'" [modelForm]="['dateTime','number','productList.name','productList.quantity','productList.amount','productList.sumAmount','productList.measurementUnit', 'status']"></app-invoices>
 
