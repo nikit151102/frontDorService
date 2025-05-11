@@ -416,7 +416,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
           const isFormValid = this.validateFormFields(response.data);
 
-          if (isFormValid) {
+          if ((isFormValid && this.modelForm) || !this.modelForm) {
             this.invoiceService.sendingVerification(
               this.transformToSecondFormat(invoice),
               status,
