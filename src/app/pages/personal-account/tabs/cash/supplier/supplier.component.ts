@@ -63,7 +63,7 @@ export class SupplierComponent implements OnInit {
         this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
           .then((productTarget) => {
             const dataSources = {
-              productTarget: productTarget.data
+              productTarget: productTarget
             };
     
             const formSet = getFormSets(dataSources);
