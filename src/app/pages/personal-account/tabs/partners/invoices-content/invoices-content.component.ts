@@ -40,6 +40,9 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     },
     ]
 
+    this.productsService.defaultFilters = [];
+    this.productsService.queryData.filters = [];
+
     this.productsService.queryData.filters = [{
       field: 'DocInvoice.Partner.Type',
       values: [0, 1, 5],
