@@ -207,7 +207,7 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
             },
             {
                 label: 'Сохранить и отправить',
@@ -420,7 +420,7 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
             },
             {
                 label: 'Сохранить и отправить',
