@@ -470,10 +470,10 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         const requiredFields = [
             'date',
             'auto',
-            'placeFromId',
+            // 'placeFromId',
             'placeToId',
             'cargoId',
-            'ttn',
+            // 'ttn',
             'weight',
             'amount'
         ];

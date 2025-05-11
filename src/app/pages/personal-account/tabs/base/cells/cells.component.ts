@@ -110,13 +110,12 @@ export class CellsComponent implements OnInit {
     ])
       .then(([productTarget, placeFroms, organization, storageArea]) => {
         const dataSources = {
-          productTarget: productTarget.data,
-          placeFroms: placeFroms.data,
-          organizations: organization.data,
-          storageArea: storageArea.data,
+          productTarget: productTarget,
+          placeFroms: placeFroms,
+          organizations: organization,
+          storageArea: storageArea,
           filter: this.defaultFilters
         };
-
         const formSet = this.currentComponent === 'arrival'
           ? getFormArrivalSets(dataSources)
           : getFormExpenseSets(dataSources);
@@ -132,27 +131,28 @@ export class CellsComponent implements OnInit {
       });
   }
 
-  // Новый метод с кэшированием
   async loadDataWithCache(apiEndpoint: string): Promise<any> {
-    // 1. Проверяем кэш
+    console.log(`[Cache] Запрос для ${apiEndpoint}`);
+
     const cachedData = this.cacheService.get(apiEndpoint);
     if (cachedData) {
-      console.log('Используем кэш для', apiEndpoint);
       return cachedData;
     }
 
-    // 2. Если нет в кэше, загружаем с сервера
     try {
       const data = await this.loadData(apiEndpoint);
-      // 3. Сохраняем в кэш (TTL 1 час)
+
+      if (!data) {
+        throw new Error('Пустой ответ от сервера');
+      }
+
       this.cacheService.set(apiEndpoint, data, 60 * 60 * 1000);
       return data;
     } catch (error) {
-      console.error('Ошибка загрузки данных:', error);
+      console.error(`[Cache] Ошибка для ${apiEndpoint}:`, error);
       throw error;
     }
   }
-
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.cellsService.getProductsByEndpoint(apiEndpoint).subscribe(
@@ -186,7 +186,6 @@ export class CellsComponent implements OnInit {
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
 
       try {
-        // Массив эндпоинтов для загрузки
         const endpoints = [
           '/api/Entities/Cargo/Filter',
           '/api/Entities/MiningQuarry/Filter',
@@ -194,18 +193,18 @@ export class CellsComponent implements OnInit {
           '/api/Entities/StorageArea/Filter'
         ];
 
-        // Загружаем данные с кэшированием
         const [productTarget, placeFroms, organization, storageArea] = await Promise.all(
           endpoints.map(endpoint => this.loadDataWithCache(endpoint))
         );
 
         const dataSources = {
-          productTarget: productTarget.data,
-          placeFroms: placeFroms.data,
-          organizations: organization.data,
-          storageArea: storageArea.data,
+          productTarget: productTarget,
+          placeFroms: placeFroms,
+          organizations: organization,
+          storageArea: storageArea,
           filter: this.defaultFilters
         };
+
 
         const formSet = type === 'arrival'
           ? getFormArrivalSets(dataSources)
