@@ -106,11 +106,11 @@ export class UuidSearchFilterSortComponent {
   this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe({
     next: (data: any) => {
       console.log('Данные получены с сервера: loadData', data);
-      this.products = data;
+      this.products = data.data;
       this.endpointDataLoaded = true;
       
       // Сохраняем в кэш (5 минут TTL)
-      this.cacheService.set(this.apiEndpoint, data);
+      this.cacheService.set(this.apiEndpoint, data.data);
       this.cacheService.setLoading(this.apiEndpoint, false);
     },
     error: (error) => {

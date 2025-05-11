@@ -117,7 +117,7 @@ export class BitumenComponent implements OnInit {
   loadData(apiEndpoint: string): Promise<any> {
     return new Promise((resolve, reject) => {
       this.bitumenService.getProductsByEndpoint(apiEndpoint).subscribe(
-        (data: any) => resolve(data),
+        (data: any) => resolve(data.data),
         (error) => {
           console.error('Ошибка загрузки данных с эндпоинта:', error);
           reject(error);

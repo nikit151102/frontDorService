@@ -91,8 +91,8 @@ export class MechanicComponent implements OnInit {
         try {
           const data = await this.loadData(apiEndpoint);
           // 3. Сохраняем в кэш (TTL 1 час)
-          this.cacheService.set(apiEndpoint, data, 60 * 60 * 1000);
-          return data;
+          this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
+          return data.data;
         } catch (error) {
           console.error('Ошибка при загрузке данных:', error);
           throw error;
