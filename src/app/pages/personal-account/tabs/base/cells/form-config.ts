@@ -532,7 +532,12 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
             invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument', null, filter).subscribe(
                 (invoice: any) => {
                     if (!send) {
-                        invoicesService.addItemToStart(invoice.data);
+                        if (dataForm.id) {
+                            invoicesService.updateActiveData(invoice.documentMetadata.data);
+                        }
+                        else {
+                            invoicesService.addItemToStart(invoice.documentMetadata.data);
+                        }
                         sendClose();
                     }
                     invoicesService.totalInfo = invoice.totalInfo;
@@ -544,7 +549,12 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                     if (send) {
                         invoiceService.sendingVerification(invoice.documentMetadata.data, verificationLevel, 'api/CommercialWork/ManagerDocument').subscribe(
                             (data: any) => {
-                                invoicesService.addItemToStart(data.data);
+                                if (dataForm.id) {
+                                    invoicesService.updateActiveData(data.data);
+                                }
+                                else {
+                                    invoicesService.addItemToStart(data.data);
+                                }
                                 sendClose();
                             },
                             (error: any) => {
