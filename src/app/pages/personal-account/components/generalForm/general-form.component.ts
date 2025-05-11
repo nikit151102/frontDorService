@@ -265,7 +265,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.selectedInvoice = {};
-    console.log('model', this.model)
+    this.data = null;
     if (this.model) {
       for (const key in this.model) {
         if (this.model.hasOwnProperty(key)) {
@@ -273,7 +273,12 @@ export class GeneralFormComponent implements OnInit, OnChanges {
         }
       }
       this.dialogVisible = true;
+      if ('id' in this.model) {
+        delete this.model['id'];
+      }
       this.oldData = structuredClone(this.model);
+
+      console.log('this.modelthis.model', this.model)
     }
   }
 
