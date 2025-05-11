@@ -25,6 +25,9 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ) { }
 
   ngOnInit(): void {
+    console.log('---------defaultFilters')
+    this.invoicesService.defaultFilters = [];
+    this.invoicesService.queryData.filters = [];
     this.invoicesService.defaultFilters = [{
       field: 'Partner.Type',
       values: [0, 1, 5],

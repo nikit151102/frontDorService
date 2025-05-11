@@ -80,7 +80,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
       this.invoicesService?.totalInfo?.totalPagesCount;
-      this.loadInvoices();
+      this.loadInvoices(true);
       console.log('loadInvoices defaultFilter')
       console.log('counterpartyData', this.counterpartyData)
     }
@@ -88,7 +88,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
-      this.loadInvoices();
+      this.loadInvoices(true);
       console.log('loadInvoices counterpartyId')
       console.log('counterpartyData', this.counterpartyData)
     }
@@ -96,12 +96,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
       this.currentPage = 0;
-      this.loadInvoices();
+      this.loadInvoices(true);
       console.log('loadInvoices buttonConfigs')
     }
     if (changes['selectedComponent']) {
       this.currentPage = 0;
-      this.loadInvoices();
+      this.loadInvoices(true);
     }
     this.partnersService.selectCounterpartyId = this.counterpartyId;
     console.log('this.partnersService.selectCounterpartyId', this.partnersService.selectCounterpartyId)
@@ -145,7 +145,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     })
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
-    this.loadInvoices();
+    this.loadInvoices(true);
   }
 
   @HostBinding('style.--table-width') get cssVariable() {
