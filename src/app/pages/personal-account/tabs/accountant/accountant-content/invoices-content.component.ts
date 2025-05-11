@@ -24,7 +24,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.invoicesService.defaultFilters = [{
       field: 'Partner.Type',
-      values: [0,1],
+      values: [0, 1],
       type: 1
     },
     {
@@ -62,6 +62,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   ];
 
   totalInfoColumnInvoices = [
+    { columnNum: 0, value: 'totalCount' },
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
   ]

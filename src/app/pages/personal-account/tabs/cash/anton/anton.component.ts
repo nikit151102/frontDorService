@@ -35,6 +35,7 @@ export class AntonComponent implements OnInit {
   ];
 
   totalInfoColumnInvoices = [
+    { columnNum: 0, value: 'totalCount' },
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
     { columnNum: 6, value: 'totalSaldoInverse' }
@@ -71,7 +72,7 @@ export class AntonComponent implements OnInit {
     // 1. Проверяем кэш
     const cachedData = this.cacheService.get(apiEndpoint);
     if (cachedData) {
-      console.log('cachedData',cachedData)
+      console.log('cachedData', cachedData)
       console.log('Используем кэшированные данные для', apiEndpoint);
       return cachedData;
     }

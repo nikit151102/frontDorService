@@ -35,6 +35,7 @@ export class DimaComponent implements OnInit {
   ];
 
   totalInfoColumnInvoices = [
+    { columnNum: 0, value: 'totalCount' },
     { columnNum: 4, value: 'totalExpenseSum' },
     { columnNum: 5, value: 'totalIncomeSum' },
     { columnNum: 6, value: 'totalSaldoInverse' }
@@ -90,7 +91,7 @@ export class DimaComponent implements OnInit {
     // 2. Если нет в кэше, загружаем с сервера
     try {
       const data = await this.loadData(apiEndpoint);
-      console.log('data',data)
+      console.log('data', data)
       // 3. Сохраняем в кэш (TTL 1 час)
       this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
       return data.data;
