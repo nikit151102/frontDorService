@@ -129,18 +129,18 @@
                                 </ng-container>
 
                             </div>
-                             <!-- Итоговая сумма -->
-                        <div class="product-footer">
-                            <div></div>
-                            <div></div>
-                            <div></div>
-                            <div style="text-align: center;">{{ calculatingAmount() }}</div>
-                            <div></div>
-                            <div></div>
-                        </div>
+                            <!-- Итоговая сумма -->
+                            <div class="product-footer">
+                                <div></div>
+                                <div></div>
+                                <div></div>
+                                <div style="text-align: center;">{{ calculatingAmount() }}</div>
+                                <div></div>
+                                <div></div>
+                            </div>
                         </div>
 
-                       
+
 
 
 
@@ -156,13 +156,12 @@
             </div>
             <p-footer style="z-index: 999;">
                 <button
-                    *ngIf="currentRole != 1 && (((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice) && isBtnDraft"
+                    *ngIf="currentRole != 1 && ((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice) && isBtnDraft"
                     pButton label="Черновик" icon="pi pi-check" (click)="saveInvoice()">
                 </button>
 
-                <button
-                    *ngIf="(((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit && selectedInvoice.docAccountType == 0) || newIncoice)"
-                    pButton [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'" icon="pi pi-check"
+                <button *ngIf="((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice)" pButton
+                    [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'" icon="pi pi-check"
                     (click)="saveAndSendInvoice()">
                 </button>
 
@@ -173,8 +172,14 @@
                 <button *ngIf="selectedInvoice.docAccountType != 0 && isScope" pButton label="Подписать фактуру"
                     icon="pi pi-check" (click)="acceptAccountDraft()"></button>
 
-                <button *ngIf="currentRole == 1 && newIncoice == false" pButton label="Изменить" icon="pi pi-check"
-                    (click)="saveInvoice()"></button>
+                <button
+                    *ngIf="(currentRole == 1 && newIncoice == false) || (currentRole != 1 && selectedInvoice.status == 3 || selectedInvoice.status == 0 ) && newIncoice == false"
+                    pButton label="Изменить" icon="pi pi-check" (click)="saveInvoice()"></button>
+
+                <button
+                    *ngIf="(currentRole != 1 && selectedInvoice.status == 3 || selectedInvoice.status == 0 ) && newIncoice == false"
+                    pButton label="Изменить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
+                
 
                 <ng-container *ngFor="let button of buttons">
                     <button class="btn btn-details" *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
