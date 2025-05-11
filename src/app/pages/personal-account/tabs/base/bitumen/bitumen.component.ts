@@ -42,7 +42,7 @@ export class BitumenComponent implements OnInit {
     { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
     { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
-    { field: 'placeTo', header: 'Куда слилb', type: 'string', visible: true, width: '10%' },
+    { field: 'placeTo', header: 'Куда слил', type: 'string', visible: true, width: '10%' },
     {
       field: 'cargoName',
       fieldView: 'cargoName',
@@ -152,17 +152,16 @@ export class BitumenComponent implements OnInit {
         field: 'ManagerDocType',
         values: [typeDocs],
         type: 1
-      }, {
-        field: 'dateTime', values: [1],
-        type: 1
       }];
+
+      this.invoicesService.queryData.sorts = [{
+        field: 'Date', sortType: 1
+      }];
+
 
       this.invoicesService.filterStatic = [{
         field: 'ManagerDocType',
         values: [typeDocs],
-        type: 1
-      }, {
-        field: 'dateTime', values: [1],
         type: 1
       }];
 

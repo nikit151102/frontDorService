@@ -66,7 +66,7 @@ export class CellsComponent implements OnInit {
   totalInfoColumnExpense = [
     { columnNum: 0, value: 'totalCount' },
     { columnNum: 5, value: 'totalSumWeight' },
-    { columnNum: 6, value: 'totalSumWeight' },
+    { columnNum: 7, value: 'totalAmountSum' },
   ];
 
   columnsExpenseData = [
@@ -188,19 +188,15 @@ export class CellsComponent implements OnInit {
         field: 'ManagerDocType',
         values: [typeDocs],
         type: 1
-      },
-      {
-        field: 'dateTime', values: [1],
-        type: 1
+      }];
+
+      this.invoicesService.queryData.sorts = [{
+        field: 'Date', sortType: 1
       }];
 
       this.invoicesService.filterStatic = [{
         field: 'ManagerDocType',
         values: [typeDocs],
-        type: 1
-      },
-      {
-        field: 'dateTime', values: [1],
         type: 1
       }];
 
