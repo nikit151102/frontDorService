@@ -74,7 +74,7 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose),
             },
             {
                 label: 'Сохранить и отправить',
@@ -104,7 +104,7 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
 function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClose: Function) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
 
-    let data = {
+    let data: any = {
         dateTime: model.dateTime,
         type: 1,
         docPaymentType: 2,
@@ -116,7 +116,9 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
             amount: model.expenseSum
         }]
     };
-
+    if (model.hasOwnProperty('id')) {
+        data.id = model.id;
+    }
     data = invoicesService.setTypeAnton(data)
 
     const titlePopUp = model && model.id ? 'Вы действительно хотите обновить данные?' : 'Вы действительно хотите создать счет-фактуру?';
