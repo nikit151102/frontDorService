@@ -21,13 +21,13 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
   constructor(private jwtService: JwtService,
     private invoicesService: InvoicesService,
-    public productsService:ProductsService
+    public productsService: ProductsService
   ) { }
 
   ngOnInit(): void {
     this.invoicesService.defaultFilters = [{
       field: 'Partner.Type',
-      values: [0,1,5],
+      values: [0, 1, 5],
       type: 1
     },
     {
@@ -35,20 +35,20 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       values: [0, 1],
       type: 1
     },
-  ]
+    ]
 
     this.productsService.queryData.filters = [{
       field: 'DocInvoice.Partner.Type',
-      values: [0,1,5],
+      values: [0, 1, 5],
       type: 1
     },
-  {
+    {
       field: 'ManagerDocType',
       values: [0],
       type: 1
     }
-  ]
-  
+    ]
+
     this.jwtService.getDecodedToken()
   }
 
@@ -79,7 +79,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '13%' },
     { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' },
     { field: 'DocInvoice.CreatorName', fieldView: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '16%' },
-    
+
   ];
 
 
@@ -104,6 +104,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
 
   totalInfoColumnInvoices = [
+    { columnNum: 0, value: 'totalCount' },
     { columnNum: 1, value: 'totalExpenseSum' },
     { columnNum: 2, value: 'totalIncomeSum' },
     { columnNum: 3, value: 'totalSaldo' },
