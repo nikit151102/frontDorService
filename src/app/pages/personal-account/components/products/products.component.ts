@@ -32,15 +32,20 @@ export class ProductsComponent implements OnChanges, OnInit {
   @Input() totalInfoColumn: any;
   @Input() actions: { label: string, action: string }[] = []; // изменено на строку (название метода)
   @Input() productService!: any;
-  @Input() productsServ:any
+  @Input() productsServ: any
+  @Input() selectedComponent: string = '';
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
       this.productsServ.counterpartyId = this.counterpartyId;
       this.productsServ.endpoint = this.endpoint;
- 
 
-      if(this.productsServ){
- this.loadProducts();
+      if (changes['selectedComponent']) {
+        this.loadProducts(true);
+      }
+
+      if (this.productsServ) {
+        this.loadProducts();
       }
     }
   }
@@ -82,7 +87,7 @@ export class ProductsComponent implements OnChanges, OnInit {
           newInvoices = response.documentMetadata.data.map(mapInvoice);
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
-        }``
+        } ``
 
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.productsServ.totalRecords = response.totalInfo?.totalPagesCount * this.productsServ.pageSize;

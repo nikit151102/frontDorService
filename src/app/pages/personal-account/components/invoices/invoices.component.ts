@@ -63,6 +63,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>;
   @Input() generalForm: boolean = false;
   @Input() defaultFilter: any;
+  @Input() selectedComponent: string = '';
+
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
@@ -93,8 +95,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
+      this.currentPage = 0;
       this.loadInvoices();
       console.log('loadInvoices buttonConfigs')
+    }
+    if (changes['selectedComponent']) {
+      this.currentPage = 0;
+      this.loadInvoices();
     }
     this.partnersService.selectCounterpartyId = this.counterpartyId;
     console.log('this.partnersService.selectCounterpartyId', this.partnersService.selectCounterpartyId)
