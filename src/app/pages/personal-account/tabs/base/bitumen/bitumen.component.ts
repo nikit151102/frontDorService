@@ -152,6 +152,9 @@ export class BitumenComponent implements OnInit {
         field: 'ManagerDocType',
         values: [typeDocs],
         type: 1
+      }, {
+        field: 'dateTime', values: [1],
+        type: 1
       }];
 
       this.defaultFilters = { ...this.invoicesService.defaultFilters };

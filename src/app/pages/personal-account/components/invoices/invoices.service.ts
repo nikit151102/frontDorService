@@ -186,7 +186,7 @@ export class InvoicesService {
     const exists = this.queryData.sorts.some((sort) => sort.field === 'dateTime');
 
     if (!exists) {
-      this.queryData.sorts.push({ field: 'dateTime', sortType: 0 });
+      this.queryData.sorts.push({ field: 'dateTime', sortType: 1 });
     }
 
     console.log('page',page )
