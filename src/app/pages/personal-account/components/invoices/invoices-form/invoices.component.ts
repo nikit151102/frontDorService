@@ -687,7 +687,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   AcceptEditPartner(idPartner: string) {
     this.selectedInvoice.partnerId = idPartner;
-    
+
     this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
 
       (invoice) => {
@@ -827,15 +827,16 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
     console.log('this.oldData', this.oldData)
     if (!this.deepEqual(this.selectedInvoice, this.oldData)) {
       console.log(' Объекты отличаются')
-      this.dialogVisible = true;
-      this.showConfirmDialog = true;
+      // this.dialogVisible = true;
+      // this.showConfirmDialog = true;
+      this.dialogVisible = false;
       if (event)
         event.preventDefault();
     } else {
       this.selectedInvoice = null;
       this.newIncoice = false;
       this.showConfirmDialog = false;
-      this.dialogVisible = true;
+      this.dialogVisible = false;
     }
   }
 

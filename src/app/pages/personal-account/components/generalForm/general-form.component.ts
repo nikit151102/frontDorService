@@ -74,7 +74,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     if (changes['data'] && this.data) {
 
       this.selectedInvoice = this.data;
-      console.log('this.areOptionsLoaded',this.areOptionsLoaded())
+      console.log('this.areOptionsLoaded', this.areOptionsLoaded())
       if (this.config && this.areOptionsLoaded()) {
         this.patchModelWithData(this.data);
       } else {
@@ -107,7 +107,7 @@ export class GeneralFormComponent implements OnInit, OnChanges {
       console.warn('Конфигурация или поля не определены');
       return;
     }
-console.log('patchModelWithData')
+    console.log('patchModelWithData')
     for (const field of this.config.fields) {
       console.log(`Обрабатываем поле: ${field.name}`);
       if (data.hasOwnProperty(field.name)) {
@@ -232,8 +232,9 @@ console.log('patchModelWithData')
 
   onDialogClose(event: any = null) {
     if (!this.deepEqual(this.selectedInvoice, this.oldData)) {
-      this.dialogVisible = true;
-      this.showConfirmDialog = true;
+      // this.dialogVisible = true;
+      // this.showConfirmDialog = true;
+      this.dialogVisible = false;
       if (event)
         event.preventDefault();
     } else {
