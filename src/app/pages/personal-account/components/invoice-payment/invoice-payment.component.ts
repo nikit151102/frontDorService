@@ -19,6 +19,7 @@ import { CacheReferenceService } from '../../../../services/cache-reference.serv
 export class InvoicePaymentComponent implements OnInit {
   @Input() counterpartyId: string = '';
   @Input() paymentType: number = 1;
+  @Input() filters: any;
   visible: boolean = false;
   title: string = 'Оплата';
   message: string = '';
@@ -122,7 +123,13 @@ export class InvoicePaymentComponent implements OnInit {
       data.partnerId = this.counterpartyId;
     }
 
-    this.invoicePaymentService.setPayment(data).subscribe(
+    this.invoicePaymentService.setPayment({
+      queryDto: {
+        filters: this.transformFilters(this.filters),
+        sorts: []
+      },
+      entityDto: data
+    }).subscribe(
       (data: any) => {
         this.invoicePaymentService.visibleModal(false)
         this.invoicesService.addItemToStart(data.documentMetadata.data);
@@ -139,6 +146,26 @@ export class InvoicePaymentComponent implements OnInit {
     this.invoicePaymentService.visibleModal(false);
   }
 
+
+  transformFilters(rawFilters: any): any[] {
+    try {
+      if (Array.isArray(rawFilters)) {
+        return rawFilters.filter(Boolean).map(filter =>
+          filter.field ? filter : Object.values(filter).find((f: any) => f?.field)
+        ).filter(Boolean);
+      }
+
+      if (rawFilters && typeof rawFilters === 'object') {
+        return Object.values(rawFilters)
+          .map((item: any) => item?.field ? item : Object.values(item || {}).find((f: any) => f?.field))
+          .filter(Boolean);
+      }
+      return [];
+    } catch (e) {
+      console.error('Error transforming filters:', e);
+      return [];
+    }
+  }
 
   onDateInput(event: any) {
     let value = event.target.value;

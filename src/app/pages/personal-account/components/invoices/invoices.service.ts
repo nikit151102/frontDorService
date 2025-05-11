@@ -32,6 +32,7 @@ export class InvoicesService {
 
   queryData: QueryDto = { filters: [], sorts: []};
   defaultFilters: FilterDto[] = [];
+  filterStatic: any;
   constructor(private http: HttpClient, private router: Router) { }
 
   endpoint: string = '';

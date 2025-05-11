@@ -74,7 +74,7 @@ export class CashComponent implements OnInit {
           type: 1
         }
       ];
-
+    this.invoicesService.filterStatic = newFilters;
     newFilters.forEach(newFilter => {
       const existingFilterIndex = this.invoicesService.defaultFilters.findIndex(existingFilter =>
         existingFilter.field === newFilter.field

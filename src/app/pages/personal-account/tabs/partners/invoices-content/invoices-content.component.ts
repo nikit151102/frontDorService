@@ -38,7 +38,20 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       values: [0, 1],
       type: 1
     },
-    ]
+    ];
+    
+    this.invoicesService.filterStatic = [{
+      field: 'Partner.Type',
+      values: [0, 1, 5],
+      type: 1
+    },
+    {
+      field: 'DocPaymentType',
+      values: [0, 1],
+      type: 1
+    },
+    ];
+
 
     this.productsService.defaultFilters = [];
     this.productsService.queryData.filters = [];
@@ -54,6 +67,8 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       type: 1
     }
     ]
+
+    
 
     this.jwtService.getDecodedToken()
   }

@@ -194,6 +194,16 @@ export class CellsComponent implements OnInit {
         type: 1
       }];
 
+      this.invoicesService.filterStatic = [{
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      },
+      {
+        field: 'dateTime', values: [1],
+        type: 1
+      }];
+
       this.defaultFilters = { ...this.invoicesService.defaultFilters };
       this.currentComponent = type;
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
