@@ -207,22 +207,22 @@ export function getFormArrivalSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [2]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
             },
             {
                 label: 'Сохранить и отправить',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [2]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [2]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "ManagerDocType", type: 1, values: [2]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [2] }]),
             },
             {
                 label: 'Отменить',
@@ -420,22 +420,22 @@ export function getFormExpenseSets(productsTarget: FormDataSources): InvoiceConf
             {
                 label: 'Изменить',
                 condition: (data, userRoleId) => data.id,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [3]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
             },
             {
                 label: 'Сохранить и отправить',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [3]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
             },
             {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{field : "ManagerDocType", type: 1, values: [3]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
             },
             {
                 label: 'Черновик',
                 condition: (data, userRoleId) => !data.id && userRoleId != 1,
-                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{field : "ManagerDocType", type: 1, values: [3]}]),
+                action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, false, sendClose, [{ field: "ManagerDocType", type: 1, values: [3] }]),
             },
             {
                 label: 'Отменить',
@@ -535,6 +535,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                         invoicesService.addItemToStart(invoice.data);
                         sendClose();
                     }
+                    invoicesService.totalInfo = invoice.totalInfo;
                     toastService.showSuccess('Сохранение', 'Счет-фактура сохранена');
 
                     const currentRole = jwtService.getDecodedToken().email;

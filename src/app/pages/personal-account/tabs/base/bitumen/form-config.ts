@@ -534,6 +534,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                         invoicesService.addItemToStart(invoice.documentMetadata.data);
                         sendClose();
                     }
+                    invoicesService.totalInfo = invoice.totalInfo;
                     toastService.showSuccess('Сохранение', invoice.documentMetadata.message);
 
                     const currentRole = jwtService.getDecodedToken().email;
