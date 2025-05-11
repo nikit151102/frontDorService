@@ -31,9 +31,11 @@ export class BitumenComponent implements OnInit {
   productTarget: any;
   buttonConfigs: any;
 
-  totalInfoColumnInvoices = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
+  totalInfoColumnArrival = [
+    { columnNum: 0, value: 'totalCount' },
+    { columnNum: 5, value: 'totalSumTTN' },
+    { columnNum: 6, value: 'totalSumWeight' },
+    { columnNum: 8, value: 'totalAmountSum' },
   ];
 
   columnsArrivalData = [
@@ -68,6 +70,13 @@ export class BitumenComponent implements OnInit {
   ];
 
 
+  totalInfoColumnExpense = [
+    { columnNum: 0, value: 'totalCount' },
+    { columnNum: 5, value: 'totalSumWeight' },
+    { columnNum: 6, value: 'totalSumWeight' },
+    { columnNum: 7, value: 'totalAmountSum' },
+  ];
+
   columnsExpenseData = [
     { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
     { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
@@ -101,12 +110,13 @@ export class BitumenComponent implements OnInit {
 
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
+  currentTotalInfo: any = this.totalInfoColumnArrival;
 
 
   ngOnInit(): void {
     const cachedEndpoints = this.cacheService.getAllCachedEndpoints();
     console.log('Все закэшированные эндпоинты:', cachedEndpoints);
-    this.switchComponent('arrival', 0, 'invoices', null ,'Приход');
+    this.switchComponent('arrival', 0, 'invoices', null, 'Приход');
     const currentRole = this.jwtService.getDecodedToken().email;
     this.paymentType = currentRole === '3' ? 2 : 3;
 
@@ -147,6 +157,7 @@ export class BitumenComponent implements OnInit {
       this.defaultFilters = { ...this.invoicesService.defaultFilters };
       this.currentComponent = type;
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+      this.currentTotalInfo = type === 'arrival' ? this.totalInfoColumnArrival : this.totalInfoColumnExpense;
 
       // Проверяем кэш для каждого эндпоинта
       const endpoints = [

@@ -32,9 +32,11 @@ export class CellsComponent implements OnInit {
   placeFroms: any;
   buttonConfigs: any;
 
-  totalInfoColumnInvoices = [
-    { columnNum: 1, value: 'totalExpenseSum' },
-    { columnNum: 2, value: 'totalIncomeSum' },
+  totalInfoColumnArrival = [
+    { columnNum: 0, value: 'totalCount' },
+    { columnNum: 5, value: 'totalSumTTN' },
+    { columnNum: 6, value: 'totalSumWeight' },
+    { columnNum: 8, value: 'totalAmountSum' },
   ];
 
   columnsArrivalData = [
@@ -60,6 +62,12 @@ export class CellsComponent implements OnInit {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
   ];
 
+
+  totalInfoColumnExpense = [
+    { columnNum: 0, value: 'totalCount' },
+    { columnNum: 5, value: 'totalSumWeight' },
+    { columnNum: 6, value: 'totalSumWeight' },
+  ];
 
   columnsExpenseData = [
     { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
@@ -94,6 +102,7 @@ export class CellsComponent implements OnInit {
 
   currentComponent: 'arrival' | 'expense' = 'arrival';
   currentColumns: any = this.columnsArrivalData;
+  currentTotalInfo: any = this.totalInfoColumnArrival;
 
   ngOnInit(): void {
     this.switchComponent('arrival', 2, 'invoices', null, 'Приход');
@@ -184,6 +193,7 @@ export class CellsComponent implements OnInit {
       this.defaultFilters = { ...this.invoicesService.defaultFilters };
       this.currentComponent = type;
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
+      this.currentTotalInfo = type === 'arrival' ? this.totalInfoColumnArrival : this.totalInfoColumnExpense;
 
       try {
         const endpoints = [

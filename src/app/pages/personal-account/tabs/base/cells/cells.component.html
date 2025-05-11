@@ -8,7 +8,7 @@
 
 <ng-container *ngIf="typeComponent == 'invoices'">
   <app-invoices [counterpartyId]="'00000000-0000-0000-0000-000000000000'" [columns]="currentColumns"
-    [paymentType]="paymentType" [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="totalInfoColumnInvoices"
+    [paymentType]="paymentType" [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="currentTotalInfo"
     [generalForm]="true" [endpoint]="'api/CommercialWork/ManagerDocument'"
     [endpointGetData]="'api/CommercialWork/ManagerDocument/Filter'" [defaultFilter]="defaultFilters">
   </app-invoices>
