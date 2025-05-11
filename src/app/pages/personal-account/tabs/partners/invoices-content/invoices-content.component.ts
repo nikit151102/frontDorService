@@ -84,9 +84,9 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
 
   totalInfoColumn = [
+    { columnNum: 0, value: 'totalCount' },
     { columnNum: 2, value: 'totalExpenseSum' },
     { columnNum: 4, value: 'totalIncomeSum' },
-    { columnNum: 7, value: 'totalSaldo' },
   ];
 
 
