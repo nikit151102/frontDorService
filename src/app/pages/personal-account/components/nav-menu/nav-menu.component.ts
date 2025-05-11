@@ -150,6 +150,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
       this.router.navigate(['/']);
       this.tokenService.clearToken();
       window.history.pushState(null, '', '/');
+      this.cacheService.clear();
     } else {
       this.activatedRoute.paramMap.subscribe(params => {
         const id = params.get('id');
@@ -188,6 +189,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   }
 
   refreshReference() {
+    this.cacheService.clear();
     this.toastService.showSuccess('Обновление справочников', 'Начато обновление данных...');
 
     this.cacheService.refreshAllCachedData().subscribe({
