@@ -5,8 +5,9 @@
         <ng-template pTemplate="header">
             <tr>
                 <ng-container *ngFor="let col of columns">
-                    <th class="filter-header" [style.min-width]="col.width">
-                        <div style="display: flex; justify-content: space-between;">
+                    <th [style.min-width]="col.width">
+                        <div style="display: flex; align-items: center; gap: 10px">
+                            {{ col.label }}
                             <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field"
                                 [filterType]="1" (filterChange)="referenceBookService.onFilterChange($event)"
                                 (sortChange)="referenceBookService.onSortChange($event)"
@@ -34,16 +35,8 @@
                                 (filterChange)="referenceBookService.onFilterChange($event)"
                                 (sortChange)="referenceBookService.onSortChange($event)">
                             </app-uuid-search-filter-sort>
-
                         </div>
                     </th>
-
-                </ng-container>
-                <th style="width: 200px;"></th>
-            </tr>
-            <tr>
-                <ng-container *ngFor="let col of columns">
-                    <th [style.min-width]="col.width">{{ col.label }}</th>
                 </ng-container>
                 <th></th>
             </tr>
@@ -90,11 +83,13 @@
                 <div class="form-group-container" [ngClass]="{'two-columns': formFields.length > 4}">
                     <div class="form-group" *ngFor="let field of formFields">
                         <label *ngIf="field.visible == true" [for]="field.field ">{{ field.label }}:</label>
-                        <input *ngIf="field.type === 'text' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
-                            name="{{ field.field }}" class="form-control" required type="text" />
+                        <input *ngIf="field.type === 'text' && field.visible == true" id="{{ field.field }}"
+                            [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
+                            type="text" />
 
-                        <input *ngIf="field.type === 'date' && field.visible == true" id="{{ field.field }}" [(ngModel)]="modalData[field.field]"
-                            name="{{ field.field }}" class="form-control" required type="date" />
+                        <input *ngIf="field.type === 'date' && field.visible == true" id="{{ field.field }}"
+                            [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
+                            type="date" />
 
                         <input *ngIf="field.type === 'number' && field.visible == true" id="{{ field.field }}"
                             [(ngModel)]="modalData[field.field]" name="{{ field.field }}" class="form-control" required
@@ -128,20 +123,20 @@
     <div class="modal" *ngIf="isModalUserCreateOpen" [ngClass]="{ 'open': isModalUserCreateOpen }">
         <div class="modal-content">
             <span class="close-btn" (click)="isModalUserCreateOpen = false">×</span>
-    
+
             <h2 class="modal-title">Логин</h2>
             <p class="username">{{ newUser.userName }}</p>
-    
+
             <h2 class="modal-title">Код доступа</h2>
             <div class="code-container">
                 <span *ngFor="let digit of (newUser.initialPassCode + '').split('')" class="code-digit">
                     {{ digit }}
-                </span>                
+                </span>
             </div>
         </div>
     </div>
-    
-    
+
+
 
 </div>
 

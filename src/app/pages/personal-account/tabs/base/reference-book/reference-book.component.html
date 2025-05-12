@@ -1,12 +1,14 @@
 <div class="container">
     <span style="color: #101010c7; font-size: 20px;">База > Организации</span>
-    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)" style="    margin: 20px 0;">Создать запись</button>
+    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)"
+        style="    margin: 20px 0;">Создать запись</button>
     <p-table [value]="data" class="invoice-table">
         <ng-template pTemplate="header">
             <tr>
                 <ng-container *ngFor="let col of columns">
-                    <th class="filter-header" [style.min-width]="col.width">
-                        <div style="display: flex; justify-content: space-between;">
+                    <th [style.min-width]="col.width">
+                        <div style="display: flex; align-items: center; gap: 10px">
+                            {{ col.label }}
                             <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field"
                                 [filterType]="1" (filterChange)="referenceBookService.onFilterChange($event)"
                                 (sortChange)="referenceBookService.onSortChange($event)"
@@ -37,13 +39,6 @@
 
                         </div>
                     </th>
-
-                </ng-container>
-                <th style="width: 200px;"></th>
-            </tr>
-            <tr>
-                <ng-container *ngFor="let col of columns">
-                    <th [style.min-width]="col.width">{{ col.label }}</th>
                 </ng-container>
                 <th></th>
             </tr>
