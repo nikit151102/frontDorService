@@ -148,14 +148,28 @@ export class ProductsComponent implements OnChanges, OnInit {
   }
 
   statuses = [
-    { label: 'Не отправлено', value: 0 },
-    { label: 'Проверка Механик', value: 1 },
-    { label: 'Проверка Директор', value: 2 },
-    { label: 'Отклонено Механик', value: 3 },
-    { label: 'Отклонено Директор', value: 4 },
-    { label: 'Подписано', value: 5 },
-    { label: 'Удалено', value: 6 }
+    { label: 'Черновик', value: 0, id: 0 },
+    { label: 'Проверка Механик', value: 1, id: 1 },
+    { label: 'Проверка Директор', value: 2, id: 2 },
+    { label: 'Отклонено Механик', value: 3, id: 3 },
+    { label: 'Отклонено Директор', value: 4, id: 4 },
+    { label: 'Подписано', value: 5, id: 5 },
+    { label: 'Удалено', value: 6, id: 6 },
+    { label: 'Проведено', value: 7, id: 7 }
   ];
+  getStatusClass(value: number): string {
+    switch (value) {
+      case 0: return 'status-not-checked';
+      case 1:
+      case 2: return 'status-sent-for-check';
+      case 3:
+      case 4: return 'status-rejected';
+      case 5: return 'status-approved';
+      case 6: return 'status-deleted';
+      case 7: return 'status-completed';
+      default: return '';
+    }
+  }
 
   constructor() { }
 

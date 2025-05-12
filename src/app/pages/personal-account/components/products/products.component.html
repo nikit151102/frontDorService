@@ -60,9 +60,16 @@
                                 {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
                             </ng-container>
                             <ng-template #normalField>
-                                {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
-                                product[col.fieldView] }}
+                                <ng-container *ngIf="col.field != 'DocInvoice.Status' && col.field != 'status'">
+                                    {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
+                                    product[col.fieldView] }}
+                                </ng-container>
+                                    <span *ngIf="col.field === 'DocInvoice.Status' || col.field === 'status'"
+                                [ngClass]="getStatusClass(product['docInvoiceStatus'])" class="status-tag">
+                                {{ getStatusLabel(product['docInvoiceStatus']) }}
+                            </span>
                             </ng-template>
+                        
                         </td>
                     </ng-container>
                     <td *ngIf="actions.length > 0">
