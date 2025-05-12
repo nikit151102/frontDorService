@@ -2,10 +2,11 @@
 .counterparties-list {
     width: 320px;
     background: #f9f9f9;
+    margin-left: 25px;
     padding: 20px;
-    border-radius: 8px;
+    border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    margin-top: 8px;
+    margin-top: 24px;
 }
 
 .add-button {
@@ -441,7 +442,7 @@ span {
     color: #101010 !important;
 }
 
-#title-modal{
+#title-modal {
     font-size: 20px;
 }
 
@@ -453,6 +454,6 @@ span {
     padding-top: 20px;
 }
 
-.p-fluid{
+.p-fluid {
     margin-top: 25px;
 }

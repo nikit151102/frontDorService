@@ -53,7 +53,7 @@ import { UnsavedChangesDialogComponent } from '../../unsaved-changes-dialog/unsa
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
   providers: [ConfirmationService, MessageService]
-})
+}) 
 export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyName!: any;

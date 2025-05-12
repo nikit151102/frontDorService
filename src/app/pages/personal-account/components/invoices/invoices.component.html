@@ -25,33 +25,13 @@
 </div>
 
 
-<div style="margin-bottom: 10px;  display: flex;
-    flex-direction: column;
-    width: fit-content;">
-
-    <h2 *ngIf="counterpartyData" class="counterparty-title">
-        <span class="short-name">{{ counterpartyData.shortName }}</span>
-
-        <span *ngIf="counterpartyData.fullName" class="separator">-</span>
-
-        <span *ngIf="counterpartyData.fullName" class="full-name">
-            {{ counterpartyData.fullName }}
-        </span>
-
-        <span *ngIf="getTaxValue(counterpartyData.tax)" class="tax-badge">
-            ({{ getTaxValue(counterpartyData.tax) }})
-        </span>
-    </h2>
-
-</div>
-
 <div class="table-wrapper">
 <div class="table-container" (scroll)="onScroll($event)">
     <table class="invoice-table">
       <thead>
         <tr class="filter-row">
           <ng-container *ngFor="let col of columns">
-            <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width">
+            <th *ngIf="isColumnVisible(col)" class="filter-header" [style.width]="col.width" style="padding: 0 15px;">
               <div style="display: flex; justify-content: space-between;">
                 <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
                   (filterChange)="invoicesService.onFilterChange($event)"
@@ -84,7 +64,7 @@
         </tr>
         <tr class="header-row">
           <ng-container *ngFor="let col of columns">
-            <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
+            <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">{{ col.header }}</th>
           </ng-container>
         </tr>
       </thead>

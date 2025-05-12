@@ -1,11 +1,12 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { ProductsComponent } from '../../../components/products/products.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { BUTTON_SETS } from './button-config';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { ProductsService } from '../../../components/products/products.service';
+import { taxes } from '../../../../../services/data';
 
 @Component({
   selector: 'app-invoices-content',
@@ -18,14 +19,14 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() counterpartyData!: any;
   @Input() notificationItem: any;
   selectedComponent: string = 'invoices';
+  showDetails: boolean = false;
 
   constructor(private jwtService: JwtService,
-    private invoicesService: InvoicesService,
+    public invoicesService: InvoicesService,
     public productsService: ProductsService
   ) { }
 
   ngOnInit(): void {
-    console.log('---------defaultFilters')
     this.invoicesService.defaultFilters = [];
     this.invoicesService.queryData.filters = [];
     this.invoicesService.defaultFilters = [{
@@ -39,7 +40,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       type: 1
     },
     ];
-    
+
     this.invoicesService.filterStatic = [{
       field: 'Partner.Type',
       values: [0, 1, 5],
@@ -68,7 +69,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     }
     ]
 
-    
+
 
     this.jwtService.getDecodedToken()
   }
@@ -80,6 +81,10 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
       //   this.invoicesService.updateOrAddItem(this.notificationItem);
       // }
     }
+    if (changes['counterpartyData']) {
+      this.showDetails = false;
+    }
+
   }
 
   getButtonConfigs() {
@@ -131,27 +136,13 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { columnNum: 3, value: 'totalSaldo' },
   ]
 
-
-
-  productActions = [
-    {
-      label: 'Редактировать',
-      action: (product: any) => this.editProduct(product)
-    },
-    {
-      label: 'Удалить',
-      action: (product: any) => this.deleteProduct(product)
-    }
-  ];
-
-  editProduct(product: any) {
-    console.log('Редактируем:', product);
-    // Здесь можно добавить логику редактирования, например, открытие модального окна
+  getTaxValue(tax: any) {
+    const foundTax = taxes.find((item: any) => item.value === tax);
+    return foundTax ? foundTax.label : '';
   }
 
-  deleteProduct(product: any) {
-    console.log('Удаляем:', product);
-    // Здесь можно добавить логику удаления, например, вызов API
+  toggleDetails() {
+    this.showDetails = !this.showDetails;
   }
 
 

@@ -1,5 +1,12 @@
 <div
-    style="display: flex;     justify-content: space-between;     background: #f4f4f9;     border-radius: 8px; padding: 5px;   align-items: center;  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
+    style="display: flex;     
+    justify-content: space-between;     
+    background: #ffffff;     
+    border-radius: 8px; 
+    margin: 0 25px;
+    padding: 5px;   
+    align-items: center;  
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
     <nav class="nav-menu">
         <ul>
             <li *ngFor="let item of items">
@@ -25,7 +32,7 @@
     </nav>
 
 
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 10px; margin-right: 12px;">
         <a (click)="refreshReference()" id="exit-btn">Обновить данные</a>
         <a (click)="execute('exit')" id="exit-btn">Выйти</a>
 

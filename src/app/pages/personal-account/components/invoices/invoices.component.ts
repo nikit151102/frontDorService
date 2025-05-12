@@ -76,7 +76,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
   ngOnChanges(changes: SimpleChanges) {
 
-    if (changes['defaultFilter']) {
+    if (changes['defaultFil`ter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
