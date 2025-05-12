@@ -65,6 +65,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() defaultFilter: any;
   @Input() selectedComponent: string = '';
   @Input() modelForm: any;
+  @Input() heightContainer: string = '330px'
 
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -446,19 +447,19 @@ export class InvoicesComponent implements OnChanges, OnInit {
       rejectLabel: 'Отмена',
       onAccept: () => {
 
-       this.invoiceService.sendingVerification(
-              this.transformToSecondFormat(invoice),
-              status,
-              this.endpoint
-            ).subscribe(
-              (verificationResponse: any) => {
-                this.invoicesService.updateActiveData(verificationResponse.data);
-              },
-              (error) => {
-                console.error('Error deleting invoice', error);
-                this.toastService.showError('Ошибка', error.error.message);
-              }
-            );
+        this.invoiceService.sendingVerification(
+          this.transformToSecondFormat(invoice),
+          status,
+          this.endpoint
+        ).subscribe(
+          (verificationResponse: any) => {
+            this.invoicesService.updateActiveData(verificationResponse.data);
+          },
+          (error) => {
+            console.error('Error deleting invoice', error);
+            this.toastService.showError('Ошибка', error.error.message);
+          }
+        );
       }
     });
   }

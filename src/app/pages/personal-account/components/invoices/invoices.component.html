@@ -26,7 +26,7 @@
 
 
 <div class="table-wrapper">
-  <div class="table-container" (scroll)="onScroll($event)">
+  <div class="table-container" (scroll)="onScroll($event)" [style.height]="'calc(100vh - ' + heightContainer + ')'">
     <table class="invoice-table">
       <thead>
         <!-- <tr class="filter-row">

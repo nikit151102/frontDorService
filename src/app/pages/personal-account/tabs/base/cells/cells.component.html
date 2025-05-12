@@ -12,7 +12,7 @@
     [paymentType]="paymentType" [buttonConfigs]="getButtonConfigs()" [totalInfoColumn]="currentTotalInfo"
     [generalForm]="true" [endpoint]="'api/CommercialWork/ManagerDocument'"
     [endpointGetData]="'api/CommercialWork/ManagerDocument/Filter'" [defaultFilter]="defaultFilters"
-    [modelForm]="currentFormField">
+    [modelForm]="currentFormField" [heightContainer]="'260px'">
   </app-invoices>
 </ng-container>
 <ng-container *ngIf="typeComponent == 'products'">
