@@ -60,15 +60,7 @@ export class CashComponent implements OnInit {
           field: 'antonCashType',
           values: [cashType],
           type: 1
-        },
-        {
-          field: 'DocPaymentType',
-          values: [0, 1],
-          type: 1
-        },
-        { field: "DocAccountType", values: [0, 1], type: 1 },
-
-        { field: "Partner.Type", values: [0, 1, 5], type: 1 }
+        }
       ]
       : [
         {
