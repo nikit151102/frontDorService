@@ -1,5 +1,5 @@
 .table-container {
-    height: calc(100vh - 320px);
+    height: calc(100vh - 330px);
     overflow-y: auto;
     position: relative;
 }
@@ -60,7 +60,7 @@ tfoot td {
 }
 
 .invoice-table td {
-    padding: 12px;
+    padding: 5px;
     text-align: left;
     font-size: 14px;
     color: #666;

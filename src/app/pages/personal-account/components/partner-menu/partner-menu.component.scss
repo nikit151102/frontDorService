@@ -1,9 +1,9 @@
 /* Стиль для списка контрагентов */
 .counterparties-list {
-    width: 320px;
+    width: 290px;
     background: #f9f9f9;
     margin-left: 25px;
-    padding: 20px;
+    padding: 10px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     margin-top: 24px;
@@ -76,7 +76,7 @@ ul {
     list-style: none;
     padding: 0;
     overflow-y: scroll;
-    height: calc(100vh - 290px);
+    height: calc(100vh - 240px);
     overflow-x: hidden;
     direction: rtl;
 }
@@ -105,7 +105,7 @@ li {
     flex-direction: row-reverse;
     align-items: center;
     justify-content: space-between;
-    padding: 12px;
+    padding: 7px;
     background-color: #ffffff;
     color: #101010;
     margin-bottom: 12px;
@@ -219,6 +219,7 @@ span {
     display: inline-block;
     padding: 4px 10px;
     border-radius: 10px;
+    font-size: 13px;
     font-weight: 600;
     color: #fff;
     text-transform: capitalize;

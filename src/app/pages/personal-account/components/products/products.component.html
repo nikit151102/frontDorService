@@ -19,7 +19,8 @@
                 <tr>
                     <ng-container *ngFor="let col of columns">
                         <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                            <div style="display: flex; justify-content: space-between;" [style.width]="col.width">
+                            <div style="display: flex; align-items: center; gap: 10px">
+                                {{ col.header }}
                                 <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
                                     [filterType]="1" (filterChange)="productsServ.onFilterChange($event)"
                                     (sortChange)="productsServ.onSortChange($event)">
@@ -45,11 +46,6 @@
                                 </app-uuid-search-filter-sort>
                             </div>
                         </th>
-                    </ng-container>
-                </tr>
-                <tr>
-                    <ng-container *ngFor="let col of columns">
-                        <th *ngIf="isColumnVisible(col)" [style.width]="col.width">{{ col.header }}</th>
                     </ng-container>
                     <th *ngIf="actions.length > 0">Действия</th>
                 </tr>

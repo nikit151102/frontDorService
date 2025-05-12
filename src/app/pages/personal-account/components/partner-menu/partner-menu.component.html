@@ -26,6 +26,7 @@
         <div style="       display: flex;
                 flex-direction: column;
                 align-items: flex-end;
+                    font-size: 13px;
             ">
           <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName
             }}</span>
@@ -56,7 +57,7 @@
             </span>
           </div>
           <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">
-            <img src="svgs/settings.svg" alt="Настройки" style="width: 24px;">
+            <img src="svgs/settings.svg" alt="Настройки" style="width: 20px;">
           </button>
           <div *ngIf="menuOpenFor === counterparty.id" class="menu">
             <ng-container *ngFor="let button of getButtonSet()">
@@ -78,7 +79,7 @@
 
   <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '600px'}">
     <p-header>
-      <span class="pi pi-pencil"></span> 
+      <span class="pi pi-pencil"></span>
       <span id="title-modal">
         {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
       </span>
