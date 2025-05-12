@@ -38,6 +38,9 @@ export class DateFilterSortComponent {
 
   constructor(private elementRef: ElementRef) { }
 
+  visibleModal() {
+    this.isTest = !this.isTest;
+  }
 
   toggleSort(type: 'asc' | 'desc') {
     this.sortOrder = type;

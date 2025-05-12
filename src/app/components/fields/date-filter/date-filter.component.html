@@ -1,5 +1,5 @@
 <div class="date-filter-sort">
-    <a (click)="isTest = true">
+    <a (click)="visibleModal()">
         <img src="svgs/dots_three_vertical.svg" alt="" width="30px">
         <span *ngIf="selectedFilter" style="    background: #b1d0ff;
     border-radius: 50%;
@@ -7,17 +7,15 @@
     position: absolute;
     top: 0px;
     right: -10px;
-    font-size: 13px;"> +1</span>
+    font-size: 13px;"> +</span>
     </a>
     <div class="filter-dropdown" *ngIf="isTest">
         <!-- Поле для выбора даты -->
         <div class="date-box">
-
             <input type="text" [(ngModel)]="selectedDate" placeholder="" readonly #dateInput
                 [ngStyle]="{'width': '200px', 'background': '#ffffff', 'border': '1px solid #007BFF', 'transition': 'all 0.3s ease'}"
                 [ngClass]="{'search-expanded': true}"
                 *ngIf="dateValue.length> 0 || startDate.length>0 ||  endDate.length>0" />
-
         </div>
 
         <span class="block"> Фильтры</span>

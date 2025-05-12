@@ -28,39 +28,24 @@ export class SearchFilterSortComponent {
   searchTerm: string = '';
   selectedFilters: any[] = []; // Используем any, так как фильтры могут быть разных типов
   sortOrder: 'asc' | 'desc' = 'asc';
-  isFilterOpen = false;
+  isOpen: boolean = false
+
 
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
   constructor(private elementRef: ElementRef) { }
 
-  toggleFilter() {
-    this.isFilterOpen = !this.isFilterOpen;
+  visibleModal() {
+    this.isOpen = !this.isOpen;
   }
 
   inputWidth: string = '30px';
   bgColor: string = 'transparent';
   borderStyle: string = 'none';
   isSearchOpen: boolean = false;
-  
-  toggleSearch(isFocused: boolean) {
-    if (isFocused) {
-      this.inputWidth = '200px';
-      this.bgColor = '#ffffff';
-      this.borderStyle = '1px solid #007BFF';
-      this.isSearchOpen = true;
-    } else {
-      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
-        this.inputWidth = '30px';
-        this.bgColor = 'transparent';
-        this.borderStyle = 'none';
-        this.isSearchOpen = false;
-      }, 200);
-    }
-  }
 
-    
+
   onSearchChange() {
     const filterDto: FilterDto = {
       field: this.filterField,
@@ -86,14 +71,12 @@ export class SearchFilterSortComponent {
     this.filterChange.emit(filterDto);
   }
 
-  toggleSort() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-
+  toggleSort(type: 'asc' | 'desc') {
+    this.sortOrder = type;
     const sortDto: SortDto = {
       field: this.filterField,
       sortType: this.sortOrder === 'asc' ? 0 : 1
     };
-
     this.sortChange.emit(sortDto);
   }
 
@@ -111,14 +94,8 @@ export class SearchFilterSortComponent {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside ) {
-      this.isFilterOpen = false;
-    }
-    if (!clickedInside  && this.inputWidth != '30px') {
-      this.inputWidth = '30px';
-      this.bgColor = 'transparent';
-      this.borderStyle = 'none';
-      this.isSearchOpen = false;
+    if (!clickedInside) {
+      this.isOpen = false;
     }
   }
 

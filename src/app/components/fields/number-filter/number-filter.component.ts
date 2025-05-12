@@ -30,7 +30,7 @@ export class NumberFilterComponent {
   endNumber: number = 0;        // Конец диапазона для "Между"
   showNumberInput: boolean = false; // Показать поля для ввода чисел
   isFilterOpen: boolean = false;
-
+  isOpen: boolean = false
   sortOrder: 'asc' | 'desc' = 'asc'; // Направление сортировки
 
   @Output() filterChange = new EventEmitter<FilterDto>();
@@ -38,41 +38,19 @@ export class NumberFilterComponent {
 
   constructor(private elementRef: ElementRef) { }
 
-  toggleFilter() {
-    this.isFilterOpen = !this.isFilterOpen;
+  visibleModal() {
+    this.isOpen = !this.isOpen;
   }
 
-
-  inputWidth: string = '30px';
-  bgColor: string = 'transparent';
-  borderStyle: string = 'none';
-  isSearchOpen: boolean = false;
-  
-  toggleSearch(isFocused: boolean) {
-    if (isFocused) {
-      this.inputWidth = '150px';
-      this.bgColor = '#ffffff';
-      this.borderStyle = '1px solid #007BFF';
-      this.isSearchOpen = true;
-    } else {
-      setTimeout(() => {  // Добавляем небольшую задержку, чтобы не схлопывалось резко
-        this.inputWidth = '30px';
-        this.bgColor = 'transparent';
-        this.borderStyle = 'none';
-        this.isSearchOpen = false;
-      }, 200);
-    }
-  }
-
-
-  toggleSort() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+  toggleSort(type: 'asc' | 'desc') {
+    this.sortOrder = type;
     const sortDto: SortDto = {
       field: this.filterField,
       sortType: this.sortOrder === 'asc' ? 0 : 1
     };
     this.sortChange.emit(sortDto);
   }
+
 
   onFilterChange(filter: string) {
     this.selectedFilter = filter;
@@ -150,20 +128,15 @@ export class NumberFilterComponent {
     this.startNumber = 0;      // Сбрасываем начало диапазона
     this.endNumber = 0;        // Сбрасываем конец диапазона
     this.showNumberInput = false; // Скрываем поля ввода
+    this.isOpen = false;
     this.emitFilterChange();   // Эмитируем сброс фильтра
   }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
-    if (!clickedInside ) {
-      this.isFilterOpen = false;
-    }
-    if (!clickedInside  && this.inputWidth != '30px') {
-      this.inputWidth = '30px';
-      this.bgColor = 'transparent';
-      this.borderStyle = 'none';
-      this.isSearchOpen = false;
+    if (!clickedInside) {
+      this.isOpen = false;
     }
   }
 

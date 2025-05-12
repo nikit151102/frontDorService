@@ -53,7 +53,7 @@ input:focus {
     align-items: flex-start;
     top: 100%;
     left: 0;
-    width: 100%;
+    width: 300px;
     /* Делаем выпадашку шириной как поле */
     background: white;
     border-radius: 6px;
@@ -90,6 +90,8 @@ input:focus {
     color: #666;
     transition: all 0.3s ease-in-out;
     margin-left: 8px;
+    width: 100%;
+    display: flex;
 }
 
 .sort-btn:hover {
@@ -122,6 +124,12 @@ input:focus {
 }
 
 
+.block{
+    padding-top: 17px;
+    padding-bottom: 4px;
+    border-bottom: solid 1px #d1d1d1;
+    font-size: 15px;
+}
 
 .input-container {
     position: relative;

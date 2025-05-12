@@ -471,12 +471,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         const requiredFields = [
             'date',
             'auto',
-            'placeFromId',
-            'placeToId',
-            'cargoId',
-            'ttn',
-            'weight',
-            'amount'
+          
         ];
 
         const zeroAllowedFields = ['paymentType'];
