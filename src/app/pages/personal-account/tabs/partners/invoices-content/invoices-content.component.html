@@ -24,21 +24,21 @@
             <div class="info-value count">
                 {{invoicesService.totalInfo.totalCount}}
             </div>
-            <div class="info-label">Количество записей</div>
+            <div class="info-label">Записей</div>
         </div>
 
         <div class="info-card" *ngIf="invoicesService.totalInfo && invoicesService.totalInfo.totalIncomeSum">
             <div class="info-value income">
                 {{invoicesService.totalInfo.totalIncomeSum | number:'1.2-2'}}
             </div>
-            <div class="info-label">Общие доходы</div>
+            <div class="info-label">Приход</div>
         </div>
 
         <div class="info-card" *ngIf="invoicesService.totalInfo && invoicesService.totalInfo.totalExpenseSum ">
             <div class="info-value expense">
                 {{invoicesService.totalInfo.totalExpenseSum | number:'1.2-2'}}
             </div>
-            <div class="info-label">Общие расходы</div>
+            <div class="info-label">Расход</div>
         </div>
 
         <div class="info-card"
