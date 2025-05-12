@@ -60,7 +60,15 @@ export class CashComponent implements OnInit {
           field: 'antonCashType',
           values: [cashType],
           type: 1
-        }
+        },
+        {
+          field: 'DocPaymentType',
+          values: [0, 1],
+          type: 1
+        },
+        { field: "DocAccountType", values: [0, 1], type: 1 },
+
+        { field: "Partner.Type", values: [0, 1, 5], type: 1 }
       ]
       : [
         {
@@ -74,6 +82,11 @@ export class CashComponent implements OnInit {
           type: 1
         }
       ];
+
+
+    0
+
+
     this.invoicesService.filterStatic = newFilters;
     newFilters.forEach(newFilter => {
       const existingFilterIndex = this.invoicesService.defaultFilters.findIndex(existingFilter =>
