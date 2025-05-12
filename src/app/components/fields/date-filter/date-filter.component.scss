@@ -16,6 +16,14 @@
     position: relative;
 }
 
+
+.block{
+    padding-top: 17px;
+    padding-bottom: 4px;
+    border-bottom: solid 1px #d1d1d1;
+    font-size: 15px;
+}
+
 .date-box input {
     width: 100%;
     padding: 12px;
@@ -58,11 +66,10 @@
     position: absolute;
     top: 100%;
     left: 0;
-    // width: 100%;
-    max-width: 325px;
+    width: 300px;
     z-index: 999;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     gap: 5px;
 }
 
@@ -120,10 +127,12 @@
     color: #666;
     transition: all 0.3s ease-in-out;
     margin-left: 8px;
+    width: 100%;
+    display: flex;
 }
 
 .sort-btn:hover {
-    background: #007bff36;
+    background: #5c6bc0;
     color: white;
 }
 
@@ -156,7 +165,7 @@
 }
 
 
-.btn-clear-filter{
+.btn-clear-filter {
     padding: 5px;
     background: transparent;
     color: #1b506a;
@@ -171,23 +180,21 @@
 .input-container {
     position: relative;
     width: 100%;
-  }
-  
-  .input-container svg {
+}
+
+.input-container svg {
     position: absolute;
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-  }
-  
-  .input-container input {
-    padding-left: 30px; /* Место для иконки */
-  }
-  
+}
 
-input{
-    color: #101010;
+.input-container input {
+    padding-left: 30px;
+    /* Место для иконки */
 }
 
 
-
+input {
+    color: #101010;
+}

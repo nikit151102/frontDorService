@@ -1,32 +1,32 @@
 <div style=" display: flex; gap: 10px;">
-    <ng-container *ngIf="!generalForm">
-        <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
-            [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
-            (buttonClicked)="handleButtonClick($event.button, $event.product)"  [filters]="invoicesService.defaultFilters">
-        </app-invoices-form>
+  <ng-container *ngIf="!generalForm">
+    <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
+      [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
+      (buttonClicked)="handleButtonClick($event.button, $event.product)" [filters]="invoicesService.defaultFilters">
+    </app-invoices-form>
 
-    </ng-container>
-    <ng-container *ngIf="generalForm">
-        <general-form [data]="selectData"></general-form>
-        
-    </ng-container>
+  </ng-container>
+  <ng-container *ngIf="generalForm">
+    <general-form [data]="selectData"></general-form>
 
-    <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
-        <button (click)="openPaymentModal()" style=" height: 36px;
+  </ng-container>
+
+  <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
+    <button (click)="openPaymentModal()" style=" height: 36px;
      padding: 8px;
         background: #34d399;
         border: none;
         color: #fff;
         border-radius: 7px;">
-            Оплатить
-        </button>
-    </ng-container>
+      Оплатить
+    </button>
+  </ng-container>
 
 </div>
 
 
 <div class="table-wrapper">
-<div class="table-container" (scroll)="onScroll($event)">
+  <div class="table-container" (scroll)="onScroll($event)">
     <table class="invoice-table">
       <thead>
         <tr class="filter-row">
@@ -37,23 +37,22 @@
                   (filterChange)="invoicesService.onFilterChange($event)"
                   (sortChange)="invoicesService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
                 </app-search-filter-sort>
-  
+
                 <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
                   (filterChange)="invoicesService.onFilterChange($event)"
                   (sortChange)="invoicesService.onSortChange($event)">
                 </app-date-filter>
-  
+
                 <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
                   (filterChange)="invoicesService.onFilterChange($event)"
                   (sortChange)="invoicesService.onSortChange($event)">
                 </app-number-filter>
-  
-                <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint"
-                  [fieldNames]="''" [enam]="null" [Field]="col.field"
-                  (filterChange)="invoicesService.onFilterChange($event)"
+
+                <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint" [fieldNames]="''"
+                  [enam]="null" [Field]="col.field" (filterChange)="invoicesService.onFilterChange($event)"
                   (sortChange)="invoicesService.onSortChange($event)">
                 </app-uuid-search-filter-sort>
-  
+
                 <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
                   [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event)"
                   (sortChange)="invoicesService.onSortChange($event)">
@@ -64,16 +63,26 @@
         </tr>
         <tr class="header-row">
           <ng-container *ngFor="let col of columns">
-            <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">{{ col.header }}</th>
+            <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
+              <div style="display: flex; align-items: center; gap: 10px">
+                {{ col.header }}
+                <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
+                  (filterChange)="invoicesService.onFilterChange($event)"
+                  (sortChange)="invoicesService.onSortChange($event)">
+                </app-date-filter>
+              </div>
+
+            </th>
           </ng-container>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let product of invoices" class="invoice-row" (dblclick)="isEditInvoice = false; getInvoiceById(product)">
+        <tr *ngFor="let product of invoices" class="invoice-row"
+          (dblclick)="isEditInvoice = false; getInvoiceById(product)">
           <ng-container *ngFor="let col of columns">
             <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
-              (dblclick)="isEditInvoice = false; getInvoiceById(product)"
-              (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
+              (dblclick)="isEditInvoice = false; getInvoiceById(product)" (contextmenu)="onRightClick($event, product)"
+              [style.width]="col.width">
               <ng-container
                 *ngIf="(col.field === 'dateTime' || col.field === 'date' || col.field === 'paymentDateTime'); else normalField">
                 <ng-container *ngIf="product['paymentDateTime'] && product['paymentDateTime'] != null">
@@ -143,7 +152,7 @@
         </tr>
       </tfoot>
     </table>
-  
+
   </div>
 </div>
 
@@ -151,16 +160,16 @@
 <!-- Контекстное меню -->
 <div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
 
-    <ng-container *ngFor="let button of getButtonSet()">
-        <button class="btn btn-details"
-            *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true" [ngClass]="button.class"
-            (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
-            {{ button.label }}
-        </button>
-    </ng-container>
+  <ng-container *ngFor="let button of getButtonSet()">
+    <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
+      [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
+      {{ button.label }}
+    </button>
+  </ng-container>
 </div>
 
 
 
-<app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType" [filters]="invoicesService.filterStatic"></app-invoice-payment>
+<app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType"
+  [filters]="invoicesService.filterStatic"></app-invoice-payment>
 <app-score-form [counterpartyId]="counterpartyId" [data]="dataSelectScope"></app-score-form>

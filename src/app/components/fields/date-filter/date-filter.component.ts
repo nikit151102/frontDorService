@@ -24,11 +24,12 @@ export class DateFilterSortComponent {
   @Input() filterField: string = '';
   selectedFilter: string = '';
   selectedDate: string = '';
-  dateValue: string = '';      
-  startDate: string = '';     
-  endDate: string = '';       
+  dateValue: string = '';
+  startDate: string = '';
+  endDate: string = '';
   showCalendar: boolean = false;
   isFilterOpen: boolean = false;
+  isTest: boolean = false
 
   sortOrder: 'asc' | 'desc' = 'asc';
 
@@ -37,33 +38,9 @@ export class DateFilterSortComponent {
 
   constructor(private elementRef: ElementRef) { }
 
-  toggleFilter() {
-    this.isFilterOpen = !this.isFilterOpen;
-  }
 
-  inputWidth: string = '30px';
-  bgColor: string = 'transparent';
-  borderStyle: string = 'none';
-  isSearchOpen: boolean = false;
-
-  toggleSearch(isFocused: boolean) {
-    if (isFocused) {
-      this.inputWidth = '200px';
-      this.bgColor = '#ffffff';
-      this.borderStyle = '1px solid #007BFF';
-      this.isSearchOpen = true;
-    } else {
-      setTimeout(() => {
-        this.inputWidth = '30px';
-        this.bgColor = 'transparent';
-        this.borderStyle = 'none';
-        this.isSearchOpen = false;
-      }, 200);
-    }
-  }
-
-  toggleSort() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
+  toggleSort(type: 'asc' | 'desc') {
+    this.sortOrder = type;
     const sortDto: SortDto = {
       field: this.filterField,
       sortType: this.sortOrder === 'asc' ? 0 : 1
@@ -79,6 +56,7 @@ export class DateFilterSortComponent {
     this.endDate = '';
     this.showCalendar = true;
   }
+
   onDateChange() {
     const filterDto: FilterDto = {
       field: this.filterField,
@@ -113,7 +91,6 @@ export class DateFilterSortComponent {
       return null;
     }
   }
-
 
   getDateFilterType(): number {
     switch (this.selectedFilter) {
@@ -166,6 +143,7 @@ export class DateFilterSortComponent {
     this.startDate = '';
     this.endDate = '';
     this.showCalendar = false;
+    this.isTest = false;
     this.emitFilterChange();
   }
 
@@ -173,13 +151,7 @@ export class DateFilterSortComponent {
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside) {
-      this.isFilterOpen = false;
-    }
-    if (!clickedInside && this.inputWidth != '30px') {
-      this.inputWidth = '30px';
-      this.bgColor = 'transparent';
-      this.borderStyle = 'none';
-      this.isSearchOpen = false;
+      this.isTest = false;
     }
   }
 }
