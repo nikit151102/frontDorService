@@ -78,7 +78,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
   ngOnChanges(changes: SimpleChanges) {
 
-    if (changes['defaultFil`ter']) {
+    if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.currentPage = 0;
@@ -96,6 +96,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
       console.log('counterpartyData', this.counterpartyData)
     }
 
+    if (changes['currentFormField']) {
+      this.loadInvoices(true);
+      console.log('loadInvoices buttonConfigs')
+    }
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
       this.currentPage = 0;
