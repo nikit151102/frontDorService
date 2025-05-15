@@ -1,7 +1,7 @@
 <div class="container">
   <app-base-menu (selectTab)="onSelectTab($event)"></app-base-menu>
 
-  <div class="content">
+  <div class="content" [style.width]="contentWidth">
     <router-outlet></router-outlet>
   </div>
 

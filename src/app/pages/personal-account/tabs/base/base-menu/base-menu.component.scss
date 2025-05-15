@@ -7,7 +7,63 @@
     padding: 10px;
     border-radius: 20px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
+
+/* Стили для скрытого состояния */
+.counterparties-list.hidden {
+    width: 0;
+    opacity: 0;
+    padding: 0;
+    margin-left: 0;
+    visibility: hidden;
+}
+
+/* Стили для кнопки переключения */
+.toggle-visibility-btn {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    background: #f9f9f9;
+    border: none;
+    border-radius: 20px;
+    padding: 12px;
+    cursor: pointer;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-visibility-btn:hover {
+    background: #e0e0e0;
+}
+
+.toggle-visibility-btn.checked {
+    margin-top: 12px;
+    right: -6px;
+}
+
+
+.custom-arrow {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid rgb(0 0 0);
+    border-bottom: 2px solid rgb(0 0 0);
+    transform: rotate(-45deg);
+    transition: transform 0.3s ease;
+    margin-left: 3px;
+}
+
+.custom-arrow.rotated {
+    transform: rotate(135deg);
+}
+
 
 .add-button {
     background-color: #5c6bc0;

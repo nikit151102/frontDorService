@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { InvoicesService } from '../../components/invoices/invoices.service';
 import { environment } from '../../../../../environment';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,15 @@ export class BaseService {
   private socket!: WebSocket;
 
   selectManagerDocType: any;
+  
+  private _someVariable = new BehaviorSubject<any>(true);
 
+  public someVariable$ = this._someVariable.asObservable();
+
+  setSomeVariable(value: any) {
+    this._someVariable.next(value);
+  }
+  
   connectToWebSocket(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     let apiUrl = environment.apiUrl.replace(/^https/, "wss");

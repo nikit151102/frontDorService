@@ -1,6 +1,7 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 import { CommonModule } from '@angular/common';
+import { BaseService } from '../base.service';
 
 @Component({
   selector: 'app-base-menu',
@@ -18,11 +19,21 @@ export class BaseMenuComponent implements OnInit {
     { code: '195630', name: 'Организации', access: '', managerDocType: null, navigate: (item: any) => [ 'reference', item.code] },
   ];
 
-  constructor(private jwtService: JwtService) { }
+  constructor(private jwtService: JwtService, private baseService:BaseService) { }
 
   decodedRole: any[] = [];
+  isVisible = true;
+
+  toggleVisibility() {
+    this.baseService.setSomeVariable(!this.isVisible);
+  }
+
 
   ngOnInit(): void {
+    this.baseService.someVariable$.subscribe((value: any) => {
+      this.isVisible = value
+    })
+
     const decodedToken = this.jwtService.getDecodedToken();
 
     if (decodedToken && decodedToken.role) {
