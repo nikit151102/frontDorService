@@ -4,6 +4,7 @@ import { AccountantService } from './accountant.service';
 import { InvoicesContentComponent } from './accountant-content/invoices-content.component';
 import { PartnerMenuComponent } from '../../components/partner-menu/partner-menu.component';
 import { BUTTON_SETS } from './button-config';
+import { PartnerMenuService } from '../../components/partner-menu/partner-menu.service';
 
 @Component({
   selector: 'app-accountant',
@@ -18,9 +19,20 @@ export class AccountantComponent implements OnInit {
   selectedCounterparty: any;
   notificationsInvoices: any;
   notificationsPartners: any;
-  constructor(private accountantService: AccountantService) { }
+  contentWidth: any;
+  constructor(private accountantService: AccountantService,
+    private partnerMenuService: PartnerMenuService
+  ) { }
 
   ngOnInit(): void {
+    this.partnerMenuService.setSomeVariable(true);
+    this.partnerMenuService.someVariable$.subscribe((value: any) => {
+      this.contentWidth = value
+        ? 'calc(100% - 320px)'
+        : 'calc(100% - 120px)';
+    });
+
+
     this.accountantService.connectToWebSocket();
     this.accountantService.invoices$.subscribe((values: any) => {
       this.notificationsInvoices = values;

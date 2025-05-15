@@ -41,6 +41,7 @@ export class PartnerMenuComponent {
   @Input() buttonConfigs!: Record<string, ButtonConfig[]>
   @Input() title: string = 'контрагента'
 
+
   counterparties: any = [];
   selectedId: any;
   menuOpenFor: number | null = null;
@@ -61,7 +62,11 @@ export class PartnerMenuComponent {
     { label: 'Проект', value: 5 }
   ];
 
+  isVisible = true;
 
+  toggleVisibility() {
+    this.partnerMenuService.setSomeVariable(!this.isVisible);
+  }
 
   constructor(
     private partnerMenuService: PartnerMenuService,
@@ -74,6 +79,10 @@ export class PartnerMenuComponent {
   ) { }
 
   ngOnInit(): void {
+    this.partnerMenuService.someVariable$.subscribe((value: any) => {
+      this.isVisible = value
+    })
+
     this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
 
     this.loadCounterparties();
@@ -143,7 +152,7 @@ export class PartnerMenuComponent {
   loadCounterparties() {
     this.partnerMenuService.getCounterparties().subscribe(
       (data: any) => {
-     
+
         this.counterparties = data.data;
 
         this.sortCounterpartiesByStatus();
@@ -161,10 +170,10 @@ export class PartnerMenuComponent {
     if (saldo == null) {
       return 0;
     }
-    return saldo < 0 ? Math.abs(saldo) + '-'  : saldo.toString();
+    return saldo < 0 ? Math.abs(saldo) + '-' : saldo.toString();
   }
 
-  
+
   sortCounterpartiesByStatus() {
     this.counterparties = this.partnerStatusService.sortByStatus(this.counterparties)
   }

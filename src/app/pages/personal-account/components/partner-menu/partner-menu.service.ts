@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../environment';
 import { Router } from '@angular/router';
 
@@ -29,6 +29,15 @@ export class PartnerMenuService {
   queryData: any = { filters: [], sorts: [] }
 
   constructor(private http: HttpClient, private router: Router) { }
+
+
+  private _someVariable = new BehaviorSubject<any>(true);
+
+  public someVariable$ = this._someVariable.asObservable();
+
+  setSomeVariable(value: any) {
+    this._someVariable.next(value);
+  }
 
   // Получить всех контрагентов
   getCounterparties(): Observable<any> {

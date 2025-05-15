@@ -27,6 +27,7 @@ import { Router } from '@angular/router';
 import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config';
 import { taxes } from '../../../../services/data';
 import { PartnersService } from '../../tabs/partners/partners.service';
+import { PartnerMenuService } from '../partner-menu/partner-menu.service';
 
 @Component({
   selector: 'app-invoices',

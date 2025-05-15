@@ -14,7 +14,7 @@ app-invoices-table {
 }
 
 app-invoices-content {
-    width: calc(100% - 320px) !important;
+    // width: calc(100% - 320px) !important;
     overflow-y: hidden;
     overflow-x: auto;
     scroll-behavior: smooth;

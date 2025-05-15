@@ -1,37 +1,42 @@
-<div class="counterparties-list">
+<div style="position: relative; min-width: 60px;">
+<button class="toggle-visibility-btn" (click)="toggleVisibility()"
+[ngClass]="{'checked': !isVisible}">
+  <span class="custom-arrow" [class.rotated]="!isVisible"></span>
+</button>
+  <div class="counterparties-list" *ngIf="isVisible">
 
-  <div class="settings">
-    <button class="add-button" title="Добавить контрагента"
-      (click)="isEdit = true; isNewItem = true; openDialog($event); ">
-      <img src="svgs/plus.svg" alt="">
-    </button>
+    <div class="settings">
+      <button class="add-button" title="Добавить контрагента"
+        (click)="isEdit = true; isNewItem = true; openDialog($event); ">
+        <img src="svgs/plus.svg" alt="">
+      </button>
 
-    <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" [placeholder]="'Найти...'"
-      class="search-input">
-    </app-custom-input>
+      <app-custom-input [(ngModel)]="searchTerm" (valueChange)="onSearchChange($event)" [placeholder]="'Найти...'"
+        class="search-input">
+      </app-custom-input>
 
-  </div>
+    </div>
 
-  <ul>
-    <li (click)="select('00000000-0000-0000-0000-000000000000', '')">
-      <div class="counterparty-item">
-        <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
-      </div>
-    </li>
+    <ul>
+      <li (click)="select('00000000-0000-0000-0000-000000000000', '')">
+        <div class="counterparty-item">
+          <span [class.active]="'00000000-0000-0000-0000-000000000000' === selectedId">Все</span>
+        </div>
+      </li>
 
-    <li *ngFor="let counterparty of counterparties"
-      (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty)"
-      [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
-      <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
-        <div style="       display: flex;
+      <li *ngFor="let counterparty of counterparties"
+        (click)="!isForbiddenStatus(counterparty.editStatus) && select(counterparty.id, counterparty)"
+        [class.disabled]="isForbiddenStatus(counterparty.editStatus)">
+        <div class="counterparty-item" [class.disabled]="!isEditable(counterparty.editStatus)">
+          <div style="       display: flex;
                 flex-direction: column;
                 align-items: flex-end;
                     font-size: 13px;
             ">
-          <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName
-            }}</span>
-          <div class="status-tag">
-            <span [ngClass]="{
+            <span [class.active]="counterparty.id === selectedId" style="text-align: end;">{{ counterparty.shortName
+              }}</span>
+            <div class="status-tag">
+              <span [ngClass]="{
                 'status-not-checked': counterparty.editStatus === 1,
                 'status-sent-for-check': counterparty.editStatus === 2,
                 'status-approved': counterparty.editStatus === 7,
@@ -42,104 +47,106 @@
                 'status-active': counterparty.editStatus === 9 ,
                 'status-new-rej': counterparty.editStatus === 10
             }" class="status-tag-text">
-              {{ getStatusLabel(counterparty.editStatus) }}
-            </span>
+                {{ getStatusLabel(counterparty.editStatus) }}
+              </span>
+            </div>
           </div>
-        </div>
-        <div class="actions">
-          <div>
-            <span *ngIf="counterparty.partnerSaldoData && counterparty.partnerSaldoData.totalSaldo" [ngClass]="{
+          <div class="actions">
+            <div>
+              <span *ngIf="counterparty.partnerSaldoData && counterparty.partnerSaldoData.totalSaldo" [ngClass]="{
               'positive': counterparty.partnerSaldoData.totalSaldo > 0,
               'zero': counterparty.partnerSaldoData.totalSaldo === 0,
               'negative': counterparty.partnerSaldoData.totalSaldo < 0
           }">
-              {{ formatSaldo(counterparty.partnerSaldoData.totalSaldo) }}
-            </span>
-          </div>
-          <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">
-            <img src="svgs/settings.svg" alt="Настройки" style="width: 20px;">
-          </button>
-          <div *ngIf="menuOpenFor === counterparty.id" class="menu">
-            <ng-container *ngFor="let button of getButtonSet()">
-              <button class="menu-item" *ngIf="button.condition ? button.condition(counterparty) : true"
-                [ngClass]="button.class" (click)="handleButtonClick(button, counterparty, $event)"
-                [title]="button.titlePopUp">
-                {{ button.label }}
-              </button>
-            </ng-container>
+                {{ formatSaldo(counterparty.partnerSaldoData.totalSaldo) }}
+              </span>
+            </div>
+            <button class="gear-btn" (click)="openMenu(counterparty.id, $event)">
+              <img src="svgs/settings.svg" alt="Настройки" style="width: 20px;">
+            </button>
+            <div *ngIf="menuOpenFor === counterparty.id" class="menu">
+              <ng-container *ngFor="let button of getButtonSet()">
+                <button class="menu-item" *ngIf="button.condition ? button.condition(counterparty) : true"
+                  [ngClass]="button.class" (click)="handleButtonClick(button, counterparty, $event)"
+                  [title]="button.titlePopUp">
+                  {{ button.label }}
+                </button>
+              </ng-container>
 
-          </div>
-        </div>
-      </div>
-    </li>
-  </ul>
-
-
-
-
-  <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '600px'}">
-    <p-header>
-      <span class="pi pi-pencil"></span>
-      <span id="title-modal">
-        {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
-      </span>
-    </p-header>
-
-    <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
-      <div class="p-fluid">
-
-        <!-- Краткое наименование -->
-        <div class="p-field">
-          <label for="shortName">Краткое наименование</label>
-          <div class="field-wrapper">
-            <input id="shortName" type="text" pInputText formControlName="shortName"
-              placeholder="Введите краткое наименование" />
-            <small *ngIf="oldPrototype?.shortName" class="text-muted old-value">Старое значение: {{
-              oldPrototype.shortName }}</small>
+            </div>
           </div>
         </div>
+      </li>
+    </ul>
 
-        <!-- Полное наименование -->
-        <div class="p-field">
-          <label for="fullName">Полное наименование</label>
-          <div class="field-wrapper">
-            <input id="fullName" type="text" pInputText formControlName="fullName"
-              placeholder="Введите полное наименование" />
-            <small *ngIf="oldPrototype?.fullName" class="text-muted old-value">Старое значение: {{ oldPrototype.fullName
-              }}</small>
+
+
+
+    <p-dialog [(visible)]="display" [modal]="true" [closable]="false" [style]="{width: '600px'}">
+      <p-header>
+        <span class="pi pi-pencil"></span>
+        <span id="title-modal">
+          {{ selectedCounterparty ? 'Изменить контрагента' : 'Добавить контрагента' }}
+        </span>
+      </p-header>
+
+      <form [formGroup]="counterpartyForm" (ngSubmit)="onSubmit()">
+        <div class="p-fluid">
+
+          <!-- Краткое наименование -->
+          <div class="p-field">
+            <label for="shortName">Краткое наименование</label>
+            <div class="field-wrapper">
+              <input id="shortName" type="text" pInputText formControlName="shortName"
+                placeholder="Введите краткое наименование" />
+              <small *ngIf="oldPrototype?.shortName" class="text-muted old-value">Старое значение: {{
+                oldPrototype.shortName }}</small>
+            </div>
           </div>
-        </div>
 
-        <!-- ИНН -->
-        <div class="p-field">
-          <label for="inn">ИНН</label>
-          <div class="field-wrapper">
-            <input id="inn" type="text" pInputText formControlName="inn" placeholder="Введите ИНН" />
-            <small *ngIf="oldPrototype?.inn" class="text-muted old-value">Старое значение: {{ oldPrototype.inn
-              }}</small>
+          <!-- Полное наименование -->
+          <div class="p-field">
+            <label for="fullName">Полное наименование</label>
+            <div class="field-wrapper">
+              <input id="fullName" type="text" pInputText formControlName="fullName"
+                placeholder="Введите полное наименование" />
+              <small *ngIf="oldPrototype?.fullName" class="text-muted old-value">Старое значение: {{
+                oldPrototype.fullName
+                }}</small>
+            </div>
           </div>
+
+          <!-- ИНН -->
+          <div class="p-field">
+            <label for="inn">ИНН</label>
+            <div class="field-wrapper">
+              <input id="inn" type="text" pInputText formControlName="inn" placeholder="Введите ИНН" />
+              <small *ngIf="oldPrototype?.inn" class="text-muted old-value">Старое значение: {{ oldPrototype.inn
+                }}</small>
+            </div>
+          </div>
+
+          <div class="p-field p-col-12">
+            <label for="tax">Налог</label>
+            <p-dropdown id="tax" [style]="{ 'min-width': '120px', 'width': '100%' ,  'height': '36px', 'padding': '0'}"
+              [panelStyle]="{ 'width': '100%' }" panelStyleClass="custom-dropdown-panel" formControlName="tax"
+              [options]="taxes" optionLabel="label" [disabled]="!isEdit" appendTo="body"
+              [scrollHeight]="'200px'"></p-dropdown>
+
+
+          </div>
+
         </div>
 
-        <div class="p-field p-col-12">
-          <label for="tax">Налог</label>
-          <p-dropdown id="tax" [style]="{ 'min-width': '120px', 'width': '100%' ,  'height': '36px', 'padding': '0'}"
-            [panelStyle]="{ 'width': '100%' }" panelStyleClass="custom-dropdown-panel" formControlName="tax"
-            [options]="taxes" optionLabel="label" [disabled]="!isEdit" appendTo="body"
-            [scrollHeight]="'200px'"></p-dropdown>
-
-
+        <div class="modal-btns">
+          <button type="button" pButton label="Закрыть" icon="pi pi-times" class="p-button-secondary"
+            (click)="display = false; isNewItem = false;"></button>
+          <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
+            *ngIf="isNewItem ==true || currentRole == 1" class="p-button-primary"></button>
         </div>
-
-      </div>
-
-      <div class="modal-btns">
-        <button type="button" pButton label="Закрыть" icon="pi pi-times" class="p-button-secondary"
-          (click)="display = false; isNewItem = false;"></button>
-        <button type="submit" pButton label="Сохранить" icon="pi pi-check" [disabled]="counterpartyForm.invalid"
-          *ngIf="isNewItem ==true || currentRole == 1" class="p-button-primary"></button>
-      </div>
-    </form>
-  </p-dialog>
+      </form>
+    </p-dialog>
 
 
+  </div>
 </div>

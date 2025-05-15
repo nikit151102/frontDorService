@@ -23,7 +23,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
   constructor(private jwtService: JwtService,
     public invoicesService: InvoicesService,
-    public productsService: ProductsService
+    public productsService: ProductsService,
   ) { }
 
   ngOnInit(): void {
