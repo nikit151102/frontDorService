@@ -62,15 +62,25 @@ export class NumberFilterComponent {
     this.emitFilterChange();
   }
 
-  onSearchChange() {
+onSearchChange() {
+  if (this.selectedNumber === '' || this.selectedNumber === null || this.selectedNumber === undefined) {
+    this.resetFilter();
+    console.log('selectedNumber',this.selectedNumber)
+        const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [],
+      type: 2
+    };
+    this.filterChange.emit(filterDto);
+  } else {
     const filterDto: FilterDto = {
       field: this.filterField,
       values: [Number(this.selectedNumber)],
       type: 2
     };
-
     this.filterChange.emit(filterDto);
   }
+}
 
   onNumberChange() {
     const filterDto: FilterDto = {
