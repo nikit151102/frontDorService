@@ -56,7 +56,6 @@ input:focus {
     align-items: flex-start;
     top: 100%;
     left: 0;
-    width: 100%;
     /* Делаем выпадашку шириной как поле */
     background: white;
     border-radius: 6px;
@@ -94,6 +93,8 @@ input:focus {
     color: #666;
     transition: all 0.3s ease-in-out;
     margin-left: 8px;
+    width: 100%;
+    display: flex;
 }
 
 .sort-btn:hover {
@@ -125,29 +126,34 @@ input:focus {
 }
 
 
+.block {
+    padding-top: 17px;
+    padding-bottom: 4px;
+    border-bottom: solid 1px #d1d1d1;
+    font-size: 15px;
+    width: 100%;
+}
 
 
 
 .input-container {
     position: relative;
     width: 100%;
-  }
-  
-  .input-container svg {
+}
+
+.input-container svg {
     position: absolute;
     left: 10px;
     top: 50%;
     transform: translateY(-50%);
-  }
-  
-  .input-container input {
-    padding-left: 30px; /* Место для иконки */
-  }
-  
+}
 
-input{
-    color: #101010;
+.input-container input {
+    padding-left: 30px;
+    /* Место для иконки */
 }
 
 
-
+input {
+    color: #101010;
+}

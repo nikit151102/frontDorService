@@ -60,12 +60,26 @@ tfoot td {
 }
 
 .invoice-table td {
-    padding: 5px;
+    padding: 2px 5px;
     text-align: left;
     font-size: 14px;
     color: #666;
     border-bottom: 1px solid #eee;
     background: #fff;
+}
+
+.invoice-table td,
+.invoice-table th {
+    min-height: 38px !important;
+    height: 100% !important;
+    display: flex;
+    align-items: center;
+}
+
+.invoice-table tr {
+    display: flex;
+    align-items: flex-end;
+    min-height: 38px !important;
 }
 
 .invoice-table tr:hover {
@@ -339,10 +353,10 @@ tfoot td {
 
 .status-tag {
     display: inline-block;
-    padding: 6px 12px;
+    padding: 0px 10px;
     border-radius: 12px;
     font-weight: bold;
-    font-size: 0.9rem;
+    font-size: 13px;
     text-align: center;
     transition: background-color 0.3s, color 0.3s;
     margin-right: 8px;

@@ -36,6 +36,10 @@ export class UuidSearchFilterSortComponent {
   sortOrder: 'asc' | 'desc' = 'asc';
   isFilterOpen = false;
 
+  visibleModal() {
+    this.isFilterOpen = !this.isFilterOpen;
+  }
+
   @Output() filterChange = new EventEmitter<FilterDto>();
   @Output() sortChange = new EventEmitter<SortDto>();
 
@@ -85,40 +89,40 @@ export class UuidSearchFilterSortComponent {
 
 
   loadData() {
-  // 1. Проверяем кэш
-  const cachedData = this.cacheService.get(this.apiEndpoint);
-  
-  if (cachedData) {
-    this.products = cachedData;
-    this.endpointDataLoaded = true;
-    console.log('Данные получены из кэша:', this.products);
-    return;
-  }
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(this.apiEndpoint);
 
-  // 2. Проверяем, не идет ли уже загрузка
-  if (this.cacheService.isLoading(this.apiEndpoint)) {
-    return;
-  }
-
-  // 3. Устанавливаем флаг загрузки
-  this.cacheService.setLoading(this.apiEndpoint, true);
-
-  this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe({
-    next: (data: any) => {
-      console.log('Данные получены с сервера: loadData', data);
-      this.products = data.data;
+    if (cachedData) {
+      this.products = cachedData;
       this.endpointDataLoaded = true;
-      
-      // Сохраняем в кэш (5 минут TTL)
-      this.cacheService.set(this.apiEndpoint, data.data);
-      this.cacheService.setLoading(this.apiEndpoint, false);
-    },
-    error: (error) => {
-      console.error('Ошибка загрузки:', error);
-      this.cacheService.setLoading(this.apiEndpoint, false);
+      console.log('Данные получены из кэша:', this.products);
+      return;
     }
-  });
-}
+
+    // 2. Проверяем, не идет ли уже загрузка
+    if (this.cacheService.isLoading(this.apiEndpoint)) {
+      return;
+    }
+
+    // 3. Устанавливаем флаг загрузки
+    this.cacheService.setLoading(this.apiEndpoint, true);
+
+    this.uuidSearchFilterSortService.getProductsByEndpoint(this.apiEndpoint).subscribe({
+      next: (data: any) => {
+        console.log('Данные получены с сервера: loadData', data);
+        this.products = data.data;
+        this.endpointDataLoaded = true;
+
+        // Сохраняем в кэш (5 минут TTL)
+        this.cacheService.set(this.apiEndpoint, data.data);
+        this.cacheService.setLoading(this.apiEndpoint, false);
+      },
+      error: (error) => {
+        console.error('Ошибка загрузки:', error);
+        this.cacheService.setLoading(this.apiEndpoint, false);
+      }
+    });
+  }
 
   toggleFilter() {
     this.isFilterOpen = !this.isFilterOpen;
@@ -153,16 +157,15 @@ export class UuidSearchFilterSortComponent {
     this.filterChange.emit(filterDto);
   }
 
-  toggleSort() {
-    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-
+  toggleSort(type: 'asc' | 'desc') {
+    this.sortOrder = type;
     const sortDto: SortDto = {
       field: this.Field,
       sortType: this.sortOrder === 'asc' ? 0 : 1
     };
-
     this.sortChange.emit(sortDto);
   }
+
 
   getDisplayText(field: string): string {
     // Функция для формирования строки для отображения на основе полей
@@ -183,13 +186,10 @@ export class UuidSearchFilterSortComponent {
   onClickOutside(event: MouseEvent) {
     const clickedInside = this.elementRef.nativeElement.contains(event.target);
     if (!clickedInside) {
-      this.isFilterOpen = false;
-    }
-    if (!clickedInside && this.inputWidth != '30px') {
       this.inputWidth = '30px';
       this.bgColor = 'transparent';
       this.borderStyle = 'none';
-      this.isSearchOpen = false;
+      this.isFilterOpen = false;
     }
   }
 }
