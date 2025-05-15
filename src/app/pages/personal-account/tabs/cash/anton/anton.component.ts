@@ -31,7 +31,7 @@ export class AntonComponent implements OnInit {
     { field: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
     { field: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: false, width: '10%' },
+    { field: 'actions', header: '', type: 'actions', visible: false, width: '' },
   ];
 
   totalInfoColumnInvoices = [

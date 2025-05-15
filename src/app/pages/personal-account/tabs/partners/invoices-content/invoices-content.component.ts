@@ -124,7 +124,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '15%' },
     { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '15%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '15%' },
+    { field: 'actions', header: '', type: 'actions', visible: true, width: '' },
   ];
 
 

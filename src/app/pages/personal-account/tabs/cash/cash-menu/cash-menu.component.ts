@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
+import { CashMenuService } from './cash-menu.service';
 
 @Component({
   selector: 'app-cash-menu',
@@ -28,11 +29,20 @@ export class CashMenuComponent implements OnInit {
   //   { name: 'Егор', access: '', antonCashType: 3 },
   // ];
 
-  constructor(private jwtService: JwtService) { }
+  constructor(private jwtService: JwtService, private cashMenuService: CashMenuService) { }
 
   decodedRole: any[] = [];
+  isVisible = true;
+
+  toggleVisibility() {
+    this.cashMenuService.setSomeVariable(!this.isVisible);
+  }
 
   ngOnInit(): void {
+    this.cashMenuService.someVariable$.subscribe((value: any) => {
+      this.isVisible = value
+    })
+
     const decodedToken = this.jwtService.getDecodedToken();
 
     if (decodedToken && decodedToken.role) {

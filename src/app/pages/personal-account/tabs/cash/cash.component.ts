@@ -9,6 +9,7 @@ import { EgorComponent } from './egor/egor.component';
 import { CashService } from './cash.service';
 import { SupplierComponent } from './supplier/supplier.component';
 import { DimaBaseComponent } from './dimaBase/dima.component';
+import { CashMenuService } from './cash-menu/cash-menu.service';
 
 enum CashType {
   MECHANIC = 'Механик',
@@ -30,8 +31,8 @@ export class CashComponent implements OnInit {
 
   selectedCashType: number | null = null;
   titleTab: string = '';
-
-  constructor(private invoicesService: InvoicesService, private cashService: CashService) { }
+  contentWidth: any;
+  constructor(private invoicesService: InvoicesService, private cashService: CashService, private cashMenuService: CashMenuService) { }
 
   getTitleTab(): string {
     switch (this.selectedCashType) {
@@ -46,6 +47,13 @@ export class CashComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cashMenuService.setSomeVariable(true);
+    this.cashMenuService.someVariable$.subscribe((value: any) => {
+      this.contentWidth = value
+        ? 'calc(100% - 290px)'
+        : 'calc(100% - 120px)';
+    });
+
     this.cashService.connectToWebSocket();
   }
 

@@ -1,14 +1,19 @@
-<div class="counterparties-list">
-    <ul>
-        <li *ngFor="let item of items" (click)="hasAccess(item.access) && select(item)"
-            [class.disabled]="!hasAccess(item.access)">
-            <div class="counterparty-item" [class.disabled]="!hasAccess(item.access)">
-                <div style="display: flex; flex-direction: column; align-items: flex-end;">
-                    <span [class.active]="item.name === selectedName" style="text-align: end;">
-                        {{ item.name }}
-                    </span>
+<div style="position: relative; min-width: 60px;">
+    <button class="toggle-visibility-btn" (click)="toggleVisibility()" [ngClass]="{'checked': !isVisible}">
+        <span class="custom-arrow" [class.rotated]="!isVisible"></span>
+    </button>
+    <div class="counterparties-list" *ngIf="isVisible">
+        <ul>
+            <li *ngFor="let item of items" (click)="hasAccess(item.access) && select(item)"
+                [class.disabled]="!hasAccess(item.access)">
+                <div class="counterparty-item" [class.disabled]="!hasAccess(item.access)">
+                    <div style="display: flex; flex-direction: column; align-items: flex-end;">
+                        <span [class.active]="item.name === selectedName" style="text-align: end;">
+                            {{ item.name }}
+                        </span>
+                    </div>
                 </div>
-            </div>
-        </li>
-    </ul>
+            </li>
+        </ul>
+    </div>
 </div>

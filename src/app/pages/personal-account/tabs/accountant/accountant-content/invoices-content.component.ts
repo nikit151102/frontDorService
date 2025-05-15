@@ -58,7 +58,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
     { field: 'partnerName', header: 'Контрагент', type: 'string', visible: true, width: '20%' },
     { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '20%' },
-    { field: 'actions', header: 'Действия', type: 'actions', visible: true, width: '10%' },
+    { field: 'actions', header: '', type: 'actions', visible: true, width: '' },
   ];
 
   totalInfoColumnInvoices = [

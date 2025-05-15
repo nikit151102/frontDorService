@@ -3,7 +3,7 @@
   <app-cash-menu (selectedNameChange)="onNameSelected($event)"></app-cash-menu>
 
   <!-- Правая часть -->
-  <div class="right-content">
+  <div class="right-content" [style.width]="contentWidth">
     <span style="color: #101010c7; font-size: 20px;">Касса <ng-container *ngIf="selectedCashType != null"> > {{ getTitleTab() }} </ng-container> </span>
     <ng-container [ngSwitch]="selectedCashType">
       <app-mechanic *ngSwitchCase="0"></app-mechanic> <!-- Механик -->
