@@ -66,7 +66,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() defaultFilter: any;
   @Input() selectedComponent: string = '';
   @Input() modelForm: any;
-  @Input() heightContainer: string = '330px'
+  @Input() heightContainer: string = '280px'
 
   selectInvoice: any;
   items: MenuItem[] | undefined;
