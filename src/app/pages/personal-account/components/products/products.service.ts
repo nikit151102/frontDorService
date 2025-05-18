@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../environment';
 import { ActivatedRoute, Router } from '@angular/router';
+import { InvoicesService } from '../invoices/invoices.service';
 
 
 interface FilterDto {
@@ -29,7 +30,7 @@ interface QueryDto {
 export class ProductsService {
 
   queryData: QueryDto = { filters: [], sorts: [] };
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private invoicesService:InvoicesService) { }
 
   endpoint: string = '';
 
@@ -204,6 +205,8 @@ console.log('hasAccountPartnerTypeFilter',hasAccountPartnerTypeFilter)
           sumAmount: invoice.sumAmount.toString().replace('.', ','),
         }));
         this.totalInfo = data.totalInfo;
+        this.invoicesService.totalInfo = data.totalInfo;
+        console.log('this.invoicesService.totalInfo',this.invoicesService.totalInfo)
         console.log('data', data)
         console.log('products', this.products)
       },

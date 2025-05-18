@@ -9,6 +9,7 @@ import { MultiSelectModule } from 'primeng/multiselect';
 import { NumberFilterComponent } from '../../../../components/fields/number-filter/number-filter.component';
 import { UuidSearchFilterSortComponent } from '../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
 import { InvoicesFormComponent } from '../invoices/invoices-form/invoices.component';
+import { InvoicesService } from '../invoices/invoices.service';
 
 @Component({
   selector: 'app-products',
@@ -99,6 +100,7 @@ export class ProductsComponent implements OnChanges, OnInit {
           this.productsServ.products = [...this.productsServ.products, ...newInvoices];
         }
         this.productsServ.totalInfo = response.totalInfo;
+        this.invoicesService.totalInfo = response.totalInfo;
         this.productsServ.totalPages = response.totalPages;
         this.productsServ.currentPage++;
         this.productsServ.loading = false;
@@ -171,7 +173,7 @@ export class ProductsComponent implements OnChanges, OnInit {
     }
   }
 
-  constructor() { }
+  constructor(private invoicesService:InvoicesService) { }
 
 
   getStatusLabel(value: number): string {

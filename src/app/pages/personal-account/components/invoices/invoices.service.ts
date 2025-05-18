@@ -30,7 +30,7 @@ interface QueryDto {
 
 export class InvoicesService {
 
-  queryData: QueryDto = { filters: [], sorts: []};
+  queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];
   filterStatic: any;
   constructor(private http: HttpClient, private router: Router) { }
@@ -71,24 +71,24 @@ export class InvoicesService {
 
   addOrUpdateItem(newItem: any) {
     console.log('Received new item:', newItem);
-    
+
     const currentData = this.getActiveData();
     console.log('Current data before update:', currentData);
-    
+
     if (!Array.isArray(currentData)) {
       console.log('Current data is not array, creating new array');
       this.dataSubject.next([newItem]);
       return;
     }
-  
+
     const filteredData = currentData.filter(item => {
       console.log(`Comparing ${item?.id} with ${newItem.id}`);
       return item.id !== newItem.id;
     });
-    
+
     const updatedData = [newItem, ...filteredData];
     console.log('Updated data to emit:', updatedData);
-    
+
     this.dataSubject.next(updatedData);
   }
 
@@ -190,12 +190,12 @@ export class InvoicesService {
       this.queryData.sorts.push({ field: 'dateTime', sortType: 1 });
     }
 
-    console.log('page',page )
-    if(page !== undefined && page !== null){
+    console.log('page', page)
+    if (page !== undefined && page !== null) {
       this.queryData.page = page;
     }
 
-    if(pageSize !== undefined && pageSize !== null){
+    if (pageSize !== undefined && pageSize !== null) {
       this.queryData.pageSize = pageSize;
     }
 
@@ -203,7 +203,7 @@ export class InvoicesService {
     if (this.endpointGetData) {
       url = `${environment.apiUrl}/${this.endpointGetData}`;
     }
-    else {  
+    else {
       url = `${environment.apiUrl}/${this.endpoint}/Filter/${id}`;
     }
     return this.http.post<any>(url, this.queryData, {
@@ -285,6 +285,7 @@ export class InvoicesService {
   counterpartyId: any;
   products: any;
   totalInfo: any;
+
 
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(

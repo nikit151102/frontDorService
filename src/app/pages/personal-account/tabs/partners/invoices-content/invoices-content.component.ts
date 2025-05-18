@@ -20,7 +20,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   @Input() notificationItem: any;
   selectedComponent: string = 'invoices';
   showDetails: boolean = false;
-
+  cardTotalInfo: any;
   constructor(private jwtService: JwtService,
     public invoicesService: InvoicesService,
     public productsService: ProductsService,
