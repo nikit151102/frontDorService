@@ -82,6 +82,11 @@ export function getFormSets(productsTarget: FormDataSources): InvoiceConfig {
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [0] }]),
             },
             {
+                label: 'Подписать',
+                condition: (data, userRoleId) => data.id && userRoleId == 1 && data.status < 5,
+                action: (model: any, dependencies: any, sendClose: any) => handleSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [4] }]),
+            },
+            {
                 label: 'Сохранить',
                 condition: (data, userRoleId) => !data.id && userRoleId == 1,
                 action: (model: any, dependencies: any, sendClose: any) => handleSaveAndSend(model, dependencies, true, sendClose, [{ field: "antonCashType", type: 1, values: [0] }]),
@@ -172,6 +177,59 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         }
     });
 }
+
+
+
+function handleSend(model: any, dependencies: any, send: boolean, sendClose: Function, filter: any) {
+    const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
+
+    let data: any = {
+        dateTime: model.dateTime,
+        type: 1,
+        docPaymentType: 2,
+        manufacturer: model.manufacturer,
+        productList: [{
+            productTargetId: model.productTargetId || '',
+            quantity: 1,
+            name: model.productName,
+            amount: model.expenseSum
+        }]
+    };
+    if (model.hasOwnProperty('id')) {
+        data.id = model.id;
+    }
+    data = invoicesService.setTypeAnton(data)
+
+    const titlePopUp = 'Вы действительно хотите подписать фактуру?';
+    const acceptLabel = 'Подписать';
+
+    confirmPopupService.openConfirmDialog({
+        title: '',
+        message: titlePopUp,
+        acceptLabel: acceptLabel,
+        rejectLabel: 'Отмена',
+        onAccept: () => {
+
+            invoiceService.sendingVerification(data, 5).subscribe(
+                (data: any) => {
+                    let item = data.data
+
+                    // item.productTarget =  model.productTarget.name;
+                    item.name = item.productList[0].name;
+
+                    invoicesService.updateActiveData(item);
+                    sendClose();
+                },
+                (error: any) => {
+                    console.error('Ошибка при отправке на проверку:', error);
+                }
+            );
+
+        }
+    });
+}
+
+
 
 export const MODEL = {
     dateTime: '',
