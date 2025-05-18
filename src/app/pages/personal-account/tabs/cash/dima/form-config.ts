@@ -167,6 +167,7 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
                             },
                             (error: any) => {
                                 console.error('Ошибка при отправке на проверку:', error);
+                                toastService.showError('Ошибка', error.error.message);
                             }
                         );
                     }
