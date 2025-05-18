@@ -190,7 +190,7 @@ function handleSend(model: any, dependencies: any, send: boolean, sendClose: Fun
         docPaymentType: 2,
         manufacturer: model.manufacturer,
         productList: [{
-            productTargetId: model.productTargetId || '',
+            productTargetId: model['productTarget.Id'] || '',
             quantity: 1,
             name: model.productName,
             amount: model.expenseSum

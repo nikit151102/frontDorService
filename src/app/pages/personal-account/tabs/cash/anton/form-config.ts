@@ -183,14 +183,14 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
 
 function handleSend(model: any, dependencies: any, send: boolean, sendClose: Function, filter: any) {
     const { confirmPopupService, invoiceService, productsService, invoicesService, messageService, toastService, jwtService } = dependencies;
-
+console.log('productTargetId',model)
     let data: any = {
         dateTime: model.dateTime,
         type: 1,
         docPaymentType: 2,
         manufacturer: model.manufacturer,
         productList: [{
-            productTargetId: model.productTargetId || '',
+            productTargetId: model['productTarget.Id'] || '',
             quantity: 1,
             name: model.productName,
             amount: model.expenseSum
