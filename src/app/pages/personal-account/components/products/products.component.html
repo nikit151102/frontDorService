@@ -56,20 +56,23 @@
                     <ng-container *ngFor="let col of columns">
                         <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
                             (dblclick)="onRowDblClick($event, product, col.fieldView)">
-                            <ng-container *ngIf="col.fieldView === 'dateTime'; else normalField">
+                            <ng-container *ngIf="col.fieldView === 'dateTime'; ">
                                 {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
                             </ng-container>
-                            <ng-template #normalField>
+                            <ng-container *ngIf="col.type == 'number'">
+                                {{formatisNumber(product[col.field])}}
+                            </ng-container>
+                            <ng-container *ngIf="col.type != 'number'">
                                 <ng-container *ngIf="col.field != 'DocInvoice.Status' && col.field != 'status'">
                                     {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
                                     product[col.fieldView] }}
                                 </ng-container>
-                                    <span *ngIf="col.field === 'DocInvoice.Status' || col.field === 'status'"
-                                [ngClass]="getStatusClass(product['docInvoiceStatus'])" class="status-tag">
-                                {{ getStatusLabel(product['docInvoiceStatus']) }}
-                            </span>
-                            </ng-template>
-                        
+                                <span *ngIf="col.field === 'DocInvoice.Status' || col.field === 'status'"
+                                    [ngClass]="getStatusClass(product['docInvoiceStatus'])" class="status-tag">
+                                    {{ getStatusLabel(product['docInvoiceStatus']) }}
+                                </span>
+                            </ng-container>
+
                         </td>
                     </ng-container>
                     <td *ngIf="actions.length > 0">

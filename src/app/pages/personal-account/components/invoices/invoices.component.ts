@@ -79,7 +79,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
-  
+
   getTaxValue(tax: any) {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
@@ -253,13 +253,24 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.dataSelectScope = selectData;
   }
 
-  getTotalValue(columnIndex: number): any {
+  getTotalValue(columnIndex: number): string | null {
     if (!this.invoicesService.totalInfo) return null;
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
     const value = column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
 
-    return typeof value === 'number' ? value.toString().replace('.', ',') : value;
+    if (value === null) return null;
+
+    if (typeof value === 'number') {
+      return value.toFixed(2).replace('.', ',');
+    }
+
+    const numericValue = parseFloat(value);
+    if (!isNaN(numericValue)) {
+      return numericValue.toFixed(2).replace('.', ',');
+    }
+
+    return value;
   }
 
   statuses = [
@@ -383,6 +394,22 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
+  formatisNumber(value: any): string {
+    const numericValue = typeof value === 'string'
+      ? parseFloat(value.replace(',', '.'))
+      : Number(value);
+
+    if (isNaN(numericValue)) return '0';
+
+    if (Number.isInteger(numericValue)) {
+      return numericValue.toString();
+    } else {
+      const formatted = numericValue.toFixed(2);
+      return formatted.endsWith('.00')
+        ? formatted.replace('.00', '')
+        : formatted.replace('.', ',');
+    }
+  }
 
   deleteInvoice(invoiceId: any) {
     this.confirmPopupService.openConfirmDialog({
