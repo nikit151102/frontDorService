@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router, RouterOutlet } from '@angular/router';
+import { ActivatedRoute, NavigationExtras, Router, RouterOutlet } from '@angular/router';
 import { NavMenuComponent } from './components/nav-menu/nav-menu.component';
 import { JwtService } from '../../services/jwt.service';
 import { NavMenuService } from './components/nav-menu/nav-menu.service';
+import { ToastService } from '../../services/toast.service';
 
 @Component({
   selector: 'app-personal-account',
@@ -17,8 +18,9 @@ export class PersonalAccountComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private jwtService: JwtService,
-    private navMenuService: NavMenuService
-  ) {}
+    private navMenuService: NavMenuService,
+    private toastService: ToastService,
+  ) { }
 
   ngOnInit(): void {
     const fullPath = this.router.url;
@@ -43,7 +45,11 @@ export class PersonalAccountComponent implements OnInit {
     const decodedToken = this.jwtService.getDecodedToken();
     if (!decodedToken || !decodedToken.role) {
       console.error('Ошибка: нет роли в токене!');
-      this.router.navigate(['profile'], { relativeTo: this.route });
+      this.router.navigateByUrl('/', { replaceUrl: true });
+      this.toastService.showError(
+        'Отказано в доступе',
+        'Ваш профиль не имеет прав для работы с системой.'
+      );
       return;
     }
 
@@ -70,7 +76,11 @@ export class PersonalAccountComponent implements OnInit {
     if (firstAvailableTab) {
       this.router.navigate([firstAvailableTab.path], { relativeTo: this.route, replaceUrl: true });
     } else {
-      this.router.navigate(['profile'], { relativeTo: this.route });
+      this.router.navigateByUrl('/', { replaceUrl: true });
+      this.toastService.showError(
+        'Недостаточно прав',
+        'Для вашей учётной записи не настроены доступы.'
+      );
     }
   }
 }
