@@ -126,7 +126,6 @@ onSearchChange() {
   }
 
   openNumberPicker(input: HTMLInputElement) {
-    // You can add logic to open number picker if needed
     input.focus();
   }
 
@@ -139,7 +138,13 @@ onSearchChange() {
     this.endNumber = 0;        // Сбрасываем конец диапазона
     this.showNumberInput = false; // Скрываем поля ввода
     this.isOpen = false;
-    this.emitFilterChange();   // Эмитируем сброс фильтра
+    this.emitFilterChange();   
+       const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [],
+      type: this.getNumberFilterType()
+    };
+    this.filterChange.emit(filterDto);
   }
 
   @HostListener('document:click', ['$event'])

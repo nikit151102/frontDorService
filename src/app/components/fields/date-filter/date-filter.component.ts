@@ -147,7 +147,12 @@ export class DateFilterSortComponent {
     this.endDate = '';
     this.showCalendar = false;
     this.isTest = false;
-    this.emitFilterChange();
+    const filterDto: FilterDto = {
+      field: this.filterField,
+      values: [],
+      type: this.getDateFilterType()
+    };
+    this.filterChange.emit(filterDto);
   }
 
   @HostListener('document:click', ['$event'])

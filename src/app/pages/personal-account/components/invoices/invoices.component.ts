@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -71,7 +71,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
+  @ViewChild('tableContainer') tableContainer!: ElementRef<HTMLElement>;
 
+  scrollToTop() {
+    if (this.tableContainer && this.tableContainer.nativeElement) {
+      this.tableContainer.nativeElement.scrollTop = 0;
+    }
+  }
+
+  
   getTaxValue(tax: any) {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
@@ -81,7 +89,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
-      this.currentPage = 0;
+      this.invoicesService.currentPage = 0;
       this.invoicesService?.totalInfo?.totalPagesCount;
       this.loadInvoices(true);
       console.log('loadInvoices defaultFilter')
@@ -90,7 +98,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
-      this.currentPage = 0;
+      this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
       console.log('loadInvoices counterpartyId')
       console.log('counterpartyData', this.counterpartyData)
@@ -102,12 +110,12 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
-      this.currentPage = 0;
+      this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
       console.log('loadInvoices buttonConfigs')
     }
     if (changes['selectedComponent']) {
-      this.currentPage = 0;
+      this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
     }
     this.partnersService.selectCounterpartyId = this.counterpartyId;
@@ -308,14 +316,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   loading = false;
-  totalRecords = 0;
-  totalPages = null;
-  pageSize = 30;
-  currentPage = 0;
 
   loadInvoices(reset = false) {
     if (reset) {
-      this.currentPage = 0;
+      this.invoicesService.currentPage = 0;
       this.invoices = [];
     }
 
@@ -326,8 +330,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.invoicesService.endpointGetData = this.endpointGetData;
     this.invoicesService.getProductsByCounterparty(
       this.counterpartyId,
-      this.currentPage,
-      this.pageSize
+      this.invoicesService.currentPage,
+      this.invoicesService.pageSize
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
@@ -348,10 +352,10 @@ export class InvoicesComponent implements OnChanges, OnInit {
         }
 
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
-          this.totalRecords = response.totalInfo?.totalPagesCount * this.pageSize;
+          this.invoicesService.totalRecords = response.totalInfo?.totalPagesCount * this.invoicesService.pageSize;
         }
 
-        if (reset || this.currentPage === 0) {
+        if (reset || this.invoicesService.currentPage === 0) {
           this.invoices = newInvoices;
         } else {
           this.invoices = [...this.invoices, ...newInvoices];
@@ -359,8 +363,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         this.invoicesService.setActiveData(this.invoices);
         this.invoicesService.totalInfo = response.totalInfo;
-        this.totalPages = response.totalPages;
-        this.currentPage++;
+        this.invoicesService.totalPages = response.totalPages;
+        this.invoicesService.currentPage++;
         this.loading = false;
       },
       (error) => {
@@ -374,7 +378,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     const element = event.target;
     const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
 
-    if (atBottom && this.totalPages && this.currentPage < this.totalPages) {
+    if (atBottom && this.invoicesService.totalPages && this.invoicesService.currentPage < this.invoicesService.totalPages) {
       this.loadInvoices();
     }
   }

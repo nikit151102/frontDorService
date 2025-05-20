@@ -12,7 +12,7 @@
 
 
 <div class="table-wrapper">
-    <div class="table-container" (scroll)="onScroll($event)">
+    <div #tableContainer class="table-container" (scroll)="onScroll($event)">
 
         <table class="invoice-table">
             <thead>
@@ -22,27 +22,27 @@
                             <div style="display: flex; align-items: center; gap: 10px">
                                 {{ col.header }}
                                 <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
-                                    [filterType]="1" (filterChange)="productsServ.onFilterChange($event)"
-                                    (sortChange)="productsServ.onSortChange($event)">
+                                    [filterType]="1" (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
                                 </app-search-filter-sort>
                                 <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
-                                    (filterChange)="productsServ.onFilterChange($event)"
-                                    (sortChange)="productsServ.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
                                 </app-date-filter>
                                 <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
-                                    (filterChange)="productsServ.onFilterChange($event)"
-                                    (sortChange)="productsServ.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
                                 </app-number-filter>
                                 <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
                                     [fieldNames]="'name'" [enam]="null" [Field]="col.field"
                                     [filterType]="col.filterType" [searchField]="col.searchField"
-                                    (filterChange)="productsServ.onFilterChange($event)"
-                                    (sortChange)="productsServ.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
                                 </app-uuid-search-filter-sort>
                                 <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
                                     [enam]="statuses" [Field]="col.field" [filterType]="1"
-                                    (filterChange)="productsServ.onFilterChange($event)"
-                                    (sortChange)="productsServ.onSortChange($event)">
+                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
                                 </app-uuid-search-filter-sort>
                             </div>
                         </th>

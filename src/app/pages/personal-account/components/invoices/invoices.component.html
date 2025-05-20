@@ -26,7 +26,7 @@
 
 
 <div class="table-wrapper">
-  <div class="table-container" (scroll)="onScroll($event)" [style.height]="'calc(100vh - ' + heightContainer + ')'">
+  <div #tableContainer class="table-container" (scroll)="onScroll($event)" [style.height]="'calc(100vh - ' + heightContainer + ')'">
     <table class="invoice-table">
       <thead>
         <tr class="header-row">
@@ -35,28 +35,28 @@
               <div style="display: flex; align-items: center; gap: 10px">
                 {{ col.header }}
     <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
-                  (filterChange)="invoicesService.onFilterChange($event)"
-                  (sortChange)="invoicesService.onSortChange($event)" [isVisibleFilter]="col.isFilter">
+                  (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="invoicesService.onSortChange($event);scrollToTop()" [isVisibleFilter]="col.isFilter">
                 </app-search-filter-sort>
 
                 <app-date-filter *ngIf="col.type == 'date'" [filterField]="col.field"
-                  (filterChange)="invoicesService.onFilterChange($event)"
-                  (sortChange)="invoicesService.onSortChange($event)">
+                  (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-date-filter>
 
                 <app-number-filter *ngIf="col.type == 'number'" [filterField]="col.field"
-                  (filterChange)="invoicesService.onFilterChange($event)"
-                  (sortChange)="invoicesService.onSortChange($event)">
+                  (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-number-filter>
 
                 <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint" [fieldNames]="''"
-                  [enam]="null" [Field]="col.field" (filterChange)="invoicesService.onFilterChange($event)"
-                  (sortChange)="invoicesService.onSortChange($event)">
+                  [enam]="null" [Field]="col.field" (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>
 
                 <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
-                  [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event)"
-                  (sortChange)="invoicesService.onSortChange($event)">
+                  [Field]="col.field" [filterType]="1" (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>
               </div>
 

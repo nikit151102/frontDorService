@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, SimpleChanges, OnInit, EventEmitter, Output } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges, OnInit, EventEmitter, Output, ViewChild, ElementRef } from '@angular/core';
 import { ProductsService } from './products.service';
 import { TableModule } from 'primeng/table';
 import { DateFilterSortComponent } from '../../../../components/fields/date-filter/date-filter.component';
@@ -36,6 +36,7 @@ export class ProductsComponent implements OnChanges, OnInit {
   @Input() productsServ: any
   @Input() selectedComponent: string = '';
 
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['counterpartyId']) {
       this.productsServ.counterpartyId = this.counterpartyId;
@@ -53,8 +54,14 @@ export class ProductsComponent implements OnChanges, OnInit {
 
   selectedProduct: any;
   selectedColumns: string[] = [];
+  @ViewChild('tableContainer') tableContainer!: ElementRef<HTMLElement>;
 
 
+  scrollToTop() {
+    if (this.tableContainer && this.tableContainer.nativeElement) {
+      this.tableContainer.nativeElement.scrollTop = 0;
+    }
+  }
 
   loadProducts(reset = false) {
     if (reset) {
@@ -173,7 +180,7 @@ export class ProductsComponent implements OnChanges, OnInit {
     }
   }
 
-  constructor(private invoicesService:InvoicesService) { }
+  constructor(private invoicesService: InvoicesService) { }
 
 
   getStatusLabel(value: number): string {

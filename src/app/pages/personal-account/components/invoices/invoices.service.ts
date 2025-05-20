@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { ElementRef, Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { environment } from '../../../../../environment';
 import { Router } from '@angular/router';
@@ -258,8 +258,14 @@ export class InvoicesService {
     // Удаляем фильтр, если values стал пустым массивом или `[""]`
     this.queryData.filters = this.queryData.filters.filter(f => f.values && f.values.length > 0 && f.values[0] !== "");
 
+    this.currentPage = 0;
 
-    this.loadProducts();
+    this.getProductsByCounterparty(this.counterpartyId, this.currentPage, this.pageSize).subscribe((data: any) => {
+      this.products = data.documentMetadata.data;
+      this.totalInfo = data.totalInfo;
+      this.setActiveData(data.documentMetadata.data)
+    })
+
     console.log('Обновленные фильтры:', this.queryData.filters);
   }
 
@@ -285,7 +291,10 @@ export class InvoicesService {
   counterpartyId: any;
   products: any;
   totalInfo: any;
-
+  totalRecords = 0;
+  totalPages = null;
+  pageSize = 30;
+  currentPage = 0;
 
   loadProducts() {
     this.getProductsByCounterparty(this.counterpartyId).subscribe(
@@ -301,4 +310,10 @@ export class InvoicesService {
   }
 
 
+
+
 }
+function ViewChild(arg0: string): (target: InvoicesService, propertyKey: "tableContainer") => void {
+  throw new Error('Function not implemented.');
+}
+
