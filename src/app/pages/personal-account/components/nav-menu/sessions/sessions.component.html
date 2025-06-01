@@ -1,0 +1,71 @@
+<div class="sessions-container">
+    <button class="session-button" (click)="toggleSessions($event)">
+        <span>Активные сессии</span>
+    </button>
+
+    <div class="dropdown" #dropdown [class.open]="isOpen">
+        @if (sessions.length == 0) {
+        <div class="loading-spinner"></div>
+        }
+        @else if (error) {
+        <div class="error-message">
+            {{ error }}
+            <button class="retry-button" (click)="loadSessions()">Повторить</button>
+        </div>
+        }
+        @else {
+        <div class="session-list">
+            @for (session of sessions; track session.id) {
+            <div class="session-item" [class.current]="session.isCurrent">
+                <div class="session-details">
+                    <div class="session-info">
+                        <span class="user-name">
+                            {{ session.user.lastName }}
+                            {{ session.user.firstName }}
+                            {{ session.user.patronymic }}
+                        </span>
+                        <div class="status-container">
+                            <span class="status" [class.undefined]="session.status === 0"
+                                [class.active]="session.status === 1" [class.sleeping]="session.status === 2"
+                                [class.paused]="session.status === 3" [class.completed]="session.status === 4"
+                                [class.aborted]="session.status === 5" [class.locked]="session.status === 6"
+                                (click)="toggleStatusDropdown($event, session)">
+                                {{ getStatusText(session.status) }}
+                            </span>
+
+                            <div class="status-dropdown" [style.top.px]="dropdownPosition.top"
+                                [style.bottom.px]="dropdownPosition.bottom" *ngIf="openedStatusDropdown === session.id">
+                                <!-- <a class="status" (click)="updateStatus(session, 0)" [class.undefined]="true">Не
+                                    определена</a> -->
+                                <a *ngIf="session.status != 1" class="status" (click)="updateStatus(session, 1)"
+                                    [class.active]="true">Возобновить</a>
+                                <!-- <a class="status" (click)="updateStatus(session, 2)" [class.sleeping]="true">В спящем
+                                    режиме</a> -->
+                                <a *ngIf="session.status != 3" class="status" (click)="updateStatus(session, 3)"
+                                    [class.paused]="true">Приостановить</a>
+                                <a *ngIf="session.status != 4" class="status" (click)="updateStatus(session, 4)"
+                                    [class.completed]="true">Завершить</a>
+                                <!-- <a class="status" (click)="updateStatus(session, 5)" [class.aborted]="true">Прервана</a> -->
+                                <a *ngIf="session.status != 6" class="status" (click)="updateStatus(session, 6)"
+                                    [class.locked]="true">Заблокировать</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="session-meta">
+                        <span class="last-activity">Последняя активность: {{ formatDate(session.lastActionDateTime)
+                            }}</span>
+                        <span class="expires">Истекает: {{ formatDate(session.expireDateTime) }}</span>
+                    </div>
+
+                </div>
+                @if (session.isCurrent) {
+                <div class="current-badge">Текущая</div>
+                }
+            </div>
+            } @empty {
+            <div class="empty-state">Активные сессии не найдены</div>
+            }
+        </div>
+        }
+    </div>
+</div>

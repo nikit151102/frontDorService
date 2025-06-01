@@ -7,6 +7,7 @@ import { NavMenuService } from './nav-menu.service';
 import { Subscription } from 'rxjs';
 import { CacheReferenceService } from '../../../../services/cache-reference.service';
 import { ToastService } from '../../../../services/toast.service';
+import { SessionsComponent } from './sessions/sessions.component';
 
 interface CustomMenuItem {
   label: string;
@@ -28,7 +29,7 @@ interface NotifyData {
 @Component({
   selector: 'app-nav-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, SessionsComponent],
   templateUrl: './nav-menu.component.html',
   styleUrls: ['./nav-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -67,6 +68,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     private cacheService: CacheReferenceService,
     private toastService: ToastService
   ) { }
+
 
   ngOnInit(): void {
     const decodedToken = this.jwtService.getDecodedToken();
