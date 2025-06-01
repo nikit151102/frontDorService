@@ -61,18 +61,18 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   private notificationSubscription!: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private jwtService: JwtService, private router: Router,
+    public jwtService: JwtService, private router: Router,
     private cdr: ChangeDetectorRef,
     private tokenService: TokenService,
     private navMenuService: NavMenuService,
     private cacheService: CacheReferenceService,
-    private toastService: ToastService
+    private toastService: ToastService,
+    
   ) { }
 
 
   ngOnInit(): void {
     const decodedToken = this.jwtService.getDecodedToken();
-
     if (decodedToken && decodedToken.role) {
       if (Array.isArray(decodedToken.role)) {
         this.decodedRole = decodedToken.role;

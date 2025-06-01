@@ -94,7 +94,7 @@ export class SessionsService {
                 const currentRole = this.jwtService.getDecodedToken().email;
                 const data = JSON.parse(event.data);
 
-                if (currentRole === 3) {
+                if (currentRole === 1) {
                     this.updateSessionProperty(data);
                 } else {
                     switch (data.status) {

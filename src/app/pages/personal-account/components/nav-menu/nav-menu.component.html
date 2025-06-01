@@ -1,5 +1,4 @@
-<div
-    style="display: flex;     
+<div style="display: flex;     
     justify-content: space-between;     
     background: #ffffff;     
     border-radius: 8px; 
@@ -34,7 +33,9 @@
 
     <div style="display: flex; gap: 10px; margin-right: 12px;">
 
-<app-sessions></app-sessions>
+        <ng-container *ngIf="jwtService.getDecodedToken().email == 1">
+            <app-sessions></app-sessions>
+        </ng-container>
 
         <a (click)="refreshReference()" id="exit-btn">Обновить данные</a>
         <a (click)="execute('exit')" id="exit-btn">Выйти</a>
