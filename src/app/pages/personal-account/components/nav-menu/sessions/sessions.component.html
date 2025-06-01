@@ -52,6 +52,8 @@
                         </div>
                     </div>
                     <div class="session-meta">
+                                                <span class="last-activity">Дата создания : {{ formatDate(session.createDateTime)
+                            }}</span>
                         <span class="last-activity">Последняя активность: {{ formatDate(session.lastActionDateTime)
                             }}</span>
                         <span class="expires">Истекает: {{ formatDate(session.expireDateTime) }}</span>
