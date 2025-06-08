@@ -170,7 +170,17 @@ export class PartnerMenuComponent {
     if (saldo == null) {
       return 0;
     }
-    return saldo < 0 ? Math.abs(saldo) + '-' : saldo.toString();
+
+    if (saldo < 0) {
+      const absoluteValue = Math.abs(saldo);
+      return absoluteValue % 1 === 0
+        ? absoluteValue + '-'
+        : absoluteValue.toFixed(2) + '-';
+    }
+
+    return saldo % 1 === 0
+      ? saldo.toString()
+      : saldo.toFixed(2);
   }
 
 
