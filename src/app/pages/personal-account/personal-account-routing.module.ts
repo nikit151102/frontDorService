@@ -23,10 +23,17 @@ const routes: Routes = [
       {
         path: 'base', loadChildren: () => import('./tabs/base/base.module').then(m => m.BaseModule)
       },
-      
+
       {
         path: 'profile', loadChildren: () => import('./tabs/profile/profile.module').then(m => m.ProfileModule)
-      }
+      },
+      {
+        path: 'logistic', loadChildren: () => import('./tabs/logistic/logistic.module').then(m => m.LogisticModule)
+      },
+      {
+        path: 'director', loadChildren: () => import('./tabs//director/director.module').then(m => m.DirectorModule)
+      },
+
     ]
   }
 ];

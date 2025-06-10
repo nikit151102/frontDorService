@@ -104,4 +104,20 @@ export const referenceConfig = [
         ],
     },
     
+     {
+        typeId: '193452',
+        endpoint: 'api/Entities/DriverEmployee',
+        pageTitle: 'Водители',
+        tableColumns: [
+            { label: 'Имя', field: 'name', type: 'string', width: '49%' },
+            { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
+            { label: 'Отчество', field: 'patronymic', type: 'string', width: '49%' },
+        ],
+        formFields: [
+            { label: 'Имя', field: 'name', type: 'text', visible: true},
+            { label: 'Фамилия', field: 'surname', type: 'text', visible: true },
+            { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
+        ],
+    },
+    
 ];

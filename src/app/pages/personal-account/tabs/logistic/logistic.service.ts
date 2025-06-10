@@ -1,0 +1,62 @@
+import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../../../../environment';
+import { InvoicesService } from '../../components/invoices/invoices.service';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class LogisticService {
+
+  constructor(public invoicesService: InvoicesService) { }
+
+  private socket!: WebSocket;
+
+  selectManagerDocType: any;
+  
+  private _someVariable = new BehaviorSubject<any>(true);
+
+  public someVariable$ = this._someVariable.asObservable();
+
+  setSomeVariable(value: any) {
+    this._someVariable.next(value);
+  }
+  
+  connectToWebSocket(): void {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    let apiUrl = environment.apiUrl.replace(/^https/, "wss");
+    const url = `${apiUrl}/auth/WebsocketConnect?token=${token}&queueTag=managerDocTable`;
+    this.socket = new WebSocket(url);
+
+    this.socket.onopen = () => {
+    };
+
+    this.socket.onmessage = (event) => {
+      try {
+        const data = JSON.parse(event.data);
+        console.log("web-socket works:", data);
+        console.log('data.managerDocType', data.managerDocType);
+        console.log('this.selectManagerDocType', this.selectManagerDocType)
+        if (this.selectManagerDocType === data.managerDocType) {
+          this.invoicesService.addOrUpdateItem(data);
+        }
+      } catch (e) {
+        console.error('Error parsing WebSocket message:', e);
+      }
+    };
+
+    this.socket.onerror = (error) => {
+      console.error('WebSocket error:', error);
+    };
+
+    this.socket.onclose = () => {
+    };
+  }
+
+  disconnectWebSocket(): void {
+    if (this.socket) {
+      this.socket.close();
+    }
+  }
+}
+

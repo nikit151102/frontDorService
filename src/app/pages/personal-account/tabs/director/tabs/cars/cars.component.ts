@@ -1,0 +1,257 @@
+import { CommonModule } from '@angular/common';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { TableModule } from 'primeng/table';
+import { DateFilterSortComponent } from '../../../../../../components/fields/date-filter/date-filter.component';
+import { NumberFilterComponent } from '../../../../../../components/fields/number-filter/number-filter.component';
+import { SearchFilterSortComponent } from '../../../../../../components/fields/search-filter-sort/search-filter-sort.component';
+import { UuidSearchFilterSortComponent } from '../../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
+import { InvoicesService } from '../../../../components/invoices/invoices.service';
+import { ProductsService } from '../../../../components/products/products.service';
+import { CarsService } from './cars.service';
+import { columns, totalInfoColumn } from './config';
+
+@Component({
+  selector: 'app-cars',
+  providers: [ProductsService],
+  imports: [CommonModule, TableModule,
+    SearchFilterSortComponent,
+    DateFilterSortComponent,
+    NumberFilterComponent,
+    UuidSearchFilterSortComponent,
+    FormsModule,
+    MultiSelectModule
+  ],
+  templateUrl: './cars.component.html',
+  styleUrl: './cars.component.scss'
+})
+export class CarsComponent implements OnChanges, OnInit {
+  @Input() counterpartyId!: any;
+  endpoint: string = 'api/Director/AnalyticsTransport';
+  columns: any = columns;
+  totalInfoColumn = totalInfoColumn;
+  @Input() actions: { label: string, action: string }[] = [];
+  @Input() productService!: any;
+  @Input() selectedComponent: string = '';
+
+  constructor(private invoicesService: InvoicesService,
+    public productsServ:CarsService
+  ) { }
+
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['counterpartyId']) {
+      this.productsServ.counterpartyId = this.counterpartyId;
+      this.productsServ.endpoint = this.endpoint;
+
+      if (changes['selectedComponent']) {
+        this.loadProducts(true);
+      }
+
+      if (this.productsServ) {
+        this.loadProducts();
+      }
+    }
+  }
+
+  selectedProduct: any;
+  selectedColumns: string[] = [];
+  @ViewChild('tableContainer') tableContainer!: ElementRef<HTMLElement>;
+
+
+  scrollToTop() {
+    if (this.tableContainer && this.tableContainer.nativeElement) {
+      this.tableContainer.nativeElement.scrollTop = 0;
+    }
+  }
+
+  loadProducts(reset = false) {
+    if (reset) {
+      this.productsServ.currentPage = 0;
+      this.productsServ.currentPage = 0
+      this.selectedProduct = [];
+    }
+
+    if (this.productsServ.loading) return;
+
+    this.productsServ.loading = true;
+
+    this.productsServ.getProductsByCounterparty(
+      this.counterpartyId,
+      this.productsServ.currentPage,
+      this.productsServ.pageSize
+    ).subscribe(
+      (response: any) => {
+        const mapInvoice = (invoice: any) => {
+          const transformed = {
+            ...invoice,
+            expenseSum: invoice.expenseSum?.toString().replace('.', ','),
+            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
+          };
+
+          return transformed;
+        };
+
+        let newInvoices = [];
+        if (response.documentMetadata && response.documentMetadata.data) {
+          newInvoices = response.documentMetadata.data.map(mapInvoice);
+        } else if (response.data) {
+          newInvoices = response.data.map(mapInvoice);
+        } ``
+
+        if (response.totalInfo && response.totalInfo?.totalPagesCount) {
+          this.productsServ.totalRecords = response.totalInfo?.totalPagesCount * this.productsServ.pageSize;
+        }
+
+        if (reset || this.productsServ.currentPage === 0) {
+          this.productsServ.products = newInvoices;
+        } else {
+          this.productsServ.products = [...this.productsServ.products, ...newInvoices];
+        }
+        this.productsServ.totalInfo = response.totalInfo;
+        this.invoicesService.totalInfo = response.totalInfo;
+        this.productsServ.totalPages = response.totalPages;
+        this.productsServ.currentPage++;
+        this.productsServ.loading = false;
+      },
+      (error: any) => {
+        this.productsServ.loading = false;
+      }
+    );
+  }
+
+
+  onScroll(event: any) {
+    const element = event.target;
+    const atBottom = element.scrollHeight - element.scrollTop <= element.clientHeight + 50;
+
+    if (atBottom && this.productsServ.totalPages && this.productsServ.currentPage < this.productsServ.totalPages) {
+      this.loadProducts();
+    }
+  }
+
+
+  ngOnInit() {
+    this.selectedColumns = this.columns.map((col: any) => col.field);
+    console.log('this.columns', this.columns)
+    this.updateColumnVisibility();
+
+  }
+
+  updateColumnVisibility() {
+    this.columns.forEach((col: any) => {
+      col.visible = this.selectedColumns.includes(col.field);
+    });
+  }
+
+  isColumnVisible(column: any): boolean {
+    return column.visible;
+  }
+
+
+  getTotalValue(columnIndex: number): string | null {
+    if (!this.invoicesService.totalInfo) return null;
+
+    const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+    const value = column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
+
+    if (value === null) return null;
+
+    if (typeof value === 'number') {
+      return value.toFixed(2).replace('.', ',');
+    }
+
+    const numericValue = parseFloat(value);
+    if (!isNaN(numericValue)) {
+      return numericValue.toFixed(2).replace('.', ',');
+    }
+
+    return value;
+  }
+
+  statuses = [
+    { label: 'Черновик', value: 0, id: 0 },
+    { label: 'Проверка Механик', value: 1, id: 1 },
+    { label: 'Проверка Директор', value: 2, id: 2 },
+    { label: 'Отклонено Механик', value: 3, id: 3 },
+    { label: 'Отклонено Директор', value: 4, id: 4 },
+    { label: 'Подписано', value: 5, id: 5 },
+    { label: 'Удалено', value: 6, id: 6 },
+    { label: 'Проведено', value: 7, id: 7 }
+  ];
+  getStatusClass(value: number): string {
+    switch (value) {
+      case 0: return 'status-not-checked';
+      case 1:
+      case 2: return 'status-sent-for-check';
+      case 3:
+      case 4: return 'status-rejected';
+      case 5: return 'status-approved';
+      case 6: return 'status-deleted';
+      case 7: return 'status-completed';
+      default: return '';
+    }
+  }
+
+
+  getStatusLabel(value: number): string {
+    return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';
+  }
+
+
+
+  onActionClick(actionName: string, product: any) {
+    if (this.productService && typeof this.productService[actionName] === 'function') {
+      this.productService[actionName](product);
+    } else {
+      console.error(`Method ${actionName} does not exist on ProductsService`);
+    }
+  }
+
+    formatisNumber(value: any): string {
+    const numericValue = typeof value === 'string'
+      ? parseFloat(value.replace(',', '.'))
+      : Number(value);
+
+    if (isNaN(numericValue)) return '0';
+
+    if (Number.isInteger(numericValue)) {
+      return numericValue.toString();
+    } else {
+      const formatted = numericValue.toFixed(2);
+      return formatted.endsWith('.00')
+        ? formatted.replace('.00', '')
+        : formatted.replace('.', ',');
+    }
+  }
+
+
+  isEditInvoice: boolean = false;
+  selectInvoiceId: string = '';
+
+  onRowDblClick(event: MouseEvent, product: any, field: string) {
+
+    if (field == 'docInvoice') {
+      console.log('field', field)
+      this.isEditInvoice = false;
+      this.selectInvoiceId = product.docInvoiceId;
+    }
+  }
+
+
+
+  dropdownVisible: { [key: string]: boolean } = {};
+
+  toggleDropdown(productId: string) {
+    Object.keys(this.dropdownVisible).forEach(id => {
+      if (id !== productId) this.dropdownVisible[id] = false;
+    });
+
+    this.dropdownVisible[productId] = !this.dropdownVisible[productId];
+  }
+
+
+  verificationInvoice(id: string, status: number) { }
+
+}
