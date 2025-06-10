@@ -124,7 +124,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       fuelCost: [0, [Validators.required, Validators.min(0)]],
       fuelTotalCost: [0, [Validators.required, Validators.min(0)]],
       driverSalary: [0, [Validators.required, Validators.min(0)]],
-      driverId: ['', Validators.required]
+      driverEmployeeId: ['', Validators.required]
     }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
@@ -182,7 +182,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   onDriverChange(selectedValue: any): void {
     console.log('Выбрано значение:', selectedValue);
-    this.invoiceForm.get('driverId')?.setValue(selectedValue);
+    this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
   }
 
   saveInvoice(): void {
@@ -199,6 +199,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       });
     } else {
       this.markAllAsTouched();
+      console.error('Ошибка при сохранении документа валидация');
     }
   }
 
