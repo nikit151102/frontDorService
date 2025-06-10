@@ -103,6 +103,11 @@ export class GeneralDocsFormService {
   }
 
 
+  add7Hours(dateTime: Date | string): Date {
+    const date = new Date(dateTime);
+    date.setHours(date.getHours() + 7);  // Добавляем 7 часов
+    return date;
+  }
 
   savedoc(item: any): Observable<any[]> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -114,6 +119,8 @@ export class GeneralDocsFormService {
       item.endDateTime = new Date(item.endDateTime).toISOString();
     }
 
+    item.beginDateTime = this.add7Hours(item.beginDateTime);
+    item.endDateTime = this.add7Hours(item.endDateTime);
     return new Observable(observer => {
       this.http.post<any[]>(`${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
         {

@@ -78,7 +78,11 @@ export class InvoicesContentService {
       return [];
     }
   }
-
+add7Hours(dateTime: Date | string): Date {
+  const date = new Date(dateTime);
+  date.setHours(date.getHours() + 7);  // Добавляем 7 часов
+  return date;
+}
   saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
    console.log('filtersfiltersfiltersfilters',filters)
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -88,8 +92,9 @@ export class InvoicesContentService {
     } else {
       invoiceid = invoice.id;
     }
+    invoice.dateTime = this.add7Hours(invoice.dateTime)
     if (invoice.id) {
-
+     
       return this.http.put<any>(`${environment.apiUrl}/${endpoint}/${invoiceid}`,
         {
           queryDto: {

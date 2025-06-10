@@ -651,6 +651,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         const typeProjectsValue = currentUrl.includes('/projects') ? true : false;
         if (typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
+        this.selectedInvoice.dateTime = new Date(this.selectedInvoice.dateTime).toISOString();
 
         this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
           (invoice) => {
