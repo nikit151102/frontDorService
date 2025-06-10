@@ -107,6 +107,12 @@ export class GeneralDocsFormService {
   savedoc(item: any): Observable<any[]> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
+    if (item.beginDateTime) {
+      item.beginDateTime = new Date(item.beginDateTime).toISOString();
+    }
+    if (item.endDateTime) {
+      item.endDateTime = new Date(item.endDateTime).toISOString();
+    }
 
     return new Observable(observer => {
       this.http.post<any[]>(`${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
