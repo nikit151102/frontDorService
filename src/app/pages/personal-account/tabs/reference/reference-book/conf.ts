@@ -5,7 +5,7 @@ export const referenceConfig = [
         pageTitle: 'Сотрудники',
         tableColumns: [
             { label: 'Фамилия', field: 'lastName', type: 'string', width: '20%' },
-            { label: 'Имя', field: 'firstName' , type: 'string', width: '20%' },
+            { label: 'Имя', field: 'firstName', type: 'string', width: '20%' },
             { label: 'Должность', field: 'position.name', type: 'string', width: '40%' },
         ],
         formFields: [
@@ -13,10 +13,10 @@ export const referenceConfig = [
             { label: 'Имя', field: 'firstName', type: 'text', visible: true },
             { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
             { label: 'Должность', field: 'positionId', type: 'dropdown', endpoint: 'api/Entities/Position/Filter', visible: true },
-            { label: 'Пароль', field: 'password', type: 'text',  visible: true },
-            { label: 'userName', field: 'userName', type: 'text',  visible: false },
-            { label: 'email', field: 'email', type: 'text',  visible: false },
-            { label: 'isMailSend', field: 'isMailSend', type: 'boolean',  visible: false },
+            { label: 'Пароль', field: 'password', type: 'text', visible: true },
+            { label: 'userName', field: 'userName', type: 'text', visible: false },
+            { label: 'email', field: 'email', type: 'text', visible: false },
+            { label: 'isMailSend', field: 'isMailSend', type: 'boolean', visible: false },
         ],
     },
     {
@@ -45,7 +45,7 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'name', type: 'string', width: '48%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
         ],
     },
@@ -58,7 +58,7 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'cargoName', type: 'string', width: '33%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'cargoName', type: 'text', visible: true },
         ],
     },
@@ -71,7 +71,7 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'storageName', type: 'string', width: '49%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'storageName', type: 'text', visible: true },
         ],
     },
@@ -85,7 +85,7 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
         ],
     },
@@ -99,25 +99,25 @@ export const referenceConfig = [
             { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
         ],
         formFields: [
-            { label: 'Код', field: 'code', type: 'text', visible: true},
+            { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
         ],
     },
-    
-     {
+
+    {
         typeId: '193452',
         endpoint: 'api/Entities/DriverEmployee',
         pageTitle: 'Водители',
         tableColumns: [
+            { label: 'Фамилия', field: 'surName', type: 'string', width: '49%' },
             { label: 'Имя', field: 'name', type: 'string', width: '49%' },
-            { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
             { label: 'Отчество', field: 'patronymic', type: 'string', width: '49%' },
         ],
         formFields: [
-            { label: 'Имя', field: 'name', type: 'text', visible: true},
-            { label: 'Фамилия', field: 'surname', type: 'text', visible: true },
+            { label: 'Фамилия', field: 'surName', type: 'string', width: '49%' },
+            { label: 'Имя', field: 'name', type: 'text', visible: true },
             { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
         ],
     },
-    
+
 ];
