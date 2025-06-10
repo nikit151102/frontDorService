@@ -18,6 +18,7 @@ import { UnsavedChangesDialogComponent } from '../../../../components/unsaved-ch
 import { GeneralDocsFormService } from './general-docs-form.service';
 import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
 import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
+import { dateRangeValidator } from './dateValidate';
 
 @Component({
   selector: 'app-general-docs-form',
@@ -124,7 +125,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       fuelTotalCost: [0, [Validators.required, Validators.min(0)]],
       driverSalary: [0, [Validators.required, Validators.min(0)]],
       driverId: ['', Validators.required]
-    });
+    }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
     this.setupCalculations();

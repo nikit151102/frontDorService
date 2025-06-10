@@ -1,14 +1,8 @@
 <button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
-    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" [header]="'фактуры' + 
-    ((selectedInvoice?.partner?.shortName || selectedInvoice?.partner?.fullName) 
-      ? (' (' + 
-        (selectedInvoice?.partner?.shortName || '') + 
-        (selectedInvoice?.partner?.shortName && selectedInvoice?.partner?.fullName ? ' - ' : '') + 
-        (selectedInvoice?.partner?.fullName || '') + 
-        ')') 
-      : '')" (onHide)="onDialogClose()">
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" [header]="'Документ логиста'"
+        (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
 
@@ -44,8 +38,11 @@
                                     *ngIf="invoiceForm.get('endDateTime')?.touched && invoiceForm.get('endDateTime')?.invalid"
                                     class="p-error">Это поле обязательно</small>
                             </div>
-                        </div>
 
+                        </div>
+                        <small *ngIf="invoiceForm.errors?.['dateRangeInvalid']" class="p-error" style="display: block;">
+                            Дата "От" должна быть раньше даты "До"
+                        </small>
 
                         <!-- Пробег -->
 
