@@ -423,7 +423,8 @@ tfoot td {
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    width: 80% !important;
+    max-width: 650px  !important;
+    width: 100% !important;
     height: 80% !important;
 }
 

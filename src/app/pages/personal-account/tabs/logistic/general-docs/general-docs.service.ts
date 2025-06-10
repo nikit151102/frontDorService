@@ -135,25 +135,6 @@ export class GeneralDocsService {
   }
 
 
-  setTypeAnton(data: any) {
-    const currentUrl = this.router.url;
-    const typeAntonValue = currentUrl.includes('/cash') ? true : false;
-
-    if (typeAntonValue === true) {
-      const antonCashFilter = this.defaultFilters.find(f => f.field === 'antonCashType');
-      console.log('antonCashFilter')
-      console.log('antonCashFilter', antonCashFilter)
-      if (antonCashFilter && antonCashFilter.values && antonCashFilter.values.length > 0) {
-        data.antonCashType = antonCashFilter.values[0];
-        console.log('antonCashFilter.values[0]', antonCashFilter.values[0])
-      }
-    }
-
-    return data
-
-  }
-
-
   getProductsByCounterparty(page: any = null, pageSize: any = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.queryData.filters = this.queryData.filters || [];
@@ -161,23 +142,6 @@ export class GeneralDocsService {
     console.log('this.defaultFilters[0]', this.defaultFilters)
     if (!this.queryData.filters.includes(this.defaultFilters[0])) {
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
-    }
-
-
-    const hasAccountTypeFilter = this.queryData.filters.some(
-      (filter: any) => filter.field === 'DocAccountType'
-    );
-
-    const currentUrl = this.router.url;
-    const typeValue = currentUrl.includes('/cash') ? 1 : 0;
-
-
-    if (!hasAccountTypeFilter && typeValue != 1) {
-      this.queryData.filters.push({
-        field: 'DocAccountType',
-        values: [0, 1],
-        type: 1,
-      });
     }
 
     if (!this.queryData.sorts) {

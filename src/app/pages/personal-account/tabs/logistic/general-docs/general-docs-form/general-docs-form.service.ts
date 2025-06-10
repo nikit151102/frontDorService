@@ -106,21 +106,28 @@ export class GeneralDocsFormService {
 
   savedoc(item: any): Observable<any[]> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
+
+
     return new Observable(observer => {
-      this.http.post<any[]>(`${environment.apiUrl}/api/CommercialWork/DocLogisticShift`, item, {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
-        }),
-      }).subscribe(
-        (response: any) => {
-          const data = response.data;
-          this.generalDocsService.addOrUpdateItem(data)
-        },
-        (error) => {
-          observer.error(error);
+      this.http.post<any[]>(`${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
+        {
+          'entityDto': item,
+          'queryDto': this.generalDocsService.queryData
         }
-      );
+        , {
+          headers: new HttpHeaders({
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${token}`
+          }),
+        }).subscribe(
+          (response: any) => {
+            const data = response.data;
+            this.generalDocsService.addOrUpdateItem(data)
+          },
+          (error) => {
+            observer.error(error);
+          }
+        );
     });
   }
 

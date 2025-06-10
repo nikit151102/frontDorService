@@ -17,6 +17,7 @@ import { CustomInputNumberComponent } from '../../../../../../ui-kit/custom-inpu
 import { UnsavedChangesDialogComponent } from '../../../../components/unsaved-changes-dialog/unsaved-changes-dialog.component';
 import { GeneralDocsFormService } from './general-docs-form.service';
 import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
+import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
 
 @Component({
   selector: 'app-general-docs-form',
@@ -94,10 +95,18 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initForm();
-    this.vehicleOptions = this.loadDropdownData('/api/Entities/ProductTarget/Filter')
-    this.driverOptions = this.loadDropdownData('/api/Entities/DriverEmployee')
-  }
 
+    this.generalFormService.getProductsByEndpoint('/api/Entities/ProductTarget/Filter').subscribe((data: any) => {
+      this.vehicleOptions = data;
+    });
+
+    this.generalFormService.getProductsByEndpoint('/api/Entities/DriverEmployee/Filter').subscribe((data: any) => {
+      this.driverOptions = data.map((driver: any) => ({
+        ...driver,
+        fullName: `${driver.surName} ${driver.name} ${driver.patronymic}`.trim(),
+      }));
+    });
+  }
 
   initForm(): void {
     this.invoiceForm = this.fb.group({
@@ -114,7 +123,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       fuelCost: [0, [Validators.required, Validators.min(0)]],
       fuelTotalCost: [0, [Validators.required, Validators.min(0)]],
       driverSalary: [0, [Validators.required, Validators.min(0)]],
-      driverId: ['']
+      driverId: ['', Validators.required]
     });
 
     // Подписка на изменения для вычисляемых полей
@@ -195,32 +204,6 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
   markAllAsTouched(): void {
     Object.values(this.invoiceForm.controls).forEach(control => {
       control.markAsTouched();
-    });
-  }
-
-
-  loadDropdownData(apiEndpoint: string) {
-    // 1. Проверяем кэш
-    const cachedData = this.cacheService.get(apiEndpoint);
-
-    if (cachedData) {
-      return cachedData;
-    }
-
-    this.generalFormService.getProductsByEndpoint(apiEndpoint).subscribe({
-      next: (data: any) => {
-        console.log('Данные получены с сервера: loadData', data);
-
-        // Сохраняем в кэш (5 минут TTL)
-        this.cacheService.set(apiEndpoint, data.data);
-
-        return data.data;
-
-      },
-      error: (error) => {
-        console.error('Ошибка загрузки:', error);
-        this.cacheService.setLoading(apiEndpoint, false);
-      }
     });
   }
 
