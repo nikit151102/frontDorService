@@ -1,6 +1,6 @@
 <div style=" display: flex; gap: 10px;">
 
-    <app-general-docs-form [data]="selectData"></app-general-docs-form>
+  <app-general-docs-form [data]="selectData"></app-general-docs-form>
 
 </div>
 
@@ -36,7 +36,7 @@
                   (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>
 
-                <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="col.enam"
+                <app-uuid-search-filter-sort *ngIf="col.type == 'enam'" [fieldNames]="'label'" [enam]="statuses"
                   [Field]="col.field" [filterType]="1"
                   (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
                   (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
@@ -67,6 +67,10 @@
                 <ng-container *ngIf="col.field === 'number'">
                   {{product[col.field]}}
                 </ng-container>
+                <span *ngIf="col.field === 'status'"
+                  [ngClass]="getStatusClass(product[col.field])" class="status-tag">
+                  {{ getStatusLabel(product[col.field]) }}
+                </span>
                 <span *ngIf="col.field === 'paymentType' ">
                   {{ transform(product[col.field]) }}
                 </span>
@@ -130,4 +134,3 @@
     </button>
   </ng-container>
 </div>
-
