@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, tap } from 'rxjs';
 import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../../environment';
@@ -109,39 +109,34 @@ export class GeneralDocsFormService {
     return date;
   }
 
-  savedoc(item: any): Observable<any[]> {
+  savedoc(item: any): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
-    if (item.beginDateTime) {
-      item.beginDateTime = new Date(item.beginDateTime).toISOString();
-    }
-    if (item.endDateTime) {
-      item.endDateTime = new Date(item.endDateTime).toISOString();
-    }
-
-    item.beginDateTime = this.add7Hours(item.beginDateTime);
-    item.endDateTime = this.add7Hours(item.endDateTime);
-    return new Observable(observer => {
-      this.http.post<any[]>(`${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
-        {
-          'entityDto': item,
-          'queryDto': this.generalDocsService.queryData
-        }
-        , {
-          headers: new HttpHeaders({
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${token}`
-          }),
-        }).subscribe(
-          (response: any) => {
-            const data = response.data;
-            this.generalDocsService.addOrUpdateItem(data)
-          },
-          (error) => {
-            observer.error(error);
-          }
-        );
+    ['beginDateTime', 'endDateTime'].forEach(prop => {
+      if (item[prop]) {
+        item[prop] = this.add7Hours(new Date(item[prop]).toISOString());
+      }
     });
+
+    const request = item?.id
+      ? this.http.put
+      : this.http.post;
+
+    return request<any>(
+      `${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
+      {
+        entityDto: item,
+        queryDto: this.generalDocsService.queryData
+      },
+      {
+        headers: new HttpHeaders({
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        })
+      }
+    ).pipe(
+      tap(response => this.generalDocsService.addOrUpdateItem(response.data))
+    );
   }
 
 }

@@ -67,32 +67,15 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
-
       this.selectedInvoice = this.data;
-      console.log('this.areOptionsLoaded', this.areOptionsLoaded())
-      if (this.config && this.areOptionsLoaded()) {
-      } else {
-        const waitForConfig = setInterval(() => {
-          if (this.config && this.areOptionsLoaded()) {
-            clearInterval(waitForConfig);
-            this.cdr.detectChanges();
-          }
-        }, 100);
-      }
+      console.log('this.areOptionsLoaded', this.selectedInvoice)
+      this.fillFormWithInvoiceData();
     }
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
     }
   }
 
-  private areOptionsLoaded(): boolean {
-    return this.config?.fields.every(field => {
-      if (field.type === 'dropdown') {
-        return Array.isArray(field.options) && field.options.length > 0;
-      }
-      return true;
-    });
-  }
 
   ngOnInit(): void {
     this.initForm();
@@ -129,6 +112,36 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
     // Подписка на изменения для вычисляемых полей
     this.setupCalculations();
+  }
+
+  fillFormWithInvoiceData(): void {
+    if (!this.selectedInvoice) {
+      console.warn('selectedInvoice is null or undefined');
+      return;
+    }
+
+    const odometerValue = this.selectedInvoice.endOdometer != null && this.selectedInvoice.beginOdometer != null
+      ? this.selectedInvoice.endOdometer - this.selectedInvoice.beginOdometer
+      : 0;
+    // Заполняем форму данными из selectedInvoice
+    this.invoiceForm.patchValue({
+      productTargetId: this.selectedInvoice.productTarget.id || '',
+      beginDateTime: this.selectedInvoice.beginDateTime || '',
+      endDateTime: this.selectedInvoice.endDateTime || '',
+      beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
+      endOdometer: this.selectedInvoice.endOdometer ?? 0,
+      odometer: odometerValue,
+      grossCash: this.selectedInvoice.grossCash ?? 0,
+      grossNoNds: this.selectedInvoice.grossNoNds ?? 0,
+      grossNds: this.selectedInvoice.grossNds ?? 0,
+      fuelCount: this.selectedInvoice.fuelCount ?? 0,
+      fuelCost: this.selectedInvoice.fuelCost ?? 0,
+      fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
+      driverSalary: this.selectedInvoice.driverSalary ?? 0,
+      driverEmployeeId: this.selectedInvoice.driver.id || ''
+    });
+
+    console.log('Form filled with invoice data:', this.selectedInvoice);
   }
 
 
