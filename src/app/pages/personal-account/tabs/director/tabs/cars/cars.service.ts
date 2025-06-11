@@ -58,12 +58,12 @@ export class CarsService {
       this.queryData.sorts = [];
     }
 
-    const exists = this.queryData.sorts.some((sort) => sort.field === 'DocInvoice.DateTime');
+    const exists = this.queryData.sorts.some((sort) => sort.field === 'DateTime');
 
     if (!exists) {
-      this.queryData.sorts.push({ field: 'DocInvoice.DateTime', sortType: 0 });
+      this.queryData.sorts.push({ field: 'DateTime', sortType: 0 });
     }
-    
+
     if (page !== undefined && page !== null) {
       this.queryData.page = page;
     }
