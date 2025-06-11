@@ -19,6 +19,8 @@ import { GeneralDocsFormService } from './general-docs-form.service';
 import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
 import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
 import { dateRangeValidator } from './dateValidate';
+import { JwtService } from '../../../../../../services/jwt.service';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 
 @Component({
   selector: 'app-general-docs-form',
@@ -51,18 +53,20 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
   isEdit: boolean = true;
   invoiceForm!: FormGroup;
   dialogVisible = false;
-
+  newDoc: boolean = true;
   // Mock data
   vehicleOptions = [];
   driverOptions = [];
-
+  currentRole: any;
 
   constructor(
     private generalFormService: GeneralDocsFormService,
     private cdr: ChangeDetectorRef,
     private toastService: ToastService,
     private cacheService: CacheReferenceService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private jwtService: JwtService,
+    private confirmPopupService: ConfirmPopupService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -70,6 +74,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       this.selectedInvoice = this.data;
       console.log('this.areOptionsLoaded', this.selectedInvoice)
       this.fillFormWithInvoiceData();
+      this.newDoc = false;
       this.dialogVisible = true;
     }
     if (changes['config'] || changes['model']) {
@@ -80,7 +85,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
     this.initForm();
-
+    this.currentRole = this.jwtService.getDecodedToken().email;
     this.generalFormService.getProductsByEndpoint('/api/Entities/ProductTarget/Filter').subscribe((data: any) => {
       this.vehicleOptions = data;
     });
@@ -104,10 +109,10 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       odometer: [0, [Validators.required, Validators.min(0)]],
       grossCash: [0, [Validators.required, Validators.min(0)]],
       grossNoNds: [0, [Validators.required, Validators.min(0)]],
-      grossNds: [0, [Validators.required, Validators.min(0)]],
-      fuelCount: [0, [Validators.required, Validators.min(0)]],
-      fuelCost: [0, [Validators.required, Validators.min(0)]],
-      fuelTotalCost: [0, [Validators.required, Validators.min(0)]],
+      grossNds: [0],
+      fuelCount: [0],
+      fuelCost: [0],
+      fuelTotalCost: [0],
       driverSalary: [0, [Validators.required, Validators.min(0)]],
       driverEmployeeId: ['', Validators.required]
     }, { validators: dateRangeValidator() });
@@ -125,12 +130,12 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     const odometerValue = this.selectedInvoice.endOdometer != null && this.selectedInvoice.beginOdometer != null
       ? this.selectedInvoice.endOdometer - this.selectedInvoice.beginOdometer
       : 0;
-      
+
     // Заполняем форму данными из selectedInvoice
     this.invoiceForm.patchValue({
       productTargetId: this.selectedInvoice.productTargetId || '',
-      beginDateTime: this.selectedInvoice.beginDateTime || '',
-      endDateTime: this.selectedInvoice.endDateTime || '',
+      beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
+      endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
       beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
       endOdometer: this.selectedInvoice.endOdometer ?? 0,
       odometer: odometerValue,
@@ -201,28 +206,78 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
   }
 
-  saveInvoice(): void {
+
+  saveInvoice(callback?: (invoice: any) => void) {
     if (this.invoiceForm.valid) {
-      console.log('Сохранение данных:', this.invoiceForm.value);
-      let data = this.invoiceForm.value;
-      if(this.data && this.data.id){
-        data.id = this.data.id
+
+      let titlePopUp = '';
+      let acceptLabel = '';
+
+      if (this.selectedInvoice && this.selectedInvoice.id) {
+        titlePopUp = 'Вы действительно хотите обновить данные?';
+        acceptLabel = 'Обновить';
+      } else {
+        titlePopUp = 'Вы действительно хотите создать документ?';
+        acceptLabel = 'Создать';
       }
-      this.generalFormService.savedoc(data).subscribe({
-        next: (response) => {
-          console.log('Документ успешно сохранен', response);
-          this.toastService.showSuccess('Успешно', response.documentMetadata.message)
-          this.dialogVisible = false;
-        },
-        error: (err) => {
-          console.error('Ошибка при сохранении документа', err);
-          this.toastService.showError('Ошибка', err.error.Message)
+
+      this.confirmPopupService.openConfirmDialog({
+        title: '',
+        message: titlePopUp,
+        acceptLabel: acceptLabel,
+        rejectLabel: 'Отмена',
+        onAccept: () => {
+          console.log('Сохранение данных:', this.invoiceForm.value);
+          let data = this.invoiceForm.value;
+          if (this.data && this.data.id) {
+            data.id = this.data.id
+          }
+          this.generalFormService.savedoc(data).subscribe({
+            next: (response) => {
+              console.log('Документ успешно сохранен', response);
+              this.toastService.showSuccess('Успешно', response.documentMetadata.message)
+              this.dialogVisible = false;
+              if (callback && response.documentMetadata.data) {
+                callback(response.documentMetadata.data);
+              }
+            },
+            error: (err) => {
+              console.error('Ошибка при сохранении документа', err);
+              this.toastService.showError('Ошибка', err.error.Message)
+            }
+          });
         }
       });
+
     } else {
       this.markAllAsTouched();
       console.error('Ошибка при сохранении документа валидация');
     }
+
+  }
+
+  saveAndSendInvoice() {
+
+    this.saveInvoice((invoice: any) => {
+      let currentRole = this.jwtService.getDecodedToken().email;
+      if (currentRole == '7') {
+        this.sendingInvoice(invoice, 2);
+      } else if (currentRole == '1') {
+        this.sendingInvoice(invoice, 5);
+      }
+    });
+  }
+
+  sendingInvoice(doc: string, status: number) {
+    this.generalFormService.sendingVerification(doc, status).subscribe(
+      (updatedInvoice: any) => {
+
+      },
+      error => {
+        console.error('Ошибка при отправке на проверку:', error);
+        this.toastService.showError('Ошибка', error.error.message);
+      }
+    );
   }
 
   markAllAsTouched(): void {
@@ -253,10 +308,13 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
 
   createNewInvoice(): void {
+    this.newDoc = true;
     this.selectedInvoice = {};
     this.data = null;
+    this.invoiceForm.reset();
     this.dialogVisible = true;
   }
+
 
 
 }

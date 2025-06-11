@@ -168,8 +168,21 @@
 
             </div>
             <p-footer>
-                <button pButton label="Сохранить" (click)="saveInvoice()">
-                </button>
+                <ng-container *ngIf="newDoc">
+                    <button pButton [label]="'Черновик'" *ngIf="currentRole != 1" icon="pi pi-check"
+                        (click)="saveAndSendInvoice()">
+                    </button>
+                    <button pButton [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'"
+                        icon="pi pi-check" (click)="saveAndSendInvoice()">
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="!newDoc">
+                    <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)" (click)="saveInvoice()">
+                    </button>
+                    <button pButton label="Отправить на проверку" *ngIf="currentRole != 1" (click)="sendingInvoice(invoiceForm.value, 2)">
+                    </button>
+                </ng-container>
+
                 <button pButton label="Отмена" (click)="onDialogClose()" class="p-button-secondary">
                 </button>
             </p-footer>

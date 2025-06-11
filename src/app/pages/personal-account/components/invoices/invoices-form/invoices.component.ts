@@ -66,7 +66,6 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   @Output() buttonClicked = new EventEmitter<{ button: ButtonConfig; product: any }>();
 
   visibleCheckPersonId: boolean = true;
-
   measurementUnits: any[] = [];
   productTargets: any[] = [];
   adjustmentOptions = adjustmentOptions;

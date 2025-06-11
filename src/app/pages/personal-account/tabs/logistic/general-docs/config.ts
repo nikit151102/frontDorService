@@ -39,7 +39,16 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             class: 'btn-details',
             isEditData: false,
             condition: (product, idCurrentUser) => product.status,
-        }
+        },
+        {
+            label: 'Отправить на проверку',
+            action: 'sendingInvoice',
+            class: 'btn-edit',
+            titlePopUp: 'Редактирование фактуры',
+            messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
+            isEditData: true,
+            condition: (product, idCurrentUser) => product.status == 1,
+        },
     ],
     director: [
         {
@@ -49,7 +58,6 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             isEditData: false,
             condition: (product, idCurrentUser) => true,
         },
-
         {
             label: 'Изменить',
             action: 'getInvoiceById',
@@ -58,6 +66,15 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
             isEditData: true,
             condition: (product, idCurrentUser) => true,
+        },
+        {
+            label: 'Подписать',
+            action: 'sendingInvoice',
+            class: 'btn-edit',
+            titlePopUp: 'Редактирование фактуры',
+            messagePopUp: 'Вы уверены, что хотите изменить информацию в этой фактуре?',
+            isEditData: true,
+            condition: (product, idCurrentUser) => product.status != 5,
         },
         {
             label: 'Удалить',

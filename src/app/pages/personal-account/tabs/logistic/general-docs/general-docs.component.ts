@@ -20,6 +20,7 @@ import { PartnersService } from '../../partners/partners.service';
 import { BUTTON_SETS, columnsDocs, endpoint, totalInfoColumn } from './config';
 import { GeneralDocsService } from './general-docs.service';
 import { GeneralDocsFormComponent } from './general-docs-form/general-docs-form.component';
+import { GeneralDocsFormService } from './general-docs-form/general-docs-form.service';
 
 @Component({
   selector: 'app-general-docs',
@@ -109,6 +110,7 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
     private partnersService: PartnersService,
+    private generalFormService: GeneralDocsFormService,
     private router: Router) { }
 
   ngOnInit() {
@@ -434,6 +436,26 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
         this.toastService.showError('Ошибка', error.error.Message);
       })
   }
+
+
+  sendingInvoice(doc: any) {
+    if (this.currentRole == 1) {
+      doc.status = 5;
+    } else {
+      doc.status = 2;
+    }
+    this.generalFormService.sendingVerification(doc, status).subscribe(
+      (updatedInvoice: any) => {
+        this.generalDocsService.addOrUpdateItem(updatedInvoice.data);
+        this.contextMenuVisible = false;
+      },
+      error => {
+        console.error('Ошибка при отправке на проверку:', error);
+        this.toastService.showError('Ошибка', error.error.message);
+      }
+    );
+  }
+
 
   contextMenuVisible = false;
   contextMenuX = 0;
