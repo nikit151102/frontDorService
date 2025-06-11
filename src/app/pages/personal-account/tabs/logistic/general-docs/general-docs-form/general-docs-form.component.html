@@ -13,7 +13,8 @@
                         <div class="p-field p-col-12">
                             <label for="productTargetId">ТС</label>
                             <app-custom-dropdown [options]="vehicleOptions" optionLabel="name" optionValue="id"
-                                selected='' (selectedChange)="onVehicleChange($event)">
+                                [selected]="invoiceForm.get('productTargetId')?.value"
+                                (selectedChange)="onVehicleChange($event)">
                             </app-custom-dropdown>
                             <small
                                 *ngIf="invoiceForm.get('productTargetId')?.touched && invoiceForm.get('productTargetId')?.invalid"
@@ -153,7 +154,8 @@
                             <div class="p-field p-col-12 p-md-6" style="width: 100%;">
                                 <label for="driverId">Водитель</label>
                                 <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
-                                    selected='' (selectedChange)="onDriverChange($event)">
+                                    [selected]="invoiceForm.get('driverId')?.value"
+                                    (selectedChange)="onDriverChange($event)">
                                 </app-custom-dropdown>
                                 <small
                                     *ngIf="invoiceForm.get('driverId')?.touched && invoiceForm.get('driverId')?.invalid"

@@ -8,7 +8,7 @@ export const totalInfoColumn = [
 
 
 export const columnsDocs = [
-    { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
     // { field: 'status', header: 'Статус', type: 'enum', visible: true, width: '15%' },
     { field: 'beginDateTime', header: 'Начало', type: 'date', visible: true, width: '15%' },
     { field: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },

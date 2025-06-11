@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, Observable, tap } from 'rxjs';
+import { BehaviorSubject, catchError, Observable, tap, throwError } from 'rxjs';
 import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../../environment';
@@ -105,11 +105,16 @@ export class GeneralDocsFormService {
 
   add7Hours(dateTime: Date | string): Date {
     const date = new Date(dateTime);
-    date.setHours(date.getHours() + 7);  // Добавляем 7 часов
+    date.setHours(date.getHours() + 7);
     return date;
   }
 
+
   savedoc(item: any): Observable<any> {
+    if (!item) {
+      return throwError(() => new Error('Item cannot be null or undefined'));
+    }
+
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     ['beginDateTime', 'endDateTime'].forEach(prop => {
@@ -118,25 +123,26 @@ export class GeneralDocsFormService {
       }
     });
 
-    const request = item?.id
-      ? this.http.put
-      : this.http.post;
+    const body = {
+      entityDto: item,
+      queryDto: this.generalDocsService.queryData || {}
+    };
 
-    return request<any>(
-      `${environment.apiUrl}/api/CommercialWork/DocLogisticShift`,
-      {
-        entityDto: item,
-        queryDto: this.generalDocsService.queryData
-      },
-      {
-        headers: new HttpHeaders({
-          'Accept': 'application/json',
-          'Authorization': `Bearer ${token}`
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+
+    const url = `${environment.apiUrl}/api/CommercialWork/DocLogisticShift`;
+
+    return (item?.id ? this.http.put(`${url}/${item.id}`, body, { headers }) : this.http.post(url, body, { headers }))
+      .pipe(
+        tap((response: any) => this.generalDocsService.addOrUpdateItem(response.documentMetadata.data)),
+        catchError(err => {
+          console.error('API Error:', err);
+          return throwError(() => err);
         })
-      }
-    ).pipe(
-      tap(response => this.generalDocsService.addOrUpdateItem(response.data))
-    );
+      );
   }
 
 }

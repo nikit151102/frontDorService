@@ -70,6 +70,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       this.selectedInvoice = this.data;
       console.log('this.areOptionsLoaded', this.selectedInvoice)
       this.fillFormWithInvoiceData();
+      this.dialogVisible = true;
     }
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
@@ -91,6 +92,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       }));
     });
   }
+
 
   initForm(): void {
     this.invoiceForm = this.fb.group({
@@ -123,9 +125,10 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     const odometerValue = this.selectedInvoice.endOdometer != null && this.selectedInvoice.beginOdometer != null
       ? this.selectedInvoice.endOdometer - this.selectedInvoice.beginOdometer
       : 0;
+      
     // Заполняем форму данными из selectedInvoice
     this.invoiceForm.patchValue({
-      productTargetId: this.selectedInvoice.productTarget.id || '',
+      productTargetId: this.selectedInvoice.productTargetId || '',
       beginDateTime: this.selectedInvoice.beginDateTime || '',
       endDateTime: this.selectedInvoice.endDateTime || '',
       beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
@@ -138,7 +141,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       fuelCost: this.selectedInvoice.fuelCost ?? 0,
       fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
       driverSalary: this.selectedInvoice.driverSalary ?? 0,
-      driverEmployeeId: this.selectedInvoice.driver.id || ''
+      driverEmployeeId: this.selectedInvoice.driver || ''
     });
 
     console.log('Form filled with invoice data:', this.selectedInvoice);
@@ -201,13 +204,19 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
   saveInvoice(): void {
     if (this.invoiceForm.valid) {
       console.log('Сохранение данных:', this.invoiceForm.value);
-      this.generalFormService.savedoc(this.invoiceForm.value).subscribe({
+      let data = this.invoiceForm.value;
+      if(this.data && this.data.id){
+        data.id = this.data.id
+      }
+      this.generalFormService.savedoc(data).subscribe({
         next: (response) => {
           console.log('Документ успешно сохранен', response);
+          this.toastService.showSuccess('Успешно', response.documentMetadata.message)
           this.dialogVisible = false;
         },
         error: (err) => {
           console.error('Ошибка при сохранении документа', err);
+          this.toastService.showError('Ошибка', err.error.Message)
         }
       });
     } else {
