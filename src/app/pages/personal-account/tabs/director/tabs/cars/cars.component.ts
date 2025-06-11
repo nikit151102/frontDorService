@@ -26,7 +26,7 @@ import { columns, totalInfoColumn } from './config';
   templateUrl: './cars.component.html',
   styleUrl: './cars.component.scss'
 })
-export class CarsComponent implements OnChanges, OnInit {
+export class CarsComponent implements OnInit {
   @Input() counterpartyId!: any;
   endpoint: string = 'api/Director/AnalyticsTransport';
   columns: any = columns;
@@ -36,24 +36,9 @@ export class CarsComponent implements OnChanges, OnInit {
   @Input() selectedComponent: string = '';
 
   constructor(private invoicesService: InvoicesService,
-    public productsServ:CarsService
+    public productsServ: CarsService
   ) { }
 
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['counterpartyId']) {
-      this.productsServ.counterpartyId = this.counterpartyId;
-      this.productsServ.endpoint = this.endpoint;
-
-      if (changes['selectedComponent']) {
-        this.loadProducts(true);
-      }
-
-      if (this.productsServ) {
-        this.loadProducts();
-      }
-    }
-  }
 
   selectedProduct: any;
   selectedColumns: string[] = [];
@@ -78,7 +63,6 @@ export class CarsComponent implements OnChanges, OnInit {
     this.productsServ.loading = true;
 
     this.productsServ.getProductsByCounterparty(
-      this.counterpartyId,
       this.productsServ.currentPage,
       this.productsServ.pageSize
     ).subscribe(
@@ -133,6 +117,8 @@ export class CarsComponent implements OnChanges, OnInit {
 
 
   ngOnInit() {
+    this.productsServ.endpoint = this.endpoint;
+    this.loadProducts()
     this.selectedColumns = this.columns.map((col: any) => col.field);
     console.log('this.columns', this.columns)
     this.updateColumnVisibility();
@@ -209,7 +195,7 @@ export class CarsComponent implements OnChanges, OnInit {
     }
   }
 
-    formatisNumber(value: any): string {
+  formatisNumber(value: any): string {
     const numericValue = typeof value === 'string'
       ? parseFloat(value.replace(',', '.'))
       : Number(value);

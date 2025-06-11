@@ -49,57 +49,10 @@ export class CarsService {
 
 
 
-  getProductsByCounterparty(id: string, page: any = null, pageSize: any = null): Observable<any> {
+  getProductsByCounterparty(page: any = null, pageSize: any = null): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
 
     this.queryData.filters = this.queryData.filters || [];
-
-    const currentUrl = this.router.url;
-
-    const typeValue = currentUrl.includes('/services')
-      ? 1
-      : currentUrl.includes('/projects')
-        ? 5
-        : 0;
-
-    const hasAccountTypeFilter = this.queryData.filters.some(
-      (filter: any) => filter.field === 'DocInvoice.DocAccountType'
-    );
-
-    if (!hasAccountTypeFilter) {
-      this.queryData.filters.push({
-        field: 'DocInvoice.DocAccountType',
-        values: [0],
-        type: 1,
-      });
-    }
-console.log('defaultFiltersdefaultFilters', this.defaultFilters)
-console.log('this.queryData.filters',this.queryData.filters)
-    const hasAccountPartnerTypeFilter = this.queryData.filters.some(
-      (filter: any) => filter.field === 'DocInvoice.Partner.Type'
-    );
-
-    let defaultFilter: any;
-console.log('hasAccountPartnerTypeFilter',hasAccountPartnerTypeFilter)
-    if (!hasAccountPartnerTypeFilter) {
-      defaultFilter = {
-        field: 'DocInvoice.Partner.Type',
-        values: [typeValue],
-        type: 1
-      }
-    }
-
-    
-
-    // const filterExists = this.queryData.filters.some(filter =>
-    //   filter.field === defaultFilter.field &&
-    //   JSON.stringify(filter.values) === JSON.stringify(defaultFilter.values) &&
-    //   filter.type === defaultFilter.type
-    // );
-
-    // if (!filterExists) {
-    //   this.queryData.filters.push(defaultFilter);
-    // }
 
     if (!this.queryData.sorts) {
       this.queryData.sorts = [];
@@ -110,14 +63,7 @@ console.log('hasAccountPartnerTypeFilter',hasAccountPartnerTypeFilter)
     if (!exists) {
       this.queryData.sorts.push({ field: 'DocInvoice.DateTime', sortType: 0 });
     }
-
-
-    const existsDocPaymentType = this.queryData.filters.some((sort) => sort.field === 'DocInvoice.DocPaymentType');
-
-    if (!existsDocPaymentType) {
-      this.queryData.filters.push({ field: 'DocInvoice.DocPaymentType', values: [0], type: 1 });
-    }
-
+    
     if (page !== undefined && page !== null) {
       this.queryData.page = page;
     }
@@ -127,7 +73,7 @@ console.log('hasAccountPartnerTypeFilter',hasAccountPartnerTypeFilter)
     }
 
 
-    return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, this.queryData, {
+    return this.http.post<any>(`${environment.apiUrl}/${this.endpoint}`, this.queryData, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
         'Authorization': `Bearer ${token}`
