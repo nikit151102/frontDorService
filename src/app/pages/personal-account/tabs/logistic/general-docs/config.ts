@@ -1,9 +1,9 @@
 export const endpoint = 'api/CommercialWork/DocLogisticShift'
 export const totalInfoColumn = [
     { columnNum: 0, value: 'totalCount' },
-    { columnNum: 4, value: 'totalDifferentOdometer' },
-    { columnNum: 5, value: 'totalGrossSum' },
-    { columnNum: 6, value: 'totalKilometerCost' },
+    { columnNum: 3, value: 'totalDifferentOdometer' },
+    { columnNum: 4, value: 'totalGrossSum' },
+    { columnNum: 5, value: 'totalKilometerCost' },
 ];
 
 

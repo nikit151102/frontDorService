@@ -68,7 +68,7 @@
                   {{ transform(product[col.field]) }}
                 </span>
                 <ng-container *ngIf="col.type == 'number'">
-                  {{formatisNumber(product[col.field])}}
+                  {{formatIsNumber(product[col.field])}}
                 </ng-container>
                 <span
                   *ngIf="col.type != 'number' && col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">

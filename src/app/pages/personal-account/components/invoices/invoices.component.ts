@@ -402,12 +402,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (isNaN(numericValue)) return '0';
 
     if (Number.isInteger(numericValue)) {
-      return numericValue.toString();
+      return numericValue.toLocaleString('ru-RU');
     } else {
-      const formatted = numericValue.toFixed(2);
-      return formatted.endsWith('.00')
-        ? formatted.replace('.00', '')
-        : formatted.replace('.', ',');
+      const formatted = numericValue.toLocaleString('ru-RU', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+      return formatted.endsWith(',00')
+        ? formatted.replace(',00', '')
+        : formatted;
     }
   }
 
