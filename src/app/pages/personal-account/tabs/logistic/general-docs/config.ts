@@ -7,18 +7,29 @@ export const totalInfoColumn = [
 ];
 
 
-export const columnsDocs = [
-    { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    // { field: 'status', header: 'Статус', type: 'enum', visible: true, width: '15%' },
-    { field: 'beginDateTime', header: 'Начало', type: 'date', visible: true, width: '15%' },
-    { field: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },
-    { field: 'differentOdometer', header: 'Разница (км)', type: 'number', visible: true, width: '15%' },
-    { field: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '15%' },
-    { field: 'kilometerCost', header: 'Вал/Км', type: 'number', visible: true, width: '15%' },
-    { field: 'driverEmployeeName', header: 'Водитель', type: 'string', visible: true, width: '15%' },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' }
-];
+// export const columnsDocs = [
+//     { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+//     // { field: 'status', header: 'Статус', type: 'enum', visible: true, width: '15%' },
+//     { field: 'beginDateTime', header: 'Начало', type: 'date', visible: true, width: '15%' },
+//     { field: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },
+//     { field: 'differentOdometer', header: 'Разница (км)', type: 'number', visible: true, width: '15%' },
+//     { field: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '15%' },
+//     { field: 'kilometerCost', header: 'Вал/Км', type: 'number', visible: true, width: '15%' },
+//     { field: 'driverEmployeeName', header: 'Водитель', type: 'string', visible: true, width: '15%' },
+//     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' }
+// ];
 
+
+export const columnsDocs = [
+    { field: 'productTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'beginDateTime', fieldView: 'beginDateTime', header: 'Начало', type: 'date', visible: true, width: '15%' },
+    { field: 'endDateTime', fieldView: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },
+    { field: 'differentOdometer', fieldView: 'differentOdometer', header: 'Разница (км)', type: 'number', visible: true, width: '15%' },
+    { field: 'grossSum', fieldView: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '15%' },
+    { field: 'kilometerCost', fieldView: 'kilometerCost', header: 'Вал/км', type: 'number', visible: true, width: '15%' },
+    { field: 'driverEmployeeName', fieldView: 'driverEmployeeName', searchField: 'driverEmployee.Name', header: 'Водитель', type: 'string', visible: true, width: '15%' },
+    { field: 'status', fieldView: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' },
+];
 
 export interface ButtonConfig {
     label: string;

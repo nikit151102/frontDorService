@@ -46,6 +46,11 @@ export class ReferenceBookService {
     return this.http.post<any[]>(`${environment.apiUrl}/${this.endpoint}/Filter`, this.queryData, { headers: this.getHeader() });
   }
 
+  getDropdownData(endpoint: string): Observable<any[]>  {
+    this.queryData.filters = this.queryData.filters || [];
+    return this.http.post<any[]>(`${environment.apiUrl}/${endpoint}`, this.queryData, { headers: this.getHeader() });
+  }
+
   // Получение конкретной записи по ID
   getRecord(id: string): Observable<any> {
     return this.http.get<any>(`${environment.apiUrl}/${this.endpoint}/${id}`, { headers: this.getHeader() });
@@ -70,11 +75,15 @@ export class ReferenceBookService {
     return this.http.post<any>(`${environment.apiUrl}/api/Entities/Position/Filter`, { filters: [], sorts: [] }, { headers: this.getHeader() });
   }
 
-  getPermision(){
-    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Permission/Filter`, 
-    { filters: [{field: "PermissionCategory",
-      type: 0,
-      values: ["SectionPermissions"]}], sorts: [] }, { headers: this.getHeader() });
+  getPermision() {
+    return this.http.post<any>(`${environment.apiUrl}/api/Entities/Permission/Filter`,
+      {
+        filters: [{
+          field: "PermissionCategory",
+          type: 0,
+          values: ["SectionPermissions"]
+        }], sorts: []
+      }, { headers: this.getHeader() });
   }
   queryData: QueryDto = { filters: [], sorts: [] };
   defaultFilters: FilterDto[] = [];

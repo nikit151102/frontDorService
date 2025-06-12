@@ -53,8 +53,12 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
     }
   }
 
+  dropdownsData: any = {};
+
   updateConfig() {
     this.currentConfig = referenceConfig.find(config => config.typeId === this.typeId);
+
+    this.loadDropdownsData();
 
     if (this.currentConfig) {
       this.formFields = this.currentConfig.formFields;
@@ -74,6 +78,19 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
     this.referenceBookService.loadData();
     this.cdr.detectChanges();
+  }
+
+  loadDropdownsData() {
+
+    const dropdownFields = this.currentConfig.formFields.filter((field:any) => field.type === 'dropdown');
+    console.log('dropdownFields',dropdownFields)
+    dropdownFields.forEach((field:any) => {
+      if (field.endpoint) {
+        this.referenceBookService.getDropdownData(field.endpoint).subscribe((response: any) => {
+          this.dropdownsData[field.field] = response.data; 
+        });
+      }
+    });
   }
 
   ngOnInit(): void {

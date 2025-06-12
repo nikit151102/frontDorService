@@ -25,6 +25,7 @@ export class SearchFilterSortComponent {
   @Input() filterField: string = ''; // Название поля для фильтрации
   @Input() filterType: number = 0; // Тип фильтрации (0 - string, 1 - int и т.д.)
   @Input() isVisibleFilter: boolean = true;
+  @Input() searchField: string = '';
   searchTerm: string = '';
   selectedFilters: any[] = []; // Используем any, так как фильтры могут быть разных типов
   sortOrder: 'asc' | 'desc' = 'asc';
@@ -48,7 +49,7 @@ export class SearchFilterSortComponent {
 
   onSearchChange() {
     const filterDto: FilterDto = {
-      field: this.filterField,
+      field: this.searchField || this.filterField,
       values: this.searchTerm ? [this.searchTerm] : [],
       type: 0
     };

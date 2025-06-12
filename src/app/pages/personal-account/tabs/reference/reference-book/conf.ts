@@ -41,12 +41,15 @@ export const referenceConfig = [
         endpoint: 'api/Entities/ProductTarget',
         pageTitle: 'Назначение товара',
         tableColumns: [
-            { label: 'Код', field: 'code', type: 'string', width: '48%' },
-            { label: 'Наименование', field: 'name', type: 'string', width: '48%' },
+            { label: 'Код', field: 'code', type: 'string', width: '10%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
+            { label: 'Категория', field: 'productTargetCategory', type: 'string', width: '39%' },
+
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
+            { label: 'Категория', field: 'ProductTargetCategoryId', type: 'dropdown', endpoint: 'api/Entities/Position/Filter', visible: true },
         ],
     },
     {
@@ -63,16 +66,18 @@ export const referenceConfig = [
         ],
     },
     {
-        typeId: '925812',
+        typeId: '924684',
         endpoint: 'api/Entities/Storage',
-        pageTitle: 'Назначение товара',
+        pageTitle: 'Категории назначений товаров',
         tableColumns: [
-            { label: 'Код', field: 'code', type: 'string', width: '49%' },
-            { label: 'Наименование', field: 'storageName', type: 'string', width: '49%' },
+            { label: 'Код', field: 'code', type: 'string', width: '10%' },
+            { label: 'Наименование', field: 'name', type: 'string', width: '49%' },
+            { label: 'Краткое наименование', field: 'shortName', type: 'string', width: '49%' },
         ],
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true },
-            { label: 'Наименование', field: 'storageName', type: 'text', visible: true },
+            { label: 'Наименование', field: 'name', type: 'text', visible: true },
+            { label: 'Краткое наименование', field: 'shortName', type: 'text', visible: true },
         ],
     },
 
@@ -112,6 +117,7 @@ export const referenceConfig = [
             { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
             { label: 'Имя', field: 'name', type: 'string', width: '49%' },
             { label: 'Отчество', field: 'patronymic', type: 'string', width: '49%' },
+
         ],
         formFields: [
             { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
