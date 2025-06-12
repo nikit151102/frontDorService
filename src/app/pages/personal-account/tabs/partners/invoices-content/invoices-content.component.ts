@@ -71,7 +71,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
 
 
-    this.jwtService.getDecodedToken()
+    console.log('this.jwtService.getDecodedToken()',this.jwtService.getDecodedToken().email)
   }
 
   ngOnChanges(changes: SimpleChanges): void {

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../../../../environment';
 import { Router } from '@angular/router';
+import { JwtService } from '../../../../../services/jwt.service';
 
 interface Product {
   productName: string;
@@ -28,7 +29,7 @@ interface DocInvoice {
 })
 export class InvoicesContentService {
 
-  constructor(private http: HttpClient, private router: Router) { }
+  constructor(private http: HttpClient, private router: Router, private jwtService: JwtService,) { }
 
   getInvoices(): Observable<any> {
     const token = localStorage.getItem('YXV0aFRva2Vu');
@@ -80,10 +81,11 @@ export class InvoicesContentService {
   }
   add7Hours(dateTime: Date | string): Date {
     const date = new Date(dateTime);
-    date.setHours(date.getHours() + 7);  // Добавляем 7 часов
+    const hoursOffset = Number(this.jwtService.getDecodedToken().hoursOffset);
+    date.setHours(date.getHours() + hoursOffset); 
     return date;
   }
-  
+
   saveInvoice(invoice: any, endpoint: string = 'api/CommercialWork/DocInvoice', cashType = null, filters: any): Observable<any> {
     console.log('filtersfiltersfiltersfilters', filters)
     const token = localStorage.getItem('YXV0aFRva2Vu');

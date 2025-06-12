@@ -4,6 +4,7 @@ import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from '../../../../../../../environment';
 import { GeneralDocsService } from '../general-docs.service';
+import { JwtService } from '../../../../../../services/jwt.service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,8 @@ export class GeneralDocsFormService {
   private service: any;
 
   constructor(private http: HttpClient,
-    private generalDocsService: GeneralDocsService
+    private generalDocsService: GeneralDocsService,
+    private jwtService: JwtService,
   ) { }
 
   // Инициализируем конфигурацию
@@ -105,7 +107,8 @@ export class GeneralDocsFormService {
 
   add7Hours(dateTime: Date | string): Date {
     const date = new Date(dateTime);
-    date.setHours(date.getHours() + 7);
+    const hoursOffset = Number(this.jwtService.getDecodedToken().hoursOffset);
+    date.setHours(date.getHours() + hoursOffset);  // Добавляем 7 часов
     return date;
   }
 
