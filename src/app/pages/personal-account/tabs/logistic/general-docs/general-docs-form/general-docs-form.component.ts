@@ -93,7 +93,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     this.generalFormService.getProductsByEndpoint('/api/Entities/DriverEmployee/Filter').subscribe((data: any) => {
       this.driverOptions = data.map((driver: any) => ({
         ...driver,
-        fullName: `${driver.surName} ${driver.name} ${driver.patronymic}`.trim(),
+        fullName: `${driver.surname} ${driver.name} ${driver.patronymic}`.trim(),
       }));
     });
   }
