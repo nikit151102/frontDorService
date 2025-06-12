@@ -74,7 +74,11 @@
                             </div>
 
                         </div>
-
+                        <small
+                            *ngIf="invoiceForm.get('odometer')?.invalid && invoiceForm.get('odometer')?.errors?.['negativeOdometer']"
+                            class="p-error">
+                            Пробег не может быть отрицательным
+                        </small>
 
 
                         <!-- Валовая прибыль -->
@@ -177,9 +181,11 @@
                     </button>
                 </ng-container>
                 <ng-container *ngIf="!newDoc">
-                    <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)" (click)="saveInvoice()">
+                    <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)"
+                        (click)="saveInvoice()">
                     </button>
-                    <button pButton label="Отправить на проверку" *ngIf="currentRole != 1" (click)="sendingInvoice(invoiceForm.value, 2)">
+                    <button pButton label="Отправить на проверку" *ngIf="currentRole != 1"
+                        (click)="sendingInvoice(invoiceForm.value, 2)">
                     </button>
                 </ng-container>
 

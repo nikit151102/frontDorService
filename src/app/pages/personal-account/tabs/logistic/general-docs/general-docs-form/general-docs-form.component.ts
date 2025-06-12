@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -106,7 +106,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       endDateTime: ['', Validators.required],
       beginOdometer: [0, [Validators.required, Validators.min(0)]],
       endOdometer: [0, [Validators.required, Validators.min(0)]],
-      odometer: [0, [Validators.required, Validators.min(0)]],
+      odometer: [0, [Validators.required, Validators.min(0), this.positiveOdometerValidator]],
       grossCash: [0, [Validators.required, Validators.min(0)]],
       grossNoNds: [0, [Validators.required, Validators.min(0)]],
       grossNds: [0],
@@ -119,6 +119,11 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
     // Подписка на изменения для вычисляемых полей
     this.setupCalculations();
+  }
+
+  positiveOdometerValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value;
+    return value < 0 ? { negativeOdometer: true } : null;
   }
 
   fillFormWithInvoiceData(): void {
@@ -181,6 +186,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       const begin = beginControl.value || 0;
       const end = endControl.value || 0;
       odometerControl.setValue(end - begin, { emitEvent: false });
+      odometerControl.updateValueAndValidity();
     }
   }
 
