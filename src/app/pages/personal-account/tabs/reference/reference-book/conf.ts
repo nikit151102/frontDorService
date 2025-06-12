@@ -54,7 +54,7 @@ export const referenceConfig = [
     },
     {
         typeId: '103825',
-        endpoint: 'api/Entities/ProductTargetCategory',
+        endpoint: 'api/Entities/Storage',
         pageTitle: 'Грузы',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '33%' },
@@ -67,7 +67,7 @@ export const referenceConfig = [
     },
     {
         typeId: '924684',
-        endpoint: 'api/Entities/Storage',
+        endpoint: 'api/Entities/ProductTargetCategory',
         pageTitle: 'Категории назначений товаров',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '10%' },

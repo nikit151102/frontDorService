@@ -16,7 +16,7 @@ export class ReferenceComponent {
   references: { id: string; label: string; command: () => void }[] = [
     { id: '030521', label: 'Сотрудники', command: () => this.executeReference('030521') },
     { id: '495142', label: 'Назначение товара', command: () => this.executeReference('495142') },
-    { id: '103825', label: 'Категории назначений товаров', command: () => this.executeReference('103825') },
+    { id: '924684', label: 'Категории назначений товаров', command: () => this.executeReference('924684') },
     { id: '915825', label: 'Единицы измерения', command: () => this.executeReference('161283') },
     { id: '925812', label: 'Склады', command: () => this.executeReference('925812') },
     { id: '103825', label: 'Грузы', command: () => this.executeReference('103825') },
