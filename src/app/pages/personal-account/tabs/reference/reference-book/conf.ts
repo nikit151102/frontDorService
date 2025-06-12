@@ -49,12 +49,12 @@ export const referenceConfig = [
         formFields: [
             { label: 'Код', field: 'code', type: 'text', visible: true },
             { label: 'Наименование', field: 'name', type: 'text', visible: true },
-            { label: 'Категория', field: 'ProductTargetCategoryId', type: 'dropdown', endpoint: 'api/Entities/Position/Filter', visible: true },
+            { label: 'Категория', field: 'ProductTargetCategoryId', type: 'dropdown', endpoint: 'api/Entities/ProductTargetCategory/Filter', visible: true },
         ],
     },
     {
         typeId: '103825',
-        endpoint: 'api/Entities/Cargo',
+        endpoint: 'api/Entities/ProductTargetCategory',
         pageTitle: 'Грузы',
         tableColumns: [
             { label: 'Код', field: 'code', type: 'string', width: '33%' },
