@@ -120,7 +120,7 @@ export const referenceConfig = [
 
         ],
         formFields: [
-            { label: 'Фамилия', field: 'surname', type: 'type', visible: true  },
+            { label: 'Фамилия', field: 'surname', type: 'text', visible: true  },
             { label: 'Имя', field: 'name', type: 'text', visible: true },
             { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
         ],
