@@ -15,7 +15,7 @@ export const columnsDocs = [
     { field: 'differentOdometer', header: 'Разница (км)', type: 'number', visible: true, width: '15%' },
     { field: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '15%' },
     { field: 'kilometerCost', header: 'Вал/Км', type: 'number', visible: true, width: '15%' },
-    { field: 'driver', header: 'Водитель', type: 'string', visible: true, width: '15%' },
+    { field: 'driverEmployeeName', header: 'Водитель', type: 'string', visible: true, width: '15%' },
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' }
 ];
 
