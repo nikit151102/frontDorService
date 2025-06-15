@@ -82,6 +82,7 @@ export class InvoicesContentService {
   add7Hours(dateTime: Date | string): Date {
     const date = new Date(dateTime);
     const hoursOffset = Number(this.currentUserService.getUser().hoursOffset);
+    console.log('this.currentUserService.getUser()',this.currentUserService.getUser())
     date.setHours(date.getHours() + hoursOffset); 
     return date;
   }
