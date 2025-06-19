@@ -27,7 +27,6 @@ import { columns, totalInfoColumn } from './config';
   styleUrl: './cars.component.scss'
 })
 export class CarsComponent implements OnInit {
-  @Input() counterpartyId!: any;
   endpoint: string = 'api/Director/AnalyticsTransport';
   columns: any = columns;
   totalInfoColumn = totalInfoColumn;
@@ -118,6 +117,7 @@ export class CarsComponent implements OnInit {
 
   ngOnInit() {
     this.productsServ.endpoint = this.endpoint;
+    this.productsServ.products = [];
     this.loadProducts()
     this.selectedColumns = this.columns.map((col: any) => col.field);
     console.log('this.columns', this.columns)
