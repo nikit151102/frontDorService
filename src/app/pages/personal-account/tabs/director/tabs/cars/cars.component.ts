@@ -10,7 +10,7 @@ import { UuidSearchFilterSortComponent } from '../../../../../../components/fiel
 import { InvoicesService } from '../../../../components/invoices/invoices.service';
 import { ProductsService } from '../../../../components/products/products.service';
 import { CarsService } from './cars.service';
-import { columns, totalInfoColumn } from './config';
+import { columns, totalInfoColumn, viewDataColumns } from './config';
 
 @Component({
   selector: 'app-cars',
@@ -30,6 +30,7 @@ export class CarsComponent implements OnInit {
   endpoint: string = 'api/Director/AnalyticsTransport';
   columns: any = columns;
   totalInfoColumn = totalInfoColumn;
+  viewDataColumns: any = viewDataColumns;
   @Input() actions: { label: string, action: string }[] = [];
   @Input() productService!: any;
   @Input() selectedComponent: string = '';
@@ -38,6 +39,15 @@ export class CarsComponent implements OnInit {
     public productsServ: CarsService
   ) { }
 
+  // Функция для проверки видимости группы
+  isGroupVisible(group: any): boolean {
+    return group.visible && group.columns.some((col: any) => this.isColumnVisible(col));
+  }
+
+  // Функция для проверки видимости колонки
+  isColumnVisible(col: any): boolean {
+    return col.visible;
+  }
 
   selectedProduct: any;
   selectedColumns: string[] = [];
@@ -131,9 +141,6 @@ export class CarsComponent implements OnInit {
     });
   }
 
-  isColumnVisible(column: any): boolean {
-    return column.visible;
-  }
 
 
   getTotalValue(columnIndex: number): string | null {

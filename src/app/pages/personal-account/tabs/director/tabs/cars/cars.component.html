@@ -16,44 +16,65 @@
 
         <table class="invoice-table">
             <thead>
+                <!-- Основная строка с группировками -->
                 <tr>
-                    <ng-container *ngFor="let col of columns">
-                        <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                            <div style="display: flex; align-items: center; gap: 10px">
-                                {{ col.header }}
-                                <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
-                                    [filterType]="1" (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
-                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
-                                </app-search-filter-sort>
-                                <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
-                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
-                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
-                                </app-date-filter>
-                                <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
-                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
-                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
-                                </app-number-filter>
-                                <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
-                                    [fieldNames]="'name'" [enam]="null" [Field]="col.field"
-                                    [filterType]="col.filterType" [searchField]="col.searchField"
-                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
-                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
-                                </app-uuid-search-filter-sort>
-                                <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
-                                    [enam]="statuses" [Field]="col.field" [filterType]="1"
-                                    (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
-                                    (sortChange)="productsServ.onSortChange($event); scrollToTop()">
-                                </app-uuid-search-filter-sort>
-                            </div>
+                    <ng-container *ngFor="let group of columns">
+                      <ng-container *ngIf="group.columns.length > 1">
+                          <th style="text-align: center;" *ngIf="isGroupVisible(group)" [attr.colspan]="group.columns.length"
+                            [style.width]="group.width">
+                            {{ group.header }}
                         </th>
+                      </ng-container>
+                      <ng-container *ngIf="group.columns.length == 1">
+<th></th>
+                      </ng-container>
                     </ng-container>
-                    <th *ngIf="actions.length > 0">Действия</th>
+                    <th *ngIf="actions.length > 0" [attr.rowspan]="2">Действия</th>
+                </tr>
+
+                <!-- Строка с конкретными колонками -->
+                <tr>
+                    <ng-container *ngFor="let group of columns">
+                        <ng-container *ngIf="isGroupVisible(group)">
+                            <ng-container *ngFor="let col of group.columns">
+                                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
+                                    <div style="display: flex; align-items: center; gap: 10px">
+                                        {{ col.header }}
+                                        <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
+                                            [filterType]="1"
+                                            (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                            (sortChange)="productsServ.onSortChange($event); scrollToTop()">
+                                        </app-search-filter-sort>
+                                        <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
+                                            (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                            (sortChange)="productsServ.onSortChange($event); scrollToTop()">
+                                        </app-date-filter>
+                                        <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
+                                            (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                            (sortChange)="productsServ.onSortChange($event); scrollToTop()">
+                                        </app-number-filter>
+                                        <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'"
+                                            [apiEndpoint]="col.endpoint" [fieldNames]="'name'" [enam]="null"
+                                            [Field]="col.field" [filterType]="col.filterType"
+                                            [searchField]="col.searchField"
+                                            (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                            (sortChange)="productsServ.onSortChange($event); scrollToTop()">
+                                        </app-uuid-search-filter-sort>
+                                        <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'"
+                                            [enam]="statuses" [Field]="col.field" [filterType]="1"
+                                            (filterChange)="productsServ.onFilterChange($event); scrollToTop()"
+                                            (sortChange)="productsServ.onSortChange($event); scrollToTop()">
+                                        </app-uuid-search-filter-sort>
+                                    </div>
+                                </th>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
                 </tr>
             </thead>
-
             <tbody>
                 <tr *ngFor="let product of productsServ.products" class="invoice-row">
-                    <ng-container *ngFor="let col of columns">
+                    <ng-container *ngFor="let col of viewDataColumns">
                         <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
                             (dblclick)="onRowDblClick($event, product, col.fieldView)">
                             <ng-container *ngIf="col.fieldView === 'dateTime'; ">
