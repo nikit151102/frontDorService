@@ -38,7 +38,7 @@
                         <ng-container *ngIf="isGroupVisible(group)">
                             <ng-container *ngFor="let col of group.columns">
                                 <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                                    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px;">
                                         {{ col.header }}
                                         <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
                                             [filterType]="1"
