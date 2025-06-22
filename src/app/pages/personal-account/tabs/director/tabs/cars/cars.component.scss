@@ -3,6 +3,7 @@
     overflow-y: auto;
     position: relative;
 }
+
 thead {
     position: sticky;
     top: 0;
@@ -255,7 +256,7 @@ tfoot {
     position: absolute;
 }
 
-:host ::ng-deep .p-datatable{
+:host ::ng-deep .p-datatable {
     position: absolute;
 }
 
@@ -273,7 +274,7 @@ tfoot {
 :host ::ng-deep p-dialog .p-datatable-tfoot {
     position: sticky;
     bottom: 30px;
-    
+
 }
 
 :host ::ng-deep p-dialog .p-datatable-tfoot>tr>td {
@@ -340,9 +341,6 @@ tfoot {
     position: sticky;
     top: 0;
     z-index: 10;
-    background: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-    font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 /* Основные стили для заголовков */
@@ -367,6 +365,14 @@ tfoot {
     text-transform: uppercase;
     font-size: 0.85em;
     letter-spacing: 0.5px;
+}
+
+.invoice-table thead tr:first-child th:first-child {
+    border-radius: 20px 0 0 0;
+}
+
+.invoice-table thead tr:first-child th:last-child {
+    border-radius: 0 20px 0 0;
 }
 
 /* Разделители между группами */

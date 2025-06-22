@@ -19,15 +19,15 @@
                 <!-- Основная строка с группировками -->
                 <tr>
                     <ng-container *ngFor="let group of columns">
-                      <ng-container *ngIf="group.columns.length > 1">
-                          <th style="text-align: center;" *ngIf="isGroupVisible(group)" [attr.colspan]="group.columns.length"
-                            [style.width]="group.width">
-                            {{ group.header }}
-                        </th>
-                      </ng-container>
-                      <ng-container *ngIf="group.columns.length == 1">
-<th></th>
-                      </ng-container>
+                        <ng-container *ngIf="group.columns.length > 1">
+                            <th style="text-align: center;" *ngIf="isGroupVisible(group)"
+                                [attr.colspan]="group.columns.length" [style.width]="group.width">
+                                {{ group.header }}
+                            </th>
+                        </ng-container>
+                        <ng-container *ngIf="group.columns.length == 1">
+                            <th></th>
+                        </ng-container>
                     </ng-container>
                     <th *ngIf="actions.length > 0" [attr.rowspan]="2">Действия</th>
                 </tr>
@@ -38,7 +38,7 @@
                         <ng-container *ngIf="isGroupVisible(group)">
                             <ng-container *ngFor="let col of group.columns">
                                 <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                                    <div style="display: flex; align-items: center; gap: 10px">
+                                    <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
                                         {{ col.header }}
                                         <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
                                             [filterType]="1"

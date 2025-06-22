@@ -13,11 +13,11 @@
         <tr class="header-row">
           <ng-container *ngFor="let col of columns">
             <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
-              <div style="display: flex; align-items: center; gap: 10px">
+              <div style="display: flex; align-items: center; gap: 10px; font-size: 13px;">
                 {{ col.header }}
-               
+
                 <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
-                [searchField]="col.searchField" 
+                  [searchField]="col.searchField"
                   (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
                   (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
                 </app-search-filter-sort>
@@ -31,7 +31,8 @@
                 </app-number-filter>
                 <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
                   [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType"
-                  [searchField]="col.searchField" (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                  [searchField]="col.searchField"
+                  (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
                   (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>
                 <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"
@@ -50,7 +51,7 @@
           (dblclick)="isEditInvoice = false; getInvoiceById(product)">
           <ng-container *ngFor="let col of columns">
 
-                        <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+            <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
               (dblclick)="isEditInvoice = false; getInvoiceById(product)" (contextmenu)="onRightClick($event, product)"
               [style.width]="col.width">
               <ng-container
@@ -61,7 +62,8 @@
                 <ng-container *ngIf="col.fieldView === 'number'">
                   {{product[col.fieldView]}}
                 </ng-container>
-                <span *ngIf="col.fieldView === 'status'" [ngClass]="getStatusClass(product[col.fieldView])" class="status-tag">
+                <span *ngIf="col.fieldView === 'status'" [ngClass]="getStatusClass(product[col.fieldView])"
+                  class="status-tag">
                   {{ getStatusLabel(product[col.fieldView]) }}
                 </span>
                 <span *ngIf="col.fieldView === 'paymentType' ">
@@ -76,7 +78,7 @@
                 </span>
               </ng-template>
             </td>
-            
+
             <ng-container *ngIf="col.type === 'actions'">
               <td class="invoice-cell actions-cell">
                 <div class="dropdown">
