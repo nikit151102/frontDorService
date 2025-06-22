@@ -14,7 +14,7 @@ export class MenuComponent implements OnInit {
   @Output() selectTab = new EventEmitter<any>();
   selectedName: string = '';
   items: any[] = [
-    { code: '349143', name: 'Битум', access: '', managerDocType: 0, navigate: ['cars'] },
+    { code: '349143', name: 'Машины', access: '', managerDocType: 0, navigate: ['cars'] },
   ];
 
   constructor(private jwtService: JwtService, private logisticService:LogisticService) { }
