@@ -4,5 +4,7 @@
     [value]="getFormattedValue()"
     (input)="handleInput($event)" 
     (keypress)="preventNonNumeric($event)" 
-    [disabled]="disabled" />
+    [disabled]="disabled"
+    [readonly]="disabled" />
 </div>
+

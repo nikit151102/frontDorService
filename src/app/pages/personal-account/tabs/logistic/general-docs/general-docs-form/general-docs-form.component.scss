@@ -1,3 +1,7 @@
+h4 {
+    margin: 15px 0 5px 0;
+}
+
 .table-container {
     // height: calc(100vh - 330px);
     overflow-y: auto;
@@ -262,7 +266,7 @@ tfoot td {
 
 
 
-.p-error{
+.p-error {
     color: red;
 }
 
@@ -427,7 +431,7 @@ tfoot td {
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    max-width: 650px  !important;
+    max-width: 650px !important;
     width: 100% !important;
     height: 80% !important;
 }

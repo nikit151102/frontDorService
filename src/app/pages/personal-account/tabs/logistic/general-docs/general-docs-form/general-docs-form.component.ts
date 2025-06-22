@@ -106,7 +106,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       endDateTime: ['', Validators.required],
       beginOdometer: [0, [Validators.required, Validators.min(0)]],
       endOdometer: [0, [Validators.required, Validators.min(0)]],
-      odometer: [0, [Validators.required, Validators.min(0), this.positiveOdometerValidator]],
+      odometer: [{ value: 0, disabled: true }],
       grossCash: [0, [Validators.required, Validators.min(0)]],
       grossNoNds: [0, [Validators.required, Validators.min(0)]],
       grossNds: [0],
