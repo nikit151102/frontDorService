@@ -14,9 +14,6 @@ import { statuses, taxes, types, adjustmentOptions, columns, productColumns } fr
 import { ConfirmPopupService } from '../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoicesService } from '../invoices.service';
 import { InvoicesContentService } from '../../../tabs/partners/invoices-content/invoices-content.service';
-import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
-import { CustomInputNumberComponent } from '../../../../../ui-kit/custom-input-number/custom-input-number.component';
-import { CustomInputComponent } from '../../../../../ui-kit/custom-input/custom-input.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { ToastService } from '../../../../../services/toast.service';
 import { InvoicesEditPartnerPopUpComponent } from './invoices-edit-partner-pop-up/invoices-edit-partner-pop-up.component';
@@ -42,9 +39,6 @@ import { UnsavedChangesDialogComponent } from '../../unsaved-changes-dialog/unsa
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
-    CustomDropdownComponent,
-    CustomInputNumberComponent,
-    CustomInputComponent,
     InvoicesEditPartnerPopUpComponent,
     InfoScopeComponent,
     ListInvoicesComponent,
@@ -136,8 +130,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
 
   onButtonClick(button: ButtonConfig) {
-    this.buttonClicked.emit({ button, product: this.selectedInvoice });
-    this.selectedInvoice = null;
+    const data = structuredClone(this.selectedInvoice);
+    this.buttonClicked.emit({ button, product: data });
+    // this.selectedInvoice = null;
+    this.dialogVisible = false;
     this.selectScope = null;
   }
 
