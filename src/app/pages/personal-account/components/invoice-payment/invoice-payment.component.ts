@@ -14,7 +14,8 @@ import { CacheReferenceService } from '../../../../services/cache-reference.serv
   standalone: true,
   imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule, CustomInputComponent],
   templateUrl: './invoice-payment.component.html',
-  styleUrls: ['./invoice-payment.component.scss']
+  styleUrls: ['./invoice-payment.component.scss'],
+  
 })
 export class InvoicePaymentComponent implements OnInit {
   @Input() counterpartyId: string = '';

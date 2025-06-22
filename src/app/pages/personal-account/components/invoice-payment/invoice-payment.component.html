@@ -1,30 +1,49 @@
-<div class="overlay" *ngIf="visible">
-    <div class="popup">
+<div class="payment-overlay" *ngIf="visible" [@fadeInOut]>
+    <div class="payment-popup" [@slideInOut]>
         <div class="popup-header">
-            <span>Оплата ({{invoicePaymentService.selectInvoiceShortName}} -
-                {{invoicePaymentService.selectInvoiceFullName}})</span>
+            <h3>Оплата ({{invoicePaymentService.selectInvoiceShortName}} - {{invoicePaymentService.selectInvoiceFullName}})</h3>
+            <button class="close-btn" (click)="closePopup()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
         </div>
+        
         <div class="popup-body">
-            <div class="p-field p-col-12" style="    display: flex; flex-direction: column;">
+            <div class="form-field">
                 <label for="dateTime">Дата</label>
-                <p-calendar id="dateTime" [(ngModel)]="dateTime" [showTime]="false" dateFormat="dd-mm-yy"
+                <p-calendar id="dateTime" [(ngModel)]="dateTime" [showTime]="false" dateFormat="dd.mm.yy"
+                    inputStyleClass="modern-input" panelStyleClass="modern-calendar"
                     (onInput)="onDateInput($event)">
                 </p-calendar>
             </div>
 
-            <div class="p-field p-col-12" style="    max-width: 225px;">
-                <label for="dateTime">Сумма оплаты</label>
-                <app-custom-input-number [(ngModel)]="amount" [min]="0">
+            <div class="form-field amount-field">
+                <label for="amount">Сумма оплаты</label>
+                <app-custom-input-number [(ngModel)]="amount" [min]="0" inputId="amount"
+                    inputStyleClass="modern-input">
                 </app-custom-input-number>
+                <span class="currency-symbol">₽</span>
             </div>
-            <div class="p-field p-col-12" style="    max-width: 225px;">
-                <label for="dateTime">На основе</label>
-                <app-custom-input [(ngModel)]="number" placeholder="Заполните поле"></app-custom-input>
+            
+            <div class="form-field">
+                <label for="documentNumber">На основе</label>
+                <app-custom-input [(ngModel)]="number" placeholder="Номер документа" inputId="documentNumber"
+                    inputStyleClass="modern-input">
+                </app-custom-input>
             </div>
         </div>
+        
         <div class="popup-footer">
-            <button class="btn reject" (click)="closePopup()">{{ rejectLabel }}</button>
-            <button class="btn accept" (click)="onAccept()">{{ acceptLabel }}</button>
+            <button class="btn reject" (click)="closePopup()">
+                {{ rejectLabel }}
+            </button>
+            <button class="btn accept" (click)="onAccept()">
+                {{ acceptLabel }}
+                <svg viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                </svg>
+            </button>
         </div>
     </div>
 </div>

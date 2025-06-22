@@ -1,215 +1,214 @@
-<button pButton label="Создать фактуру" icon="pi pi-plus" (click)="createNewInvoice()"
-    *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'" style="color: white;">
-</button>
+<div class="invoice-container">
+  <!-- Кнопка создания новой фактуры -->
+  <button class="create-btn" (click)="createNewInvoice()" *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000'">
+    <svg class="icon" viewBox="0 0 24 24">
+      <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+    </svg>
+    Создать фактуру
+  </button>
 
-<ng-container *ngIf="selectedInvoice">
-    <!-- Форма редактирования счета -->
-    <!-- <p-dialog [(visible)]="selectedInvoice" [modal]="true" [closable]="true" 
-    [header]="'Фактуры (' + 
-    (productsService.selectedCounterparty.shortName || '') + 
-    (productsService.selectedCounterparty.shortName && productsService.selectedCounterparty.fullName ? ' - ' : '') + 
-    (productsService.selectedCounterparty.fullName || '') + 
-    ')'" (onHide)="onDialogClose()"> -->
+  <!-- Диалоговое окно фактуры -->
+  <div class="dialog-overlay" *ngIf="dialogVisible" [class.active]="dialogVisible">
+    <div class="invoice-dialog">
+      <div class="dialog-header">
+        <h2>Фактуры ({{selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || ''}})</h2>
+        <button class="close-btn" (click)="onDialogClose($event)">
+          <svg viewBox="0 0 24 24">
+            <path fill="currentColor" d="M19,6.41L17.59,5L12,10.59L6.41,5L5,6.41L10.59,12L5,17.59L6.41,19L12,13.41L17.59,19L19,17.59L13.41,12L19,6.41Z" />
+          </svg>
+        </button>
+      </div>
 
-
-    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
-        [header]="'Фактуры (' + (selectedInvoice?.partner?.fullName || productsService.selectedCounterparty?.fullName || '') + ')'"
-        (onHide)="onDialogClose($event)">
-        <div class="form-container">
-            <div id="content">
-                <ng-container *ngIf="drafts && drafts.length > 0">
-                    <app-list-invoices [drafts]="drafts" (itemSelected)="onInvoiceSelected($event)"></app-list-invoices>
-                </ng-container>
-                <div style="display: flex; flex-direction: column;">
-                    <div class="p-fluid p-formgrid p-grid">
-                        <div style="display: flex; gap: 15px;">
-                            <div style="display: flex; gap: 10px;">
-                                <div class="p-field p-col-12">
-                                    <label for="number">Номер фактуры</label>
-                                    <app-custom-input [(ngModel)]="selectedInvoice.number" [disabled]="!isEdit"
-                                        placeholder="Введите номер фактуры"></app-custom-input>
-                                </div>
-                                <div class="p-field p-col-12">
-                                    <label for="dateTime">Дата</label>
-                                    <p-calendar id="dateTime" [(ngModel)]="selectedInvoice.dateTime" [showTime]="false"
-                                        [disabled]="!isEdit"  dateFormat="dd-mm-yy" (onInput)="onDateInput($event)">
-                                    </p-calendar>
-                                </div>
-
-                                <!-- <div class="p-field p-col-12">
-                        <label for="stateNumberCar">Гос. номер автомобиля</label>
-                        <input id="stateNumberCar" [(ngModel)]="selectedInvoice.stateNumberCar" pInputText [disabled]="!isEdit" />
-                        </div> -->
-                            </div>
-
-                            <div style="display: flex; gap: 10px;">
-                                <div class="p-field p-col-12">
-                                    <label for="type">Тип</label>
-                                    <p-dropdown [style]="{ 'min-width': '120px' }" id="type" [(ngModel)]="type"
-                                        [options]="types" optionLabel="label" optionValue="value"
-                                        (onChange)="onTypeChange()" [disabled]="!isEdit">
-                                    </p-dropdown>
-                                </div>
-
-                                <!-- <div class="p-field p-col-12" *ngIf="type === 0 || selectedInvoice.expenseSum < 0">
-                                    <label for="adjustmentType">Корректировка</label>
-                                    <p-dropdown id="adjustmentType" [(ngModel)]="adjustmentType"
-                                        [options]="adjustmentOptions" optionLabel="label" optionValue="value"
-                                        (onChange)="onAdjustmentChange()" [disabled]="!isEdit">
-                                    </p-dropdown>
-                                </div> -->
-
-                                <div class="p-field p-col-12" *ngIf="visibleCheckPersonId">
-                                    <label for="checkPersonId">Проверяющий</label>
-                                    <p-dropdown [style]="{ 'min-width': '150px' }" id="checkPersonId"
-                                        [(ngModel)]="selectedInvoice.checkPersonId" [options]="checkers"
-                                        optionLabel="fullName" optionValue="id" [disabled]="!isEdit">
-                                    </p-dropdown>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-field p-col-12">
-                            <a id="btn-togleComment" (click)="toggleComment()"
-                                *ngIf="!showComment || !selectedInvoice.comment">
-                                {{ showComment || selectedInvoice.comment ? 'Скрыть' : 'Добавить комментарий' }}
-                            </a>
-
-                            <label for="comment" *ngIf="showComment || selectedInvoice.comment">Комментарий</label>
-
-
-                            <div *ngIf="showComment || selectedInvoice.comment">
-                                <textarea id="comment" [(ngModel)]="selectedInvoice.comment"></textarea>
-                            </div>
-                        </div>
-
-                        <button
-                            *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit) || currentRole == 1"
-                            pButton icon="pi pi-pencil" class="btn-edit" (click)="addProduct()"
-                            label="Добавить"></button>
-
-                        <div class="product-list">
-                            <div class="product-header">
-                                <div>Наименование товара</div>
-                                <div>Количество</div>
-                                <div>Цена</div>
-                                <div>Общая сумма</div>
-                                <div>Единица измерения</div>
-                                <div>Назначение товара</div>
-                                <ng-container *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3">
-                                    <div></div>
-                                </ng-container>
-
-                            </div>
-                            <div *ngFor="let product of selectedInvoice.productList; let i = index" class="product-row">
-                                <app-custom-input [(ngModel)]="product.name" [disabled]="!isEdit"
-                                    placeholder="Введите название товара"></app-custom-input>
-
-                                <app-custom-input-number [(ngModel)]="product.quantity" [disabled]="!isEdit" [min]="0"
-                                    (ngModelChange)="onQuantityOrAmountChange(product); onQuantityOrSumAmountChange(product)">
-                                </app-custom-input-number>
-
-                                <app-custom-input-number [(ngModel)]="product.amount" [disabled]="!isEdit" [min]="0"
-                                    (ngModelChange)="onQuantityOrAmountChange(product)">
-                                </app-custom-input-number>
-
-                                <app-custom-input-number [(ngModel)]="product.sumAmount" [disabled]="!isEdit" [min]="0"
-                                    (ngModelChange)="onQuantityOrSumAmountChange(product)">
-                                </app-custom-input-number>
-
-                                <app-custom-dropdown [options]="measurementUnits" optionLabel="name" optionValue="id"
-                                    [(selected)]="product.measurementUnitId" [disabled]="!isEdit">
-                                </app-custom-dropdown>
-                                <app-custom-dropdown [options]="productTargets" optionLabel="name" optionValue="id"
-                                    [(selected)]="product.productTargetId" [disabled]="!isEdit">
-                                </app-custom-dropdown>
-                                <ng-container
-                                    *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
-                                    <button pButton icon="pi pi-trash" class="btn-delete"
-                                        (click)="removeProduct(i)">Удалить</button>
-                                </ng-container>
-
-                            </div>
-                            <!-- Итоговая сумма -->
-                            <div class="product-footer">
-                                <div></div>
-                                <div></div>
-                                <div></div>
-                                <div style="text-align: center;">{{ calculatingAmount() }}</div>
-                                <div></div>
-                                <div></div>
-                            </div>
-                        </div>
-
-
-
-
-
-                    </div>
-
-
-                    <ng-container *ngIf="isScope">
-                        <app-info-scope [selectScope]="selectScope"></app-info-scope>
-                    </ng-container>
-
-
-                </div>
-            </div>
-            <p-footer style="z-index: 999;">
-                <button
-                    *ngIf="currentRole != 1 && ((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice) && isBtnDraft"
-                    pButton label="Черновик" icon="pi pi-check" (click)="saveInvoice()">
-                </button>
-
-                <button *ngIf="((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice)" pButton
-                    [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'" icon="pi pi-check"
-                    (click)="saveAndSendInvoice()">
-                </button>
-
-
-                <!-- <button *ngIf="selectedInvoice.status == 5 && selectedInvoice.docAccountType != 0" pButton
-                    label="Сохранить изменения" icon="pi pi-check" (click)="saveInvoice()"></button> -->
-
-                <button *ngIf="selectedInvoice.docAccountType != 0 && isScope" pButton label="Подписать фактуру"
-                    icon="pi pi-check" (click)="acceptAccountDraft()"></button>
-
-                <button
-                    *ngIf="(currentRole == 1 && newIncoice == false) || (currentRole != 1 && selectedInvoice.status == 3 || selectedInvoice.status == 0 ) && newIncoice == false"
-                    pButton label="Изменить" icon="pi pi-check" (click)="saveInvoice()"></button>
-
-                <button
-                    *ngIf="(currentRole != 1 && selectedInvoice.status == 3 || selectedInvoice.status == 0 ) && newIncoice == false"
-                    pButton label="Изменить и отправить" icon="pi pi-check" (click)="saveAndSendInvoice()"></button>
-                
-
-                <ng-container *ngFor="let button of buttons">
-                    <button class="btn btn-details" *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true)
-                                  && (visibleFieldsButton.includes(button.label))
-                                  && (button.label !== 'Подписать' || !newIncoice)" [ngClass]="button.class"
-                        (click)="onButtonClick(button)" [title]="button.titlePopUp">
-                        {{ button.label }}
-                    </button>
-                </ng-container>
-
-                <!-- <button *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit" pButton
-                    label="Изменить Контрагента" icon="pi pi-check" (click)="editPartner()"></button> -->
-
-                <button *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" pButton
-                    label="Закрыть" (click)="onDialogClose()"></button>
-            </p-footer>
-
-
+      <div class="dialog-content">
+        <!-- Список черновиков -->
+        <div class="drafts-list" *ngIf="drafts && drafts.length > 0">
+          <app-list-invoices [drafts]="drafts" (itemSelected)="onInvoiceSelected($event)"></app-list-invoices>
         </div>
-    </p-dialog>
 
+        <!-- Форма фактуры -->
+        <form class="invoice-form">
+          <div class="form-row">
+            <!-- Номер и дата -->
+            <div class="form-group">
+              <label for="number">Номер фактуры</label>
+              <input id="number" [(ngModel)]="selectedInvoice.number" [disabled]="!isEdit" 
+                     placeholder="Введите номер фактуры" name="number">
+            </div>
+            
+            <div class="form-group">
+              <label for="dateTime">Дата</label>
+              <input type="date" id="dateTime" [(ngModel)]="selectedInvoice.dateTime" 
+                     [disabled]="!isEdit" name="dateTime" (input)="onDateInput($event)">
+            </div>
+            
+            <!-- Тип и проверяющий -->
+            <div class="form-group">
+              <label for="type">Тип</label>
+              <select id="type" [(ngModel)]="type" [disabled]="!isEdit" name="type" (change)="onTypeChange()">
+                <option *ngFor="let type of types" [value]="type.value">{{type.label}}</option>
+              </select>
+            </div>
+            
+            <div class="form-group" *ngIf="visibleCheckPersonId">
+              <label for="checkPersonId">Проверяющий</label>
+              <select id="checkPersonId" [(ngModel)]="selectedInvoice.checkPersonId" [disabled]="!isEdit" name="checkPersonId">
+                <option *ngFor="let checker of checkers" [value]="checker.id">{{checker.fullName}}</option>
+              </select>
+            </div>
+          </div>
 
-</ng-container>
+          <!-- Комментарий -->
+          <div class="form-group comment-group">
+            <a class="toggle-comment" (click)="toggleComment()">
+              {{ showComment || selectedInvoice.comment ? 'Скрыть' : 'Добавить комментарий' }}
+            </a>
+            
+            <div *ngIf="showComment || selectedInvoice.comment" class="comment-area">
+              <label for="comment">Комментарий</label>
+              <textarea id="comment" [(ngModel)]="selectedInvoice.comment" name="comment"></textarea>
+            </div>
+          </div>
 
+          <!-- Кнопка добавления товара -->
+          <button type="button" class="add-product-btn" 
+                  *ngIf="((selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit) || currentRole == 1"
+                  (click)="addProduct()">
+            <svg viewBox="0 0 24 24">
+              <path fill="currentColor" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
+            </svg>
+            Добавить товар
+          </button>
 
+          <!-- Таблица товаров -->
+          <div class="products-table">
+            <div class="table-header">
+              <div class="header-cell">Наименование товара</div>
+              <div class="header-cell">Количество</div>
+              <div class="header-cell">Цена</div>
+              <div class="header-cell">Общая сумма</div>
+              <div class="header-cell">Единица измерения</div>
+              <div class="header-cell">Назначение товара</div>
+              <div class="header-cell" *ngIf="selectedInvoice.status == 0 || selectedInvoice.status == 3"></div>
+            </div>
 
-<p-confirmDialog></p-confirmDialog>
+            <div class="table-body">
+              <div class="table-row" *ngFor="let product of selectedInvoice.productList; let i = index">
+                <div class="table-cell">
+                  <input [(ngModel)]="product.name" [disabled]="!isEdit" 
+                         placeholder="Название товара" name="productName{{i}}">
+                </div>
+                <div class="table-cell">
+                  <input type="number" [(ngModel)]="product.quantity" [disabled]="!isEdit" min="0"
+                         (ngModelChange)="onQuantityOrAmountChange(product); onQuantityOrSumAmountChange(product)"
+                         name="productQuantity{{i}}">
+                </div>
+                <div class="table-cell">
+                  <input type="number" [(ngModel)]="product.amount" [disabled]="!isEdit" min="0"
+                         (ngModelChange)="onQuantityOrAmountChange(product)"
+                         name="productAmount{{i}}">
+                </div>
+                <div class="table-cell">
+                  <input type="number" [(ngModel)]="product.sumAmount" [disabled]="!isEdit" min="0"
+                         (ngModelChange)="onQuantityOrSumAmountChange(product)"
+                         name="productSumAmount{{i}}">
+                </div>
+                <div class="table-cell">
+                  <select [(ngModel)]="product.measurementUnitId" [disabled]="!isEdit" 
+                          name="productMeasurement{{i}}">
+                    <option *ngFor="let unit of measurementUnits" [value]="unit.id">{{unit.name}}</option>
+                  </select>
+                </div>
+                <div class="table-cell">
+                  <select [(ngModel)]="product.productTargetId" [disabled]="!isEdit" 
+                          name="productTarget{{i}}">
+                    <option *ngFor="let target of productTargets" [value]="target.id">{{target.name}}</option>
+                  </select>
+                </div>
+                <div class="table-cell" *ngIf="(selectedInvoice.status == 0 || selectedInvoice.status == 3) && isEdit">
+                  <button type="button" class="delete-btn" (click)="removeProduct(i)">
+                    <svg viewBox="0 0 24 24">
+                      <path fill="currentColor" d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+            </div>
 
-<app-invoices-edit-partner-pop-up (partnerSelected)="AcceptEditPartner($event)"></app-invoices-edit-partner-pop-up>
+            <!-- Итоговая сумма -->
+            <div class="table-footer">
+              <div class="footer-cell"></div>
+              <div class="footer-cell"></div>
+              <div class="footer-cell"></div>
+              <div class="footer-cell total-amount">{{ calculatingAmount() }}</div>
+              <div class="footer-cell"></div>
+              <div class="footer-cell"></div>
+            </div>
+          </div>
 
+          <!-- Область видимости (если есть) -->
+          <ng-container *ngIf="isScope">
+            <app-info-scope [selectScope]="selectScope"></app-info-scope>
+          </ng-container>
+        </form>
+      </div>
 
-<app-unsaved-changes-dialog *ngIf="showConfirmDialog" (confirmClose)="confirmCloseDialog()"
-    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>
+      <!-- Футер диалога с кнопками действий -->
+      <div class="dialog-footer">
+        <div class="action-buttons">
+          <button type="button" class="btn draft-btn" 
+                  *ngIf="currentRole != 1 && ((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice) && isBtnDraft"
+                  (click)="saveInvoice()">
+            Черновик
+          </button>
+
+          <button type="button" class="btn save-btn" 
+                  *ngIf="((newIncoice && isEdit && selectedInvoice.docAccountType == 0) || newIncoice)" 
+                  (click)="saveAndSendInvoice()">
+            {{ currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить' }}
+          </button>
+
+          <button type="button" class="btn sign-btn" 
+                  *ngIf="selectedInvoice.docAccountType != 0 && isScope" 
+                  (click)="acceptAccountDraft()">
+            Подписать фактуру
+          </button>
+
+          <button type="button" class="btn edit-btn" 
+                  *ngIf="(currentRole == 1 && newIncoice == false) || (currentRole != 1 && (selectedInvoice.status == 3 || selectedInvoice.status == 0) && newIncoice == false)"
+                  (click)="saveInvoice()">
+            Изменить
+          </button>
+
+          <button type="button" class="btn edit-send-btn" 
+                  *ngIf="(currentRole != 1 && (selectedInvoice.status == 3 || selectedInvoice.status == 0)) && newIncoice == false"
+                  (click)="saveAndSendInvoice()">
+            Изменить и отправить
+          </button>
+
+          <ng-container *ngFor="let button of buttons">
+            <button type="button" class="btn custom-btn" 
+                    *ngIf="(button.condition ? button.condition(selectedInvoice, null) : true) &&
+                           (visibleFieldsButton.includes(button.label)) &&
+                           (button.label !== 'Подписать' || !newIncoice)"
+                    (click)="onButtonClick(button)" [title]="button.titlePopUp">
+              {{ button.label }}
+            </button>
+          </ng-container>
+
+          <button type="button" class="btn close-btn" 
+                  *ngIf="selectedInvoice.id && selectedInvoice.status != 0 && selectedInvoice.status != 3" 
+                  (click)="onDialogClose()">
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Вспомогательные компоненты -->
+  <app-invoices-edit-partner-pop-up (partnerSelected)="AcceptEditPartner($event)"></app-invoices-edit-partner-pop-up>
+
+  <app-unsaved-changes-dialog *ngIf="showConfirmDialog" 
+                              (confirmClose)="confirmCloseDialog()"
+                              (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>
+</div>

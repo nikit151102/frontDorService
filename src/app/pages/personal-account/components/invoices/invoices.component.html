@@ -12,13 +12,14 @@
   </ng-container>
 
   <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
-    <button (click)="openPaymentModal()" style=" height: 36px;
-     padding: 8px;
-        background: #34d399;
-        border: none;
-        color: #fff;
-        border-radius: 7px;">
-      Оплатить
+    <button (click)="openPaymentModal()" class="modern-pay-button">
+      <span class="button-text">Оплатить</span>
+      <span class="button-icon">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" />
+        </svg>
+      </span>
     </button>
   </ng-container>
 
@@ -33,7 +34,8 @@
         <tr class="header-row">
           <ng-container *ngFor="let col of columns">
             <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; width: 100%;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; width: 100%;">
                 {{ col.header }}
                 <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field" [filterType]="1"
                   (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
