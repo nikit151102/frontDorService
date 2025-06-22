@@ -95,7 +95,7 @@
                   {{ transform(product[col.field]) }}
                 </span>
                 <ng-container *ngIf="col.type == 'number'">
-                  {{formatisNumber(product[col.field])}}
+                  {{formatingDataService.formatisNumber(product[col.field])}}
                 </ng-container>
                 <span
                   *ngIf="col.type != 'number' && col.field !== 'number' && col.field !== 'invoiceStatus' && col.field !== 'status' && col.field !== 'paymentType'">
@@ -129,7 +129,7 @@
           <ng-container *ngFor="let col of columns; let i = index">
             <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
               <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
-                {{ getTotalValue(i) }}
+                {{ formatingDataService.formatisNumber(getTotalValue(i)) }}
               </ng-container>
               <ng-template #emptyCell></ng-template>
             </td>

@@ -11,6 +11,7 @@ import { InvoicesService } from '../../../../components/invoices/invoices.servic
 import { ProductsService } from '../../../../components/products/products.service';
 import { CarsService } from './cars.service';
 import { columns, totalInfoColumn, viewDataColumns } from './config';
+import { FormatingDataService } from '../../../../../../services/formating-data.service';
 
 @Component({
   selector: 'app-cars',
@@ -36,7 +37,8 @@ export class CarsComponent implements OnInit {
   @Input() selectedComponent: string = '';
 
   constructor(private invoicesService: InvoicesService,
-    public productsServ: CarsService
+    public productsServ: CarsService, 
+    public formatingDataService:FormatingDataService
   ) { }
 
   // Функция для проверки видимости группы

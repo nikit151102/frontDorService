@@ -28,6 +28,7 @@ import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config
 import { taxes } from '../../../../services/data';
 import { PartnersService } from '../../tabs/partners/partners.service';
 import { PartnerMenuService } from '../partner-menu/partner-menu.service';
+import { FormatingDataService } from '../../../../services/formating-data.service';
 
 @Component({
   selector: 'app-invoices',
@@ -140,7 +141,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
     private el: ElementRef, private renderer: Renderer2,
     private scoreFormService: ScoreFormService,
     private partnersService: PartnersService,
-    private router: Router) { }
+    private router: Router,
+    public formatingDataService: FormatingDataService) { }
 
   ngOnInit() {
 
@@ -394,25 +396,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
-  formatisNumber(value: any): string {
-    const numericValue = typeof value === 'string'
-      ? parseFloat(value.replace(',', '.'))
-      : Number(value);
 
-    if (isNaN(numericValue)) return '0';
-
-    if (Number.isInteger(numericValue)) {
-      return numericValue.toLocaleString('ru-RU');
-    } else {
-      const formatted = numericValue.toLocaleString('ru-RU', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
-      return formatted.endsWith(',00')
-        ? formatted.replace(',00', '')
-        : formatted;
-    }
-  }
 
   deleteInvoice(invoiceId: any) {
     this.confirmPopupService.openConfirmDialog({

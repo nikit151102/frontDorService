@@ -21,6 +21,7 @@ import { BUTTON_SETS, columnsDocs, endpoint, totalInfoColumn } from './config';
 import { GeneralDocsService } from './general-docs.service';
 import { GeneralDocsFormComponent } from './general-docs-form/general-docs-form.component';
 import { GeneralDocsFormService } from './general-docs-form/general-docs-form.service';
+import { FormatingDataService } from '../../../../../services/formating-data.service';
 
 @Component({
   selector: 'app-general-docs',
@@ -111,7 +112,8 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
     private scoreFormService: ScoreFormService,
     private partnersService: PartnersService,
     private generalFormService: GeneralDocsFormService,
-    private router: Router) { }
+    private router: Router,
+    public formatingDataService: FormatingDataService) { }
 
   ngOnInit() {
     this.endpoint = endpoint;
@@ -352,7 +354,7 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
       this.loadInvoices();
     }
   }
-  
+
   formatIsNumber(value: any): string {
     const numericValue = typeof value === 'string'
       ? parseFloat(value.replace(',', '.'))
