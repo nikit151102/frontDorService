@@ -59,6 +59,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   // ];
   decodedRole: any[] = [];
   notifications: any;
+  menuActive: Boolean = false;
+  
   private notificationSubscription!: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -94,6 +96,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     console.log('notifications', this.notifications)
   }
 
+  toggleMenu(){
+    this.menuActive = !this.menuActive;
+  }
+  
   hasAccess(access: string): boolean {
     return !access || this.decodedRole.includes(access);
     // return true

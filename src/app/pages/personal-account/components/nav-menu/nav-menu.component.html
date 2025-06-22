@@ -1,44 +1,64 @@
-<div style="display: flex;     
-    justify-content: space-between;     
-    background: #ffffff;     
-    border-radius: 8px; 
-    margin: 0 25px;
-    padding: 5px;   
-    align-items: center;  
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
-    <nav class="nav-menu">
-        <ul>
-            <li *ngFor="let item of items">
-                <button (click)="execute(item.commandName || '')" [disabled]="!hasAccess(item.access)"
-                    style="position: relative;">
-                    {{ item.label }}
-
-                    <!-- Кружок уведомлений -->
-                    <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge"
-                        [ngClass]="getNotificationClass(item.notifyKey)"
-                        (mouseenter)="showTooltip(item.notifyKey, $event)" (mouseleave)="hideTooltip()">
-                        {{ getNotificationCount(item.notifyKey) }}
-                    </span>
+<div class="navbar-container">
+    <div class="navbar">
+        <!-- Лого/бренд (опционально) -->
+        <!-- <div class="navbar-brand">
+            <span>YourLogo</span>
+        </div> -->
+        
+        <!-- Бургер-меню для мобильных -->
+        <button class="burger-menu" (click)="toggleMenu()" aria-label="Toggle menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </button>
+        
+        <!-- Основное меню -->
+        <nav class="nav-menu" [class.active]="menuActive">
+            <ul class="nav-list">
+                <li *ngFor="let item of items" class="nav-item">
+                    <button class="nav-button" (click)="execute(item.commandName || '')" [disabled]="!hasAccess(item.access)">
+                        {{ item.label }}
+                        
+                        <!-- Бейдж уведомлений -->
+                        <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge"
+                            [ngClass]="getNotificationClass(item.notifyKey)"
+                            (mouseenter)="showTooltip(item.notifyKey, $event)" 
+                            (mouseleave)="hideTooltip()">
+                            {{ getNotificationCount(item.notifyKey) }}
+                        </span>
+                    </button>
+                </li>
+            </ul>
+            
+            <!-- Управляющие кнопки -->
+            <div class="nav-controls">
+                <ng-container *ngIf="jwtService.getDecodedToken().email == 1">
+                    <app-sessions></app-sessions>
+                </ng-container>
+                
+                <button class="control-button refresh" (click)="refreshReference()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M23 4v6h-6M1 20v-6h6"></path>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                    </svg>
+                    Обновить
                 </button>
-
-                <!-- Всплывающая подсказка с деталями -->
-                <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
-                    <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
-                    <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
-                </div>
-            </li>
-        </ul>
-    </nav>
-
-
-    <div style="display: flex; gap: 10px; margin-right: 12px;">
-
-        <ng-container *ngIf="jwtService.getDecodedToken().email == 1">
-            <app-sessions></app-sessions>
-        </ng-container>
-
-        <a (click)="refreshReference()" id="exit-btn">Обновить данные</a>
-        <a (click)="execute('exit')" id="exit-btn">Выйти</a>
-
+                
+                <button class="control-button exit" (click)="execute('exit')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                        <polyline points="16 17 21 12 16 7"></polyline>
+                        <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    Выйти
+                </button>
+            </div>
+        </nav>
+        
+        <!-- Всплывающая подсказка -->
+        <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
+            <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
+            <p *ngIf="tooltipData?.needActionCount">Требуется действий: {{ tooltipData?.needActionCount }}</p>
+        </div>
     </div>
 </div>

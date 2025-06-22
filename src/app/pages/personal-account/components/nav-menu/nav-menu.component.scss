@@ -1,165 +1,275 @@
-.nav-menu {
-    z-index: 111;
-    position: relative;
-    background: #ffffff;
-    padding: 6px;
-    // border-radius: 8px;
-    // box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
-    // margin-bottom: 0px;
+/* Основные стили */
+.navbar-container {
+    --primary-color: #4f46e5;
+    --primary-hover: #4338ca;
+    --text-color: #374151;
+    --border-color: #e5e7eb;
+    --bg-color: #ffffff;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+
+    font-family: 'Inter', system-ui, sans-serif;
+    box-sizing: border-box;
 }
 
-ul {
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--bg-color);
+    padding: 0.75rem 1.5rem;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    position: relative;
+    flex-wrap: wrap;
+}
+
+.navbar-brand {
+    font-weight: 600;
+    color: var(--primary-color);
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+/* Бургер-меню */
+.burger-menu {
+    display: none;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 28px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 110;
+
+    span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background: var(--text-color);
+        transition: var(--transition);
+        transform-origin: center;
+    }
+
+    &.active span:nth-child(1) {
+        transform: translateY(8px) rotate(45deg);
+    }
+
+    &.active span:nth-child(2) {
+        opacity: 0;
+    }
+
+    &.active span:nth-child(3) {
+        transform: translateY(-8px) rotate(-45deg);
+    }
+}
+
+/* Навигационное меню */
+.nav-menu {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    gap: 1.5rem;
+    transition: var(--transition);
+    justify-content: space-between;
+
+    &.active {
+        transform: translateX(0) !important;
+        opacity: 1 !important;
+    }
+}
+
+.nav-list {
+    display: flex;
+    gap: 0.75rem;
     list-style: none;
     margin: 0;
     padding: 0;
-    display: flex;
-    gap: 15px;
 }
 
-li {
-    display: inline-block;
+.nav-item {
+    position: relative;
 }
 
-button {
-    background: #ffffff;
-    border: 1px solid #d1d1d1;
-    padding: 7px 10px;
-    border-radius: 5px;
-    font-weight: 600;
-    color: #5c6bc0;
+.nav-button {
+    background: transparent;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    color: var(--text-color);
     cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    font-size: 0.95rem;
+
+    &:hover {
+        background: #f3f4f6;
+        color: var(--primary-color);
+    }
+
+    &:focus {
+        outline: 2px solid var(--primary-color);
+        outline-offset: 2px;
+    }
+
+    &:disabled {
+        color: #9ca3af;
+        cursor: not-allowed;
+
+        &:hover {
+            background: transparent;
+        }
+    }
 }
 
-button:hover {
-    background: #e0e0e0;
-    color: #3f4e9f;
-}
-
-button:focus {
-    outline: none;
-    border-color: #5c6bc0;
-}
-
-button:disabled {
-    background: #e0e0e0;
-    color: #a0a0a0;
-    cursor: not-allowed;
-    border: 1px solid #d1d1d1;
-}
-
-
-
-
-
+/* Бейдж уведомлений */
 .notification-badge {
-    color: white;
-    font-size: 12px;
-    font-weight: bold;
-    padding: 4px 8px;
-    border-radius: 12px;
-    text-align: center;
-    display: inline-block;
     position: absolute;
     top: -6px;
     right: -6px;
     min-width: 20px;
-}
-
-.notification-info {
-    background: #5959ff; // Только непрочитанные
-}
-
-.notification-warning {
-    background: orange; // Есть и непрочитанные, и требующие действия
-}
-
-.tooltip {
-    text-align: start;
-    position: absolute;
-    background: rgba(255, 255, 255, 0.8);
-    color: #101010;
-    padding: 2px 4px;
-    border-radius: 10px;
-    font-size: 13px;
-    white-space: nowrap;
-    z-index: 1000;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-
-
-
-
-
-.navbar-profile {
+    height: 20px;
     display: flex;
     align-items: center;
-    position: relative;
-}
-
-.profile-pic {
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    cursor: pointer;
-}
-
-.dropdown {
-    position: relative;
-}
-
-.dropdown-btn {
-    background-color: #333;
-    color: white;
-    border: none;
-    padding: 10px;
-    cursor: pointer;
-}
-
-.dropdown-btn:hover {
-    background-color: #444;
-}
-
-.dropdown-content {
-    display: block;
-    position: absolute;
-    width: 150px;
-    top: 25px;
-    border-radius: 8px;
-    right: 0;
-    background-color: white;
-    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 150;
-}
-
-.dropdown-content a {
-    color: black;
-    padding: 10px;
-    text-decoration: none;
-    display: block;
-    margin: 5px;
-    cursor: pointer;
-}
-
-.dropdown-content a:hover {
-    background-color: #f1f1f1;
-    border-radius: 8px;
-}
-
-
-
-#exit-btn {
-    background: #ffffff;
-    // height: 37px;
-    border: 1px solid #d1d1d1;
-    padding: 7px 10px;
-    border-radius: 5px;
+    justify-content: center;
+    font-size: 0.7rem;
     font-weight: 600;
-    color: #5c6bc0;
-    cursor: pointer;
-    transition: background-color 0.3s, color 0.3s;
+    color: white;
+    border-radius: 50%;
+    padding: 0 0.25rem;
+
+    &.notification-info {
+        background: #3b82f6;
+    }
+
+    &.notification-warning {
+        background: #f59e0b;
+    }
+}
+
+/* Управляющие кнопки */
+.nav-controls {
     display: flex;
     align-items: center;
+    gap: 0.75rem;
+    margin-left: 1rem;
+}
+
+.control-button {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.95rem;
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+
+    &.refresh {
+        color: #2563eb;
+
+        &:hover {
+            background: #dbeafe;
+        }
+    }
+
+    &.exit {
+        color: #dc2626;
+
+        &:hover {
+            background: #fee2e2;
+        }
+    }
+
+    svg {
+        flex-shrink: 0;
+    }
+}
+
+/* Всплывающая подсказка */
+.tooltip {
+    position: absolute;
+    background: white;
+    color: var(--text-color);
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    border: 1px solid var(--border-color);
+
+    p {
+        margin: 0.25rem 0;
+        white-space: nowrap;
+    }
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .navbar {
+        padding: 0.75rem 1rem;
+    }
+
+    .burger-menu {
+        display: flex;
+    }
+
+    .nav-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background: var(--bg-color);
+        flex-direction: column;
+        align-items: stretch;
+        padding: 1rem;
+        border-radius: 0 0 12px 12px;
+        box-shadow: var(--shadow);
+        z-index: 100;
+        transform: translateY(-20px);
+        opacity: 0;
+        pointer-events: none;
+
+        &.active {
+            transform: translateY(0);
+            opacity: 1;
+            pointer-events: all;
+        }
+    }
+
+    .nav-list {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+    }
+
+    .nav-button {
+        justify-content: space-between;
+        padding: 0.75rem 1rem;
+        width: 100%;
+    }
+
+    .nav-controls {
+        margin: 1rem 0 0;
+        width: 100%;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+
+    .control-button {
+        justify-content: center;
+        width: 100%;
+    }
 }
