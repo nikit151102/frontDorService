@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
-import { BaseService } from '../../base/base.service';
+import { DirectorService } from '../director.service';
 
 @Component({
   selector: 'app-menu',
@@ -19,18 +19,18 @@ export class MenuComponent implements OnInit {
     { code: '810632', name: 'Ячейки', access: '', managerDocType: 2, navigate: ['cells'] },
   ];
 
-  constructor(private jwtService: JwtService, private baseService: BaseService) { }
+  constructor(private jwtService: JwtService, private directorService: DirectorService) { }
 
   decodedRole: any[] = [];
   isVisible = true;
 
   toggleVisibility() {
-    this.baseService.setSomeVariable(!this.isVisible);
+    this.directorService.setSomeVariable(!this.isVisible);
   }
 
 
   ngOnInit(): void {
-    this.baseService.someVariable$.subscribe((value: any) => {
+    this.directorService.someVariable$.subscribe((value: any) => {
       this.isVisible = value
     })
 
