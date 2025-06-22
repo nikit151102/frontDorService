@@ -1,12 +1,14 @@
 <div class="container">
 
-    <button class="btn btn-primary mb-4" (click)="openCreateModal(currentConfig.endpoint)">Создать запись</button>
-    <p-table [value]="data" class="invoice-table">
-        <ng-template pTemplate="header">
-            <tr>
+    <button style=" margin-top: 10px;" class="btn btn-primary mb-4"
+        (click)="openCreateModal(currentConfig.endpoint)">Создать запись</button>
+    <table class="invoice-table">
+        <thead>
+
+            <tr class="header-row">
                 <ng-container *ngFor="let col of columns">
                     <th [style.min-width]="col.width">
-                        <div style="display: flex; align-items: center; gap: 10px">
+                        <div class="header-cell">
                             {{ col.label }}
                             <app-search-filter-sort *ngIf="col.type == 'string'" [filterField]="col.field"
                                 [filterType]="1" (filterChange)="referenceBookService.onFilterChange($event)"
@@ -40,10 +42,9 @@
                 </ng-container>
                 <th></th>
             </tr>
-        </ng-template>
-
-        <ng-template pTemplate="body" let-product>
-            <tr class="invoice-row" (dblclick)="openEditModal(product)">
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of data" class="invoice-row" (dblclick)="openEditModal(product)">
                 <ng-container *ngFor="let col of columns">
                     <td class="invoice-cell" (dblclick)="openEditModal(product)"
                         (contextmenu)="onRightClick($event, product)" [style.width]="col.width">
@@ -58,7 +59,7 @@
                     </td>
                 </ng-container>
                 <td class="invoice-cell actions-cell">
-                    <div class="dropdown" style="display: flex; flex-direction: row; gap: 5px; width: fit-content;">
+                    <div class="action-buttons">
                         <button class="btn btn-details" (click)="openEditModal(product)">
                             <svg width="24px" height="24px" viewBox="0 -0.5 25 25" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">
@@ -75,14 +76,13 @@
                                 </g>
                             </svg>
                         </button>
-                        <button class="btn btn-details" (click)="deleteRecord(product.id)">
-                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none"
-                                xmlns="http://www.w3.org/2000/svg">
+                        <button class="btn btn-details" style="    background: #ff3f3f;" (click)="deleteRecord(product.id)">
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                 <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                 <g id="SVGRepo_iconCarrier">
                                     <path
-                                        d="M6.29977 5H21L19 12H7.37671M20 16H8L6 3H3M9 20C9 20.5523 8.55228 21 8 21C7.44772 21 7 20.5523 7 20C7 19.4477 7.44772 19 8 19C8.55228 19 9 19.4477 9 20ZM20 20C20 20.5523 19.5523 21 19 21C18.4477 21 18 20.5523 18 20C18 19.4477 18.4477 19 19 19C19.5523 19 20 19.4477 20 20Z"
+                                        d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
                                         stroke="#ffffff" stroke-width="2" stroke-linecap="round"
                                         stroke-linejoin="round"></path>
                                 </g>
@@ -91,10 +91,8 @@
                     </div>
                 </td>
             </tr>
-        </ng-template>
-    </p-table>
-
-
+        </tbody>
+    </table>
 
 
     <div class="modal" *ngIf="isModalOpen" [ngClass]="{ 'open': isModalOpen }">
