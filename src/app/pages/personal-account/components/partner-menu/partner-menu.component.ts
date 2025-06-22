@@ -68,6 +68,10 @@ export class PartnerMenuComponent {
     this.partnerMenuService.setSomeVariable(!this.isVisible);
   }
 
+  closeModal(){
+this.display = false;
+  }
+  
   constructor(
     private partnerMenuService: PartnerMenuService,
     private fb: FormBuilder,
