@@ -34,7 +34,10 @@ export class SessionsComponent implements OnInit {
   toggleSessions(event: Event) {
     event.stopPropagation();
     this.isOpen = !this.isOpen;
-    if (this.isOpen && this.sessions.length === 0) {
+    // if (this.isOpen && this.sessions.length === 0) {
+    //   this.loadSessions();
+    // }
+    if (this.isOpen ) {
       this.loadSessions();
     }
   }
@@ -49,7 +52,7 @@ export class SessionsComponent implements OnInit {
         this.isLoading = false;
         this.cdr.detectChanges();
       },
-      error: (err:any) => {
+      error: (err: any) => {
         this.error = 'Не удалось загрузить сессии. Пожалуйста, попробуйте снова.';
         this.isLoading = false;
         this.cdr.detectChanges();
