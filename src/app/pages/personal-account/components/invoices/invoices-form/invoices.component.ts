@@ -53,7 +53,7 @@ import { UnsavedChangesDialogComponent } from '../../unsaved-changes-dialog/unsa
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss',
   providers: [ConfirmationService, MessageService]
-}) 
+})
 export class InvoicesFormComponent implements OnInit, OnChanges {
   @Input() invoiceId!: any;
   @Input() counterpartyName!: any;
@@ -298,6 +298,9 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           productTargetId: product.productTarget ? product.productTarget.id : null,
         }));
       }
+      this.selectedInvoice.dateTime = new Date(this.selectedInvoice.dateTime);
+      console.log('selectedInvoice  2222',this.selectedInvoice)
+      
       this.oldData = structuredClone(this.selectedInvoice);
       this.dialogVisible = true;
     })
@@ -651,7 +654,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
         if (typeProjectsValue == true && this.type == 1) this.selectedInvoice.type = 0;
 
         this.selectedInvoice.dateTime = new Date(this.selectedInvoice.dateTime).toISOString();
-
+        console.log('Selected Invoice before save:', this.selectedInvoice);
         this.invoiceService.saveInvoice(this.selectedInvoice, 'api/CommercialWork/DocInvoice', null, this.filters).subscribe(
           (invoice) => {
             console.log('invoice.documentMetadata.data', invoice.documentMetadata.data);
@@ -665,11 +668,13 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
             this.toastService.showSuccess('Сохранение', invoice.documentMetadata.message);
             const invoiceId = invoice.documentMetadata.data.id;
-            this.selectedInvoice = null;
-            this.cdr.detectChanges();
+
 
             if (callback && invoice.documentMetadata.data) {
               callback(invoice.documentMetadata.data);
+            } else {
+              this.selectedInvoice = null;
+              this.cdr.detectChanges();
             }
           },
           (error) => {
@@ -721,9 +726,13 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
           this.invoices[index] = { ...this.invoices[index], ...updatedInvoice.data };
           console.log('this.invoices[index]', this.invoices[index]);
           this.invoices = [...this.invoices];
+          this.selectedInvoice = null;
+          this.dialogVisible = false;
           this.cdr.detectChanges();
-          this.onDialogClose();
+
+          console.log('this.dialogVisible', this.dialogVisible)
         }
+        this.onDialogClose();
       },
       error => {
         console.error('Ошибка при отправке на проверку:', error);

@@ -37,7 +37,7 @@
             
             <div class="form-group">
               <label for="dateTime">Дата</label>
-              <input type="date" id="dateTime" [(ngModel)]="selectedInvoice.dateTime" 
+              <input type="date" id="dateTime" [ngModel]="selectedInvoice.dateTime | date:'yyyy-MM-dd'" 
                      [disabled]="!isEdit" name="dateTime" (input)="onDateInput($event)">
             </div>
             
