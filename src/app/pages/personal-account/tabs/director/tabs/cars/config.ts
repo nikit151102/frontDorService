@@ -35,7 +35,7 @@ export const columns = [
             { field: 'repairNoNdsExpense', fieldView: 'repairNoNdsExpense', header: 'Без НДС', type: 'number', visible: true, width: '5%' },
         ],
         visible: true,
-        width: '15%' 
+        width: '15%'
     },
     {
         header: 'Топливо',
@@ -97,9 +97,18 @@ export const viewDataColumns = [
 
 export const totalInfoColumn = [
     { columnNum: 0, value: 'totalCount' },
-    { columnNum: 2, value: 'totalExpenseSum' },
-    { columnNum: 4, value: 'totalIncomeSum' },
+    { columnNum: 1, value: 'grossCashTotalSum' },
+    { columnNum: 2, value: 'grossNdsTotalSum' },
+    { columnNum: 3, value: 'grossNoNdsTotalSum' },
+    { columnNum: 4, value: 'repairCashExpenseTotalSum' },
+    { columnNum: 5, value: 'repairNdsExpenseTotalSum' },
+    { columnNum: 6, value: 'repairNoNdsExpenseTotalSum' },
+    { columnNum: 7, value: 'fuelExpenseTotalSum' },
+    { columnNum: 8, value: 'garageExpenseTotalSum' },
+    { columnNum: 9, value: 'driverSalaryTotalSum' },
+    { columnNum: 10, value: 'summaryTotalSum' },
 ];
+
 
 
 
