@@ -10,12 +10,12 @@ export const columns = [
                 header: 'Назначение',
                 type: 'uuid',
                 visible: true,
-                width: '15%',
+                width: '10%',
                 endpoint: '/api/Entities/ProductTarget/Filter'
             }
         ],
         visible: true,
-        width: '15%'
+        width: '10%'
     },
     {
         header: 'Вал',
@@ -80,7 +80,7 @@ export const viewDataColumns = [
         header: 'Назначение',
         type: 'uuid',
         visible: true,
-        width: '15%',
+        width: '10%',
         endpoint: '/api/Entities/ProductTarget/Filter'
     },
     { field: 'grossCash', fieldView: 'grossCash', header: 'Нал', type: 'number', visible: true, width: '5%' },
