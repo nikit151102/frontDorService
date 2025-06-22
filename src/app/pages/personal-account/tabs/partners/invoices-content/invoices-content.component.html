@@ -43,12 +43,13 @@
             </div>
         </div>
 
-        <div class="counterparty-profile">
+        <div class="counterparty-profile" *ngIf="counterpartyData.fullName">
             <div class="profile-card" [class.expanded]="showDetails">
                 <div class="profile-main">
-                    <h3 class="profile-name">{{counterpartyData.fullName}}</h3>
+                    
                     <div class="profile-details">
-                        <span class="profile-shortname">{{counterpartyData.shortName}}</span>
+                        <!-- <span class="profile-shortname">{{counterpartyData.shortName}}</span> -->
+                        <h3 class="profile-name">{{counterpartyData.fullName}}</h3>
                         <span class="profile-tax">{{getTaxValue(counterpartyData.tax)}}</span>
                     </div>
                 </div>
