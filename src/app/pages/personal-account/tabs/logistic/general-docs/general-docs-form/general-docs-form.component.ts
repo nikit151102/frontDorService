@@ -104,22 +104,29 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       productTargetId: ['', Validators.required],
       beginDateTime: ['', Validators.required],
       endDateTime: ['', Validators.required],
+      workDays: ['', Validators.required],
       beginOdometer: [0, [Validators.required, Validators.min(0)]],
       endOdometer: [0, [Validators.required, Validators.min(0)]],
       odometer: [{ value: 0, disabled: true }],
-      grossCash: [0, [Validators.required, Validators.min(0)]],
-      grossNoNds: [0, [Validators.required, Validators.min(0)]],
+      loadedOdometer: [0, [Validators.required, Validators.min(0)]],
+      emptyOdometer: [0, [Validators.required, Validators.min(0)]],
+      grossCash: [0],
+      grossNoNds: [0],
       grossNds: [0],
+      driverSalary: [0, [Validators.required, Validators.min(0)]],
+      officeSalary: [0, [Validators.required, Validators.min(0)]],
+      fuelBegin: [0],
+      fuelEnd: [0],
       fuelCount: [0],
       fuelCost: [0],
       fuelTotalCost: [0],
-      driverSalary: [0, [Validators.required, Validators.min(0)]],
       driverEmployeeId: ['', Validators.required]
     }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
     this.setupCalculations();
   }
+
 
   positiveOdometerValidator(control: AbstractControl): ValidationErrors | null {
     const value = control.value;
@@ -141,16 +148,22 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       productTargetId: this.selectedInvoice.productTargetId || '',
       beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
       endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
+      workDays: this.selectedInvoice.workDays ?? 0,
       beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
       endOdometer: this.selectedInvoice.endOdometer ?? 0,
       odometer: odometerValue,
+      loadedOdometer: this.selectedInvoice.loadedOdometer ?? 0,
+      emptyOdometer: this.selectedInvoice.emptyOdometer ?? 0,
       grossCash: this.selectedInvoice.grossCash ?? 0,
       grossNoNds: this.selectedInvoice.grossNoNds ?? 0,
       grossNds: this.selectedInvoice.grossNds ?? 0,
+      driverSalary: this.selectedInvoice.driverSalary ?? 0,
+      officeSalary: this.selectedInvoice.officeSalary ?? 0,
+      fuelBegin: this.selectedInvoice.fuelBegin ?? 0,
+      fuelEnd: this.selectedInvoice.fuelEnd ?? 0,
       fuelCount: this.selectedInvoice.fuelCount ?? 0,
       fuelCost: this.selectedInvoice.fuelCost ?? 0,
       fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
-      driverSalary: this.selectedInvoice.driverSalary ?? 0,
       driverEmployeeId: this.selectedInvoice.driver || ''
     });
 
@@ -164,6 +177,9 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     const endOdometerControl = this.invoiceForm.get('endOdometer');
     const fuelCountControl = this.invoiceForm.get('fuelCount');
     const fuelCostControl = this.invoiceForm.get('fuelCost');
+    const odometerControl = this.invoiceForm.get('odometer');
+    const loadedOdometerControl = this.invoiceForm.get('loadedOdometer');
+    const emptyOdometerControl = this.invoiceForm.get('emptyOdometer');
 
     // Проверяем существование контролов перед подпиской
     if (beginOdometerControl && endOdometerControl) {
@@ -174,6 +190,21 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     if (fuelCountControl && fuelCostControl) {
       fuelCountControl.valueChanges.subscribe(() => this.calculateFuelTotal());
       fuelCostControl.valueChanges.subscribe(() => this.calculateFuelTotal());
+    }
+
+    if (odometerControl && loadedOdometerControl && emptyOdometerControl) {
+      odometerControl.valueChanges.subscribe(() => {
+        this.lastChangedField = 'odometer';
+        this.calculateOdometerParts();
+      });
+      loadedOdometerControl.valueChanges.subscribe(() => {
+        this.lastChangedField = 'loadedOdometer';
+        this.calculateOdometerParts();
+      });
+      emptyOdometerControl.valueChanges.subscribe(() => {
+        this.lastChangedField = 'emptyOdometer';
+        this.calculateOdometerParts();
+      });
     }
   }
 
@@ -190,16 +221,56 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     }
   }
 
-  calculateFuelTotal(): void {
-    const countControl = this.invoiceForm.get('fuelCount');
-    const costControl = this.invoiceForm.get('fuelCost');
-    const totalControl = this.invoiceForm.get('fuelTotalCost');
 
-    if (countControl && costControl && totalControl) {
-      const count = countControl.value || 0;
-      const cost = costControl.value || 0;
-      totalControl.setValue(count * cost, { emitEvent: false });
+  private calculateOdometerParts(): void {
+    const odometer = this.invoiceForm.get('odometer')?.value;
+    const loadedOdometer = this.invoiceForm.get('loadedOdometer')?.value;
+    const emptyOdometer = this.invoiceForm.get('emptyOdometer')?.value;
+
+    // Если пробег невалидный (0, отрицательный или не число) - очищаем зависимые поля
+    if (odometer === null || odometer === undefined || odometer <= 0) {
+      this.invoiceForm.get('loadedOdometer')?.setValue(null, { emitEvent: false });
+      this.invoiceForm.get('emptyOdometer')?.setValue(null, { emitEvent: false });
+      return;
     }
+
+    // Определяем, какое поле было изменено последним
+    const lastChangedField = this.getLastChangedField();
+
+    // Если изменили груженный пробег - пересчитываем пустой
+    if (lastChangedField === 'loadedOdometer' && loadedOdometer !== null) {
+      this.invoiceForm.get('emptyOdometer')?.setValue(odometer - loadedOdometer, { emitEvent: false });
+    }
+    // Если изменили пустой пробег - пересчитываем груженный
+    else if (lastChangedField === 'emptyOdometer' && emptyOdometer !== null) {
+      this.invoiceForm.get('loadedOdometer')?.setValue(odometer - emptyOdometer, { emitEvent: false });
+    }
+    // Проверяем корректность суммы
+    else if (loadedOdometer !== null && emptyOdometer !== null &&
+      (loadedOdometer + emptyOdometer) !== odometer) {
+      console.warn('Сумма груженного и пустого пробега не равна общему пробегу');
+    }
+  }
+
+  private lastChangedField: string | null = null;
+
+  // Метод для отслеживания последнего измененного поля
+  private getLastChangedField(): string | null {
+    return this.lastChangedField;
+  }
+
+
+  private calculateFuelTotal() {
+    const fuelBegin = this.invoiceForm.get('fuelBegin')?.value || 0;
+    const fuelEnd = this.invoiceForm.get('fuelEnd')?.value || 0;
+    const fuelCount = this.invoiceForm.get('fuelCount')?.value || 0;
+    const fuelCost = this.invoiceForm.get('fuelCost')?.value || 0;
+
+    // Формула: (Начало + Заправки - Конец) * Цена
+    const total = (fuelBegin + fuelCount - fuelEnd) * fuelCost;
+
+    // Устанавливаем рассчитанное значение
+    this.invoiceForm.get('fuelTotalCost')?.setValue(total, { emitEvent: false });
   }
 
   onVehicleChange(selectedValue: any): void {

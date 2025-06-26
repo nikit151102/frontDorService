@@ -147,7 +147,7 @@
 .invoice-form {
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 10px;
 }
 
 .form-row {
@@ -195,7 +195,7 @@
     }
 
     textarea {
-        min-height: 100px;
+        // min-height: 100px;
     }
 }
 
@@ -222,8 +222,8 @@
     .comment-area {
         overflow: hidden;
         transition: all 0.3s ease;
-        max-height: 0;
-        opacity: 0;
+        // max-height: 0;
+        // opacity: 0;
 
         &.visible {
             max-height: 200px;
@@ -237,7 +237,7 @@
         }
 
         textarea {
-            min-height: 100px;
+            // min-height: 100px;
             resize: vertical;
         }
     }
@@ -291,7 +291,7 @@
 
 .table-header {
     display: grid;
-    grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
+    grid-template-columns: 20% 10% 15% 15% 15% 15% 10%;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     font-weight: 600;
     font-size: 14px;
@@ -329,7 +329,7 @@
 
 .table-row {
     display: grid;
-    grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
+    grid-template-columns: 20% 10% 15% 15% 15% 15% 10%;
     border-bottom: 1px solid #edf2f7;
     transition: all 0.2s ease;
 
@@ -405,7 +405,7 @@
 
 .table-footer {
     display: grid;
-    grid-template-columns: 20% 10% 10% 10% 15% 15% 10%;
+    grid-template-columns: 20% 10% 15% 15% 15% 15% 10%;
     background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
     font-weight: 600;
     padding: 14px 16px;

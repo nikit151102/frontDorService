@@ -332,6 +332,7 @@ tfoot td {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
+    width: 150px;
 }
 
 .product-table td input,
@@ -431,7 +432,7 @@ tfoot td {
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    max-width: 650px !important;
+    max-width: 800px !important;
     width: 100% !important;
     height: 80% !important;
 }

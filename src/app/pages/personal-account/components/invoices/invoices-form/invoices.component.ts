@@ -121,7 +121,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   toggleComment() {
     this.showComment = !this.showComment;
-
+console.log('toggleComment',this.showComment)
     // Если скрываем и комментарий пустой — полностью убираем
     if (!this.showComment && !this.selectedInvoice.comment) {
       this.selectedInvoice.comment = '';
