@@ -189,28 +189,35 @@ console.log('toggleComment',this.showComment)
       this.productTargets = data.data;
     })
   }
-
-  onDateInput(event: any) {
+onDateInput(event: any) {
     let value = event.target.value;
     value = value.replace(/[,\.]/g, '-');
-    let date = this.parseDate(value);
-    if (date) {
-      this.selectedInvoice.dateTime = date;
+    
+    // Try parsing in different formats
+    const date = this.parseDate(value);
+    
+    if (date && !isNaN(date.getTime())) {  // Check if date is valid
+        this.selectedInvoice.dateTime = date;
+    } else {
+        console.warn('Invalid date format:', value);
     }
-  }
-  parseDate(value: string): Date | null {
-    const parts = value.split('-');
-    if (parts.length === 3) {
-      const day = parseInt(parts[0], 10);
-      const month = parseInt(parts[1], 10) - 1;
-      const year = parseInt(parts[2], 10);
-      const date = new Date(Date.UTC(year, month, day));
-      if (date.getDate() === day && date.getMonth() === month && date.getFullYear() === year) {
-        return date;
-      }
+}
+
+// Improved parseDate function
+private parseDate(dateString: string): Date | null {
+    if (!dateString) return null;
+    
+    // Try parsing as ISO format (YYYY-MM-DD)
+    if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
+        const date = new Date(dateString);
+        if (!isNaN(date.getTime())) return date;
     }
+    
+    // Try parsing other formats if needed
+    // Add additional format checks here
+    
     return null;
-  }
+}
 
 
   selectScope: any = {
