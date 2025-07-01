@@ -44,7 +44,7 @@
             <!-- Тип и проверяющий -->
             <div class="form-group">
               <label for="type">Тип</label>
-              <select id="type" [(ngModel)]="type" [disabled]="!isEdit" name="type" (change)="onTypeChange()">
+              <select id="type" [(ngModel)]="type" [disabled]="!isEdit" name="type" (ngModelChange)="onTypeChange()">
                 <option *ngFor="let type of types" [value]="type.value">{{type.label}}</option>
               </select>
             </div>

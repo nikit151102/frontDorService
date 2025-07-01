@@ -121,7 +121,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
 
   toggleComment() {
     this.showComment = !this.showComment;
-console.log('toggleComment',this.showComment)
+    console.log('toggleComment', this.showComment)
     // Если скрываем и комментарий пустой — полностью убираем
     if (!this.showComment && !this.selectedInvoice.comment) {
       this.selectedInvoice.comment = '';
@@ -189,35 +189,35 @@ console.log('toggleComment',this.showComment)
       this.productTargets = data.data;
     })
   }
-onDateInput(event: any) {
+  onDateInput(event: any) {
     let value = event.target.value;
     value = value.replace(/[,\.]/g, '-');
-    
+
     // Try parsing in different formats
     const date = this.parseDate(value);
-    
-    if (date && !isNaN(date.getTime())) {  // Check if date is valid
-        this.selectedInvoice.dateTime = date;
-    } else {
-        console.warn('Invalid date format:', value);
-    }
-}
 
-// Improved parseDate function
-private parseDate(dateString: string): Date | null {
+    if (date && !isNaN(date.getTime())) {  // Check if date is valid
+      this.selectedInvoice.dateTime = date;
+    } else {
+      console.warn('Invalid date format:', value);
+    }
+  }
+
+  // Improved parseDate function
+  private parseDate(dateString: string): Date | null {
     if (!dateString) return null;
-    
+
     // Try parsing as ISO format (YYYY-MM-DD)
     if (/^\d{4}-\d{2}-\d{2}$/.test(dateString)) {
-        const date = new Date(dateString);
-        if (!isNaN(date.getTime())) return date;
+      const date = new Date(dateString);
+      if (!isNaN(date.getTime())) return date;
     }
-    
+
     // Try parsing other formats if needed
     // Add additional format checks here
-    
+
     return null;
-}
+  }
 
 
   selectScope: any = {
@@ -302,8 +302,8 @@ private parseDate(dateString: string): Date | null {
         }));
       }
       this.selectedInvoice.dateTime = new Date(this.selectedInvoice.dateTime);
-      console.log('selectedInvoice  2222',this.selectedInvoice)
-      
+      console.log('selectedInvoice  2222', this.selectedInvoice)
+
       this.oldData = structuredClone(this.selectedInvoice);
       this.dialogVisible = true;
     })
@@ -349,44 +349,42 @@ private parseDate(dateString: string): Date | null {
 
 
 
-
   adjustmentType: number | null = null;
   type: number | null = null;
 
   onTypeChange() {
     if (this.type === 0) {
-      this.adjustmentType = 1;
-
-      this.onAdjustmentChange()
+      this.adjustmentType = 1; // Установка значения по умолчанию
+      this.updateProductAmounts(); // Обновляем суммы
     } else {
       this.adjustmentType = null;
-      this.selectedInvoice.productList.forEach((product: any) => {
-        product.amount = Math.abs(product.amount);
-        product.sumAmount = Math.abs(product.sumAmount);
-      });
-      this.selectedInvoice.type = 1;
+      this.selectedInvoice.type = 1; // Приход
+      this.updateProductAmounts();
     }
   }
 
   onAdjustmentChange() {
-    if (this.selectedInvoice.productList) {
-      this.selectedInvoice.productList.forEach((product: any) => {
+    console.log('Adjustment changed to:', this.adjustmentType);
+    this.updateProductAmounts();
+  }
 
-        if (this.type === 0) {
-          product.amount = Math.abs(product.amount) * (this.adjustmentType === 2 ? -1 : -1);
-          product.sumAmount = -Math.abs(product.sumAmount);
-        } else {
-          product.amount = Math.abs(product.amount);
-          product.sumAmount = Math.abs(product.sumAmount);
-        }
-      });
+  updateProductAmounts() {
+    if (!this.selectedInvoice?.productList) {
+      console.warn('Product list is not available');
+      return;
+    }
 
-      // Если "+" то type = 1, если "-" то type = 0
-      if (this.adjustmentType === 1) {
-        this.selectedInvoice.type = 1; // Приход
-      } else if (this.adjustmentType === 2) {
-        this.selectedInvoice.type = 0; // Расход
+    this.selectedInvoice.productList.forEach((product: any) => {
+      if (this.type == 0) {
+        product.amount = -Math.abs(product.amount);
+        product.sumAmount = -Math.abs(product.sumAmount);
+      } else {
+        product.amount = Math.abs(product.amount);
+        product.sumAmount = Math.abs(product.sumAmount);
       }
+    });
+    if (this.type === 0) {
+      this.selectedInvoice.type = this.adjustmentType === 1 ? 1 : 0;
     }
   }
 
@@ -515,7 +513,7 @@ private parseDate(dateString: string): Date | null {
         product.sumAmount = -Math.abs(product.sumAmount);
       }
 
-      if (this.type === 0) {
+      if (this.type == 0) {
         product.sumAmount = -Math.abs(product.sumAmount);
         product.amount = -Math.abs(product.amount);
       }
@@ -527,7 +525,7 @@ private parseDate(dateString: string): Date | null {
     console.log('value', value)
     console.log('this.type', this.type)
     const updatedProducts = [...this.selectedInvoice.productList]; // Создаем новый массив
-    if (this.type !== 1 || this.selectedInvoice.expenseSum < 0) {
+    if (this.type != 1 || this.selectedInvoice.expenseSum < 0) {
       updatedProducts[index].amount = `-${value}`;
     } else {
       updatedProducts[index].amount = value;
@@ -547,7 +545,7 @@ private parseDate(dateString: string): Date | null {
           product.amount = -Math.abs(product.amount);
         }
 
-        if (this.type === 0) {
+        if (this.type == 0) {
           product.sumAmount = -Math.abs(product.sumAmount);
           product.amount = -Math.abs(product.amount);
         }
