@@ -205,10 +205,10 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   }
 
   getCurrentDateWithZeroTime(): Date {
-  const date = new Date();
-  date.setHours(0, 0, 0, 0); // Устанавливаем время в 00:00:00.000
-  return date;
-}
+    const date = new Date();
+    date.setHours(0, 0, 0, 0); // Устанавливаем время в 00:00:00.000
+    return date;
+  }
 
   // Improved parseDate function
   private parseDate(dateString: string): Date | null {
@@ -682,6 +682,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
               callback(invoice.documentMetadata.data);
             } else {
               this.selectedInvoice = null;
+              this.dialogVisible = false;
               this.cdr.detectChanges();
             }
           },
