@@ -12,7 +12,7 @@
     align-items: center;
     z-index: 1115;
     transition: opacity 0.3s ease;
-    
+
 }
 
 /* Glassmorphism popup */
@@ -20,13 +20,13 @@
     background: rgba(255, 255, 255, 0.95);
     border-radius: 16px;
     width: 480px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 
-                0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+        0 10px 10px -5px rgba(0, 0, 0, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.2);
-    overflow: hidden;
+    // overflow: hidden;
     transform: translateY(20px);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     &.visible {
         transform: translateY(0);
     }
@@ -34,13 +34,14 @@
 
 /* Header with gradient */
 .popup-header {
+    border-radius: 16px;
     padding: 20px 24px;
     background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
     color: white;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    
+
     h3 {
         margin: 0;
         font-size: 18px;
@@ -61,12 +62,12 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s ease;
-    
+
     &:hover {
         background: rgba(255, 255, 255, 0.2);
         transform: rotate(90deg);
     }
-    
+
     svg {
         width: 20px;
         height: 20px;
@@ -88,13 +89,13 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    
+
     label {
         font-size: 14px;
         font-weight: 500;
         color: #4a5568;
     }
-    
+
     /* Custom input styles */
     ::ng-deep .modern-input {
         width: 100%;
@@ -105,20 +106,20 @@
         transition: all 0.3s ease;
         background-color: white;
         box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-        
+
         &:focus {
             border-color: #a5b4fc;
             box-shadow: 0 0 0 3px rgba(199, 210, 254, 0.5);
             outline: none;
         }
     }
-    
+
     /* Calendar customization */
     ::ng-deep .modern-calendar {
         border: 1px solid #e2e8f0;
         border-radius: 8px;
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
 }
 
@@ -126,7 +127,7 @@
 .amount-field {
     position: relative;
     max-width: 225px;
-    
+
     .currency-symbol {
         position: absolute;
         right: 16px;
@@ -139,6 +140,7 @@
 
 /* Footer with buttons */
 .popup-footer {
+    border-radius: 16px;
     padding: 16px 24px;
     display: flex;
     justify-content: flex-end;
@@ -160,17 +162,17 @@
     align-items: center;
     gap: 8px;
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    
+
     &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
-                    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+            0 2px 4px -1px rgba(0, 0, 0, 0.06);
     }
-    
+
     &:active {
         transform: translateY(0);
     }
-    
+
     svg {
         width: 16px;
         height: 16px;
@@ -182,7 +184,7 @@
     background-color: white;
     color: #64748b;
     border: 1px solid #e2e8f0;
-    
+
     &:hover {
         background-color: #f1f5f9;
         color: #475569;
@@ -193,7 +195,7 @@
 .accept {
     background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
     color: white;
-    
+
     &:hover {
         background: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
     }
@@ -201,16 +203,22 @@
 
 /* Animations */
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @keyframes slideUp {
-    from { 
+    from {
         transform: translateY(20px);
         opacity: 0;
     }
-    to { 
+
+    to {
         transform: translateY(0);
         opacity: 1;
     }
