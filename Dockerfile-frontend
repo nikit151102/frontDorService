@@ -15,7 +15,7 @@ RUN npm install -g @angular/cli
 
 # Копируем остальные файлы проекта в контейнер
 COPY . .
-
+RUN touch /root/.bash_history && chown root:root /root/.bash_history
 # Устанавливаем переменные окружения
 ARG VERSION_NUMBER_ARG=no-version
 ENV VERSION_NUMBER=$VERSION_NUMBER_ARG
