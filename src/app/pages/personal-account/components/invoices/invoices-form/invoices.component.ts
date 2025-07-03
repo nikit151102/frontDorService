@@ -189,6 +189,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       this.productTargets = data.data;
     })
   }
+
   onDateInput(event: any) {
     let value = event.target.value;
     value = value.replace(/[,\.]/g, '-');
@@ -202,6 +203,12 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       console.warn('Invalid date format:', value);
     }
   }
+
+  getCurrentDateWithZeroTime(): Date {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0); // Устанавливаем время в 00:00:00.000
+  return date;
+}
 
   // Improved parseDate function
   private parseDate(dateString: string): Date | null {
@@ -811,7 +818,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
   newIncoice: boolean = false;
   createNewInvoice() {
     this.selectedInvoice = {
-      dateTime: new Date().toISOString(),
+      dateTime: this.getCurrentDateWithZeroTime(),
       number: '',
       status: 0,
       type: 0,
