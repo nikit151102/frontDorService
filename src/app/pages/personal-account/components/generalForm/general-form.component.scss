@@ -285,6 +285,7 @@ textarea {
 
 :host ::ng-deep .p-datepicker .p-datepicker-panel {
     background: #fff;
+        z-index: 100;
 }
 
 :host ::ng-deep .p-datepicker-header {
