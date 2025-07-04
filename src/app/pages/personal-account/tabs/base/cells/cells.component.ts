@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
-import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
 import { BUTTON_SETS } from '../bitumen/button-config';
 import { CellsService } from './cells.service';
@@ -10,6 +9,7 @@ import { getFormArrivalSets, MODEL, getFormExpenseSets } from './form-config';
 import { CONFIGPRODUCTS } from './products-conf';
 import { AdditionalDataComponent } from '../additional-data/additional-data.component';
 import { CacheReferenceService } from '../../../../../services/cache-reference.service';
+import { InvoicesComponent } from '../invoices/invoices.component';
 
 @Component({
   selector: 'app-cells',
@@ -40,12 +40,32 @@ export class CellsComponent implements OnInit {
   ];
 
   columnsArrivalData = [
-    { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
-    { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
-    { field: 'placeFrom', header: 'Откуда', type: 'string', visible: true, width: '10%' },
-    { field: 'placeTo', header: 'Куда слили', type: 'string', visible: true, width: '10%' },
+    { field: 'date', fieldView: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
+    { field: 'auto', fieldView: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     {
-      field: 'cargoName',
+      field: 'placeFromId',
+      fieldView: 'placeFrom',
+      filterType: 10,
+      searchField: 'placeFrom.Name',
+      header: 'Откуда',
+      type: 'uuid',
+      visible: true,
+      width: '12%',
+      endpoint: '/api/Entities/MiningQuarry/Filter'
+    },
+    {
+      field: 'placeToId',
+      fieldView: 'placeTo',
+      filterType: 10,
+      searchField: 'placeTo.Name',
+      header: 'Куда слили',
+      type: 'uuid',
+      visible: true,
+      width: '12%',
+      endpoint: '/api/Entities/MiningQuarry/Filter'
+    },
+    {
+      field: 'cargoId',
       fieldView: 'cargoName',
       filterType: 10,
       searchField: 'cargo.Name',
@@ -70,12 +90,32 @@ export class CellsComponent implements OnInit {
   ];
 
   columnsExpenseData = [
-    { field: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
-    { field: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
-    { field: 'placeTo', header: 'Откуда', type: 'string', visible: true, width: '10%' },
-    { field: 'organization', header: 'Кому', type: 'string', visible: true, width: '10%' },
+    { field: 'date', fieldView: 'date', header: 'Дата', type: 'date', visible: true, width: '12%' },
+    { field: 'auto', fieldView: 'auto', header: 'Авто', type: 'string', visible: true, width: '10%' },
     {
-      field: 'cargoName',
+      field: 'placeToId',
+      fieldView: 'placeTo',
+      filterType: 10,
+      searchField: 'placeTo.Name',
+      header: 'Куда слили',
+      type: 'uuid',
+      visible: true,
+      width: '12%',
+      endpoint: '/api/Entities/MiningQuarry/Filter'
+    },
+    {
+      field: 'OrganizationId',
+      fieldView: 'organization',
+      filterType: 10,
+      searchField: 'Organization.Name',
+      header: 'Кому',
+      type: 'uuid',
+      visible: true,
+      width: '12%',
+      endpoint: '/api/Entities/MiningQuarry/Filter'
+    },
+    {
+      field: 'cargoId',
       fieldView: 'cargoName',
       filterType: 10,
       searchField: 'cargo.Name',
@@ -91,7 +131,7 @@ export class CellsComponent implements OnInit {
     {
       field: 'paymentType',
       header: 'Форма оплаты',
-      type: '',
+      type: 'string',
       visible: true,
       width: '10%'
     },
