@@ -75,11 +75,11 @@ export class CellsComponent implements OnInit {
       width: '12%',
       endpoint: '/api/Entities/Cargo/Filter'
     },
-    { field: 'ttn', header: 'ТТН', type: 'number', visible: true, width: '10%' },
-    { field: 'weight', header: 'Тоннаж', type: 'number', visible: true, width: '8%' },
-    { field: 'amount', header: 'Цена', type: 'number', visible: true, width: '8%' },
-    { field: 'sumAmount', header: 'Сумма', type: 'number', visible: true, width: '8%' },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
+    { field: 'ttn', fieldView: 'ttn', header: 'ТТН', type: 'number', visible: true, width: '10%' },
+    { field: 'weight', fieldView: 'weight', header: 'Тоннаж', type: 'number', visible: true, width: '8%' },
+    { field: 'amount', fieldView: 'amount', header: 'Цена', type: 'number', visible: true, width: '8%' },
+    { field: 'sumAmount', fieldView: 'sumAmount', header: 'Сумма', type: 'number', visible: true, width: '8%' },
+    { field: 'status', fieldView: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
   ];
 
 
@@ -125,17 +125,18 @@ export class CellsComponent implements OnInit {
       width: '12%',
       endpoint: '/api/Entities/Cargo/Filter'
     },
-    { field: 'weight', header: 'Тоннаж', type: 'number', visible: true, width: '8%' },
-    { field: 'amount', header: 'Цена', type: 'number', visible: true, width: '8%' },
-    { field: 'sumAmount', header: 'Сумма', type: 'number', visible: true, width: '8%' },
+    { field: 'weight', fieldView: 'weight', header: 'Тоннаж', type: 'number', visible: true, width: '8%' },
+    { field: 'amount', fieldView: 'amount', header: 'Цена', type: 'number', visible: true, width: '8%' },
+    { field: 'sumAmount', fieldView:'sumAmount', header: 'Сумма', type: 'number', visible: true, width: '8%' },
     {
       field: 'paymentType',
+      fieldView: 'paymentType',
       header: 'Форма оплаты',
       type: 'string',
       visible: true,
       width: '10%'
     },
-    { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
+    { field: 'status', fieldView: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
     // { field: 'comment', header: 'Комментарий', type: 'string', visible: true, width: '15%' }
   ];
 
