@@ -53,7 +53,7 @@
                 </app-number-filter>
 
                 <app-uuid-search-filter-sort *ngIf="col.type == 'uuid'" [apiEndpoint]="col.endpoint" [fieldNames]="''"
-                  [enam]="null" [Field]="col.field"
+                  [enam]="null" [Field]="col.field" [filterType]="col.filterType" [searchField]="col.searchField"
                   (filterChange)="invoicesService.onFilterChange($event); scrollToTop()"
                   (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>

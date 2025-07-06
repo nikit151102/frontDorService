@@ -62,7 +62,7 @@ export class CellsComponent implements OnInit {
       type: 'uuid',
       visible: true,
       width: '12%',
-      endpoint: '/api/Entities/MiningQuarry/Filter'
+      endpoint: '/api/Entities/StorageArea/Filter'
     },
     {
       field: 'cargoId',
@@ -101,7 +101,7 @@ export class CellsComponent implements OnInit {
       type: 'uuid',
       visible: true,
       width: '12%',
-      endpoint: '/api/Entities/MiningQuarry/Filter'
+      endpoint: '/api/Entities/StorageArea/Filter'
     },
     {
       field: 'OrganizationId',
