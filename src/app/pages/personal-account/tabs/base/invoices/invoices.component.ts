@@ -95,6 +95,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
       this.invoicesService.defaultFilters = []
       this.invoicesService.defaultFilters = [this.defaultFilter]
+
+      if(this.invoicesService.queryData.filters)
+       this.invoicesService.queryData.filters = [...this.invoicesService.defaultFilters];
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.invoicesService.currentPage = 0;
@@ -474,7 +477,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.confirmPopupService.openConfirmDialog({
       title: titlePopUp,
       message: messagePopUp,
-      acceptLabel: 'Отправить',
+      acceptLabel: 'Сохранить',
       rejectLabel: 'Отмена',
       onAccept: () => {
 

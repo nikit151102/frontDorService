@@ -274,8 +274,6 @@ export class CellsComponent implements OnInit {
           storageArea: storageArea,
           filter: this.defaultFilters
         };
-
-
         const formSet = type === 'arrival'
           ? getFormArrivalSets(dataSources)
           : getFormExpenseSets(dataSources);

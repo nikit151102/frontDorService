@@ -524,6 +524,11 @@ function handleSaveAndSend(model: any, dependencies: any, send: boolean, sendClo
         rejectLabel: 'Отмена',
         onAccept: () => {
 
+            filter = [...filter, ,{
+        field: 'DocAccountType',
+        values: [0, 1],
+        type: 1,
+      }]
             invoiceService.saveInvoice(dataForm, 'api/CommercialWork/ManagerDocument', null, filter).subscribe(
                 (invoice: any) => {
                     if (!send) {

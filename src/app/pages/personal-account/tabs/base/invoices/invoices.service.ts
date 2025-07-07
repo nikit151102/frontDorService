@@ -159,7 +159,7 @@ export class InvoicesService {
     this.queryData.filters = this.queryData.filters || [];
 
     console.log('this.defaultFilters[0]--------------------------------------------------------')
-      this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
+      // this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
       console.log('this.defaultFilters',this.defaultFilters)
       console.log(' this.queryData', this.queryData)
 
