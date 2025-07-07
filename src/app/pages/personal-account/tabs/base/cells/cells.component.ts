@@ -244,7 +244,13 @@ export class CellsComponent implements OnInit {
         type: 1
       }];
 
-      this.defaultFilters = { ...this.invoicesService.defaultFilters };
+      console.log('this.invoicesService.defaultFilters',this.invoicesService.defaultFilters)
+
+      this.defaultFilters = {
+        field: 'ManagerDocType',
+        values: [typeDocs],
+        type: 1
+      }
       this.currentComponent = type;
       this.currentColumns = type === 'arrival' ? this.columnsArrivalData : this.columnsExpenseData;
       this.currentTotalInfo = type === 'arrival' ? this.totalInfoColumnArrival : this.totalInfoColumnExpense;

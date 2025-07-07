@@ -160,7 +160,6 @@ export class BitumenComponent implements OnInit {
         field: 'Date', sortType: 1
       }];
 
-
       this.invoicesService.filterStatic = [{
         field: 'ManagerDocType',
         values: [typeDocs],

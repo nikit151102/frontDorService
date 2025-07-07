@@ -158,11 +158,10 @@ export class InvoicesService {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.queryData.filters = this.queryData.filters || [];
 
-    console.log('this.defaultFilters[0]', this.defaultFilters)
-    if (!this.queryData.filters.includes(this.defaultFilters[0])) {
+    console.log('this.defaultFilters[0]--------------------------------------------------------')
       this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
-    }
-
+      console.log('this.defaultFilters',this.defaultFilters)
+      console.log(' this.queryData', this.queryData)
 
     const hasAccountTypeFilter = this.queryData.filters.some(
       (filter: any) => filter.field === 'DocAccountType'
@@ -170,6 +169,7 @@ export class InvoicesService {
 
     const currentUrl = this.router.url;
     const typeValue = currentUrl.includes('/cash') ? 1 : 0;
+
 
 
     if (!hasAccountTypeFilter && typeValue != 1) {

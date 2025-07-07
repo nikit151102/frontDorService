@@ -84,17 +84,26 @@ export class InvoicesComponent implements OnChanges, OnInit {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
   }
-  ngOnChanges(changes: SimpleChanges) {
 
+  ngOnChanges(changes: SimpleChanges) {
     if (changes['defaultFilter']) {
+
+
+      if (this.invoicesService.queryData.filters)
+        this.invoicesService.queryData.filters = this.invoicesService.queryData.filters
+          .filter(f => f?.field?.toLowerCase() !== 'managerdoctype');
+
+      this.invoicesService.defaultFilters = []
+      this.invoicesService.defaultFilters = [this.defaultFilter]
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.invoicesService.currentPage = 0;
       this.invoicesService?.totalInfo?.totalPagesCount;
       this.loadInvoices(true);
-      console.log('loadInvoices defaultFilter')
-      console.log('counterpartyData', this.counterpartyData)
+      console.log('loadInvoices defaultFilter');
+      console.log('counterpartyData', this.counterpartyData);
     }
+
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
