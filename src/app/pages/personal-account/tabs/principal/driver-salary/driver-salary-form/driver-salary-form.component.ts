@@ -365,6 +365,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         acceptLabel = 'Создать';
       }
 
+      
       this.confirmPopupService.openConfirmDialog({
         title: '',
         message: titlePopUp,
