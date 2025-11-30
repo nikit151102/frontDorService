@@ -86,7 +86,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
 export const CONFIGS = [
     {
         code: '349246',
-        endpoint: '/api/CommercialWork/DocInvoice/DocDirector',
+        endpoint: '/api/CommercialWork/DocInvoice/DocDirector/Filter',
         employeeType: 1,
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
@@ -96,7 +96,7 @@ export const CONFIGS = [
     },
     {
         code: '349143',
-        endpoint: '/api/CommercialWork/DocInvoice/DocDirector',
+        endpoint: '/api/CommercialWork/DocInvoice/DocDirector/Filter',
         employeeType: 2,
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
@@ -106,7 +106,7 @@ export const CONFIGS = [
     },
     {
         code: '341652',
-        endpoint: '/api/CommercialWork/DocInvoice/DocDirector',
+        endpoint: '/api/CommercialWork/DocInvoice/DocDirector/Filter',
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
         ],
