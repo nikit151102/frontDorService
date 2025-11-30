@@ -47,7 +47,7 @@ import { environment } from '../../../../../../../environment';
 export class DriverSalaryFormComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() label: string = 'Создать';
-  @Input() employeeType: Number = 1;
+  @Input() employeeType: Number = 0;
   config!: InvoiceConfig;
   service: any;
   selectedInvoice: any;
@@ -109,6 +109,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.generateYears();
     this.initForm();
+     console.log('employeeType before request:', this.employeeType);
     this.currentRole = this.jwtService.getDecodedToken().email;
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/DriverEmployee/Filter`, {
@@ -124,6 +125,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       }),
     }).subscribe(
       (response: any) => {
+        console.log('employeeType',this.employeeType)
         const data = response.data;
        this.driverOptions = data;
       }

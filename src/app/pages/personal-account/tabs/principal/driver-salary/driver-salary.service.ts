@@ -164,10 +164,10 @@ export class DriverSalaryService {
 
     let url
     if (this.endpointGetData) {
-      url = `${environment.apiUrl}/${this.endpointGetData}`;
+      url = `${environment.apiUrl}${this.endpointGetData}`;
     }
     else {
-      url = `${environment.apiUrl}/${this.endpoint}`;
+      url = `${environment.apiUrl}${this.endpoint}`;
     }
     return this.http.post<any>(url, this.queryData, {
       headers: new HttpHeaders({

@@ -38,7 +38,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
   @Input() endpointGetData: any;
-  @Input() columns: any ;
+  @Input() columns: any;
   @Input() paymentType: number = 1;
   @Input() totalInfoColumn: any;
   @Input() buttonConfigs: Record<string, ButtonConfig[]> = BUTTON_SETS;
@@ -47,7 +47,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
   @Input() modelForm: any;
   @Input() heightContainer: string = '280px'
   currentConfig: any;
-  
+
   employeeType: Number = 1;
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -113,23 +113,50 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     public formatingDataService: FormatingDataService) { }
 
   ngOnInit() {
-  this.route.url.subscribe(segments => {
-    console.log('URL segments:', segments);
-    
-    if (segments.length > 0) {
-      const configCode = segments[0].path; // Берем первый сегмент
-      console.log('configCode from segments:', configCode);
-      
-      this.currentConfig = CONFIGS.find(config => config.code === configCode);
-      if (this.currentConfig) {
-        this.endpoint = this.currentConfig.endpoint;
-        this.driverSalaryService.endpoint = this.currentConfig.endpoint;
-        this.columns = this.currentConfig.columnsDocs;
-        this.totalInfoColumn = this.currentConfig.totalInfoColumn;
+    this.route.url.subscribe(segments => {
+      console.log('URL segments:', segments);
+
+      if (segments.length > 0) {
+        const configCode = segments[0].path; 
+        console.log('configCode from segments:', configCode);
+
+        this.currentConfig = CONFIGS.find(config => config.code === configCode);
+        if (this.currentConfig) {
+          this.endpoint = this.currentConfig.endpoint;
+          this.driverSalaryService.endpoint = this.currentConfig.endpoint;
+          this.columns = this.currentConfig.columnsDocs;
+          this.totalInfoColumn = this.currentConfig.totalInfoColumn;
+
+          const fieldsToClean = ['DocPaymentType', 'AntonCashType', 'Director2Type'];
+          const hasOurFilters = this.driverSalaryService.defaultFilters.some(
+            (filter: any) => fieldsToClean.includes(filter.field)
+          );
+
+          if (!hasOurFilters) {
+            const otherFilters = this.driverSalaryService.defaultFilters
+              .filter((filter: any) => !fieldsToClean.includes(filter.field));
+
+            const newFilters = [
+              { field: 'DocPaymentType', values: [4], type: 1 },
+              { field: 'antonCashType', values: [6], type: 1 },
+              {
+                field: 'Director2Type',
+                values: [
+                  this.currentConfig.employeeType === 1 ? 1 :
+                    this.currentConfig.employeeType === 2 ? 2 : 3
+                ],
+                type: 1
+              }
+            ];
+
+            this.driverSalaryService.defaultFilters = [...otherFilters, ...newFilters];
+          }
+
+
+        }
       }
-    }
-  });
-   
+    });
+
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
 

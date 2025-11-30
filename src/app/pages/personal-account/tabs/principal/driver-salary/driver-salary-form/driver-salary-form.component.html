@@ -23,7 +23,7 @@
                         </div>
 
 
-                         <div class="p-field p-col-12" *ngIf="employeeType == 2">
+                        <div class="p-field p-col-12" *ngIf="employeeType == 2">
                             <label for="driverEmployeeId">Сотрудник</label>
                             <app-custom-dropdown [options]="driverOptions" optionLabel="name" optionValue="id"
                                 [selected]="invoiceForm.get('driverEmployeeId')?.value"
@@ -74,8 +74,7 @@
 
             </div>
             <p-footer>
-                <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)"
-                    (click)="saveData()">
+                <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)" (click)="saveData()">
                 </button>
 
                 <button pButton label="Отмена" (click)="onDialogClose()" class="p-button-secondary">
