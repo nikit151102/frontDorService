@@ -136,14 +136,15 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
             const otherFilters = this.driverSalaryService.defaultFilters
               .filter((filter: any) => !fieldsToClean.includes(filter.field));
 
+            console.log('this.currentConfig.employeeType',this.currentConfig.employeeType)
             const newFilters = [
               { field: 'DocPaymentType', values: [4], type: 1 },
               { field: 'antonCashType', values: [6], type: 1 },
               {
                 field: 'Director2Type',
                 values: [
-                  this.currentConfig.employeeType === 1 ? 1 :
-                    this.currentConfig.employeeType === 2 ? 2 : 3
+                  configCode === '349246' ? 1 :
+                    configCode === '349143' ? 2 : 3
                 ],
                 type: 1
               }
