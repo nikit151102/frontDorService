@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
-import { DirectorService } from '../director.service';
+import { DirectorService } from '../../stats/director.service';
 
 @Component({
   selector: 'app-menu',
@@ -14,9 +14,9 @@ export class MenuComponent implements OnInit {
   @Output() selectTab = new EventEmitter<any>();
   selectedName: string = '';
   items: any[] = [
-    { code: '349143', name: 'Машины', access: '', managerDocType: 0, navigate: ['cars'] },
-    { code: '349143', name: 'Битум', access: '', managerDocType: 0, navigate: ['bitumen'] },
-    { code: '810632', name: 'Ячейки', access: '', managerDocType: 2, navigate: ['cells'] },
+    { code: '349143', name: 'ЗП сотрудников', access: '', managerDocType: 0, navigate: ['349246'] },
+    { code: '349246', name: 'ЗП водителей', access: '', managerDocType: 0, navigate: ['349143'] },
+    { code: '810632', name: 'Налоги', access: '', managerDocType: 2, navigate: ['341652'] },
   ];
 
   constructor(private jwtService: JwtService, private directorService: DirectorService) { }

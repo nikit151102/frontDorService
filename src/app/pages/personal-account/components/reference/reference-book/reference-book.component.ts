@@ -1,17 +1,14 @@
 import { ChangeDetectorRef, Component, ElementRef, HostListener, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
-import { referenceConfig } from './conf';
 import { ReferenceBookService } from './reference-book.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ToastService } from '../../../../../services/toast.service';
 import { TableModule } from 'primeng/table';
 import { DateFilterSortComponent } from '../../../../../components/fields/date-filter/date-filter.component';
 import { NumberFilterComponent } from '../../../../../components/fields/number-filter/number-filter.component';
 import { SearchFilterSortComponent } from '../../../../../components/fields/search-filter-sort/search-filter-sort.component';
 import { UuidSearchFilterSortComponent } from '../../../../../components/fields/uuid-search-filter-sort/uuid-search-filter-sort.component';
-import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
 import { CustomCheckboxComponent } from '../../../../../ui-kit/custom-checkbox/custom-checkbox.component';
-
+import { CustomDropdownComponent } from '../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
 
 @Component({
   selector: 'app-reference-book',
@@ -27,6 +24,7 @@ import { CustomCheckboxComponent } from '../../../../../ui-kit/custom-checkbox/c
   styleUrls: ['./reference-book.component.scss']
 })
 export class ReferenceBookComponent implements OnInit, OnChanges {
+  @Input() referenceConfig: any;
   currentConfig: any;
   data: any[] = []; // Данные для таблицы
   formFields: any; // Поля для создания и редактирования
@@ -43,7 +41,6 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
   constructor(
     public referenceBookService: ReferenceBookService,
-    private toastService: ToastService,
     private cdr: ChangeDetectorRef,
   ) { }
 
@@ -56,53 +53,83 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   dropdownsData: any = {};
 
   updateConfig() {
-    this.currentConfig = referenceConfig.find(config => config.typeId === this.typeId);
+    // Находим конфигурацию по typeId
+    this.currentConfig = this.referenceConfig.find((config: any) => config.typeId === this.typeId);
 
-    this.loadDropdownsData();
-
-    if (this.currentConfig) {
-      this.formFields = this.currentConfig.formFields;
-      this.referenceBookService.endpoint = this.currentConfig.endpoint;
-      this.columns = this.currentConfig.tableColumns;
-      if (this.currentConfig.pageTitle == 'Пользователи') {
-        this.referenceBookService.getPosition().subscribe((values: any) => {
-          this.positions = values.data;
-        })
-        this.referenceBookService.getPermision().subscribe((values: any) => {
-          this.permisions = values.data;
-        })
-      }
-      this.referenceBookService.queryData.filters = []
-      if (this.currentConfig.pageTitle == 'Водители') {
-        if (this.referenceBookService.queryData.filters)
-          this.referenceBookService.queryData.filters.push({
-            field: 'EmployeeType',
-            values: [1],
-            type: 2
-          });
-      }
-      if (this.currentConfig.pageTitle == 'Сотрудники') {
-        if (this.referenceBookService.queryData.filters)
-          this.referenceBookService.queryData.filters.push({
-            field: 'EmployeeType',
-            values: [2],
-            type: 2
-          });
-      }
+    // Если конфигурация не найдена, выходим
+    if (!this.currentConfig) {
+      console.warn('Конфигурация не найдена для typeId:', this.typeId);
+      return;
     }
 
+    // Устанавливаем основные свойства
+    this.formFields = this.currentConfig.formFields || [];
+    this.referenceBookService.endpoint = this.currentConfig.endpoint;
+    this.columns = this.currentConfig.tableColumns || [];
 
+    // Загружаем данные для dropdown полей
+    this.loadDropdownsData();
+
+    // Загружаем дополнительные данные если это страница "Сотрудники"
+    if (this.currentConfig.pageTitle === 'Сотрудники') {
+      this.referenceBookService.getPosition().subscribe((values: any) => {
+        this.positions = values.data;
+      });
+
+      this.referenceBookService.getPermision().subscribe((values: any) => {
+        this.permisions = values.data;
+      });
+    }
+
+    // Загружаем основные данные
     this.referenceBookService.loadData();
     this.cdr.detectChanges();
   }
 
+  // Получение данных для конкретного dropdown
+  getDropdownData(fieldName: string): any[] {
+    return this.dropdownsData[fieldName] || [];
+  }
+
+
+
+
+  // Переключение видимости dropdown
+  toggleDropdown(fieldName: string) {
+    // Закрываем все остальные dropdown
+    Object.keys(this.dropdownVisible).forEach(key => {
+      if (key !== fieldName) {
+        this.dropdownVisible[key] = false;
+      }
+    });
+
+    // Переключаем текущий dropdown
+    this.dropdownVisible[fieldName] = !this.dropdownVisible[fieldName];
+
+    if (this.dropdownVisible[fieldName]) {
+      this.checkDropdownPosition();
+    }
+
+    this.cdr.detectChanges();
+  }
+
+
+  // Обработка кликов вне dropdown
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const clickedInside = (event.target as Element).closest('.dropdown-container');
+    if (!clickedInside) {
+      this.closeAllDropdowns();
+    }
+  }
+
   loadDropdownsData() {
 
-    const dropdownFields = this.currentConfig.formFields.filter((field: any) => field.type === 'dropdown');
+    const dropdownFields = this.currentConfig.formFields.filter((field: any) => field.type === 'Dropdown');
     console.log('dropdownFields', dropdownFields)
     dropdownFields.forEach((field: any) => {
       if (field.endpoint) {
-        this.referenceBookService.getDropdownData(field.endpoint).subscribe((response: any) => {
+        this.referenceBookService.getDropdownData(field.typeEndpoint, field.endpoint).subscribe((response: any) => {
           this.dropdownsData[field.field] = response.data;
         });
       }
@@ -115,13 +142,68 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
     })
   }
 
+  // Получение отображаемого значения для элемента
+  getItemDisplayValue(field: any, item: any): string {
+    // Если указаны displayFields (массив полей), объединяем их
+    if (field.displayFields && Array.isArray(field.displayFields)) {
+      const separator = field.separator || ', ';
+      const displayValues = field.displayFields
+        .map((displayField: string) => {
+          // Поддерживаем вложенные свойства через точку
+          const value = this.getNestedValue(item, displayField);
+          return value !== null && value !== undefined ? value.toString() : '';
+        })
+        .filter((value: any) => value !== ''); // Убираем пустые значения
+
+      return displayValues.join(separator);
+    }
+
+    // Если указано одиночное поле для отображения, используем его
+    if (field.labelField && item[field.labelField]) {
+      return item[field.labelField];
+    }
+
+    // Иначе пытаемся найти подходящее поле
+    const possibleFields = ['name', 'title', 'label', 'value'];
+    for (const possibleField of possibleFields) {
+      if (item[possibleField]) {
+        return item[possibleField];
+      }
+    }
+
+    // Если ничего не найдено, возвращаем ID
+    return item[field.valueField] || item.id || 'Неизвестно';
+  }
+
+  getSelectedDisplayValue(field: any): string {
+    const selectedId = this.modalData[field.field];
+    if (!selectedId) return '';
+
+    const data = this.getDropdownData(field.field);
+    const selectedItem = data.find(item => {
+      // Используем valueField из конфигурации или по умолчанию 'id'
+      const valueField = field.valueField || 'id';
+      return item[valueField] === selectedId;
+    });
+
+    return selectedItem ? this.getItemDisplayValue(field, selectedItem) : '';
+  }
+
+  selectDropdownItem(field: any, item: any) {
+    // Используем valueField из конфигурации или по умолчанию 'id'
+    const valueField = field.valueField || 'id';
+    this.modalData[field.field] = item[valueField];
+    this.dropdownVisible[field.field] = false;
+    this.cdr.detectChanges();
+  }
 
   // Открытие модального окна для создания записи
-  openCreateModal(currentEndpoint: string): void {
+  openCreateModal(currentEndpoint: any): void {
+    console.log('currentEndpoint', currentEndpoint)
     this.modalTitle = 'Создать запись';
     this.modalAction = 'Создать';
     this.modalData = {};
-    this.currentConfig = referenceConfig.find(config => config.endpoint === currentEndpoint);
+    this.currentConfig = this.referenceConfig.find((config: any) => config.endpoint === currentEndpoint);
     if (this.currentConfig) {
       this.formFields = this.currentConfig.formFields;
     }
@@ -151,7 +233,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
       } catch (error) {
         console.error('Ошибка при загрузке данных для связи', error);
-        this.toastService.showError('Ошибка', 'Ошибка при загрузке данных для связи');
+        // this.toastService.showError('Ошибка', 'Ошибка при загрузке данных для связи');
       }
     } else {
       this.modalData = { ...item };
@@ -171,6 +253,23 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   }
 
 
+  // Закрытие всех dropdown
+  closeAllDropdowns() {
+    this.dropdownVisible = {};
+    this.cdr.detectChanges();
+  }
+
+  // Проверка позиции dropdown
+  checkDropdownPosition() {
+    // Реализация проверки позиции (аналогично вашему существующему коду)
+    const dropdownElements = document.querySelectorAll('.dropdown-list');
+    dropdownElements.forEach((element: any) => {
+      const rect = element.getBoundingClientRect();
+      const windowHeight = window.innerHeight;
+      this.dropdownAbove = rect.bottom > windowHeight;
+    });
+  }
+
 
   // Закрытие модального окна
   closeModal(): void {
@@ -181,19 +280,19 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
   // Отправка формы (создание/редактирование)
   onSubmit(endpoint: string): void {
     if (this.modalAction === 'Создать') {
-      const creatorId = localStorage.getItem('VXNlcklk');
+      // const creatorId = localStorage.getItem('VXNlcklk');
 
-      if (creatorId) {
-        Object.assign(this.modalData, { creatorId });
-      } else {
-        this.toastService.showError('Ошибка', 'Не найден creatorId');
-        return;
-      }
+      // if (creatorId) {
+      //   Object.assign(this.modalData, { creatorId });
+      // } else {
+      //   // this.toastService.showError('Ошибка', 'Не найден creatorId');
+      //   return;
+      // }
 
       if (this.currentConfig.connectionReference) {
         const relatedField = this.currentConfig.connectionReference.field;
         if (!this.modalData[relatedField]) {
-          this.toastService.showError('Ошибка', `Не выбрана ${this.currentConfig.connectionReference.label}`);
+          // this.toastService.showError('Ошибка', `Не выбрана ${this.currentConfig.connectionReference.label}`);
           return;
         }
       }
@@ -220,15 +319,6 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
             firstName.charAt(0).toUpperCase() +
             patronymic.charAt(0).toUpperCase();
         }
-      }
-    this.currentConfig = referenceConfig.find(config => config.typeId === this.typeId);
-
-      if (this.currentConfig.pageTitle == 'Водители') {
-        this.modalData.employeeType = 1
-      }
-    
-      if (this.currentConfig.pageTitle == 'Сотрудники') {
-        this.modalData.employeeType = 2
       }
       this.createRecord(this.modalData);
     } else {
@@ -258,7 +348,7 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
       if (this.currentConfig.connectionReference) {
         const relatedField = this.currentConfig.connectionReference.field;
         if (!this.modalData[relatedField]) {
-          this.toastService.showError('Ошибка', `Не выбран элемент для поля ${relatedField}`);
+          // this.toastService.showError('Ошибка', `Не выбран элемент для поля ${relatedField}`);
           return;
         }
       }
@@ -279,15 +369,15 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
     this.referenceBookService.newRecord(newRecord).subscribe(
       (response) => {
         this.data.push(response.data);
-        this.toastService.showSuccess('Успех', 'Запись успешно создана');
-        if (this.currentConfig.pageTitle == 'Пользователи' && response.data) {
+        // this.toastService.showSuccess('Успех', 'Запись успешно создана');
+        if (this.currentConfig.pageTitle == 'Сотрудники' && response.data) {
           this.newUser = response.data;
           this.isModalUserCreateOpen = true;
         }
       },
       (error) => {
         const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-        this.toastService.showError('Ошибка', errorMessage);
+        // this.toastService.showError('Ошибка', errorMessage);
       }
     );
   }
@@ -299,12 +389,12 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
         const index = this.data.findIndex((item) => item.id === id);
         if (index !== -1) {
           this.data[index] = response.data;
-          this.toastService.showSuccess('Успех', 'Запись успешно обновлена');
+          // this.toastService.showSuccess('Успех', 'Запись успешно обновлена');
         }
       },
       (error) => {
         const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-        this.toastService.showError('Ошибка', errorMessage);
+        // this.toastService.showError('Ошибка', errorMessage);
       }
     );
   }
@@ -314,11 +404,11 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
     this.referenceBookService.deleteRecord(id).subscribe(
       () => {
         this.data = this.data.filter((item) => item.id !== id);
-        this.toastService.showSuccess('Успех', 'Запись успешно удалена');
+        // this.toastService.showSuccess('Успех', 'Запись успешно удалена');
       },
       (error) => {
         const errorMessage = error?.error?.Message || 'Произошла неизвестная ошибка';
-        this.toastService.showError('Ошибка', errorMessage);
+        // this.toastService.showError('Ошибка', errorMessage);
       }
     );
   }
@@ -345,18 +435,6 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
 
   dropdownVisible: { [key: string]: boolean } = {};
 
-  toggleDropdown(productId: string) {
-    console.log('Before:', this.dropdownVisible);
-    Object.keys(this.dropdownVisible).forEach(id => {
-      if (id !== productId) this.dropdownVisible[id] = false;
-    });
-
-    this.dropdownVisible[productId] = !this.dropdownVisible[productId];
-    console.log('After:', this.dropdownVisible);
-
-    this.cdr.detectChanges();
-  }
-
 
   // Выбор элемента
   selectReference(item: any): void {
@@ -367,40 +445,12 @@ export class ReferenceBookComponent implements OnInit, OnChanges {
     this.cdr.detectChanges();
   }
 
-  // Ловим клики вне выпадающего списка
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent): void {
-    const dropdownElement = document.querySelector('.dropdown-container');
-    if (dropdownElement && !dropdownElement.contains(event.target as Node)) {
-      this.closeDropdown();
-    }
-  }
-
-  // Получение значения для отображения выбранного элемента
-  getSelectedDisplayValue(): string {
-    if (this.selectedReference) {
-      return this.connectionReferenceColumns.map(column => {
-        return this.getNestedValue(this.selectedReference, column.field);
-      }).join(' - ');
-    }
-    return 'Не выбрано';
-  }
 
 
   @ViewChild('dropdown') dropdown!: ElementRef;
   @ViewChild('dropdownContainer') dropdownContainer!: ElementRef;
   dropdownAbove: boolean = false;
 
-  /** Проверяем, выходит ли список за границы экрана */
-  checkDropdownPosition(): void {
-    if (!this.dropdownContainer || !this.dropdown) return;
-
-    const rect = this.dropdownContainer.nativeElement.getBoundingClientRect();
-    const dropdownHeight = this.dropdown.nativeElement.offsetHeight;
-    const windowHeight = window.innerHeight;
-
-    this.dropdownAbove = rect.bottom + dropdownHeight > windowHeight;
-  }
 
   /** Закрытие выпадающего списка при клике вне */
   @HostListener('document:click', ['$event'])

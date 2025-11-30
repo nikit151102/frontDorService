@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { PersonalAccountComponent } from './personal-account.component';
 import { LoadingComponent } from './tabs/loading/loading.component';
+import { ReferenceComponent } from '../personal-account/components/reference/reference.component'
+import { REFERENCES_CONFIG } from './tabs/configs/references-director-menu.config';
+import { referenceConfig } from './tabs/configs/ReferenceDirectorConf';
 
 const routes: Routes = [
   {
@@ -31,7 +34,10 @@ const routes: Routes = [
         path: 'logistic', loadChildren: () => import('./tabs/logistic/logistic.module').then(m => m.LogisticModule)
       },
       {
-        path: 'director', loadChildren: () => import('./tabs//director/director.module').then(m => m.DirectorModule)
+        path: 'director', loadChildren: () => import('./tabs/principal/principal-routing.module').then(m => m.PrincipalTabRoutingModule)
+      },
+      {
+        path: 'stats', loadChildren: () => import('./tabs/stats/director.module').then(m => m.DirectorModule)
       },
 
     ]

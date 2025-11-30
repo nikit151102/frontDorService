@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -10,22 +10,23 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
+import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
+import { JwtService } from '../../../../../../services/jwt.service';
 import { ToastService } from '../../../../../../services/toast.service';
 import { CustomDropdownComponent } from '../../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
 import { CustomInputNumberComponent } from '../../../../../../ui-kit/custom-input-number/custom-input-number.component';
 import { UnsavedChangesDialogComponent } from '../../../../components/unsaved-changes-dialog/unsaved-changes-dialog.component';
-import { GeneralDocsFormService } from './general-docs-form.service';
-import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
-import { Observable, of, tap, map, catchError, throwError } from 'rxjs';
-import { dateRangeValidator } from './dateValidate';
-import { JwtService } from '../../../../../../services/jwt.service';
-import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
+import { dateRangeValidator } from '../../../logistic/general-docs/general-docs-form/dateValidate';
+import { GeneralDocsFormService } from '../../../logistic/general-docs/general-docs-form/general-docs-form.service';
+import { DriverSalaryService } from '../driver-salary.service';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../../../environment';
 
 @Component({
-  selector: 'app-general-docs-form',
-  imports: [
-    CommonModule,
+  selector: 'app-driver-salary-form',
+  imports: [CommonModule,
     TableModule,
     InputTextModule,
     InputNumberModule,
@@ -38,15 +39,15 @@ import { ConfirmPopupService } from '../../../../../../components/confirm-popup/
     ReactiveFormsModule,
     CustomDropdownComponent,
     CustomInputNumberComponent,
-    UnsavedChangesDialogComponent
-  ],
-  templateUrl: './general-docs-form.component.html',
-  styleUrl: './general-docs-form.component.scss',
+    UnsavedChangesDialogComponent],
+  templateUrl: './driver-salary-form.component.html',
+  styleUrl: './driver-salary-form.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class GeneralDocsFormComponent implements OnInit, OnChanges {
+export class DriverSalaryFormComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() label: string = 'Создать';
+  @Input() employeeType: Number = 1;
   config!: InvoiceConfig;
   service: any;
   selectedInvoice: any;
@@ -55,7 +56,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
   dialogVisible = false;
   newDoc: boolean = true;
   // Mock data
-  vehicleOptions = [];
+  staffsOptions = [];
   driverOptions = [];
   currentRole: any;
 
@@ -81,12 +82,14 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   constructor(
     private generalFormService: GeneralDocsFormService,
+    private driverSalaryService: DriverSalaryService,
     private cdr: ChangeDetectorRef,
     private toastService: ToastService,
     private cacheService: CacheReferenceService,
     private fb: FormBuilder,
     private jwtService: JwtService,
-    private confirmPopupService: ConfirmPopupService
+    private confirmPopupService: ConfirmPopupService,
+    private http: HttpClient
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -107,16 +110,27 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     this.generateYears();
     this.initForm();
     this.currentRole = this.jwtService.getDecodedToken().email;
-    this.generalFormService.getProductsByEndpoint('/api/Entities/ProductTarget/Filter').subscribe((data: any) => {
-      this.vehicleOptions = data;
-    });
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    this.http.post<any[]>(`${environment.apiUrl}/api/Entities/DriverEmployee/Filter`, {
+      filters: [{
+            field: 'EmployeeType',
+            values: [this.employeeType],
+            type: 2
+          }], sorts: []
+    }, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }),
+    }).subscribe(
+      (response: any) => {
+        const data = response.data;
+       this.driverOptions = data;
+      }
+    );
 
-    this.generalFormService.getProductsByEndpoint('/api/Entities/DriverEmployee/Filter').subscribe((data: any) => {
-      this.driverOptions = data.map((driver: any) => ({
-        ...driver,
-        fullName: `${driver.surname} ${driver.name} ${driver.patronymic}`.trim(),
-      }));
-    });
+
+  
   }
   generateYears() {
     const currentYear = new Date().getFullYear();
@@ -166,26 +180,10 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       // Добавьте эти контролы
       selectedMonth: [new Date().getMonth(), Validators.required],
       selectedYear: [new Date().getFullYear(), Validators.required],
-
-      productTargetId: ['', Validators.required],
       dateTime: ['', Validators.required],
-      // workDays: ['', Validators.required],
-      beginOdometer: [0, [Validators.required, Validators.min(0)]],
-      endOdometer: [0, [Validators.required, Validators.min(0)]],
-      odometer: [{ value: 0, disabled: true }],
-      loadedOdometer: [0, [Validators.required, Validators.min(0)]],
-      emptyOdometer: [0, [Validators.required, Validators.min(0)]],
-      grossCash: [0],
-      grossNoNds: [0],
-      grossNds: [0],
-      // driverSalary: [0, [Validators.required, Validators.min(0)]],
-      // officeSalary: [0, [Validators.required, Validators.min(0)]],
-      // fuelBegin: [0],
-      // fuelEnd: [0],
-      fuelCount: [0],
-      fuelCost: [0],
-      fuelTotalCost: [0],
-      // driverEmployeeId: ['', Validators.required]
+      directorType: [2],
+      amount: ['', Validators.required],
+      driverEmployeeId: ['', Validators.required]
     }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
@@ -212,28 +210,28 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       : 0;
 
     // Заполняем форму данными из selectedInvoice
-    this.invoiceForm.patchValue({
-      productTargetId: this.selectedInvoice.productTargetId || '',
-      beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
-      endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
-      // workDays: this.selectedInvoice.workDays ?? 0,
-      beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
-      endOdometer: this.selectedInvoice.endOdometer ?? 0,
-      odometer: odometerValue,
-      loadedOdometer: this.selectedInvoice.loadedOdometer ?? 0,
-      emptyOdometer: this.selectedInvoice.emptyOdometer ?? 0,
-      grossCash: this.selectedInvoice.grossCash ?? 0,
-      grossNoNds: this.selectedInvoice.grossNoNds ?? 0,
-      grossNds: this.selectedInvoice.grossNds ?? 0,
-      // driverSalary: this.selectedInvoice.driverSalary ?? 0,
-      // officeSalary: this.selectedInvoice.officeSalary ?? 0,
-      // fuelBegin: this.selectedInvoice.fuelBegin ?? 0,
-      // fuelEnd: this.selectedInvoice.fuelEnd ?? 0,
-      fuelCount: this.selectedInvoice.fuelCount ?? 0,
-      fuelCost: this.selectedInvoice.fuelCost ?? 0,
-      fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0
-      // driverEmployeeId: this.selectedInvoice.driver || ''
-    });
+    // this.invoiceForm.patchValue({
+    //   productTargetId: this.selectedInvoice.productTargetId || '',
+    //   beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
+    //   endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
+    //   workDays: this.selectedInvoice.workDays ?? 0,
+    //   beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
+    //   endOdometer: this.selectedInvoice.endOdometer ?? 0,
+    //   odometer: odometerValue,
+    //   loadedOdometer: this.selectedInvoice.loadedOdometer ?? 0,
+    //   emptyOdometer: this.selectedInvoice.emptyOdometer ?? 0,
+    //   grossCash: this.selectedInvoice.grossCash ?? 0,
+    //   grossNoNds: this.selectedInvoice.grossNoNds ?? 0,
+    //   grossNds: this.selectedInvoice.grossNds ?? 0,
+    //   // driverSalary: this.selectedInvoice.driverSalary ?? 0,
+    //   // officeSalary: this.selectedInvoice.officeSalary ?? 0,
+    //   fuelBegin: this.selectedInvoice.fuelBegin ?? 0,
+    //   fuelEnd: this.selectedInvoice.fuelEnd ?? 0,
+    //   fuelCount: this.selectedInvoice.fuelCount ?? 0,
+    //   fuelCost: this.selectedInvoice.fuelCost ?? 0,
+    //   fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
+    //   driverEmployeeId: this.selectedInvoice.driver || ''
+    // });
 
     console.log('Form filled with invoice data:', this.selectedInvoice);
   }
@@ -329,13 +327,13 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
 
   private calculateFuelTotal() {
-    // const fuelBegin = this.invoiceForm.get('fuelBegin')?.value || 0;
-    // const fuelEnd = this.invoiceForm.get('fuelEnd')?.value || 0;
+    const fuelBegin = this.invoiceForm.get('fuelBegin')?.value || 0;
+    const fuelEnd = this.invoiceForm.get('fuelEnd')?.value || 0;
     const fuelCount = this.invoiceForm.get('fuelCount')?.value || 0;
     const fuelCost = this.invoiceForm.get('fuelCost')?.value || 0;
 
     // Формула: (Начало + Заправки - Конец) * Цена
-    const total = (fuelCount) * fuelCost;
+    const total = (fuelBegin + fuelCount - fuelEnd) * fuelCost;
 
     // Устанавливаем рассчитанное значение
     this.invoiceForm.get('fuelTotalCost')?.setValue(total, { emitEvent: false });
@@ -343,16 +341,17 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   onVehicleChange(selectedValue: any): void {
     console.log('Выбрано значение:', selectedValue);
-    this.invoiceForm.get('productTargetId')?.setValue(selectedValue);
+    this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
   }
 
-  // onDriverChange(selectedValue: any): void {
-  //   console.log('Выбрано значение:', selectedValue);
-  //   this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
-  // }
+  onDriverChange(selectedValue: any): void {
+    console.log('Выбрано значение:', selectedValue);
+    this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
+  }
 
 
-  saveInvoice(callback?: (invoice: any) => void) {
+  saveData(callback?: (invoice: any) => void) {
+    console.log('this.invoiceForm.value', this.invoiceForm.value)
     if (this.invoiceForm.valid) {
 
       let titlePopUp = '';
@@ -377,7 +376,12 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
           if (this.data && this.data.id) {
             data.id = this.data.id
           }
-          this.generalFormService.savedoc(data).subscribe({
+          delete data.selectedMonth
+          delete data.selectedYear
+          data.directorType = 2;
+          data.status = 7;
+          // data.creatorId = localStorage.getItem('VXNlcklk')
+          this.driverSalaryService.setDriverSalary(data).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
               this.toastService.showSuccess('Успешно', response.documentMetadata.message)
@@ -401,29 +405,6 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
   }
 
-  saveAndSendInvoice() {
-
-    this.saveInvoice((invoice: any) => {
-      let currentRole = this.jwtService.getDecodedToken().email;
-      if (currentRole == '7') {
-        this.sendingInvoice(invoice, 2);
-      } else if (currentRole == '1') {
-        this.sendingInvoice(invoice, 5);
-      }
-    });
-  }
-
-  sendingInvoice(doc: string, status: number) {
-    this.generalFormService.sendingVerification(doc, status).subscribe(
-      (updatedInvoice: any) => {
-
-      },
-      error => {
-        console.error('Ошибка при отправке на проверку:', error);
-        this.toastService.showError('Ошибка', error.error.message);
-      }
-    );
-  }
 
   markAllAsTouched(): void {
     Object.values(this.invoiceForm.controls).forEach(control => {

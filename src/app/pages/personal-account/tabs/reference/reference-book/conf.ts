@@ -2,7 +2,7 @@ export const referenceConfig = [
     {
         typeId: '030521',
         endpoint: 'api/User',
-        pageTitle: 'Сотрудники',
+        pageTitle: 'Пользователи',
         tableColumns: [
             { label: 'Фамилия', field: 'lastName', type: 'string', width: '20%' },
             { label: 'Имя', field: 'firstName', type: 'string', width: '20%' },
@@ -113,6 +113,7 @@ export const referenceConfig = [
         typeId: '193452',
         endpoint: 'api/Entities/DriverEmployee',
         pageTitle: 'Водители',
+        employeeType: 1,
         tableColumns: [
             { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
             { label: 'Имя', field: 'name', type: 'string', width: '49%' },
@@ -125,5 +126,21 @@ export const referenceConfig = [
             { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
         ],
     },
+    {
+        typeId: '193232',
+        endpoint: 'api/Entities/DriverEmployee',
+        pageTitle: 'Сотрудники',
+        employeeType: 2,
+        tableColumns: [
+            { label: 'Фамилия', field: 'surname', type: 'string', width: '49%' },
+            { label: 'Имя', field: 'name', type: 'string', width: '49%' },
+            { label: 'Отчество', field: 'patronymic', type: 'string', width: '49%' },
 
+        ],
+        formFields: [
+            { label: 'Фамилия', field: 'surname', type: 'text', visible: true  },
+            { label: 'Имя', field: 'name', type: 'text', visible: true },
+            { label: 'Отчество', field: 'patronymic', type: 'text', visible: true },
+        ],
+    },
 ];

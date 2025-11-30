@@ -24,6 +24,32 @@
                             </div>
 
                             <div class="p-field p-col-12 p-md-6" style="width: 150px;">
+                                <label for="beginDateTime">Месяц</label>
+                                <select class="modern-select" formControlName="selectedMonth"
+                                    (change)="onMonthYearChange()" name="month">
+                                    <option *ngFor="let month of months" [value]="month.value">
+                                        {{ month.name }}
+                                    </option>
+                                </select>
+                                <small
+                                    *ngIf="invoiceForm.get('beginDateTime')?.touched && invoiceForm.get('beginDateTime')?.invalid"
+                                    class="p-error">Это поле обязательно</small>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6" style="width: 150px;">
+                                <label for="endDateTime">Год</label>
+                                <select class="modern-select" formControlName="selectedYear"
+                                    (change)="onMonthYearChange()" name="year">
+                                    <option *ngFor="let year of years" [value]="year">
+                                        {{ year }}
+                                    </option>
+                                </select>
+                                <small
+                                    *ngIf="invoiceForm.get('endDateTime')?.touched && invoiceForm.get('endDateTime')?.invalid"
+                                    class="p-error">Это поле обязательно</small>
+                            </div>
+
+
+                            <!-- <div class="p-field p-col-12 p-md-6" style="width: 150px;">
                                 <label for="beginDateTime">От</label>
                                 <p-calendar id="beginDateTime" formControlName="beginDateTime" [showTime]="false"
                                     dateFormat="dd.mm.yy"></p-calendar>
@@ -38,16 +64,17 @@
                                 <small
                                     *ngIf="invoiceForm.get('endDateTime')?.touched && invoiceForm.get('endDateTime')?.invalid"
                                     class="p-error">Это поле обязательно</small>
-                            </div>
+                            </div> -->
 
-                            <div class="p-field p-col-12 p-md-4">
+
+                            <!-- <div class="p-field p-col-12 p-md-4">
                                 <label for="workDays">Рабочие дни</label>
                                 <app-custom-input-number formControlName="workDays" [min]="0">
                                 </app-custom-input-number>
                                 <small
                                     *ngIf="invoiceForm.get('workDays')?.touched && invoiceForm.get('workDays')?.invalid"
                                     class="p-error">Некорректное значение</small>
-                            </div>
+                            </div> -->
 
                         </div>
                         <small *ngIf="invoiceForm.errors?.['dateRangeInvalid']" class="p-error" style="display: block;">
@@ -137,7 +164,7 @@
                                     class="p-error">Некорректное значение</small>
                             </div>
 
-                            <div class="p-field p-col-12 p-md-6">
+                            <!-- <div class="p-field p-col-12 p-md-6">
                                 <label for="driverSalary">Зп водителя</label>
                                 <app-custom-input-number formControlName="driverSalary" [min]="0">
                                 </app-custom-input-number>
@@ -153,7 +180,7 @@
                                 <small
                                     *ngIf="invoiceForm.get('officeSalary')?.touched && invoiceForm.get('officeSalary')?.invalid"
                                     class="p-error">Некорректное значение</small>
-                            </div>
+                            </div> -->
                         </div>
 
 
@@ -163,7 +190,7 @@
                         </div>
 
                         <div class="fuel-block">
-                            <div class="p-field p-col-12 p-md-4">
+                            <!-- <div class="p-field p-col-12 p-md-4">
                                 <label for="fuelBegin">Начало</label>
                                 <app-custom-input-number formControlName="fuelBegin" [min]="0">
                                 </app-custom-input-number>
@@ -178,9 +205,9 @@
                                 <small
                                     *ngIf="invoiceForm.get('fuelEnd')?.touched && invoiceForm.get('fuelEnd')?.invalid"
                                     class="p-error">Некорректное значение</small>
-                            </div>
+                            </div> -->
                             <div class="p-field p-col-12 p-md-4">
-                                <label for="fuelCount">Заправки</label>
+                                <label for="fuelCount">Количество, л</label>
                                 <app-custom-input-number formControlName="fuelCount" [min]="0">
                                 </app-custom-input-number>
                                 <small
@@ -188,7 +215,7 @@
                                     class="p-error">Некорректное значение</small>
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label for="fuelCost">Цена</label>
+                                <label for="fuelCost">Цена, руб.</label>
                                 <app-custom-input-number formControlName="fuelCost" [min]="0">
                                 </app-custom-input-number>
                                 <small
@@ -196,7 +223,7 @@
                                     class="p-error">Некорректное значение</small>
                             </div>
                             <div class="p-field p-col-12 p-md-4">
-                                <label for="fuelTotalCost">Сумма</label>
+                                <label for="fuelTotalCost">Сумма, руб.</label>
                                 <app-custom-input-number formControlName="fuelTotalCost" [min]="0" [disabled]="true">
                                 </app-custom-input-number>
                             </div>
@@ -205,7 +232,7 @@
 
                         <!-- Водитель -->
 
-                        <div class="driver-block">
+                        <!-- <div class="driver-block">
 
                             <div class="p-field p-col-12 p-md-6" style="width: 100%;">
                                 <label for="driverId">Водитель</label>
@@ -217,7 +244,7 @@
                                     *ngIf="invoiceForm.get('driverId')?.touched && invoiceForm.get('driverId')?.invalid"
                                     class="p-error">Это поле обязательно</small>
                             </div>
-                        </div>
+                        </div> -->
 
                     </div>
                 </form>

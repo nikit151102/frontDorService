@@ -1,99 +1,3 @@
-h4 {
-    margin: 15px 0 5px 0;
-}
-
-.table-container {
-    // height: calc(100vh - 330px);
-    overflow-y: auto;
-    position: relative;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-thead {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: white;
-}
-
-tfoot {
-    position: sticky;
-    bottom: -5px;
-    z-index: 1;
-    background-color: white;
-}
-
-thead th,
-tfoot td {
-    box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.1);
-}
-
-.filter-row {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    background-color: white;
-}
-
-.header-row {
-    position: sticky;
-    top: 0px;
-    z-index: 10;
-    background-color: white;
-}
-
-.invoice-table {
-    width: 100%;
-    border-collapse: collapse;
-    border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    position: relative;
-}
-
-.invoice-table th {
-    text-align: left;
-    padding: 8px;
-    background-color: #f4f7fa;
-    color: #333;
-    font-weight: 600;
-    border-bottom: 2px solid #ddd;
-}
-
-.invoice-table td {
-    padding: 2px 5px;
-    text-align: left;
-    font-size: 14px;
-    color: #666;
-    border-bottom: 1px solid #eee;
-    background: #fff;
-}
-
-.invoice-table td,
-.invoice-table th {
-    min-height: 38px !important;
-    display: flex;
-    align-items: center;
-}
-
-.invoice-table tr {
-    display: flex;
-    align-items: stretch;
-    min-height: 38px !important;
-}
-
-.invoice-table tr:hover {
-    background-color: #f9f9f9;
-    cursor: pointer;
-}
-
-.invoice-table tr.active {
-    background-color: #e0f7fa;
-}
-
 .actions {
     display: flex;
     gap: 8px;
@@ -123,6 +27,7 @@ tfoot td {
     transition: background-color 0.3s ease, transform 0.2s;
     font-size: 14px;
     font-weight: 500;
+    bottom: 28px;
 }
 
 /* Кнопка "Изменить" */
@@ -332,7 +237,6 @@ tfoot td {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    width: 150px;
 }
 
 .product-table td input,
@@ -429,13 +333,6 @@ tfoot td {
 }
 
 
-:host ::ng-deep .p-dialog {
-    background: #fff !important;
-    color: #101010 !important;
-    max-width: 800px !important;
-    width: 100% !important;
-    height: 80% !important;
-}
 
 :host ::ng-deep .p-inputtext,
 .p-select,
@@ -588,4 +485,14 @@ tfoot td {
     background-color: #fff;
     color: #333;
     transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+
+
+:host ::ng-deep .p-dialog {
+    background: #fff !important;
+    color: #101010 !important;
+    max-width: 800px !important;
+    width: 70% !important;
+    height: 50% !important;
 }

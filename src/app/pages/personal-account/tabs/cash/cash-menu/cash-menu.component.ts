@@ -16,10 +16,10 @@ export class CashMenuComponent implements OnInit {
   selectedName: string = '';
   items: any[] = [
     { name: 'Механик', access: 'MechanicAccess', antonCashType: 0 },
-    { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
-    { name: 'Дима', access: 'DimaAccess', antonCashType: 5 },
-    { name: 'Дима база', access: 'DimaAccess', antonCashType: 2 },
-    { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
+    // { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
+    // { name: 'Дима', access: 'DimaAccess', antonCashType: 5 },
+    // { name: 'Дима база', access: 'DimaAccess', antonCashType: 2 },
+    // { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
     { name: 'Снабженец', access: '', antonCashType: 4 },
   ];
   // items: any[] = [

@@ -224,18 +224,19 @@ this.display = false;
         const prototype = counterpartyData.prototype || counterpartyData;
         this.selectedCounterparty = prototype;
         this.oldPrototype = counterpartyData.prototype ? counterpartyData : null;
+      
         this.counterpartyForm.patchValue({
-          shortName: prototype.shortName,
-          fullName: prototype.fullName,
-          inn: prototype.inn,
-          tax: taxes?.find(tx => tx.value === prototype.tax) || null,
+          shortName: counterpartyData.shortName,
+          fullName: counterpartyData.fullName,
+          inn: counterpartyData.inn,
+          tax: taxes?.find(tx => tx.value === counterpartyData.tax)?.value,
           ogrn: null,
           kpp: null,
           address: null,
-          id: prototype.id,
-          type: this.typeOptions.find(option => option.value === prototype.type)
+          id: counterpartyData.id,
+          type: this.typeOptions.find(option => option.value === counterpartyData.type)
         });
-
+        
         this.toggleFormFields(this.isEdit);
       });
     } else {
@@ -277,12 +278,12 @@ this.display = false;
     }
 
     const formData = this.counterpartyForm.value;
-
+    
     const { type, ...rest } = formData;
-
+console.log('formData',formData)
     const formDataWithValueType = {
       ...rest,
-      tax: formData.tax.value,
+      tax: Number(formData.tax),
       type: type ? type.value : 0
     };
 

@@ -40,10 +40,11 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     { label: 'Контрагенты', commandName: 'clients', access: 'PartnersAccess', notifyKey: 'partnersNotifyData' },
     { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
     { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
-    { label: 'База', commandName: 'base', access: 'ManagerAccess' },
+    // { label: 'База', commandName: 'base', access: 'ManagerAccess' },
     { label: 'Логист', commandName: 'logistic', access: 'LogisticAccess' },
     // LogisticAccess
-    { label: 'Директор', commandName: 'director', access: 'DirectorAccess' },
+    { label: 'Директор', commandName: 'director', access: '' },
+    { label: 'Статистика', commandName: 'stats', access: 'DirectorAccess' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
   ];
@@ -60,7 +61,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   decodedRole: any[] = [];
   notifications: any;
   menuActive: Boolean = false;
-  
+
   private notificationSubscription!: Subscription;
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -70,7 +71,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     private navMenuService: NavMenuService,
     private cacheService: CacheReferenceService,
     private toastService: ToastService,
-    
+
   ) { }
 
 
@@ -96,10 +97,10 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     console.log('notifications', this.notifications)
   }
 
-  toggleMenu(){
+  toggleMenu() {
     this.menuActive = !this.menuActive;
   }
-  
+
   hasAccess(access: string): boolean {
     return !access || this.decodedRole.includes(access);
     // return true

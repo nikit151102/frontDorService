@@ -1,7 +1,3 @@
-h4 {
-    margin: 15px 0 5px 0;
-}
-
 .table-container {
     // height: calc(100vh - 330px);
     overflow-y: auto;
@@ -13,11 +9,109 @@ table {
     border-collapse: collapse;
 }
 
-thead {
+.invoice-table thead {
     position: sticky;
     top: 0;
     z-index: 10;
-    background-color: white;
+    background: #f9f9f9;
+}
+
+/* Основные стили для заголовков */
+.invoice-table th {
+    padding: 12px 16px;
+    font-weight: 500;
+    color: #1a202c;
+    text-align: left;
+    background: #f8fafc;
+    position: relative;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+/* Стиль для групповых заголовков */
+.invoice-table thead tr:first-child th {
+    background: #2d3748;
+    color: #f7fafc;
+    text-align: center;
+    font-weight: 600;
+    padding: 12px 16px;
+    border-bottom: none;
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+.invoice-table thead tr:first-child th:first-child {
+    border-radius: 20px 0 0 0;
+}
+
+.invoice-table thead tr:first-child th:last-child {
+    border-radius: 0 20px 0 0;
+}
+
+/* Разделители между группами */
+.invoice-table thead tr:first-child th {
+    border-right: 1px solid #4a55685e;
+    border-left: 1px solid #4a55685e;
+}
+
+.invoice-table thead tr:first-child th:first-child {
+    border-left: none;
+}
+
+.invoice-table thead tr:first-child th:last-child {
+    border-right: none;
+}
+
+/* Стиль для заголовков колонок */
+.invoice-table thead tr:last-child th {
+    background: #ffffff;
+    border-right: 1px solid #edf2f7;
+    border-top: none;
+    font-weight: 600;
+    color: #4a5568;
+}
+
+/* Визуальное выделение активной колонки */
+.invoice-table th.sort-active {
+    background: #ebf8ff;
+    color: #2b6cb0;
+}
+
+/* Границы для первой/последней колонки в группе */
+.invoice-table thead tr:last-child th:first-child {
+    border-left: 2px solid #e2e8f0;
+}
+
+.invoice-table thead tr:last-child th:last-child {
+    border-right: 2px solid #e2e8f0;
+}
+
+/* Индикатор сортировки (постоянно видимый) */
+.invoice-table th.sort-asc::after,
+.invoice-table th.sort-desc::after {
+    content: '';
+    display: inline-block;
+    margin-left: 8px;
+    width: 0;
+    height: 0;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+}
+
+.invoice-table th.sort-asc::after {
+    border-bottom: 5px solid #4299e1;
+}
+
+.invoice-table th.sort-desc::after {
+    border-top: 5px solid #4299e1;
+}
+
+/* Фильтры всегда видны */
+.invoice-table th .filter-controls {
+    opacity: 1;
+    display: inline-flex;
+    margin-left: 8px;
+    vertical-align: middle;
 }
 
 tfoot {
@@ -64,7 +158,7 @@ tfoot td {
 }
 
 .invoice-table td {
-    padding: 2px 5px;
+    padding: 5px 10px;
     text-align: left;
     font-size: 14px;
     color: #666;
@@ -266,10 +360,6 @@ tfoot td {
 
 
 
-.p-error {
-    color: red;
-}
-
 
 
 
@@ -332,7 +422,6 @@ tfoot td {
     margin-bottom: 15px;
     display: flex;
     flex-direction: column;
-    width: 150px;
 }
 
 .product-table td input,
@@ -432,8 +521,7 @@ tfoot td {
 :host ::ng-deep .p-dialog {
     background: #fff !important;
     color: #101010 !important;
-    max-width: 800px !important;
-    width: 100% !important;
+    width: 80% !important;
     height: 80% !important;
 }
 
@@ -562,30 +650,4 @@ tfoot td {
 
 .context-menu button:hover {
     background: #f0f0f0;
-}
-
-
-
-.dates-block,
-.odometer-block,
-.gross-block,
-.fuel-block,
-.driver-block {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-}
-
-
-.modern-select {
-    width: 100%;
-    padding: 0.5rem;
-    border: 1px solid #bdbdbd;
-    border-radius: 4px;
-    outline: none;
-    text-align: start;
-    font-size: 16px;
-    background-color: #fff;
-    color: #333;
-    transition: background-color 0.3s ease, border-color 0.3s ease;
 }
