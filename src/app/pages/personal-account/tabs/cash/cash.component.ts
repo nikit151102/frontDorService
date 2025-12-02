@@ -10,6 +10,7 @@ import { CashService } from './cash.service';
 import { SupplierComponent } from './supplier/supplier.component';
 import { DimaBaseComponent } from './dimaBase/dima.component';
 import { CashMenuService } from './cash-menu/cash-menu.service';
+import { DriverSalaryComponent } from './driver-salary/driver-salary.component';
 
 enum CashType {
   MECHANIC = 'Механик',
@@ -20,9 +21,10 @@ enum CashType {
   DIMA = 'Дима'
 }
 
+
 @Component({
   selector: 'app-cash',
-  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent, DimaBaseComponent],
+  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent, DimaBaseComponent, DriverSalaryComponent],
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })
@@ -42,6 +44,7 @@ export class CashComponent implements OnInit {
       case 3: return CashType.EGOR;
       case 4: return CashType.SUPPLIER;
       case 5: return CashType.DIMA;
+      case 6: return 'Директор';
       default: return 'Неизвестная вкладка';
     }
   }
@@ -83,8 +86,6 @@ export class CashComponent implements OnInit {
         }
       ];
 
-
-    0
 
 
     this.invoicesService.filterStatic = newFilters;
