@@ -1,7 +1,7 @@
 <button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
-    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" [header]="'Заработная плата водителя'"
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
         (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">

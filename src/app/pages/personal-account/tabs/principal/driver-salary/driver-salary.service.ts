@@ -135,47 +135,62 @@ export class DriverSalaryService {
   }
 
 
-  getData(page: any = null, pageSize: any = null): Observable<any> {
-    const token = localStorage.getItem('YXV0aFRva2Vu');
-    this.queryData.filters = this.queryData.filters || [];
-
-    if (!this.queryData.filters.includes(this.defaultFilters[0])) {
-      this.queryData.filters = [...this.defaultFilters, ...this.queryData.filters];
+ getData(page: any = null, pageSize: any = null): Observable<any> {
+  const token = localStorage.getItem('YXV0aFRva2Vu');
+  
+  // Создаем Map для уникальности по полю field
+  const filterMap = new Map();
+  
+  // Сначала добавляем defaultFilters
+  this.defaultFilters.forEach(filter => {
+    if (filter.field) {
+      filterMap.set(filter.field, filter);
     }
-
-    if (!this.queryData.sorts) {
-      this.queryData.sorts = [];
-    }
-
-    const exists = this.queryData.sorts.some((sort) => sort.field === 'dateTime');
-
-    if (!exists) {
-      this.queryData.sorts.push({ field: 'dateTime', sortType: 1 });
-    }
-
-    console.log('page', page)
-    if (page !== undefined && page !== null) {
-      this.queryData.page = page;
-    }
-
-    if (pageSize !== undefined && pageSize !== null) {
-      this.queryData.pageSize = pageSize;
-    }
-
-    let url
-    if (this.endpointGetData) {
-      url = `${environment.apiUrl}${this.endpointGetData}`;
-    }
-    else {
-      url = `${environment.apiUrl}${this.endpoint}`;
-    }
-    return this.http.post<any>(url, this.queryData, {
-      headers: new HttpHeaders({
-        'Accept': 'application/json',
-        'Authorization': `Bearer ${token}`
-      }),
+  });
+  
+  // Затем добавляем пользовательские фильтры (они перезапишут defaultFilters с такими же полями)
+  if (this.queryData.filters) {
+    this.queryData.filters.forEach(filter => {
+      if (filter.field) {
+        filterMap.set(filter.field, filter);
+      }
     });
   }
+  
+  // Преобразуем обратно в массив
+  this.queryData.filters = Array.from(filterMap.values());
+  
+  // Остальной код без изменений
+  if (!this.queryData.sorts) {
+    this.queryData.sorts = [];
+  }
+
+  const exists = this.queryData.sorts.some((sort) => sort.field === 'dateTime');
+  if (!exists) {
+    this.queryData.sorts.push({ field: 'dateTime', sortType: 1 });
+  }
+
+  if (page !== undefined && page !== null) {
+    this.queryData.page = page;
+  }
+
+  if (pageSize !== undefined && pageSize !== null) {
+    this.queryData.pageSize = pageSize;
+  }
+
+  let url = this.endpointGetData 
+    ? `${environment.apiUrl}${this.endpointGetData}`
+    : `${environment.apiUrl}${this.endpoint}`;
+    
+  console.log('Final filters in getData:', this.queryData.filters);
+    
+  return this.http.post<any>(url, this.queryData, {
+    headers: new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    }),
+  });
+}
 
 
   onFilterChange(filter: FilterDto) {
@@ -275,7 +290,7 @@ export class DriverSalaryService {
 
   setDriverSalary(data: any) {
     const token = localStorage.getItem('YXV0aFRva2Vu');
-    let url = `${environment.apiUrl}${this.endpoint}`;
+    let url = `${environment.apiUrl}/api/CommercialWork/DocInvoice/DocDirector`;
 
 
     return this.http.post<any>(url, {

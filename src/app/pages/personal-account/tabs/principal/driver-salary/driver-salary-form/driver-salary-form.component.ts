@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -48,6 +48,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() label: string = 'Создать';
   @Input() employeeType: Number = 0;
+   @Output() create = new EventEmitter<any>();
   config!: InvoiceConfig;
   service: any;
   selectedInvoice: any;
@@ -180,12 +181,12 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   initForm(): void {
     this.invoiceForm = this.fb.group({
       // Добавьте эти контролы
-      selectedMonth: [new Date().getMonth(), Validators.required],
-      selectedYear: [new Date().getFullYear(), Validators.required],
+      selectedMonth: [new Date().getMonth()],
+      selectedYear: [new Date().getFullYear()],
       dateTime: ['', Validators.required],
       directorType: [2],
-      amount: ['', Validators.required],
-      driverEmployeeId: ['', Validators.required]
+      amount: [''],
+      driverEmployeeId: ['']
     }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
@@ -381,14 +382,14 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
           }
           delete data.selectedMonth
           delete data.selectedYear
-          data.directorType = 2;
-          data.status = 7;
+          data.directorType = this.employeeType;
           // data.creatorId = localStorage.getItem('VXNlcklk')
           this.driverSalaryService.setDriverSalary(data).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
               this.toastService.showSuccess('Успешно', response.documentMetadata.message)
               this.dialogVisible = false;
+              this.create.emit(response); 
               if (callback && response.documentMetadata.data) {
                 callback(response.documentMetadata.data);
               }

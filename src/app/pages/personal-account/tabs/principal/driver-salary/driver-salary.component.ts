@@ -19,6 +19,7 @@ import { DriverSalaryService } from './driver-salary.service';
 import { DriverSalaryFormService } from './driver-salary-form/driver-salary-form.service';
 import { DriverSalaryFormComponent } from './driver-salary-form/driver-salary-form.component';
 import { CONFIGS } from './config';
+import { take } from 'rxjs';
 
 @Component({
   selector: 'app-driver-salary',
@@ -110,14 +111,20 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     private generalFormService: DriverSalaryFormService,
     private router: Router,
     private route: ActivatedRoute,
-    public formatingDataService: FormatingDataService) { }
+    public formatingDataService: FormatingDataService) {
+    this.driverSalaryService.defaultFilters = [];
+  }
 
   ngOnInit() {
-    this.route.url.subscribe(segments => {
+    // Очищаем фильтры перед подпиской
+    this.driverSalaryService.defaultFilters = [];
+    this.driverSalaryService.queryData.filters = [];
+    // Используем take(1) чтобы выполнить только один раз
+    this.route.url.pipe(take(1)).subscribe(segments => {
       console.log('URL segments:', segments);
 
       if (segments.length > 0) {
-        const configCode = segments[0].path; 
+        const configCode = segments[0].path;
         console.log('configCode from segments:', configCode);
 
         this.currentConfig = CONFIGS.find(config => config.code === configCode);
@@ -127,44 +134,37 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
           this.columns = this.currentConfig.columnsDocs;
           this.totalInfoColumn = this.currentConfig.totalInfoColumn;
 
-          const fieldsToClean = ['DocPaymentType', 'AntonCashType', 'Director2Type'];
-          const hasOurFilters = this.driverSalaryService.defaultFilters.some(
-            (filter: any) => fieldsToClean.includes(filter.field)
-          );
+          console.log('this.currentConfig.employeeType', this.currentConfig.employeeType);
 
-          if (!hasOurFilters) {
-            const otherFilters = this.driverSalaryService.defaultFilters
-              .filter((filter: any) => !fieldsToClean.includes(filter.field));
+          this.driverSalaryService.defaultFilters = [];
 
-            console.log('this.currentConfig.employeeType',this.currentConfig.employeeType)
-            const newFilters = [
-              { field: 'DocPaymentType', values: [4], type: 1 },
-              { field: 'antonCashType', values: [6], type: 1 },
-              {
-                field: 'Director2Type',
-                values: [
-                  configCode === '349246' ? 1 :
-                    configCode === '349143' ? 2 : 3
-                ],
-                type: 1
-              }
-            ];
+          // Полностью заменяем фильтры (не добавляем, а заменяем)
+          this.driverSalaryService.defaultFilters = [
+            { field: 'DocPaymentType', values: [4], type: 1 },
+            { field: 'antonCashType', values: [6], type: 1 },
+            {
+              field: 'Director2Type',
+              values: [
+                this.currentConfig.employeeType
+              ],
+              type: 1
+            }
+          ];
 
-            this.driverSalaryService.defaultFilters = [...otherFilters, ...newFilters];
-          }
-
-
+          console.log('Filters after update:', this.driverSalaryService.defaultFilters);
         }
       }
     });
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
-
-    this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
-
+    this.currentRole = this.jwtService.getDecodedToken().email;
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
+    this.loadData(true);
+  }
+
+  onCreate(eventData: any) {
     this.loadData(true);
   }
 
@@ -336,7 +336,9 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
           const transformed = {
             ...invoice,
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
-            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
+            incomeSum: invoice.incomeSum?.toString().replace('.', ','),
+            year: new Date(invoice.dateTime).getFullYear(),
+            month: new Date(invoice.dateTime).getMonth() + 1
           };
 
           return transformed;
@@ -532,6 +534,11 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     if (!target.closest('.context-menu') && !target.closest('.dropdown')) {
       this.closeAllMenus();
     }
+  }
+
+  ngOnDestroy() {
+    // Очищаем фильтры при уничтожении компонента
+    this.driverSalaryService.defaultFilters = [];
   }
 
 }

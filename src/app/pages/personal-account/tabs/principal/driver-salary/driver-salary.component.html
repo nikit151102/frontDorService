@@ -1,7 +1,6 @@
 <div style=" display: flex; gap: 10px;">
-
-  <app-driver-salary-form [data]="selectData" [employeeType]="currentConfig.employeeType"></app-driver-salary-form>
-
+  <app-driver-salary-form [data]="selectData" [employeeType]="currentConfig.employeeType"
+    (create)="onCreate($event)"></app-driver-salary-form>
 </div>
 
 
@@ -13,7 +12,8 @@
         <tr class="header-row">
           <ng-container *ngFor="let col of columns">
             <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
-              <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; width: 100%;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; width: 100%;">
                 {{ col.header }}
 
                 <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
