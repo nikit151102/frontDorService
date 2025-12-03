@@ -48,7 +48,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() label: string = 'Создать';
   @Input() employeeType: Number = 0;
-   @Output() create = new EventEmitter<any>();
+  @Output() create = new EventEmitter<any>();
   config!: InvoiceConfig;
   service: any;
   selectedInvoice: any;
@@ -59,6 +59,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   // Mock data
   staffsOptions = [];
   driverOptions = [];
+  ProductTargetOptions = [];
   currentRole: any;
 
   selectedMonth: number = new Date().getMonth();
@@ -110,15 +111,15 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   ngOnInit(): void {
     this.generateYears();
     this.initForm();
-     console.log('employeeType before request:', this.employeeType);
+    console.log('employeeType before request:', this.employeeType);
     this.currentRole = this.jwtService.getDecodedToken().email;
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/DriverEmployee/Filter`, {
       filters: [{
-            field: 'EmployeeType',
-            values: [this.employeeType],
-            type: 2
-          }], sorts: []
+        field: 'EmployeeType',
+        values: [this.employeeType],
+        type: 2
+      }], sorts: []
     }, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
@@ -126,13 +127,29 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       }),
     }).subscribe(
       (response: any) => {
-        console.log('employeeType',this.employeeType)
+        console.log('employeeType', this.employeeType)
         const data = response.data;
-       this.driverOptions = data;
+        this.driverOptions = data;
       }
     );
 
-
+    this.http.post<any[]>(`${environment.apiUrl}/api/Entities/ProductTarget/Filter`, {
+      filters: [{
+        field: 'ProductTargetCategory.Code',
+        values: [1],
+        type: 2
+      }], sorts: []
+    }, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }),
+    }).subscribe(
+      (response: any) => {
+        const data = response.data;
+        this.ProductTargetOptions = data;
+      }
+    );
   
   }
   generateYears() {
@@ -186,7 +203,8 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       dateTime: ['', Validators.required],
       directorType: [2],
       amount: [''],
-      driverEmployeeId: ['']
+      driverEmployeeId: [''],
+      productTargetId: ['']
     }, { validators: dateRangeValidator() });
 
     // Подписка на изменения для вычисляемых полей
@@ -347,6 +365,12 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
   }
 
+
+  onProductTargetChange(selectedValue: any): void {
+    this.invoiceForm.get('productTargetId')?.setValue(selectedValue);
+  }
+
+
   onDriverChange(selectedValue: any): void {
     console.log('Выбрано значение:', selectedValue);
     this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
@@ -368,7 +392,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         acceptLabel = 'Создать';
       }
 
-      
+
       this.confirmPopupService.openConfirmDialog({
         title: '',
         message: titlePopUp,
@@ -383,13 +407,17 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
           delete data.selectedMonth
           delete data.selectedYear
           data.directorType = this.employeeType;
+
+          if(this.employeeType == 2){
+             delete data.productTargetId;
+          }
           // data.creatorId = localStorage.getItem('VXNlcklk')
           this.driverSalaryService.setDriverSalary(data).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
               this.toastService.showSuccess('Успешно', response.documentMetadata.message)
               this.dialogVisible = false;
-              this.create.emit(response); 
+              this.create.emit(response);
               if (callback && response.documentMetadata.data) {
                 callback(response.documentMetadata.data);
               }
@@ -439,7 +467,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.newDoc = true;
-    
+
     this.selectedInvoice = {};
     this.data = null;
     this.invoiceForm.reset();

@@ -69,7 +69,6 @@ export const columns = [
         visible: true,
         width: '13%'
     },
-    
     {
         header: 'Итоги',
         columns: [

@@ -20,6 +20,8 @@ import { DriverSalaryFormService } from './driver-salary-form/driver-salary-form
 import { DriverSalaryFormComponent } from './driver-salary-form/driver-salary-form.component';
 import { CONFIGS } from './config';
 import { take } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { environment } from '../../../../../../environment';
 
 @Component({
   selector: 'app-driver-salary',
@@ -111,7 +113,8 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     private generalFormService: DriverSalaryFormService,
     private router: Router,
     private route: ActivatedRoute,
-    public formatingDataService: FormatingDataService) {
+    public formatingDataService: FormatingDataService,
+    private http: HttpClient) {
     this.driverSalaryService.defaultFilters = [];
   }
 
@@ -332,13 +335,19 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
       this.driverSalaryService.pageSize
     ).subscribe(
       (response) => {
+        const monthNames = [
+          'Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь',
+          'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'
+        ];
+
         const mapInvoice = (invoice: any) => {
+          const monthIndex = new Date(invoice.dateTime).getMonth();
           const transformed = {
             ...invoice,
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ','),
             year: new Date(invoice.dateTime).getFullYear(),
-            month: new Date(invoice.dateTime).getMonth() + 1
+            month: monthNames[monthIndex]
           };
 
           return transformed;
@@ -373,6 +382,29 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
       }
     );
   }
+
+deleteItem(id: string) {
+  const token = localStorage.getItem('YXV0aFRva2Vu');
+
+  this.http.delete(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+    headers: new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${token}`
+    })
+  }).subscribe(
+    (response: any) => {
+      const index = this.invoices.findIndex((item: any) => item.id === id);
+      if (index !== -1) {
+        this.invoices.splice(index, 1);
+      }
+      this.invoices = [...this.invoices];
+    },
+    (error) => {
+      console.error('Ошибка при удалении:', error);
+    }
+  );
+}
+
 
   onScroll(event: any) {
     const element = event.target;

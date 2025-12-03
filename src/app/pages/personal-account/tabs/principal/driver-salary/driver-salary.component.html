@@ -44,6 +44,11 @@
 
             </th>
           </ng-container>
+
+
+          <ng-container *ngIf="currentRole == 1">
+            <th>Действия</th>
+          </ng-container>
         </tr>
       </thead>
       <tbody>
@@ -97,7 +102,16 @@
                 </div>
               </td>
             </ng-container>
+
+          
+
           </ng-container>
+            <ng-container *ngIf="currentRole == 1">
+              <td>
+                 <button class="btn btn-details" style="color: #101010;"
+                    (click)="deleteItem(product.id)">Удалить</button>
+              </td>
+            </ng-container>
         </tr>
       </tbody>
       <tfoot>
