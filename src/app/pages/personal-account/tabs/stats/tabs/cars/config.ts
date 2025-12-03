@@ -56,11 +56,20 @@ export const columns = [
     {
         header: 'Зарплаты',
         columns: [
+            { field: 'officeSalary', fieldView: 'officeSalary', header: 'З/П офис', type: 'number', visible: true, width: '13%' }
+        ],
+        visible: true,
+        width: '13%'
+    },    
+    {
+        header: 'Зарплаты',
+        columns: [
             { field: 'driverSalary', fieldView: 'driverSalary', header: 'З/П водителя', type: 'number', visible: true, width: '13%' }
         ],
         visible: true,
         width: '13%'
     },
+    
     {
         header: 'Итоги',
         columns: [
@@ -91,6 +100,7 @@ export const viewDataColumns = [
     { field: 'repairNoNdsExpense', fieldView: 'repairNoNdsExpense', header: 'Без НДС', type: 'number', visible: true, width: '5%' },
     { field: 'fuelExpense', fieldView: 'fuelExpense', header: 'Топливо', type: 'number', visible: true, width: '12%' },
     { field: 'garageExpense', fieldView: 'garageExpense', header: 'Гараж', type: 'number', visible: true, width: '12%', isFilter: false },
+    { field: 'officeSalary', fieldView: 'officeSalary', header: 'Офис', type: 'number', visible: true, width: '13%' },
     { field: 'driverSalary', fieldView: 'driverSalary', header: 'Водителя', type: 'number', visible: true, width: '13%' },
     { field: 'summary', fieldView: 'summary', header: 'Итого', type: 'number', visible: true, width: '12%' }
 ];

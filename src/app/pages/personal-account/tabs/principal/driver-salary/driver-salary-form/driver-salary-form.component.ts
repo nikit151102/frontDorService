@@ -439,6 +439,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
 
   createNewInvoice(): void {
     this.newDoc = true;
+    
     this.selectedInvoice = {};
     this.data = null;
     this.invoiceForm.reset();

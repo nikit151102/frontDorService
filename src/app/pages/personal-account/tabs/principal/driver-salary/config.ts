@@ -1,26 +1,23 @@
-
-
 export const columnsDocs = [
     { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
     { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
-        { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
+        { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Сотрудник', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
 ];
 
 export const columnsEmployee = [
     { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
     { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
-    { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Сотрудник', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
-
 ];
 
 export const columnsTax = [
     { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '30%' },
     { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '30%' },
     { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '30%' },
-
 ];
+
 export const employeeType = 1
 
 export interface ButtonConfig {
