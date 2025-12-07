@@ -6,18 +6,6 @@ const routes: Routes = [
   {
     path: '',
     component: DirectorComponent,
-    children: [
-      {
-        path: '',
-        redirectTo: 'cars',
-        pathMatch: 'full'
-      },
-      
-    {
-      path: 'cars', 
-      loadChildren: () => import('./tabs/cars/cars.module').then(m => m.CarsModule), 
-    }
-    ]
   }
 ];
 

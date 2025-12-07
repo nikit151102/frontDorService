@@ -11,7 +11,7 @@
 
   </ng-container>
 
-  <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 ">
+  <ng-container *ngIf="counterpartyId != '00000000-0000-0000-0000-000000000000' && this.currentRole == 1 || 7 ">
     <button (click)="openPaymentModal()" class="modern-pay-button">
       <span class="button-text">Оплатить</span>
       <span class="button-icon">

@@ -40,6 +40,32 @@ export class CarsService {
   private dataSubject = new BehaviorSubject<any>(null);
   activData$ = this.dataSubject.asObservable();
 
+    private periodSubject = new BehaviorSubject<{startDate: string, endDate: string} | null>(null);
+  period$ = this.periodSubject.asObservable();
+
+  setPeriod(startDate: string, endDate: string) {
+    this.periodSubject.next({ startDate, endDate });
+    this.updateDateTimeFilter(startDate, endDate);
+  }
+
+  updateDateTimeFilter(startDate: string, endDate: string) {
+    if (!this.queryData.filters) {
+      this.queryData.filters = [];
+    }
+    
+    const dateTimeFilter = this.queryData.filters.find(f => f.field === 'dateTime');
+    
+    if (dateTimeFilter) {
+      dateTimeFilter.values = [startDate, endDate];
+    } else {
+      this.queryData.filters.push({
+        field: 'dateTime',
+        values: [startDate, endDate],
+        type: 2
+      });
+    }
+  }
+  
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }

@@ -18,13 +18,12 @@ export class ReferenceComponent {
     { id: '495142', label: 'Назначение товара', command: () => this.executeReference('495142') },
     { id: '924684', label: 'Категории назначений товаров', command: () => this.executeReference('924684') },
     { id: '915825', label: 'Единицы измерения', command: () => this.executeReference('161283') },
-    { id: '925812', label: 'Склады', command: () => this.executeReference('925812') },
-    { id: '103825', label: 'Грузы', command: () => this.executeReference('103825') },
-    { id: '174208', label: 'Карьеры', command: () => this.executeReference('174208') },
-    { id: '592034', label: 'Хранилище', command: () => this.executeReference('592034') },
+    // { id: '925812', label: 'Склады', command: () => this.executeReference('925812') },
+    // { id: '103825', label: 'Грузы', command: () => this.executeReference('103825') },
+    // { id: '174208', label: 'Карьеры', command: () => this.executeReference('174208') },
+    // { id: '592034', label: 'Хранилище', command: () => this.executeReference('592034') },
     { id: '193452', label: 'Водиители', command: () => this.executeReference('193452') },
-     { id: '193232', label: 'Сотрудники', command: () => this.executeReference('193232') },
-
+    { id: '193232', label: 'Сотрудники', command: () => this.executeReference('193232') },
   ];
 
   selectedId!: string;

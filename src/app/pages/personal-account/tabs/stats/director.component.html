@@ -1,7 +1,7 @@
 <div class="container">
-    <app-menu (selectTab)="onSelectTab($event)"></app-menu>
+    <app-menu (selectTab)="onSelectTab($event)"  (periodChanged)="onPeriodChanged($event)"></app-menu>
 
     <div class="content" [style.width]="contentWidth">
-        <router-outlet></router-outlet>
+        <app-cars></app-cars>
     </div>
 </div>

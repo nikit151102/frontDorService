@@ -80,7 +80,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             status: 3,
             condition: (product, idCurrentUser) => product.status === 1 || product.status === 4,
         },
-         {
+        {
             label: 'Изменить',
             action: 'getInvoiceById',
             class: 'btn-edit',
@@ -115,7 +115,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             isEditData: false,
             condition: (product, idCurrentUser) => product.status !== 0 && product.status !== 3,
         },
-         {
+        {
             label: 'Изменить',
             action: 'getInvoiceById',
             class: 'btn-edit',
@@ -150,7 +150,7 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             isEditData: false,
             condition: (product, idCurrentUser) => product.status !== 0 && product.status !== 3,
         },
-         {
+        {
             label: 'Изменить',
             action: 'getInvoiceById',
             class: 'btn-edit',
@@ -244,6 +244,59 @@ export const BUTTON_SETS: Record<string, ButtonConfig[]> = {
             messagePopUp: 'Вы уверены, что хотите изменить счет?',
             status: 5,
             condition: (product, idCurrentUser) => product.docAccountType != 0,
+        },
+        {
+            label: 'Создать фактуру',
+            action: 'createInvoiceFromAccount',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите создать счет?',
+            condition: (product, idCurrentUser) => (product.docAccountType == 1 || product.docAccountType == 2) && product.docAccountType != 0 && product.status == 5 && product.draft == null,
+            // && product.creatorId == idCurrentUser
+        }
+
+    ],
+    director2: [
+        {
+            label: 'Подробнее',
+            action: 'getInvoiceById',
+            class: 'btn-details',
+            isEditData: false,
+            condition: (product, idCurrentUser) => product.status && (product.docAccountType == 0),
+        },
+        {
+            label: 'Подробнее',
+            action: 'getInvoiceById',
+            class: 'btn-details',
+            isEditData: false,
+            condition: (product, idCurrentUser) => product.status && (product.docAccountType == 1 || product.docAccountType == 2),
+        },
+        {
+            label: 'Подписать',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение подписи',
+            messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
+            status: 5,
+            condition: (product, idCurrentUser) => product.status === 0
+        },
+        {
+            label: 'Подписать',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение подписи',
+            messagePopUp: 'Вы уверены, что хотите подписать фактуру?',
+            status: 5,
+            condition: (product, idCurrentUser) => product.status === 2,
+        },
+        {
+            label: 'Отклонить',
+            action: 'verificationInvoice',
+            class: 'btn-send',
+            titlePopUp: 'Подтверждение отклонения',
+            messagePopUp: 'Вы уверены, что хотите отклонить фактуру?',
+            status: 4,
+            condition: (product, idCurrentUser) => product.status === 2,
         },
         {
             label: 'Создать фактуру',

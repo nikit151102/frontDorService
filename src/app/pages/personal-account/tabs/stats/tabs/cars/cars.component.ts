@@ -37,8 +37,8 @@ export class CarsComponent implements OnInit {
   @Input() selectedComponent: string = '';
 
   constructor(private invoicesService: InvoicesService,
-    public productsServ: CarsService, 
-    public formatingDataService:FormatingDataService
+    public productsServ: CarsService,
+    public formatingDataService: FormatingDataService
   ) { }
 
   // Функция для проверки видимости группы
@@ -130,9 +130,30 @@ export class CarsComponent implements OnInit {
   ngOnInit() {
     this.productsServ.endpoint = this.endpoint;
     this.productsServ.products = [];
+    this.productsServ.period$.subscribe(period => {
+      if (period) {
+        this.loadProducts(true);
+      }
+    });
+
+    if (!this.productsServ.queryData.filters) {
+      this.productsServ.queryData.filters = [];
+    }
+
+    this.productsServ.defaultFilters.forEach(filter => {
+      const exists = this.productsServ.queryData.filters?.some(f =>
+        f.field === filter.field
+      );
+      if (!exists) {
+        if (!this.productsServ.queryData.filters) {
+          this.productsServ.queryData.filters = [];
+        }
+        this.productsServ.queryData.filters.push(filter);
+      }
+    });
+
     this.loadProducts()
     this.selectedColumns = this.columns.map((col: any) => col.field);
-    console.log('this.columns', this.columns)
     this.updateColumnVisibility();
 
   }
@@ -142,7 +163,6 @@ export class CarsComponent implements OnInit {
       col.visible = this.selectedColumns.includes(col.field);
     });
   }
-
 
 
   getTotalValue(columnIndex: number): string | null {
@@ -234,8 +254,6 @@ export class CarsComponent implements OnInit {
     }
   }
 
-
-
   dropdownVisible: { [key: string]: boolean } = {};
 
   toggleDropdown(productId: string) {
@@ -245,8 +263,5 @@ export class CarsComponent implements OnInit {
 
     this.dropdownVisible[productId] = !this.dropdownVisible[productId];
   }
-
-
-  verificationInvoice(id: string, status: number) { }
 
 }

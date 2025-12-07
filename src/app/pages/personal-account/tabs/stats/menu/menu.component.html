@@ -1,5 +1,5 @@
 <div style="position: relative; min-width: 60px;">
-    <button class="toggle-visibility-btn" (click)="toggleVisibility()" [ngClass]="{'checked': !isVisible}">
+    <!-- <button class="toggle-visibility-btn" (click)="toggleVisibility()" [ngClass]="{'checked': !isVisible}">
         <span class="custom-arrow" [class.rotated]="!isVisible"></span>
     </button>
     <div class="counterparties-list" *ngIf="isVisible">
@@ -15,5 +15,75 @@
                 </div>
             </li>
         </ul>
+    </div> -->
+
+
+     <div class="period-selector">
+              <!-- Информация о выбранном периоде -->
+      <div class="period-info" *ngIf="currentPeriod">
+        <h4>Выбранный период:</h4>
+        <p>Тип: {{ getPeriodTypeLabel() }}</p>
+        <p>Даты: {{ currentPeriod.startDate | date:'dd.MM.yyyy' }} - {{ currentPeriod.endDate | date:'dd.MM.yyyy' }}</p>
+      </div>
+      <!-- Выбор года -->
+      <div class="form-group">
+        <label for="yearSelect">Год:</label>
+        <select 
+          id="yearSelect" 
+          [(ngModel)]="selectedYear" 
+          (ngModelChange)="onYearChange()"
+          class="form-control"
+        >
+          <option *ngFor="let year of years" [value]="year">
+            {{ year }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Выбор типа периода -->
+      <div class="form-group">
+        <label for="periodType">Тип периода:</label>
+        <select 
+          id="periodType" 
+          [(ngModel)]="selectedPeriodType" 
+          (ngModelChange)="onPeriodTypeChange()"
+          class="form-control"
+        >
+          <option value="year">Год</option>
+          <option value="quarter">Квартал</option>
+          <option value="month">Месяц</option>
+        </select>
+      </div>
+
+      <!-- Выбор квартала (если выбран тип "quarter") -->
+      <div class="form-group" *ngIf="selectedPeriodType === 'quarter'">
+        <label for="quarterSelect">Квартал:</label>
+        <select 
+          id="quarterSelect" 
+          [(ngModel)]="selectedQuarter" 
+          (ngModelChange)="onQuarterChange()"
+          class="form-control"
+        >
+          <option *ngFor="let quarter of quarters" [value]="quarter.value">
+            {{ quarter.label }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Выбор месяца (если выбран тип "month") -->
+      <div class="form-group" *ngIf="selectedPeriodType === 'month'">
+        <label for="monthSelect">Месяц:</label>
+        <select 
+          id="monthSelect" 
+          [(ngModel)]="selectedMonth" 
+          (ngModelChange)="onMonthChange()"
+          class="form-control"
+        >
+          <option *ngFor="let month of months" [value]="month.value">
+            {{ month.label }}
+          </option>
+        </select>
+      </div>
+
     </div>
 </div>

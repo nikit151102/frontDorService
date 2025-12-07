@@ -71,7 +71,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
 
 
 
-    console.log('this.jwtService.getDecodedToken()',this.jwtService.getDecodedToken().email)
+    console.log('this.jwtService.getDecodedToken()', this.jwtService.getDecodedToken().email)
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -124,6 +124,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
     { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '15%' },
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '15%' },
     { field: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '15%' },
+    { field: 'signerName', header: 'Подписант', type: 'string', visible: true, width: '15%' },
     { field: 'actions', header: '', type: 'actions', visible: true, width: '' },
   ];
 

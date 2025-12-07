@@ -1,8 +1,7 @@
 <button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button>
 
 <ng-container *ngIf="selectedInvoice">
-    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true"
-        (onHide)="onDialogClose()">
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" (onHide)="onDialogClose()">
         <div class="form-container">
             <div class="p-fluid p-formgrid p-grid">
 
@@ -57,13 +56,15 @@
                                 class="p-error">Это поле обязательно</small>
                         </div>
                         <div class="p-field p-col-12 p-md-6">
-                            <label for="endDateTime">Год</label>
-                            <select class="modern-select" formControlName="selectedYear" (change)="onMonthYearChange()"
+                            <label for="endDateTime">Дата</label>
+                            <input type="date" formControlName="selectedYear" (click)="showDatePickerWithMonth($event)"
+                                (focus)="showDatePickerWithMonth($event)" (change)="onMonthYearChange()" #dateInput>
+                            <!-- <select class="modern-select" formControlName="selectedYear" (change)="onMonthYearChange()"
                                 name="year">
                                 <option *ngFor="let year of years" [value]="year">
                                     {{ year }}
                                 </option>
-                            </select>
+                            </select> -->
                             <small
                                 *ngIf="invoiceForm.get('endDateTime')?.touched && invoiceForm.get('endDateTime')?.invalid"
                                 class="p-error">Это поле обязательно</small>

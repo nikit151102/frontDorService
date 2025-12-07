@@ -93,36 +93,50 @@ export class DriverSalaryComponent implements OnInit {
     this.driverSalaryService.defaultFilters = [];
     this.driverSalaryService.queryData.filters = [];
     // Используем take(1) чтобы выполнить только один раз
- 
-          this.endpoint = '/api/CommercialWork/DocInvoice/DocDirector/Filter';
-          this.driverSalaryService.endpoint = '/api/CommercialWork/DocInvoice/DocDirector/Filter';
-          this.columns = [
-    { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
-    { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
-        { field: 'Number', fieldView: 'number', header: 'Документ', type: 'string', visible: true, width: '25%' },
-        { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
-];
-          this.totalInfoColumn = [
-            { columnNum: 0, value: 'totalCount' },
-        ];
 
-      
-          this.driverSalaryService.defaultFilters = [];
+    this.endpoint = '/api/CommercialWork/DocInvoice/DocDirector/Filter';
+    this.driverSalaryService.endpoint = '/api/CommercialWork/DocInvoice/DocDirector/Filter';
+    this.columns =
+      // [
+      //   { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
+      //   { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
+      //   { field: 'Number', fieldView: 'number', header: 'Документ', type: 'string', visible: true, width: '25%' },
+      //   { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
+      //   { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
+      // ];
+      [
+        { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
+        { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
+        { field: 'name', header: 'Наименование', type: 'string', visible: true, width: '15%', isFilter: false },
+        { field: 'manufacturer', fieldView: 'manufacturer', header: 'Поставщик', type: 'string', visible: true, width: '15%', isFilter: false },
+        { field: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
+        { field: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
+        { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
+        { field: 'actions', header: '', type: 'actions', visible: false, width: '' },
+      ];
 
-          // Полностью заменяем фильтры (не добавляем, а заменяем)
-          this.driverSalaryService.defaultFilters = [
-            { field: 'DocPaymentType', values: [4], type: 1 },
-            { field: 'antonCashType', values: [6], type: 1 },
-            {
-              field: 'Director2Type',
-              values: [
-                1,2,3
-              ],
-              type: 1
-            }
-          ];
-      
+
+
+    this.totalInfoColumn = [
+      { columnNum: 0, value: 'totalCount' },
+    ];
+
+
+    this.driverSalaryService.defaultFilters = [];
+
+    // Полностью заменяем фильтры (не добавляем, а заменяем)
+    this.driverSalaryService.defaultFilters = [
+      { field: 'DocPaymentType', values: [4], type: 1 },
+      { field: 'antonCashType', values: [6], type: 1 },
+      {
+        field: 'Director2Type',
+        values: [
+          1, 2, 3
+        ],
+        type: 1
+      }
+    ];
+
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);

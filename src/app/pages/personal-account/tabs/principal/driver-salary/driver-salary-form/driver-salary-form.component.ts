@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -160,6 +160,50 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     }
   }
 
+@ViewChild('dateInput') dateInput!: ElementRef;
+
+showDatePickerWithMonth(event: Event) {
+  event.preventDefault();
+  const input = event.target as HTMLInputElement;
+  const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+  const currentYear = new Date().getFullYear();
+  
+  if (selectedMonth) {
+    const defaultDate = new Date(currentYear, selectedMonth, 15);
+    const dateString = defaultDate.toISOString().split('T')[0];
+
+    input.value = dateString;
+    
+    setTimeout(() => {
+      if ('showPicker' in HTMLInputElement.prototype) {
+        input.showPicker();
+      } else {
+        input.focus();
+        input.click();
+      }
+      setTimeout(() => {
+        if (!this.invoiceForm.get('selectedYear')?.value) {
+          input.value = '';
+        }
+      }, 100);
+    }, 10);
+  } else {
+    this.showDatePicker(event);
+  }
+}
+
+showDatePicker(event: Event) {
+  const input = event.target as HTMLInputElement;
+  setTimeout(() => {
+    if ('showPicker' in HTMLInputElement.prototype) {
+      input.showPicker();
+    } else {
+      input.focus();
+      input.click();
+    }
+  }, 0);
+}
+
   updateDateTime() {
     // Получаем значения из формы
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
@@ -178,7 +222,11 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   }
 
   onMonthYearChange() {
-    this.updateDateTime();
+    // this.updateDateTime();
+    const DateTime = this.invoiceForm.get('selectedYear')?.value;
+       this.invoiceForm.patchValue({
+      dateTime: DateTime
+    });
   }
 
 
