@@ -3,22 +3,22 @@ export const columnsDocs = [
     // { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
     { field: 'DateTime', fieldView: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '30%' },
     { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'productTarget.Name', header: 'Сотрудник', type: 'uuid', visible: true, width: '30%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '30%' },
+    { field: 'Amount', fieldView: 'expenseSum', header: 'Сумма', type: 'number', visible: true, width: '30%' },
 ];
 
 export const columnsEmployee = [
     // { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
     // { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
     { field: 'DateTime', fieldView: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '25%' },
-    { field: 'productTargetName', fieldView: 'productTargetName', filterType: 10, searchField: 'productTargetName', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'productTargetName', fieldView: 'productTarget', filterType: 10, searchField: 'productTargetName', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'driverName', fieldView: 'driverName', filterType: 10, searchField: 'driverName', header: 'Водитель', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
+    { field: 'Amount', fieldView: 'expenseSum', header: 'Сумма', type: 'number', visible: true, width: '25%' },
 ];
 
 export const columnsTax = [
     { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '30%' },
     { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '30%' },
-    { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '30%' },
+    { field: 'Amount', fieldView: 'expenseSum', header: 'Сумма', type: 'number', visible: true, width: '30%' },
 ];
 
 export const employeeType = 1
