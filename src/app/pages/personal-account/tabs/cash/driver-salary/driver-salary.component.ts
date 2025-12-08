@@ -112,13 +112,16 @@ export class DriverSalaryComponent implements OnInit {
         { field: 'expenseSum', fieldView: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
         { field: 'incomeSum', fieldView: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
         { field: 'status', fieldView: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-        { field: 'actions', header: '', type: 'actions', visible: false, width: '5%' },
+        { field: 'actions', header: '', type: 'actions', visible: false, width: '' },
       ];
 
 
 
     this.totalInfoColumn = [
       { columnNum: 0, value: 'totalCount' },
+      { columnNum: 4, value: 'totalExpenseSum' },
+      { columnNum: 5, value: 'totalIncomeSum' },
+      { columnNum: 6, value: 'totalSaldo' },
     ];
 
 

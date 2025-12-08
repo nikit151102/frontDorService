@@ -90,6 +90,7 @@ export const CONFIGS = [
         employeeType: 2,
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
+            { columnNum: 2, value: 'totalExpenseSum' },
         ],
         columnsDocs: columnsDocs,
         buttons: BUTTON_SETS
@@ -100,6 +101,7 @@ export const CONFIGS = [
         employeeType: 1,
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
+            { columnNum: 3, value: 'totalExpenseSum' },
         ],
         columnsDocs: columnsEmployee,
         buttons: BUTTON_SETS
@@ -110,6 +112,7 @@ export const CONFIGS = [
         employeeType: 3,
         totalInfoColumn: [
             { columnNum: 0, value: 'totalCount' },
+            { columnNum: 2, value: 'totalExpenseSum' },
         ],
         columnsDocs: columnsTax,
         buttons: BUTTON_SETS
