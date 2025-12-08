@@ -68,7 +68,7 @@ export class CarsService {
         {
           field: 'docInvoice.dateTime',
           values: [startDate, endDate],
-          type: 5
+          type: 9
         });
     }
   }
