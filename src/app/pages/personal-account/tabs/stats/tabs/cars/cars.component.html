@@ -38,7 +38,8 @@
                         <ng-container *ngIf="isGroupVisible(group)">
                             <ng-container *ngFor="let col of group.columns">
                                 <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
-                                    <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px;">
+                                    <div
+                                        style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px;">
                                         {{ col.header }}
                                         <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field"
                                             [filterType]="1"
@@ -106,7 +107,7 @@
 
             <tfoot>
                 <tr style="  position: sticky; bottom: 0;">
-                    <ng-container *ngFor="let col of columns; let i = index">
+                    <!-- <ng-container *ngFor="let col of columns; let i = index">
                         <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
                             <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
                                 {{ formatingDataService.formatisNumber(getTotalValue(i)) }}
@@ -115,7 +116,11 @@
                         </td>
                     </ng-container>
                     <td></td>
-                    <td></td>
+                    <td></td> -->
+                    <td *ngFor="let index of [0,1,2,3,4,5,6,7,8,9,10,11]">
+                        {{ formatingDataService.formatisNumber(getTotalValue(index)) }}
+                    </td>
+
                 </tr>
             </tfoot>
         </table>

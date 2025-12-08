@@ -56,14 +56,7 @@ export const columns = [
     {
         header: 'Зарплаты',
         columns: [
-            { field: 'officeSalary', fieldView: 'officeSalary', header: 'З/П офис', type: 'number', visible: true, width: '13%' }
-        ],
-        visible: true,
-        width: '13%'
-    },    
-    {
-        header: 'Зарплаты',
-        columns: [
+            { field: 'officeSalary', fieldView: 'officeSalary', header: 'З/П офис', type: 'number', visible: true, width: '13%' },
             { field: 'driverSalary', fieldView: 'driverSalary', header: 'З/П водителя', type: 'number', visible: true, width: '13%' }
         ],
         visible: true,
@@ -114,8 +107,9 @@ export const totalInfoColumn = [
     { columnNum: 6, value: 'repairNoNdsExpenseTotalSum' },
     { columnNum: 7, value: 'fuelExpenseTotalSum' },
     { columnNum: 8, value: 'garageExpenseTotalSum' },
-    { columnNum: 9, value: 'driverSalaryTotalSum' },
-    { columnNum: 10, value: 'summaryTotalSum' },
+    { columnNum: 9, value: 'officeSalaryTotalSum' },
+    { columnNum: 10, value: 'driverSalaryTotalSum' },
+    { columnNum: 11, value: 'summaryTotalSum' },
 ];
 
 

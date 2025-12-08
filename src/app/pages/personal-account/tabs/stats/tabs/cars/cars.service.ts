@@ -40,7 +40,7 @@ export class CarsService {
   private dataSubject = new BehaviorSubject<any>(null);
   activData$ = this.dataSubject.asObservable();
 
-    private periodSubject = new BehaviorSubject<{startDate: string, endDate: string} | null>(null);
+  private periodSubject = new BehaviorSubject<{ startDate: string, endDate: string } | null>(null);
   period$ = this.periodSubject.asObservable();
 
   setPeriod(startDate: string, endDate: string) {
@@ -52,20 +52,27 @@ export class CarsService {
     if (!this.queryData.filters) {
       this.queryData.filters = [];
     }
-    
+
     const dateTimeFilter = this.queryData.filters.find(f => f.field === 'dateTime');
-    
-    if (dateTimeFilter) {
+    const docInvoiceDateTimeFilter = this.queryData.filters.find(f => f.field === 'dateTime');
+
+    if (dateTimeFilter && docInvoiceDateTimeFilter) {
       dateTimeFilter.values = [startDate, endDate];
+      docInvoiceDateTimeFilter.values = [startDate, endDate];
     } else {
       this.queryData.filters.push({
         field: 'dateTime',
         values: [startDate, endDate],
-        type: 2
-      });
+        type: 9
+      },
+        {
+          field: 'docInvoice.dateTime',
+          values: [startDate, endDate],
+          type: 5
+        });
     }
   }
-  
+
   setActiveData(tab: any) {
     this.dataSubject.next(tab);
   }

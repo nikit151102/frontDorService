@@ -105,14 +105,14 @@ export class DriverSalaryComponent implements OnInit {
       //   { field: 'Amount', fieldView: 'amount', header: 'Сумма', type: 'number', visible: true, width: '25%' },
       // ];
       [
-        { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
+        { field: 'dateTime', fieldView: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '20%' },
         { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
-        { field: 'name', header: 'Наименование', type: 'string', visible: true, width: '15%', isFilter: false },
+        { field: 'name', fieldView: 'name', header: 'Наименование', type: 'string', visible: true, width: '15%', isFilter: false },
         { field: 'manufacturer', fieldView: 'manufacturer', header: 'Поставщик', type: 'string', visible: true, width: '15%', isFilter: false },
-        { field: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
-        { field: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
-        { field: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
-        { field: 'actions', header: '', type: 'actions', visible: false, width: '' },
+        { field: 'expenseSum', fieldView: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '18%' },
+        { field: 'incomeSum', fieldView: 'incomeSum', header: 'Расход', type: 'number', visible: true, width: '18%' },
+        { field: 'status', fieldView: 'status', header: 'Статус', type: 'enam', visible: true, width: '20%' },
+        { field: 'actions', header: '', type: 'actions', visible: false, width: '5%' },
       ];
 
 

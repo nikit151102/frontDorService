@@ -44,7 +44,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     { label: 'Логист', commandName: 'logistic', access: 'LogisticAccess' },
     // LogisticAccess
     { label: 'Директор', commandName: 'director', access: 'Director2Access' },
-    { label: 'Статистика', commandName: 'stats', access: 'DirectorAccess' },
+    { label: 'Статистика', commandName: 'stats', access: 'AnalyticsSection' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
   ];
