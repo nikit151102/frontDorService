@@ -170,8 +170,6 @@ export class CarsComponent implements OnInit {
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
     const value = column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
-    console.log('column',column)
-        console.log('value',value)
     
     if (value === null) return null;
 

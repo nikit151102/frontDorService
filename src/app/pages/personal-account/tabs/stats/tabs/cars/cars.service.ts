@@ -54,7 +54,7 @@ export class CarsService {
     }
 
     const dateTimeFilter = this.queryData.filters.find(f => f.field === 'dateTime');
-    const docInvoiceDateTimeFilter = this.queryData.filters.find(f => f.field === 'dateTime');
+    const docInvoiceDateTimeFilter = this.queryData.filters.find(f => f.field === 'docInvoice.dateTime');
 
     if (dateTimeFilter && docInvoiceDateTimeFilter) {
       dateTimeFilter.values = [startDate, endDate];
