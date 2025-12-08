@@ -44,8 +44,9 @@ export class CarsService {
   period$ = this.periodSubject.asObservable();
 
   setPeriod(startDate: string, endDate: string) {
-    this.periodSubject.next({ startDate, endDate });
+    console.log('{ startDate, endDate }', { startDate, endDate })
     this.updateDateTimeFilter(startDate, endDate);
+    this.periodSubject.next({ startDate, endDate });
   }
 
   updateDateTimeFilter(startDate: string, endDate: string) {

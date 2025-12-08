@@ -15,7 +15,7 @@ import { FormatingDataService } from '../../../../../../services/formating-data.
 
 @Component({
   selector: 'app-cars',
-  providers: [ProductsService],
+  providers: [],
   imports: [CommonModule, TableModule,
     SearchFilterSortComponent,
     DateFilterSortComponent,
@@ -131,9 +131,7 @@ export class CarsComponent implements OnInit {
     this.productsServ.endpoint = this.endpoint;
     this.productsServ.products = [];
     this.productsServ.period$.subscribe(period => {
-      if (period) {
         this.loadProducts(true);
-      }
     });
 
     if (!this.productsServ.queryData.filters) {
