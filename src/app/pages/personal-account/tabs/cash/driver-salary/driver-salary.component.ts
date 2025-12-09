@@ -12,13 +12,14 @@ import { FormatingDataService } from '../../../../../services/formating-data.ser
 import { JwtService } from '../../../../../services/jwt.service';
 import { ToastService } from '../../../../../services/toast.service';
 import { ScoreFormService } from '../../../components/score-form/score-form.service';
-import { BUTTON_SETS } from '../../partners/button-config';
+import { BUTTON_SETS } from './button-config';
 import { ButtonConfig } from '../../partners/invoices-content/button-config';
 import { InvoicesContentService } from '../../partners/invoices-content/invoices-content.service';
 import { DriverSalaryService } from './driver-salary.service';
 
-import { CONFIGS } from './config';
-import { take } from 'rxjs';
+import { GeneralDocsFormComponent } from './general-docs-form/general-docs-form.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
+import { InvoicePaymentService } from '../../../components/invoice-payment/invoice-payment.service';
 
 @Component({
   selector: 'app-driver-salary',
@@ -27,7 +28,9 @@ import { take } from 'rxjs';
     SearchFilterSortComponent,
     DateFilterSortComponent,
     NumberFilterComponent,
-    UuidSearchFilterSortComponent
+    UuidSearchFilterSortComponent,
+    GeneralDocsFormComponent,
+    PaymentFormComponent
   ],
   templateUrl: './driver-salary.component.html',
   styleUrl: './driver-salary.component.scss'
@@ -60,6 +63,12 @@ export class DriverSalaryComponent implements OnInit {
   }
 
 
+  openPaymentModal() {
+
+    this.invoicePaymentService.visibleModal(true)
+  }
+
+
   getTaxValue(tax: any) {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
@@ -82,6 +91,7 @@ export class DriverSalaryComponent implements OnInit {
     private scoreFormService: ScoreFormService,
     private router: Router,
     private route: ActivatedRoute,
+    public invoicePaymentService: InvoicePaymentService,
     public formatingDataService: FormatingDataService) {
     this.driverSalaryService.defaultFilters = [];
   }
@@ -127,14 +137,13 @@ export class DriverSalaryComponent implements OnInit {
 
     this.driverSalaryService.defaultFilters = [];
 
-    // Полностью заменяем фильтры (не добавляем, а заменяем)
     this.driverSalaryService.defaultFilters = [
       { field: 'DocPaymentType', values: [4], type: 1 },
       { field: 'antonCashType', values: [6], type: 1 },
       {
         field: 'Director2Type',
         values: [
-          1, 2, 3
+          1, 2, 3, 4, 5
         ],
         type: 1
       }
@@ -388,24 +397,17 @@ export class DriverSalaryComponent implements OnInit {
     }
   }
 
-  deleteInvoice(invoiceId: any) {
+  deleteInvoice(invoice: any) {
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        let endpoint;
-        if (endpoint != '/api/CommercialWork/DocInvoice') {
-          endpoint = this.endpoint;
-        } else {
-          endpoint = '/api/CommercialWork/DocInvoice';
 
-        }
-
-        this.invoiceService.deleteInvoice(invoiceId, endpoint, this.driverSalaryService.defaultFilters).subscribe(
+        this.invoiceService.deleteInvoice(invoice, 'api/CommercialWork/DocInvoice', this.driverSalaryService.defaultFilters).subscribe(
           (invoice: any) => {
-            this.driverSalaryService.removeItemById(invoiceId.id);
+            this.driverSalaryService.removeItemById(invoice.id);
             this.driverSalaryService.totalInfo = invoice.totalInfo;
             this.toastService.showSuccess('Удалено', invoice.message);
 
@@ -424,7 +426,7 @@ export class DriverSalaryComponent implements OnInit {
 
   getInvoiceById(invoice: any) {
     console.log('invoice')
-    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
+    this.invoiceService.getInvoiceById(invoice.id).subscribe((data: any) => {
       this.selectData = { ...data.data };
       console.log('generalForm invoice', data.data)
     })

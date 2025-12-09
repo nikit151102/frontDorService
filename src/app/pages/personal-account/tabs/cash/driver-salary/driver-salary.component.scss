@@ -651,3 +651,110 @@ tfoot td {
 .context-menu button:hover {
     background: #f0f0f0;
 }
+
+
+.modern-pay-button {
+    --primary-color: #10b981;
+    --hover-color: #059669;
+    --active-color: #047857;
+    --shadow-color: rgba(16, 185, 129, 0.3);
+
+    position: relative;
+    height: 35px;
+    font-size: 13px;
+    padding: 0 24px;
+    background: var(--primary-color);
+    border: none;
+    color: white;
+    border-radius: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px var(--shadow-color),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+        opacity: 0;
+        transition: opacity 0.3s ease;
+    }
+
+    &:hover {
+        background: var(--hover-color);
+        transform: translateY(-2px);
+        box-shadow: 0 10px 15px -3px var(--shadow-color),
+            0 4px 6px -2px rgba(0, 0, 0, 0.05);
+
+        &::before {
+            opacity: 1;
+        }
+
+        .button-icon {
+            transform: translateX(3px);
+        }
+    }
+
+    &:active {
+        background: var(--active-color);
+        transform: translateY(0);
+        box-shadow: 0 2px 4px 0 var(--shadow-color);
+    }
+
+    &:focus-visible {
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.5);
+    }
+
+    .button-text {
+        position: relative;
+        z-index: 1;
+    }
+
+    .button-icon {
+        width: 20px;
+        height: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.3s ease;
+
+        svg {
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    /* Ripple effect */
+    &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+        background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+        background-repeat: no-repeat;
+        background-position: 50%;
+        transform: scale(10, 10);
+        opacity: 0;
+        transition: transform 0.5s, opacity 1s;
+    }
+
+    &:active::after {
+        transform: scale(0, 0);
+        opacity: 0.3;
+        transition: 0s;
+    }
+}

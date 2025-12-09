@@ -1,4 +1,16 @@
 <div class="table-wrapper">
+  <app-general-docs-form></app-general-docs-form>
+
+  <button (click)="openPaymentModal()" class="modern-pay-button">
+    <span class="button-text">Оплатить</span>
+    <span class="button-icon">
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+          stroke-linejoin="round" />
+      </svg>
+    </span>
+  </button>
+
   <div #tableContainer class="table-container" (scroll)="onScroll($event)"
     [style.height]="'calc(100vh - ' + heightContainer + ')'">
     <table class="invoice-table">
@@ -75,7 +87,7 @@
 
             <ng-container *ngIf="col.type === 'actions'">
               <td class="invoice-cell actions-cell">
-                <div class="dropdown">
+                <!-- <div class="dropdown">
                   <button class="btn btn-dropdown" style="color: #101010;"
                     (click)="toggleDropdown(product.id)">⋮</button>
                   <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
@@ -88,7 +100,11 @@
                       </button>
                     </ng-container>
                   </div>
-                </div>
+                </div> -->
+
+                <button *ngIf="currentRole == 1"  class="btn btn-details" (click)="deleteInvoice(product)">
+                  удалить
+                </button>
               </td>
             </ng-container>
           </ng-container>
@@ -112,3 +128,5 @@
 
   </div>
 </div>
+
+<app-payment-form></app-payment-form>

@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit, OnChanges, SimpleChanges, Input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -10,22 +11,24 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
-import { JwtService } from '../../../../services/jwt.service';
-import { CustomDropdownComponent } from '../../../../ui-kit/custom-dropdown/custom-dropdown.component';
-import { CustomInputComponent } from '../../../../ui-kit/custom-input-auth/custom-input.component';
-import { CustomInputNumberComponent } from '../../../../ui-kit/custom-input-number/custom-input-number.component';
-import { InvoiceConfig } from '../../../../interfaces/common.interface';
-import { GeneralFormService } from './general-form.service';
-import { ConfirmPopupService } from '../../../../components/confirm-popup/confirm-popup.service';
-import { ToastService } from '../../../../services/toast.service';
-import { ProductsService } from '../products/products.service';
-import { InvoicesService } from '../invoices/invoices.service';
-import { InvoicesContentService } from '../../tabs/partners/invoices-content/invoices-content.service';
-import { Router } from '@angular/router';
-import { UnsavedChangesDialogComponent } from '../unsaved-changes-dialog/unsaved-changes-dialog.component';
+import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
+import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
+import { JwtService } from '../../../../../../services/jwt.service';
+import { ToastService } from '../../../../../../services/toast.service';
+import { CustomDropdownComponent } from '../../../../../../ui-kit/custom-dropdown/custom-dropdown.component';
+import { CustomInputComponent } from '../../../../../../ui-kit/custom-input-auth/custom-input.component';
+import { CustomInputNumberComponent } from '../../../../../../ui-kit/custom-input-number/custom-input-number.component';
+import { GeneralFormService } from '../../../../components/generalForm/general-form.service';
+import { ProductsService } from '../../../../components/products/products.service';
+import { UnsavedChangesDialogComponent } from '../../../../components/unsaved-changes-dialog/unsaved-changes-dialog.component';
+import { InvoicesService } from '../../../base/invoices/invoices.service';
+import { InvoicesContentService } from '../../../partners/invoices-content/invoices-content.service';
+import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
+import { getFormSets, MODEL } from './form-config';
+import { GeneralDocsService } from './general-docs.service';
 
 @Component({
-  selector: 'general-form',
+  selector: 'app-general-docs-form',
   standalone: true,
   imports: [
     CommonModule,
@@ -44,11 +47,11 @@ import { UnsavedChangesDialogComponent } from '../unsaved-changes-dialog/unsaved
     CustomInputComponent,
     UnsavedChangesDialogComponent
   ],
-  templateUrl: './general-form.component.html',
-  styleUrl: './general-form.component.scss',
+  templateUrl: './general-docs-form.component.html',
+  styleUrl: './general-docs-form.component.scss',
   providers: [ConfirmationService, MessageService]
 })
-export class GeneralFormComponent implements OnInit, OnChanges {
+export class GeneralDocsFormComponent implements OnInit, OnChanges {
   @Input() data: any;
   @Input() label: string = 'Создать';
   config!: InvoiceConfig;
@@ -68,6 +71,8 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     private messageService: MessageService,
     private toastService: ToastService,
     private router: Router,
+    private cacheService: CacheReferenceService,
+    private generalDocsService: GeneralDocsService
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -177,17 +182,30 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     }
 
   }
-
+  buttonConfigs: any;
   currentRole: any;
   ngOnInit(): void {
     this.currentRole = this.jwtService.getDecodedToken().email;
-    this.generalFormService.getConfig().subscribe((config: any) => {
-      this.config = config;
-      console.log('config   - ',config)
-      this.initializeModel(config);
-      this.groupFieldsByRow();
-      console.log('config', config)
-    });
+    // Используем версию с кэшированием
+    this.loadDataWithCache('/api/Entities/ProductTarget/Filter')
+      .then((productTarget) => {
+        const dataSources = {
+          productTarget: productTarget
+        };
+
+        const formSet = getFormSets(dataSources);
+        this.generalFormService.setConfig(formSet);
+        this.generalFormService.setModel(MODEL);
+        this.generalFormService.setService(this.generalDocsService);
+        this.buttonConfigs = formSet.buttons;
+        this.config = getFormSets(dataSources);
+        console.log('config   - ', getFormSets(dataSources))
+        this.initializeModel(getFormSets(dataSources));
+        this.groupFieldsByRow();
+      })
+      .catch(error => {
+        console.error('Ошибка при загрузке данных:', error);
+      });
 
     this.generalFormService.getModel().subscribe((model: any) => {
       this.model = model;
@@ -197,6 +215,40 @@ export class GeneralFormComponent implements OnInit, OnChanges {
     const currentRole = this.jwtService.getDecodedToken().email;
 
   }
+
+  // Новый метод с кэшированием
+  async loadDataWithCache(apiEndpoint: string): Promise<any> {
+    // 1. Проверяем кэш
+    const cachedData = this.cacheService.get(apiEndpoint);
+    if (cachedData) {
+      console.log('Используем кэшированные данные для', apiEndpoint);
+      return cachedData;
+    }
+
+    // 2. Если нет в кэше, загружаем с сервера
+    try {
+      const data = await this.loadData(apiEndpoint);
+      // 3. Сохраняем в кэш (TTL 1 час)
+      this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
+      return data.data;
+    } catch (error) {
+      console.error('Ошибка при загрузке данных:', error);
+      throw error;
+    }
+  }
+
+  loadData(apiEndpoint: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.generalDocsService.getProductsByEndpoint(apiEndpoint).subscribe(
+        (data: any) => resolve(data),
+        (error) => {
+          console.error('Ошибка загрузки данных с эндпоинта:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+
 
   private initializeModel(config: InvoiceConfig): void {
     this.model = {};
