@@ -12,7 +12,7 @@
                         <!-- Транспортное средство -->
                         <div class="p-field p-col-12" *ngIf="employeeType == 1">
                             <label for="driverEmployeeId">Водитель</label>
-                            <app-custom-dropdown [options]="driverOptions" optionLabel="name" optionValue="id"
+                            <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
                                 [selected]="invoiceForm.get('driverEmployeeId')?.value"
                                 (selectedChange)="onVehicleChange($event)">
                             </app-custom-dropdown>
@@ -34,7 +34,7 @@
 
                         <div class="p-field p-col-12" *ngIf="employeeType == 2">
                             <label for="driverEmployeeId">Сотрудник</label>
-                            <app-custom-dropdown [options]="driverOptions" optionLabel="name" optionValue="id"
+                            <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
                                 [selected]="invoiceForm.get('driverEmployeeId')?.value"
                                 (selectedChange)="onVehicleChange($event)">
                             </app-custom-dropdown>
