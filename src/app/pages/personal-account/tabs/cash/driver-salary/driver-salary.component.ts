@@ -121,7 +121,7 @@ export class DriverSalaryComponent implements OnInit {
       { columnNum: 0, value: 'totalCount' },
       { columnNum: 4, value: 'totalExpenseSum' },
       { columnNum: 5, value: 'totalIncomeSum' },
-      { columnNum: 6, value: 'totalSaldo' },
+      { columnNum: 6, value: 'totalSaldoInverse' },
     ];
 
 
