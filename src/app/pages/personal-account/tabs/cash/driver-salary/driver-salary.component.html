@@ -1,7 +1,7 @@
 <div class="table-wrapper">
   <app-general-docs-form></app-general-docs-form>
 
-  <button (click)="openPaymentModal()" class="modern-pay-button">
+  <button (click)="openPaymentModal()" *ngIf="currentRole == 1" class="modern-pay-button">
     <span class="button-text">Оплатить</span>
     <span class="button-icon">
       <svg viewBox="0 0 24 24" fill="none">
