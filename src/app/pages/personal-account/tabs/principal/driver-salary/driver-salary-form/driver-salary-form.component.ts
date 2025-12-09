@@ -130,6 +130,10 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         console.log('employeeType', this.employeeType)
         const data = response.data;
         this.driverOptions = data;
+        this.driverOptions = data.map((employee: any) => ({
+          ...employee,
+          fullName: `${employee.surname || ''} ${employee.name || ''} ${employee.patronymic || ''}`.trim()
+        }))
       }
     );
 
@@ -150,7 +154,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         this.ProductTargetOptions = data;
       }
     );
-  
+
   }
   generateYears() {
     const currentYear = new Date().getFullYear();
@@ -160,20 +164,40 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     }
   }
 
-@ViewChild('dateInput') dateInput!: ElementRef;
+  @ViewChild('dateInput') dateInput!: ElementRef;
 
-showDatePickerWithMonth(event: Event) {
-  event.preventDefault();
-  const input = event.target as HTMLInputElement;
-  const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-  const currentYear = new Date().getFullYear();
-  
-  if (selectedMonth) {
-    const defaultDate = new Date(currentYear, selectedMonth, 15);
-    const dateString = defaultDate.toISOString().split('T')[0];
+  showDatePickerWithMonth(event: Event) {
+    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+    const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+    const currentYear = new Date().getFullYear();
 
-    input.value = dateString;
-    
+    if (selectedMonth) {
+      const defaultDate = new Date(currentYear, selectedMonth, 15);
+      const dateString = defaultDate.toISOString().split('T')[0];
+
+      input.value = dateString;
+
+      setTimeout(() => {
+        if ('showPicker' in HTMLInputElement.prototype) {
+          input.showPicker();
+        } else {
+          input.focus();
+          input.click();
+        }
+        setTimeout(() => {
+          if (!this.invoiceForm.get('selectedYear')?.value) {
+            input.value = '';
+          }
+        }, 100);
+      }, 10);
+    } else {
+      this.showDatePicker(event);
+    }
+  }
+
+  showDatePicker(event: Event) {
+    const input = event.target as HTMLInputElement;
     setTimeout(() => {
       if ('showPicker' in HTMLInputElement.prototype) {
         input.showPicker();
@@ -181,28 +205,8 @@ showDatePickerWithMonth(event: Event) {
         input.focus();
         input.click();
       }
-      setTimeout(() => {
-        if (!this.invoiceForm.get('selectedYear')?.value) {
-          input.value = '';
-        }
-      }, 100);
-    }, 10);
-  } else {
-    this.showDatePicker(event);
+    }, 0);
   }
-}
-
-showDatePicker(event: Event) {
-  const input = event.target as HTMLInputElement;
-  setTimeout(() => {
-    if ('showPicker' in HTMLInputElement.prototype) {
-      input.showPicker();
-    } else {
-      input.focus();
-      input.click();
-    }
-  }, 0);
-}
 
   updateDateTime() {
     // Получаем значения из формы
@@ -224,7 +228,7 @@ showDatePicker(event: Event) {
   onMonthYearChange() {
     // this.updateDateTime();
     const DateTime = this.invoiceForm.get('selectedYear')?.value;
-       this.invoiceForm.patchValue({
+    this.invoiceForm.patchValue({
       dateTime: DateTime
     });
   }
@@ -456,8 +460,8 @@ showDatePicker(event: Event) {
           delete data.selectedYear
           data.directorType = this.employeeType;
 
-          if(this.employeeType == 2){
-             delete data.productTargetId;
+          if (this.employeeType == 2) {
+            delete data.productTargetId;
           }
           // data.creatorId = localStorage.getItem('VXNlcklk')
           this.driverSalaryService.setDriverSalary(data).subscribe({
