@@ -17,7 +17,7 @@
         <table class="invoice-table">
             <thead>
                 <!-- Основная строка с группировками -->
-                <tr>
+                <!-- <tr>
                     <ng-container *ngFor="let group of columns">
                         <ng-container *ngIf="group.columns.length > 1">
                             <th style="text-align: center;" *ngIf="isGroupVisible(group)"
@@ -30,7 +30,7 @@
                         </ng-container>
                     </ng-container>
                     <th *ngIf="actions.length > 0" [attr.rowspan]="2">Действия</th>
-                </tr>
+                </tr> -->
 
                 <!-- Строка с конкретными колонками -->
                 <tr>
@@ -117,7 +117,7 @@
                     </ng-container>
                     <td></td>
                     <td></td> -->
-                    <td *ngFor="let index of [0,1,2,3,4,5,6,7,8,9,10,11]">
+                    <td *ngFor="let index of [0,1,2,3,4,5,6,7,8,9,10,11,12]">
                         {{ formatingDataService.formatisNumber(getTotalValue(index)) }}
                     </td>
 

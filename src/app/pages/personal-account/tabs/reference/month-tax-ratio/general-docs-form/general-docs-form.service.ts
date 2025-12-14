@@ -138,7 +138,7 @@ export class GeneralDocsFormService {
 
     const url = `${environment.apiUrl}/api/CommercialWork/MonthTaxRatio`;
 
-    return (item?.id ? this.http.put(`${url}/${item.id}`, body, { headers }) : this.http.post(url, body, { headers }))
+    return (item?.id ? this.http.put(`${url}/${item.id}`, item, { headers }) : this.http.post(url, item, { headers }))
       .pipe(
         tap((response: any) => this.generalDocsService.addOrUpdateItem(response.data)),
         catchError(err => {

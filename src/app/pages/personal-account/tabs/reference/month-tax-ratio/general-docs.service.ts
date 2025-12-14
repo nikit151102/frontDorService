@@ -68,29 +68,50 @@ export class GeneralDocsService {
     }
   }
 
-
   addOrUpdateItem(newItem: any) {
-    console.log('Received new item:', newItem);
+    const transformedItem = this.transformInvoice(newItem);
 
     const currentData = this.getActiveData();
-    console.log('Current data before update:', currentData);
 
     if (!Array.isArray(currentData)) {
-      console.log('Current data is not array, creating new array');
-      this.dataSubject.next([newItem]);
+      this.dataSubject.next([transformedItem]);
       return;
     }
 
     const filteredData = currentData.filter(item => {
-      console.log(`Comparing ${item?.id} with ${newItem.id}`);
-      return item.id !== newItem.id;
+      return item.id !== transformedItem.id;
     });
 
-    const updatedData = [newItem, ...filteredData];
-    console.log('Updated data to emit:', updatedData);
+    const updatedData = [transformedItem, ...filteredData];
 
     this.dataSubject.next(updatedData);
   }
+
+  private transformInvoice(invoice: any): any {
+    const monthNames = [
+      'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
+      'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
+    ];
+
+    let monthYear = '';
+
+    if (invoice.dateTime) {
+      const date = new Date(invoice.dateTime);
+      if (!isNaN(date.getTime())) {
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+        monthYear = `${month}`;
+      }
+    }
+
+    return {
+      ...invoice,
+      expenseSum: invoice.expenseSum?.toString().replace('.', ','),
+      incomeSum: invoice.incomeSum?.toString().replace('.', ','),
+      monthYear: monthYear
+    };
+  }
+
 
   updateFieldById(id: any, field: string, value: any) {
     const currentData = this.getActiveData();

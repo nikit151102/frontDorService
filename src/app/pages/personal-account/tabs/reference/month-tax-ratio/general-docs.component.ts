@@ -313,10 +313,27 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
+          const monthNames = [
+            'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
+            'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
+          ];
+
+          let monthYear = '';
+
+          if (invoice.dateTime) {
+            const date = new Date(invoice.dateTime);
+            if (!isNaN(date.getTime())) {
+              const month = monthNames[date.getMonth()];
+              const year = date.getFullYear();
+              monthYear = `${month}`;
+            }
+          }
+
           const transformed = {
             ...invoice,
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
-            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
+            incomeSum: invoice.incomeSum?.toString().replace('.', ','),
+            monthYear: monthYear
           };
 
           return transformed;

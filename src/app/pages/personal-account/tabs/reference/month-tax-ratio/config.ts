@@ -13,7 +13,7 @@ export const columnsDocs = [
         columns: [
             {
                 field: 'dateTime',
-                fieldView: 'dateTime',
+                fieldView: 'monthYear',
                 filterType: 10,
                 searchField: 'dateTime',
                 header: 'Месяц',
@@ -161,7 +161,7 @@ export const columnsDocs = [
 export const viewDataColumns = [
     {
         field: 'dateTime',
-        fieldView: 'dateTime',
+        fieldView: 'monthYear',
         filterType: 10,
         searchField: 'dateTime',
         header: 'Месяц',

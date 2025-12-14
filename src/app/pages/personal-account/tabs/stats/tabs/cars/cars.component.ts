@@ -89,14 +89,14 @@ export class CarsComponent implements OnInit {
         };
 
         let newInvoices = [];
-        if (response.documentMetadata && response.documentMetadata.data) {
-          newInvoices = response.documentMetadata.data.map(mapInvoice);
+        if (response.documentMetadataTaxInclude && response.documentMetadataTaxInclude.data) {
+          newInvoices = response.documentMetadataTaxInclude.data.map(mapInvoice);
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         } ``
 
-        if (response.totalInfo && response.totalInfo?.totalPagesCount) {
-          this.productsServ.totalRecords = response.totalInfo?.totalPagesCount * this.productsServ.pageSize;
+        if (response.totalInfoTaxInclude && response.totalInfoTaxInclude?.totalPagesCount) {
+          this.productsServ.totalRecords = response.totalInfoTaxInclude?.totalPagesCount * this.productsServ.pageSize;
         }
 
         if (reset || this.productsServ.currentPage === 0) {
@@ -104,8 +104,8 @@ export class CarsComponent implements OnInit {
         } else {
           this.productsServ.products = [...this.productsServ.products, ...newInvoices];
         }
-        this.productsServ.totalInfo = response.totalInfo;
-        this.invoicesService.totalInfo = response.totalInfo;
+        this.productsServ.totalInfo = response.totalInfoTaxInclude;
+        this.invoicesService.totalInfo = response.totalInfoTaxInclude;
         this.productsServ.totalPages = response.totalPages;
         this.productsServ.currentPage++;
         this.productsServ.loading = false;
