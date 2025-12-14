@@ -1,0 +1,160 @@
+<div style=" display: flex; gap: 10px;">
+
+  <app-general-docs-form [data]="selectData"></app-general-docs-form>
+
+</div>
+
+<div class="table-wrapper">
+  <div #tableContainer class="table-container" (scroll)="onScroll($event)">
+
+    <table class="invoice-table">
+      <thead>
+        <!-- Основная строка с группировками -->
+        <tr>
+          <ng-container *ngFor="let group of columns">
+            <ng-container *ngIf="group?.columns?.length > 1">
+              <th style="text-align: center;" *ngIf="isGroupVisible(group)" [attr.colspan]="group.columns.length"
+                [style.width]="group.width">
+                {{ group.header }}
+              </th>
+            </ng-container>
+            <ng-container *ngIf="group?.columns?.length == 1">
+              <th></th>
+            </ng-container>
+          </ng-container>
+          <th [attr.rowspan]="1"></th>
+        </tr>
+
+        <!-- Строка с конкретными колонками -->
+        <tr>
+          <ng-container *ngFor="let group of columns">
+            <ng-container *ngIf="isGroupVisible(group)">
+              <ng-container *ngFor="let col of group.columns">
+                <th *ngIf="isColumnVisible(col)" [style.width]="col.width">
+                  <div
+                    style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px;">
+                    {{ col.header }}
+                    <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
+                      [searchField]="col.searchField"
+                      (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                      (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
+                    </app-search-filter-sort>
+                    <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
+                      (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                      (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
+                    </app-date-filter>
+                    <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
+                      (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                      (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
+                    </app-number-filter>
+                    <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
+                      [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType"
+                      [searchField]="col.searchField"
+                      (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                      (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
+                    </app-uuid-search-filter-sort>
+                    <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"
+                      [Field]="col.field" [filterType]="1"
+                      (filterChange)="generalDocsService.onFilterChange($event); scrollToTop()"
+                      (sortChange)="generalDocsService.onSortChange($event); scrollToTop()">
+                    </app-uuid-search-filter-sort>
+                  </div>
+                </th>
+              </ng-container>
+            </ng-container>
+          </ng-container>
+          <th [attr.rowspan]="1">Действия</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of invoices" class="invoice-row">
+          <ng-container *ngFor="let col of viewDataColumns">
+            <td *ngIf="isColumnVisible(col)" class="invoice-cell" [style.width]="col.width"
+              (dblclick)="isEditInvoice = false; getInvoiceById(product)">
+              <ng-container *ngIf="col.fieldView === 'dateTime'; ">
+                {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
+              </ng-container>
+              <ng-container *ngIf="col.type == 'number'">
+                {{formatingDataService.formatisNumber(product[col.field])}}
+              </ng-container>
+              <ng-container *ngIf="col.type != 'number'">
+                <ng-container *ngIf="col.field != 'DocInvoice.Status' && col.field != 'status'">
+                  {{ col.fieldView === 'docInvoiceStatus' ? getStatusLabel(product[col.fieldView]) :
+                  product[col.fieldView] }}
+                </ng-container>
+                <span *ngIf="col.field === 'DocInvoice.Status' || col.field === 'status'"
+                  [ngClass]="getStatusClass(product['docInvoiceStatus'])" class="status-tag">
+                  {{ getStatusLabel(product['docInvoiceStatus']) }}
+                </span>
+              </ng-container>
+            </td>
+          </ng-container>
+           <ng-container>
+              <td class="invoice-cell actions-cell">
+                  <div class="action-buttons">
+                        <button class="btn btn-details" (click)="getInvoiceById(product)">
+                            <svg width="24px" height="24px" viewBox="0 -0.5 25 25" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path fill-rule="evenodd" clip-rule="evenodd"
+                                        d="M17.265 4.16231L19.21 5.74531C19.3978 5.9283 19.5031 6.17982 19.5015 6.44201C19.5 6.70421 19.3919 6.9545 19.202 7.13531L17.724 8.93531L12.694 15.0723C12.6069 15.1749 12.4897 15.2473 12.359 15.2793L9.75102 15.8793C9.40496 15.8936 9.10654 15.6384 9.06702 15.2943L9.18902 12.7213C9.19806 12.5899 9.25006 12.4652 9.33702 12.3663L14.15 6.50131L15.845 4.43331C16.1743 3.98505 16.7938 3.86684 17.265 4.16231Z"
+                                        stroke="#ffffff" stroke-width="1.5" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                    <path
+                                        d="M5.5 18.2413C5.08579 18.2413 4.75 18.5771 4.75 18.9913C4.75 19.4056 5.08579 19.7413 5.5 19.7413V18.2413ZM19.2 19.7413C19.6142 19.7413 19.95 19.4056 19.95 18.9913C19.95 18.5771 19.6142 18.2413 19.2 18.2413V19.7413ZM14.8455 6.22062C14.6904 5.83652 14.2534 5.65082 13.8693 5.80586C13.4852 5.9609 13.2995 6.39796 13.4545 6.78206L14.8455 6.22062ZM17.8893 9.66991C18.2933 9.57863 18.5468 9.17711 18.4556 8.77308C18.3643 8.36904 17.9628 8.1155 17.5587 8.20678L17.8893 9.66991ZM5.5 19.7413H19.2V18.2413H5.5V19.7413ZM13.4545 6.78206C13.6872 7.35843 14.165 8.18012 14.8765 8.8128C15.6011 9.45718 16.633 9.95371 17.8893 9.66991L17.5587 8.20678C16.916 8.35198 16.3609 8.12551 15.8733 7.69189C15.3725 7.24656 15.0128 6.63526 14.8455 6.22062L13.4545 6.78206Z"
+                                        fill="#ffffff"></path>
+                                </g>
+                            </svg>
+                        </button>
+                        <button class="btn btn-details" style="    background: #ff3f3f;" (click)="deleteInvoice(product)">
+                            <svg width="24px" height="24px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path
+                                        d="M6 7V18C6 19.1046 6.89543 20 8 20H16C17.1046 20 18 19.1046 18 18V7M6 7H5M6 7H8M18 7H19M18 7H16M10 11V16M14 11V16M8 7V5C8 3.89543 8.89543 3 10 3H14C15.1046 3 16 3.89543 16 5V7M8 7H16"
+                                        stroke="#ffffff" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round"></path>
+                                </g>
+                            </svg>
+                        </button>
+                    </div>
+              </td>
+            </ng-container>
+        </tr>
+      </tbody>
+
+      <tfoot>
+        <tr style="  position: sticky; bottom: 0;">
+          <!-- <ng-container *ngFor="let col of columns; let i = index">
+                        <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
+                            <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                                {{ formatingDataService.formatisNumber(getTotalValue(i)) }}
+                            </ng-container>
+                            <ng-template #emptyCell></ng-template>
+                        </td>
+                    </ng-container>
+                    <td></td>
+                    <td></td> -->
+          <td *ngFor="let index of [0,1,2,3,4,5,6,7,8,9,10,11]">
+            {{ formatingDataService.formatisNumber(getTotalValue(index)) }}
+          </td>
+
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>
+
+<!-- Контекстное меню -->
+<div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
+
+  <ng-container *ngFor="let button of getButtonSet()">
+    <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
+      [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
+      {{ button.label }}
+    </button>
+  </ng-container>
+</div>

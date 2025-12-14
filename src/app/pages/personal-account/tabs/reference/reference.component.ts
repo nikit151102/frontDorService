@@ -2,10 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReferenceBookComponent } from './reference-book/reference-book.component';
+import { GeneralDocsComponent } from './month-tax-ratio/general-docs.component';
 
 @Component({
   selector: 'app-reference',
-  imports: [CommonModule, ReferenceBookComponent],
+  imports: [CommonModule, ReferenceBookComponent, GeneralDocsComponent],
   templateUrl: './reference.component.html',
   styleUrl: './reference.component.scss'
 })

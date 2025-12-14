@@ -8,9 +8,9 @@ export const totalInfoColumn = [
 
 
 export const columnsDocs = [
-    { field: 'ProductTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '16%', endpoint: '/api/Entities/ProductTarget/Filter' },
-    { field: 'BeginDateTime', fieldView: 'beginDateTime', header: 'Начало', type: 'date', visible: true, width: '15%' },
-    { field: 'EndDateTime', fieldView: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },
+    { field: 'ProductTarget.Id', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: '20%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'monthYear', fieldView: 'monthYear', header: 'Месяц', type: 'date', visible: true, width: '20%' },
+    // { field: 'EndDateTime', fieldView: 'endDateTime', header: 'Окончание', type: 'date', visible: true, width: '15%' },
     { field: 'DifferentOdometer', fieldView: 'differentOdometer', header: 'Разница (км)', type: 'number', visible: true, width: '15%' },
     { field: 'GrossSum', fieldView: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '15%' },
     { field: 'KilometerCost', fieldView: 'kilometerCost', header: 'Вал/км', type: 'number', visible: true, width: '15%' },

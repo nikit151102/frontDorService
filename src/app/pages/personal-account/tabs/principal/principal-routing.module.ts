@@ -23,6 +23,10 @@ const routes: Routes = [
       {
         path: '341652',
         loadComponent: () => import('./driver-salary/driver-salary.component').then(m => m.DriverSalaryComponent),
+      },
+      {
+        path: '305641',
+        loadComponent: () => import('./driver-salary/driver-salary.component').then(m => m.DriverSalaryComponent),
       }
     ]
   }

@@ -211,6 +211,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       ? this.selectedInvoice.endOdometer - this.selectedInvoice.beginOdometer
       : 0;
 
+    const date = new Date(this.selectedInvoice.dateTime);
     // Заполняем форму данными из selectedInvoice
     this.invoiceForm.patchValue({
       productTargetId: this.selectedInvoice.productTargetId || '',
@@ -231,7 +232,8 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       // fuelEnd: this.selectedInvoice.fuelEnd ?? 0,
       fuelCount: this.selectedInvoice.fuelCount ?? 0,
       fuelCost: this.selectedInvoice.fuelCost ?? 0,
-      fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0
+      fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
+      selectedMonth: date.getMonth()
       // driverEmployeeId: this.selectedInvoice.driver || ''
     });
 

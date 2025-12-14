@@ -8,8 +8,18 @@
                     </span>
                 </div>
             </li>
+
+            <li (click)="select('146962975')">
+                 <div class="counterparty-item">
+                    <span>
+                        Коэффициенты
+                    </span>
+                </div>
+            </li>
         </ul>
     </div>
     
-    <app-reference-book [typeId]="selectReference"></app-reference-book>
+    <app-reference-book [typeId]="selectReference" *ngIf="selectReference != '146962975'"></app-reference-book>
+    
+    <app-month-tax-ratio-docs *ngIf="selectReference == '146962975'" style="width: 100%;"></app-month-tax-ratio-docs>
 </div>

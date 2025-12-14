@@ -17,14 +17,14 @@ import { ScoreFormService } from '../../../components/score-form/score-form.serv
 import { ButtonConfig } from '../../partners/invoices-content/button-config';
 import { InvoicesContentService } from '../../partners/invoices-content/invoices-content.service';
 import { PartnersService } from '../../partners/partners.service';
-import { BUTTON_SETS, columnsDocs, endpoint, totalInfoColumn } from './config';
+import { BUTTON_SETS, columnsDocs, endpoint, totalInfoColumn, viewDataColumns } from './config';
 import { GeneralDocsService } from './general-docs.service';
 import { GeneralDocsFormComponent } from './general-docs-form/general-docs-form.component';
 import { GeneralDocsFormService } from './general-docs-form/general-docs-form.service';
 import { FormatingDataService } from '../../../../../services/formating-data.service';
 
 @Component({
-  selector: 'app-general-docs',
+  selector: 'app-month-tax-ratio-docs',
   providers: [MessageService],
   imports: [CommonModule,
     SearchFilterSortComponent,
@@ -43,6 +43,7 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
   @Input() endpoint: any;
   @Input() endpointGetData: any;
   @Input() columns: any = columnsDocs;
+  viewDataColumns: any = viewDataColumns;
   @Input() paymentType: number = 1;
   @Input() totalInfoColumn: any = totalInfoColumn;
   @Input() buttonConfigs: Record<string, ButtonConfig[]> = BUTTON_SETS;
@@ -60,6 +61,11 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
     if (this.tableContainer && this.tableContainer.nativeElement) {
       this.tableContainer.nativeElement.scrollTop = 0;
     }
+  }
+
+  // Функция для проверки видимости группы
+  isGroupVisible(group: any): boolean {
+    return group.visible && group.columns.some((col: any) => this.isColumnVisible(col));
   }
 
 
@@ -307,26 +313,11 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
     ).subscribe(
       (response) => {
         const mapInvoice = (invoice: any) => {
-
-          let monthYear = '';
-          if (invoice.dateTime) {
-            const date = new Date(invoice.dateTime);
-            const monthNames = [
-              'январь', 'февраль', 'март', 'апрель', 'май', 'июнь',
-              'июль', 'август', 'сентябрь', 'октябрь', 'ноябрь', 'декабрь'
-            ];
-            const monthName = monthNames[date.getMonth()];
-            const year = date.getFullYear();
-            monthYear = `${monthName} ${year}`;
-          }
-
           const transformed = {
             ...invoice,
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
-            incomeSum: invoice.incomeSum?.toString().replace('.', ','),
-            monthYear: monthYear
+            incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-
 
           return transformed;
         };
@@ -393,19 +384,11 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
   deleteInvoice(invoiceId: any) {
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
-      message: 'Вы уверены, что хотите удалить счет-фактуру?',
+      message: 'Вы уверены, что хотите удалить запись?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        let endpoint;
-        if (endpoint != '/api/CommercialWork/DocInvoice') {
-          endpoint = this.endpoint;
-        } else {
-          endpoint = '/api/CommercialWork/DocInvoice';
-
-        }
-
-        this.invoiceService.deleteInvoice(invoiceId, endpoint, this.generalDocsService.defaultFilters).subscribe(
+        this.invoiceService.deleteInvoice(invoiceId, 'api/CommercialWork/MonthTaxRatio', this.generalDocsService.defaultFilters).subscribe(
           (invoice: any) => {
             this.generalDocsService.removeItemById(invoiceId.id);
             this.generalDocsService.totalInfo = invoice.totalInfo;
@@ -425,14 +408,11 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice')
-    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
+    this.invoiceService.getInvoiceById(invoice.id, 'api/CommercialWork/MonthTaxRatio').subscribe((data: any) => {
       this.selectData = { ...data.data };
       console.log('generalForm invoice', data.data)
     })
-
   }
-
 
   dropdownVisible: { [key: string]: boolean } = {};
 

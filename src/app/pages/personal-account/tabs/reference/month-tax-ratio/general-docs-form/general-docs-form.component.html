@@ -1,0 +1,163 @@
+<button style=" margin-top: 10px;" class="btn btn-primary mb-4" (click)="createNewInvoice()" >Создать запись</button>
+
+<ng-container *ngIf="selectedInvoice">
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" [header]="'Коэффициенты'"
+        (onHide)="onDialogClose()">
+        <div class="form-container">
+            <div class="p-fluid p-formgrid p-grid">
+
+                <form [formGroup]="invoiceForm" class="form-container">
+                    <div class="p-fluid p-formgrid p-grid">
+
+                        <div class="p-field p-col-12 p-md-6" style="width: 150px;">
+                            <label for="beginDateTime">Месяц</label>
+                            <select class="modern-select" formControlName="selectedMonth" (change)="onMonthYearChange()"
+                                name="month">
+                                <option *ngFor="let month of months" [value]="month.value">
+                                    {{ month.name }}
+                                </option>
+                            </select>
+                            <small
+                                *ngIf="invoiceForm.get('beginDateTime')?.touched && invoiceForm.get('beginDateTime')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div>
+                        <div class="p-col-12">
+                            <h4>логист</h4>
+                        </div>
+                        <div class="odometer-block">
+                            <div class="p-field p-col-12 p-md-4">
+                                <label for="logisticsCash">Нал</label>
+                                <app-custom-input-number formControlName="logisticsCash" [min]="0">
+                                </app-custom-input-number>
+                                <small
+                                    *ngIf="invoiceForm.get('logisticsCash')?.touched && invoiceForm.get('logisticsCash')?.invalid"
+                                    class="p-error">Некорректное значение</small>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <label for="logisticsNoNds">Без НДС</label>
+                                <app-custom-input-number formControlName="logisticsNoNds" [min]="0">
+                                </app-custom-input-number>
+                                <small
+                                    *ngIf="invoiceForm.get('logisticsNoNds')?.touched && invoiceForm.get('logisticsNoNds')?.invalid"
+                                    class="p-error">Некорректное значение</small>
+                            </div>
+                        </div>
+                        <div class="p-col-12">
+                            <h4>ремонты</h4>
+                        </div>
+                        <div class="odometer-block">
+                            <div class="p-field p-col-12 p-md-4">
+                                <label for="repaitsCash">Нал</label>
+                                <app-custom-input-number formControlName="repaitsCash" [min]="0">
+                                </app-custom-input-number>
+                                <small
+                                    *ngIf="invoiceForm.get('repaitsCash')?.touched && invoiceForm.get('repaitsCash')?.invalid"
+                                    class="p-error">Некорректное значение</small>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <label for="repaitsNoNds">Без НДС</label>
+                                <app-custom-input-number formControlName="repaitsNoNds" [min]="0">
+                                </app-custom-input-number>
+                                <small
+                                    *ngIf="invoiceForm.get('repaitsNoNds')?.touched && invoiceForm.get('repaitsNoNds')?.invalid"
+                                    class="p-error">Некорректное значение</small>
+                            </div>
+                        </div>
+                        <div class="odometer-block">
+                            <div>
+                                <div class="p-col-12">
+                                    <h4>зп офис</h4>
+                                </div>
+                                <div class="odometer-block">
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label for="officeSalaryCash">Нал</label>
+                                        <app-custom-input-number formControlName="officeSalaryCash" [min]="0">
+                                        </app-custom-input-number>
+                                        <small
+                                            *ngIf="invoiceForm.get('officeSalaryCash')?.touched && invoiceForm.get('officeSalaryCash')?.invalid"
+                                            class="p-error">Некорректное значение</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="p-col-12">
+                                    <h4>зп водители</h4>
+                                </div>
+                                <div class="odometer-block">
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label for="driversSalaryCash">Нал</label>
+                                        <app-custom-input-number formControlName="driversSalaryCash" [min]="0">
+                                        </app-custom-input-number>
+                                        <small
+                                            *ngIf="invoiceForm.get('driversSalaryCash')?.touched && invoiceForm.get('driversSalaryCash')?.invalid"
+                                            class="p-error">Некорректное значение</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="odometer-block">
+                            <div>
+                                <div class="p-col-12">
+                                    <h4>Платон</h4>
+                                </div>
+                                <div class="odometer-block">
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label for="platonNoNds">Без НДС</label>
+                                        <app-custom-input-number formControlName="platonNoNds" [min]="0">
+                                        </app-custom-input-number>
+                                        <small
+                                            *ngIf="invoiceForm.get('platonNoNds')?.touched && invoiceForm.get('platonNoNds')?.invalid"
+                                            class="p-error">Некорректное значение</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="p-col-12">
+                                    <h4>налоги</h4>
+                                </div>
+                                <div class="odometer-block">
+                                    <div class="p-field p-col-12 p-md-4">
+                                        <label for="taxesNoNds">Без НДС</label>
+                                        <app-custom-input-number formControlName="taxesNoNds" [min]="0">
+                                        </app-custom-input-number>
+                                        <small
+                                            *ngIf="invoiceForm.get('taxesNoNds')?.touched && invoiceForm.get('taxesNoNds')?.invalid"
+                                            class="p-error">Некорректное значение</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <p-footer>
+                <ng-container *ngIf="newDoc">
+                    <button pButton [label]="'Черновик'" *ngIf="currentRole != 1" icon="pi pi-check"
+                        (click)="saveAndSendInvoice()">
+                    </button>
+                    <button pButton [label]="currentRole == 1 ? 'Сохранить' : 'Сохранить и отправить'"
+                        icon="pi pi-check" (click)="saveAndSendInvoice()">
+                    </button>
+                </ng-container>
+                <ng-container *ngIf="!newDoc">
+                    <button pButton label="Сохранить" *ngIf="currentRole == 1 || (data.status == 0)"
+                        (click)="saveInvoice()">
+                    </button>
+                    <button pButton label="Отправить на проверку" *ngIf="currentRole != 1"
+                        (click)="sendingInvoice(invoiceForm.value, 2)">
+                    </button>
+                </ng-container>
+
+                <button pButton label="Отмена" (click)="onDialogClose()" class="p-button-secondary">
+                </button>
+            </p-footer>
+        </div>
+    </p-dialog>
+</ng-container>
+
+<p-confirmDialog></p-confirmDialog>
+
+<app-unsaved-changes-dialog *ngIf=" showConfirmDialog" (confirmClose)="confirmCloseDialog()"
+    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>

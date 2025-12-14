@@ -20,7 +20,7 @@
                                 *ngIf="invoiceForm.get('driverEmployeeId')?.touched && invoiceForm.get('driverEmployeeId')?.invalid"
                                 class="p-error">Это поле обязательно</small>
                         </div>
-                        <div class="p-field p-col-12" *ngIf="employeeType == 1">
+                        <div class="p-field p-col-12" *ngIf="employeeType == 1 || 6">
                             <label for="driverEmployeeId">Машина</label>
                             <app-custom-dropdown [options]="ProductTargetOptions" optionLabel="name" optionValue="id"
                                 [selected]="invoiceForm.get('productTargetId')?.value"

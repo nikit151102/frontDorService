@@ -21,6 +21,15 @@ export const columnsTax = [
     { field: 'Amount', fieldView: 'expenseSum', header: 'Сумма', type: 'number', visible: true, width: '30%' },
 ];
 
+export const columnsPlaton = [
+    // { field: 'DateTime', fieldView: 'year', header: 'Год', type: 'date', visible: true, width: '25%' },
+    // { field: 'DateTime', fieldView: 'month', header: 'Месяц', type: 'date', visible: true, width: '25%' },
+    { field: 'DateTime', fieldView: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '25%' },
+    { field: 'productTargetName', fieldView: 'productTarget', filterType: 10, searchField: 'productTargetName', header: 'Машина', type: 'uuid', visible: true, width: '25%', endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'Amount', fieldView: 'expenseSum', header: 'Сумма', type: 'number', visible: true, width: '25%' },
+];
+
+
 export const employeeType = 1
 
 export interface ButtonConfig {
@@ -115,6 +124,17 @@ export const CONFIGS = [
             { columnNum: 2, value: 'totalExpenseSum' },
         ],
         columnsDocs: columnsTax,
+        buttons: BUTTON_SETS
+    },
+    {
+        code: '305641',
+        endpoint: '/api/CommercialWork/DocInvoice/DocDirector/Filter',
+        employeeType: 6,
+        totalInfoColumn: [
+            { columnNum: 0, value: 'totalCount' },
+            { columnNum: 2, value: 'totalExpenseSum' },
+        ],
+        columnsDocs: columnsPlaton,
         buttons: BUTTON_SETS
     }
 ];
