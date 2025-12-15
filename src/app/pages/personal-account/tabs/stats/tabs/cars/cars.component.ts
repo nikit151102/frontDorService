@@ -101,6 +101,7 @@ export class CarsComponent implements OnInit {
         }
 
         this.oldTotalInfoColumn = response.totalInfo;
+        console.log('this.oldTotalInfoColumn ',this.oldTotalInfoColumn)
         if (reset || this.productsServ.currentPage === 0) {
           this.productsServ.products = newInvoices;
         } else {
