@@ -123,3 +123,19 @@ export const totalInfoColumn = [
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'summaryTotalSum' }
 ];
+
+export const oldTotalInfoColumn = [
+    { columnNum: 0, value: 'totalCount' },
+    { columnNum: 1, value: 'grossTotalSum' },
+    { columnNum: 2, value: '' },
+    { columnNum: 3, value: '' },
+    { columnNum: 4, value: 'taxTotalSum' },
+    { columnNum: 5, value: '' },
+    { columnNum: 6, value: '' },
+    { columnNum: 7, value: 'fuelExpenseTotalSum' },
+    { columnNum: 8, value: '' },
+    { columnNum: 9, value: 'garageExpenseTotalSum' },
+    { columnNum: 10, value: 'officeSalaryTotalSum' },
+    { columnNum: 11, value: 'driverSalaryTotalSum' },
+    { columnNum: 12, value: 'summaryTotalSum' }
+];

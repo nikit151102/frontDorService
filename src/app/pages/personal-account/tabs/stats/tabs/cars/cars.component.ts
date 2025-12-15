@@ -10,7 +10,7 @@ import { UuidSearchFilterSortComponent } from '../../../../../../components/fiel
 import { InvoicesService } from '../../../../components/invoices/invoices.service';
 import { ProductsService } from '../../../../components/products/products.service';
 import { CarsService } from './cars.service';
-import { columns, totalInfoColumn, viewDataColumns } from './config';
+import { columns, oldTotalInfoColumn, totalInfoColumn, viewDataColumns } from './config';
 import { FormatingDataService } from '../../../../../../services/formating-data.service';
 
 @Component({
@@ -31,6 +31,7 @@ export class CarsComponent implements OnInit {
   endpoint: string = 'api/Director/AnalyticsTransport';
   columns: any = columns;
   totalInfoColumn = totalInfoColumn;
+  oldTotalInfoColumn = oldTotalInfoColumn;
   viewDataColumns: any = viewDataColumns;
   @Input() actions: { label: string, action: string }[] = [];
   @Input() productService!: any;
@@ -99,6 +100,7 @@ export class CarsComponent implements OnInit {
           this.productsServ.totalRecords = response.totalInfoTaxInclude?.totalPagesCount * this.productsServ.pageSize;
         }
 
+        this.oldTotalInfoColumn = response.totalInfo;
         if (reset || this.productsServ.currentPage === 0) {
           this.productsServ.products = newInvoices;
         } else {
@@ -106,6 +108,7 @@ export class CarsComponent implements OnInit {
         }
         this.productsServ.totalInfo = response.totalInfoTaxInclude;
         this.invoicesService.totalInfo = response.totalInfoTaxInclude;
+        this
         this.productsServ.totalPages = response.totalPages;
         this.productsServ.currentPage++;
         this.productsServ.loading = false;
@@ -131,7 +134,7 @@ export class CarsComponent implements OnInit {
     this.productsServ.endpoint = this.endpoint;
     this.productsServ.products = [];
     this.productsServ.period$.subscribe(period => {
-        this.loadProducts(true);
+      this.loadProducts(true);
     });
 
     if (!this.productsServ.queryData.filters) {
@@ -168,7 +171,7 @@ export class CarsComponent implements OnInit {
 
     const column = this.totalInfoColumn.find((col: any) => col.columnNum === columnIndex);
     const value = column ? this.invoicesService.totalInfo?.[column.value] ?? 0 : null;
-    
+
     if (value === null) return null;
 
     if (typeof value === 'number') {
@@ -181,6 +184,25 @@ export class CarsComponent implements OnInit {
     }
 
     return value;
+  }
+
+
+
+  getOldTotalValue(columnIndex: number): string | null {
+    if (!this.oldTotalInfoColumn) return null;
+
+    const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+
+    if (!column) return null;
+    const value = column.value as any;
+
+    if (value === null || value === undefined) return null;
+    const numValue = Number(value);
+
+    if (!isNaN(numValue) && typeof value !== 'boolean') {
+      return numValue.toFixed(2).replace('.', ',');
+    }
+    return String(value);
   }
 
   statuses = [
