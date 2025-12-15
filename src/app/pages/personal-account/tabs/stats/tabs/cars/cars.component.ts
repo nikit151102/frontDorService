@@ -194,6 +194,11 @@ export class CarsComponent implements OnInit {
   }
 
 
+get hasOldTotalInfo(): boolean {
+  const info = this.oldTotalInfo();
+  return !!info && info.length > 0;
+}
+
 
   getOldTotalValue(columnIndex: number): string | null {
     const columns = this.oldTotalInfo();
