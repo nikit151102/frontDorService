@@ -196,6 +196,7 @@ export class CarsComponent implements OnInit {
 
 get hasOldTotalInfo(): boolean {
   const info = this.oldTotalInfo();
+  console.log('hasOldTotalInfo',!!info && info.length > 0)
   return !!info && info.length > 0;
 }
 
