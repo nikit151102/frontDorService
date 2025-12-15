@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, signal, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
@@ -33,6 +33,8 @@ export class CarsComponent implements OnInit {
   totalInfoColumn = totalInfoColumn;
   oldTotalInfoColumn = oldTotalInfoColumn;
   viewDataColumns: any = viewDataColumns;
+  oldTotalInfo = signal<any[] | null>(null);
+
   @Input() actions: { label: string, action: string }[] = [];
   @Input() productService!: any;
   @Input() selectedComponent: string = '';
@@ -63,6 +65,7 @@ export class CarsComponent implements OnInit {
       this.tableContainer.nativeElement.scrollTop = 0;
     }
   }
+
 
   loadProducts(reset = false) {
     if (reset) {
@@ -101,8 +104,9 @@ export class CarsComponent implements OnInit {
           this.productsServ.totalRecords = response.totalInfoTaxInclude?.totalPagesCount * this.productsServ.pageSize;
         }
 
-        this.oldTotalInfoColumn = response.totalInfo;
-        console.log('this.oldTotalInfoColumn ',this.oldTotalInfoColumn)
+        this.oldTotalInfo.set(response.totalInfo);
+        console.log('this.oldTotalInfoColumn ', this.oldTotalInfo());
+        
         this.cdr.detectChanges();
         if (reset || this.productsServ.currentPage === 0) {
           this.productsServ.products = newInvoices;
@@ -192,20 +196,20 @@ export class CarsComponent implements OnInit {
 
 
   getOldTotalValue(columnIndex: number): string | null {
-    if (!this.oldTotalInfoColumn) return null;
+    const columns = this.oldTotalInfo();
+    if (!columns) return null;
 
-    const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+    const column = columns.find((col: any) => col.columnNum === columnIndex);
 
-    if (!column) return null;
-    const value = column.value as any;
+    if (!column || column.value == null) return null;
 
-    if (value === null || value === undefined) return null;
-    const numValue = Number(value);
+    const numValue = parseFloat(column.value);
 
-    if (!isNaN(numValue) && typeof value !== 'boolean') {
+    if (!isNaN(numValue)) {
       return numValue.toFixed(2).replace('.', ',');
     }
-    return String(value);
+
+    return String(column.value);
   }
 
   statuses = [
