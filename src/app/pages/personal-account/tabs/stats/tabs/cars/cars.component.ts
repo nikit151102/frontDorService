@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { TableModule } from 'primeng/table';
@@ -39,7 +39,8 @@ export class CarsComponent implements OnInit {
 
   constructor(private invoicesService: InvoicesService,
     public productsServ: CarsService,
-    public formatingDataService: FormatingDataService
+    public formatingDataService: FormatingDataService,
+    private cdr: ChangeDetectorRef
   ) { }
 
   // Функция для проверки видимости группы
@@ -102,6 +103,7 @@ export class CarsComponent implements OnInit {
 
         this.oldTotalInfoColumn = response.totalInfo;
         console.log('this.oldTotalInfoColumn ',this.oldTotalInfoColumn)
+        this.cdr.detectChanges();
         if (reset || this.productsServ.currentPage === 0) {
           this.productsServ.products = newInvoices;
         } else {
