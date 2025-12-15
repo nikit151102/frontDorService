@@ -33,7 +33,7 @@ export class CarsComponent implements OnInit {
   totalInfoColumn = totalInfoColumn;
   oldTotalInfoColumn = oldTotalInfoColumn;
   viewDataColumns: any = viewDataColumns;
-  oldTotalInfo = signal<any[] | null>(null);
+oldTotalInfo = signal<any>(null);
 
   @Input() actions: { label: string, action: string }[] = [];
   @Input() productService!: any;
@@ -104,7 +104,7 @@ export class CarsComponent implements OnInit {
           this.productsServ.totalRecords = response.totalInfoTaxInclude?.totalPagesCount * this.productsServ.pageSize;
         }
 
-        this.oldTotalInfo.set(response.totalInfo);
+        this.oldTotalInfo.set(response.totalInfo || {});
         console.log('this.oldTotalInfoColumn ', this.oldTotalInfo());
         
         this.cdr.detectChanges();
@@ -196,27 +196,41 @@ export class CarsComponent implements OnInit {
 
 get hasOldTotalInfo(): boolean {
   const info = this.oldTotalInfo();
-  console.log('hasOldTotalInfo',!!info && info.length > 0)
-  return !!info && info.length > 0;
+  console.log('hasOldTotalInfo:', info);
+
+  return !!info && typeof info === 'object' && Object.keys(info).length > 0;
 }
 
 
-  getOldTotalValue(columnIndex: number): string | null {
-    const columns = this.oldTotalInfo();
-    if (!columns) return null;
-
-    const column = columns.find((col: any) => col.columnNum === columnIndex);
-
-    if (!column || column.value == null) return null;
-
-    const numValue = parseFloat(column.value);
-
-    if (!isNaN(numValue)) {
-      return numValue.toFixed(2).replace('.', ',');
-    }
-
-    return String(column.value);
+getOldTotalValue(columnIndex: number): string | null {
+  const totalInfo = this.oldTotalInfo(); 
+  
+  if (!totalInfo || typeof totalInfo !== 'object') {
+    return null;
   }
+  const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+  
+  if (!column || !column.value) {
+    return '';
+  }
+
+  const rawValue = totalInfo[column.value];
+  
+  if (rawValue == null) {
+    return '';
+  }
+
+  if (typeof rawValue === 'number') {
+    return this.formatingDataService.formatisNumber(rawValue);
+  }
+
+  const numValue = parseFloat(rawValue);
+  if (!isNaN(numValue)) {
+    return this.formatingDataService.formatisNumber(numValue);
+  }
+
+  return String(rawValue);
+}
 
   statuses = [
     { label: 'Черновик', value: 0, id: 0 },
