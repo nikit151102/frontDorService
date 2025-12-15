@@ -205,31 +205,44 @@ get hasOldTotalInfo(): boolean {
 getOldTotalValue(columnIndex: number): string | null {
   const totalInfo = this.oldTotalInfo(); 
   
+  console.log(`getOldTotalValue(${columnIndex}):`);
+  console.log('- totalInfo:', totalInfo);
+  
   if (!totalInfo || typeof totalInfo !== 'object') {
+    console.log('- Нет totalInfo или это не объект');
     return null;
   }
+  
   const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+  console.log('- column для index', columnIndex, ':', column);
   
   if (!column || !column.value) {
+    console.log('- Нет колонки или пустой value');
     return '';
   }
-
+  
   const rawValue = totalInfo[column.value];
+  console.log('- rawValue для', column.value, ':', rawValue, 'тип:', typeof rawValue);
   
   if (rawValue == null) {
+    console.log('- rawValue null/undefined');
     return '';
   }
 
+  let result;
   if (typeof rawValue === 'number') {
-    return this.formatingDataService.formatisNumber(rawValue);
+    result = this.formatingDataService.formatisNumber(rawValue);
+  } else {
+    const numValue = parseFloat(rawValue);
+    if (!isNaN(numValue)) {
+      result = this.formatingDataService.formatisNumber(numValue);
+    } else {
+      result = String(rawValue);
+    }
   }
-
-  const numValue = parseFloat(rawValue);
-  if (!isNaN(numValue)) {
-    return this.formatingDataService.formatisNumber(numValue);
-  }
-
-  return String(rawValue);
+  
+  console.log('- Результат форматирования:', result);
+  return result;
 }
 
   statuses = [
