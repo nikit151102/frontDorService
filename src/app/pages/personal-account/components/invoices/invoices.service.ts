@@ -291,6 +291,7 @@ export class InvoicesService {
   counterpartyId: any;
   products: any;
   totalInfo: any;
+  oldTotalInfo: any;
   totalRecords = 0;
   totalPages = null;
   pageSize = 30;

@@ -33,7 +33,7 @@ export class CarsComponent implements OnInit {
   totalInfoColumn = totalInfoColumn;
   oldTotalInfoColumn = oldTotalInfoColumn;
   viewDataColumns: any = viewDataColumns;
-oldTotalInfo = signal<any>(null);
+  oldTotalInfo = signal<any>(null);
 
   @Input() actions: { label: string, action: string }[] = [];
   @Input() productService!: any;
@@ -104,10 +104,10 @@ oldTotalInfo = signal<any>(null);
           this.productsServ.totalRecords = response.totalInfoTaxInclude?.totalPagesCount * this.productsServ.pageSize;
         }
 
+
         this.oldTotalInfo.set(response.totalInfo || {});
-        console.log('this.oldTotalInfoColumn ', this.oldTotalInfo());
-        
-        this.cdr.detectChanges();
+        this.invoicesService.oldTotalInfo = response.totalInfo;
+
         if (reset || this.productsServ.currentPage === 0) {
           this.productsServ.products = newInvoices;
         } else {
@@ -125,7 +125,7 @@ oldTotalInfo = signal<any>(null);
       }
     );
   }
-
+  testOldData: any;
 
   onScroll(event: any) {
     const element = event.target;
@@ -160,7 +160,7 @@ oldTotalInfo = signal<any>(null);
       }
     });
 
-    this.loadProducts()
+    // this.loadProducts()
     this.selectedColumns = this.columns.map((col: any) => col.field);
     this.updateColumnVisibility();
 
@@ -194,56 +194,34 @@ oldTotalInfo = signal<any>(null);
   }
 
 
-get hasOldTotalInfo(): boolean {
-  const info = this.oldTotalInfo();
-  console.log('hasOldTotalInfo:', info);
+  get hasOldTotalInfo(): boolean {
+    const info = this.oldTotalInfo();
+    console.log('hasOldTotalInfo:', info);
 
-  return !!info && typeof info === 'object' && Object.keys(info).length > 0;
-}
-
-
-getOldTotalValue(columnIndex: number): string | null {
-  const totalInfo = this.oldTotalInfo(); 
-  
-  console.log(`getOldTotalValue(${columnIndex}):`);
-  console.log('- totalInfo:', totalInfo);
-  
-  if (!totalInfo || typeof totalInfo !== 'object') {
-    console.log('- Нет totalInfo или это не объект');
-    return null;
-  }
-  
-  const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
-  console.log('- column для index', columnIndex, ':', column);
-  
-  if (!column || !column.value) {
-    console.log('- Нет колонки или пустой value');
-    return '';
-  }
-  
-  const rawValue = totalInfo[column.value];
-  console.log('- rawValue для', column.value, ':', rawValue, 'тип:', typeof rawValue);
-  
-  if (rawValue == null) {
-    console.log('- rawValue null/undefined');
-    return '';
+    return !!info && typeof info === 'object' && Object.keys(info).length > 0;
   }
 
-  let result;
-  if (typeof rawValue === 'number') {
-    result = this.formatingDataService.formatisNumber(rawValue);
-  } else {
-    const numValue = parseFloat(rawValue);
-    if (!isNaN(numValue)) {
-      result = this.formatingDataService.formatisNumber(numValue);
-    } else {
-      result = String(rawValue);
+
+  getOldTotalValue(columnIndex: number): string | null {
+
+    if (!this.invoicesService.oldTotalInfo) return null;
+
+    const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+    const value = column ? this.invoicesService.oldTotalInfo?.[column.value] ?? 0 : null;
+
+    if (value === null) return null;
+
+    if (typeof value === 'number') {
+      return value.toFixed(2).replace('.', ',');
     }
+
+    const numericValue = parseFloat(value);
+    if (!isNaN(numericValue)) {
+      return numericValue.toFixed(2).replace('.', ',');
+    }
+
+    return value;
   }
-  
-  console.log('- Результат форматирования:', result);
-  return result;
-}
 
   statuses = [
     { label: 'Черновик', value: 0, id: 0 },
