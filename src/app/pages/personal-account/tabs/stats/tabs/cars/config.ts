@@ -93,7 +93,7 @@ export const viewDataColumns = [
         width: '10%',
         endpoint: '/api/Entities/ProductTarget/Filter'
     },
-    { field: 'grossCash', fieldView: 'grossCash', header: 'Вал', type: 'number', visible: true, width: '5%' },
+    { field: 'grossSum', fieldView: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '5%' },
     { field: 'kmCost', fieldView: 'kmCost', header: 'Вал км', type: 'number', visible: true, width: '5%' },
     { field: 'platon', fieldView: 'platon', header: 'Платон', type: 'number', visible: true, width: '5%' },
     { field: 'tax', fieldView: 'tax', header: 'Налоги', type: 'number', visible: true, width: '5%' },
@@ -110,9 +110,9 @@ export const viewDataColumns = [
 
 export const totalInfoColumn = [
     { columnNum: 0, value: 'totalCount' },
-    { columnNum: 1, value: 'grossCashTotalSum' },
-    { columnNum: 2, value: '' },
-    { columnNum: 3, value: '' },
+    { columnNum: 1, value: 'grossTotalSum' },
+    { columnNum: 2, value: 'kmCostTotalSum' },
+    { columnNum: 3, value: 'platonExpenseTotalSum' },
     { columnNum: 4, value: 'taxTotalSum' },
     { columnNum: 5, value: '' },
     { columnNum: 6, value: '' },
