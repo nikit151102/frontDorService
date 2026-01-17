@@ -54,7 +54,7 @@
 //                 values: [
 //                     { name: 'Без НДС', code: 0 },
 //                     { name: 'НДС 5%', code: 1 },
-//                     { name: 'НДС 20%', code: 1 },
+//                     { name: 'НДС 22%', code: 1 },
 //                 ]
 //             },
 //             // { label: 'Тип', field: 'name', type: 'text' },

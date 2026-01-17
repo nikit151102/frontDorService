@@ -202,26 +202,26 @@ export class CarsComponent implements OnInit {
   }
 
 
-  getOldTotalValue(columnIndex: number): string | null {
+  // getOldTotalValue(columnIndex: number): string | null {
 
-    if (!this.invoicesService.oldTotalInfo) return null;
+  //   if (!this.invoicesService.oldTotalInfo) return null;
 
-    const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
-    const value = column ? this.invoicesService.oldTotalInfo?.[column.value] ?? 0 : null;
+  //   const column = this.oldTotalInfoColumn.find((col: any) => col.columnNum === columnIndex);
+  //   const value = column ? this.invoicesService.oldTotalInfo?.[column.value] ?? 0 : null;
 
-    if (value === null) return null;
+  //   if (value === null) return null;
 
-    if (typeof value === 'number') {
-      return value.toFixed(2).replace('.', ',');
-    }
+  //   if (typeof value === 'number') {
+  //     return value.toFixed(2).replace('.', ',');
+  //   }
 
-    const numericValue = parseFloat(value);
-    if (!isNaN(numericValue)) {
-      return numericValue.toFixed(2).replace('.', ',');
-    }
+  //   const numericValue = parseFloat(value);
+  //   if (!isNaN(numericValue)) {
+  //     return numericValue.toFixed(2).replace('.', ',');
+  //   }
 
-    return value;
-  }
+  //   return value;
+  // }
 
   statuses = [
     { label: 'Черновик', value: 0, id: 0 },

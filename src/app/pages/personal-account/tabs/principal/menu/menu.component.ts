@@ -15,9 +15,9 @@ export class MenuComponent implements OnInit {
   selectedName: string = '';
   items: any[] = [
     { code: '349143', name: 'ЗП сотрудников', access: '', managerDocType: 0, navigate: ['349246'] },
-    { code: '349246', name: 'ЗП водителей', access: '', managerDocType: 0, navigate: ['349143'] },
-    { code: '341652', name: 'Налоги', access: '', managerDocType: 2, navigate: ['341652'] },
-    { code: '305641', name: 'Платон', access: '', managerDocType: 2, navigate: ['305641'] },
+    // { code: '349246', name: 'ЗП водителей', access: '', managerDocType: 0, navigate: ['349143'] },
+    // { code: '341652', name: 'Налоги', access: '', managerDocType: 2, navigate: ['341652'] },
+    // { code: '305641', name: 'Платон', access: '', managerDocType: 2, navigate: ['305641'] },
   ];
 
   constructor(private jwtService: JwtService, private directorService: DirectorService) { }

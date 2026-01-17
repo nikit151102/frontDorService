@@ -32,7 +32,7 @@ export class PersonalAccountComponent implements OnInit {
 
     if (!rootTab) {
       this.showGreeting = true;
-      this.router.navigate(['loading'], { relativeTo: this.route });
+      // this.router.navigate(['loading'], { relativeTo: this.route });
       setTimeout(() => {
         this.checkAndRedirect();
       }, 1500);
@@ -45,7 +45,7 @@ export class PersonalAccountComponent implements OnInit {
     const decodedToken = this.jwtService.getDecodedToken();
     if (!decodedToken || !decodedToken.role) {
       console.error('Ошибка: нет роли в токене!');
-      this.router.navigateByUrl('/', { replaceUrl: true });
+      // this.router.navigateByUrl('/', { replaceUrl: true });
       this.toastService.showError(
         'Отказано в доступе',
         'Ваш профиль не имеет прав для работы с системой.'

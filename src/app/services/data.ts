@@ -20,8 +20,9 @@ export const statuses = [
 export const taxes = [
     { label: 'Без НДС', value: 0 },
     // { label: 'НДС 5%', value: 1 },
-    { label: 'НДС 20%', value: 2 }
+    { label: 'НДС 22%', value: 2 }
 ];
+
 
 
 export const adjustmentOptions = [

@@ -41,13 +41,14 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     { label: 'Бухгалтер', commandName: 'accountant', access: 'AccountantAccess', notifyKey: '' },
     { label: 'Касса', commandName: 'cash', access: 'CashAccess' },
     // { label: 'База', commandName: 'base', access: 'ManagerAccess' },
-    { label: 'Логист', commandName: 'logistic', access: 'LogisticAccess' },
-    // LogisticAccess
-    { label: 'Директор', commandName: 'director', access: 'Director2Access' },
+    // { label: 'Логист', commandName: 'logistic', access: 'LogisticAccess' },
+
+    { label: 'Директор', commandName: 'director', access: '' }, //Director2Access
     { label: 'Статистика', commandName: 'stats', access: 'AnalyticsSection' },
     { label: 'Справочники', commandName: 'reference', access: 'EntitiesAccess' }
 
   ];
+
   // items: CustomMenuItem[] = [
   //   { label: 'Контрагенты', commandName: 'clients', access: '', notifyKey: 'partnersNotifyData' },
   //   { label: 'Бухгалтер', commandName: 'accountant', access: '', notifyKey: '' },
@@ -56,8 +57,8 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   //   { label: 'Логист', commandName: 'base', access: 'none' },
   //   { label: 'Директор', commandName: 'base', access: 'none' },
   //   { label: 'Справочники', commandName: 'reference', access: '' }
-
   // ];
+  
   decodedRole: any[] = [];
   notifications: any;
   menuActive: Boolean = false;

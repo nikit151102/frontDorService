@@ -21,7 +21,7 @@ export interface Counterparty {
 export enum TaxType {
     WithoutVAT = 0, // Без НДС
     VAT5 = 1, // НДС 5%
-    VAT20 = 2 // НДС 20%
+    VAT20 = 2 // НДС 22%
 }
 
 export interface Product {
