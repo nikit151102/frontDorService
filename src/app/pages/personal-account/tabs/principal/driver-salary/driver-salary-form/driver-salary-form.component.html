@@ -46,7 +46,7 @@
                     <div class="p-field p-col-12">
                         <div class="drivers-section">
                             <div class="section-header">
-                                <label>Водители и суммы</label>
+                                <label>Назначения и суммы</label>
                                 <button pButton type="button" label="Добавить" class="p-button-rounded p-button-text"
                                     (click)="addDriverRow()">
 
@@ -60,14 +60,11 @@
 
                                     <!-- Выбор водителя -->
                                     <div class="p-col-7" style="width: -webkit-fill-available;">
-              <app-custom-dropdown 
-        [options]="driverOptions" 
-        optionLabel="fullName"
-        optionValue="id" 
-        [selected]="driver.get('driverEmployeeId')?.value"
-        (selectedChange)="onDriverChange(i, $event)"
-        placeholder="Выберите водителя">
-    </app-custom-dropdown>
+                                        <app-custom-dropdown [options]="driverOptions" optionLabel="fullName"
+                                            optionValue="id" [selected]="driver.get('driverEmployeeId')?.value"
+                                            (selectedChange)="onDriverChange(i, $event)"
+                                            placeholder="Выберите водителя">
+                                        </app-custom-dropdown>
                                         <small
                                             *ngIf="driver.get('driverEmployeeId')?.touched && driver.get('driverEmployeeId')?.invalid"
                                             class="p-error">Выберите водителя</small>

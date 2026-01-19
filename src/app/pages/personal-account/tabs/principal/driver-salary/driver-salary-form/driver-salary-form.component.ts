@@ -279,11 +279,11 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   }
 
 
-onDriverChange(index: number, value: any): void {
-  console.log('index',index , ":", value )
+  onDriverChange(index: number, value: any): void {
+    console.log('index', index, ":", value)
     const driverGroup = this.driversArray.at(index);
     driverGroup.get('driverEmployeeId')?.setValue(value);
-}
+  }
 
   updateDateTime() {
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
@@ -409,7 +409,7 @@ onDriverChange(index: number, value: any): void {
     const formValue = this.invoiceForm.value;
 
     const driversWithQuantity = formValue.drivers.map((driver: any) => ({
-      driverEmployeeId: driver.productTargetId,
+      driverEmployeeId: driver.driverEmployeeId,
       amount: driver.amount,
       quantity: 1
     }));
