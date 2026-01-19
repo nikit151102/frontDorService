@@ -424,7 +424,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     const data: any = {
       dateTime: formValue.dateTime,
       directorType: this.employeeType,
-      driverEmployeId: formValue.driverEmployeId,
+      DriverEmployeeId: formValue.driverEmployeId,
       // productTargetId: formValue.productTargetId,
       productList: driversWithQuantity
     };
