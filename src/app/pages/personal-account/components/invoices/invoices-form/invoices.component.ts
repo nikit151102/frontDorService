@@ -776,7 +776,7 @@ export class InvoicesFormComponent implements OnInit, OnChanges {
       if ((currentRole == '3' || currentRole != '2') && currentRole != '1') {
         this.sendingInvoice(invoice, 2);
       } else if (currentRole == '2') {
-        this.sendingInvoice(invoice, 1);
+        this.sendingInvoice(invoice, 2);
       } else if (currentRole == '1') {
         this.sendingInvoice(invoice, 5);
       }
