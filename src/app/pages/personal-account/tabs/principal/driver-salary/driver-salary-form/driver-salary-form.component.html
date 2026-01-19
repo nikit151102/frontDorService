@@ -60,7 +60,7 @@
 
                                     <!-- Выбор водителя -->
                                     <div class="p-col-7" style="width: -webkit-fill-available;">
-                                        <app-custom-dropdown [options]="driverOptions" optionLabel="fullName"
+                                        <app-custom-dropdown [options]="ProductTargetOptions" optionLabel="name"
                                             optionValue="id" [selected]="driver.get('driverEmployeeId')?.value"
                                             (selectedChange)="onDriverChange(i, $event)"
                                             placeholder="Выберите водителя">

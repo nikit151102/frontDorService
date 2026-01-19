@@ -409,7 +409,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     const formValue = this.invoiceForm.value;
 
     const driversWithQuantity = formValue.drivers.map((driver: any) => ({
-      driverEmployeeId: driver.driverEmployeeId,
+      productTargetId: driver.driverEmployeeId,
       amount: driver.amount,
       quantity: 1
     }));
