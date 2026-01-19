@@ -205,11 +205,13 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   loadProductTargets(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/ProductTarget/Filter`, {
-      filters: [{
-        field: 'ProductTargetCategory.Code',
-        values: [1],
-        type: 2
-      }], sorts: []
+      filters: [
+      //   {
+      //   field: 'ProductTargetCategory.Code',
+      //   values: [1],
+      //   type: 2
+      // }
+    ], sorts: []
     }, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
