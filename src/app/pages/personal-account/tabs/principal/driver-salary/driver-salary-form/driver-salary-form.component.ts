@@ -132,6 +132,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       dateTime: ['', Validators.required],
       directorType: [2],
       productTargetId: [''],
+      driverEmployeId: [''],
       drivers: this.fb.array([
         this.createDriverFormGroup()
       ])
@@ -287,6 +288,10 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     driverGroup.get('driverEmployeeId')?.setValue(value);
   }
 
+  onDriverEmployeChange(data: any): void {
+    this.invoiceForm.get('driverEmployeId')?.setValue(data);
+  }
+
   updateDateTime() {
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
     const selectedYear = this.invoiceForm.get('selectedYear')?.value;
@@ -419,6 +424,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     const data: any = {
       dateTime: formValue.dateTime,
       directorType: this.employeeType,
+      driverEmployeId: formValue.driverEmployeId,
       // productTargetId: formValue.productTargetId,
       productList: driversWithQuantity
     };

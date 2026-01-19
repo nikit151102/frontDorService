@@ -8,14 +8,14 @@
                 <div class="p-fluid p-formgrid p-grid">
 
                     <!-- Общие поля -->
-                    <div class="p-field p-col-12" *ngIf="employeeType == 1 || employeeType == 6">
-                        <label for="productTargetId">Машина</label>
-                        <app-custom-dropdown [options]="ProductTargetOptions" optionLabel="name" optionValue="id"
-                            [selected]="invoiceForm.get('productTargetId')?.value"
-                            (selectedChange)="onProductTargetChange($event)">
+                    <div class="p-field p-col-12" >
+                        <label for="driverEmployeId">Сотрудник</label>
+                        <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
+                            [selected]="invoiceForm.get('driverEmployeId')?.value"
+                            (selectedChange)="onDriverEmployeChange($event)">
                         </app-custom-dropdown>
                         <small
-                            *ngIf="invoiceForm.get('productTargetId')?.touched && invoiceForm.get('productTargetId')?.invalid"
+                            *ngIf="invoiceForm.get('driverEmployeId')?.touched && invoiceForm.get('driverEmployeId')?.invalid"
                             class="p-error">Это поле обязательно</small>
                     </div>
 
