@@ -278,6 +278,10 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     }, 0);
   }
 
+
+  selectedChangeDriver(data:any){
+console.log('selectedChangeDriver ',data)
+  }
   updateDateTime() {
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
     const selectedYear = this.invoiceForm.get('selectedYear')?.value;

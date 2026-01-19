@@ -62,7 +62,7 @@
                                     <div class="p-col-7" style="width: -webkit-fill-available;">
                                         <app-custom-dropdown [options]="driverOptions" optionLabel="fullName"
                                             optionValue="id" formControlName="driverEmployeeId"
-                                            placeholder="Выберите водителя">
+                                            placeholder="Выберите водителя" (selectedChange)="selectedChangeDriver($event)">
                                         </app-custom-dropdown>
                                         <small
                                             *ngIf="driver.get('driverEmployeeId')?.touched && driver.get('driverEmployeeId')?.invalid"
