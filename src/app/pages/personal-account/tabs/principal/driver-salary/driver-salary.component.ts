@@ -143,7 +143,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
 
           // Полностью заменяем фильтры (не добавляем, а заменяем)
           this.driverSalaryService.defaultFilters = [
-            { field: 'DocPaymentType', values: [4], type: 1 },
+            // { field: 'DocPaymentType', values: [4], type: 1 },
             { field: 'antonCashType', values: [6], type: 1 },
             {
               field: 'Director2Type',
