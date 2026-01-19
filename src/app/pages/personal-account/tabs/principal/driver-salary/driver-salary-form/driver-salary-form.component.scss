@@ -516,5 +516,89 @@ input[type="date"] {
     color: #101010 !important;
     max-width: 800px !important;
     width: 70% !important;
-    height: 50% !important;
+    height: 65% !important;
+}
+
+
+.drivers-section {
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+
+        label {
+            font-weight: 600;
+            color: #374151;
+        }
+    }
+
+    .drivers-list {
+        .driver-row {
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 1px solid #f3f4f6;
+            display: flex;
+            width: 100%;
+            align-items: center;
+            gap: 10px;
+
+            &:last-child {
+                border-bottom: none;
+                margin-bottom: 0;
+                padding-bottom: 0;
+            }
+
+            .p-col-1 {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+    }
+
+    .total-amount {
+        margin-top: 1rem;
+        padding-top: 1rem;
+        border-top: 2px solid #e5e7eb;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+        bottom: 26px;
+        position: sticky;
+        background: #ffff;
+
+        .total-label {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .total-value {
+            text-align: right;
+            color: #059669;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.modern-select {
+    width: 100%;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
-import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, FormArray, FormControl } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CalendarModule } from 'primeng/calendar';
@@ -10,6 +10,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
+import { TooltipModule } from 'primeng/tooltip';
 import { ConfirmPopupService } from '../../../../../../components/confirm-popup/confirm-popup.service';
 import { InvoiceConfig } from '../../../../../../interfaces/common.interface';
 import { CacheReferenceService } from '../../../../../../services/cache-reference.service';
@@ -26,7 +27,8 @@ import { environment } from '../../../../../../../environment';
 
 @Component({
   selector: 'app-driver-salary-form',
-  imports: [CommonModule,
+  imports: [
+    CommonModule,
     TableModule,
     InputTextModule,
     InputNumberModule,
@@ -37,9 +39,11 @@ import { environment } from '../../../../../../../environment';
     DialogModule,
     FormsModule,
     ReactiveFormsModule,
+    TooltipModule,
     CustomDropdownComponent,
     CustomInputNumberComponent,
-    UnsavedChangesDialogComponent],
+    UnsavedChangesDialogComponent
+  ],
   templateUrl: './driver-salary-form.component.html',
   styleUrl: './driver-salary-form.component.scss',
   providers: [ConfirmationService, MessageService]
@@ -49,6 +53,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   @Input() label: string = 'Создать';
   @Input() employeeType: Number = 0;
   @Output() create = new EventEmitter<any>();
+
   config!: InvoiceConfig;
   service: any;
   selectedInvoice: any;
@@ -56,6 +61,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   invoiceForm!: FormGroup;
   dialogVisible = false;
   newDoc: boolean = true;
+
   // Mock data
   staffsOptions = [];
   driverOptions = [];
@@ -97,7 +103,6 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] && this.data) {
       this.selectedInvoice = this.data;
-      console.log('this.areOptionsLoaded', this.selectedInvoice)
       this.fillFormWithInvoiceData();
       this.newDoc = false;
       this.dialogVisible = true;
@@ -107,12 +112,73 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     }
   }
 
-
   ngOnInit(): void {
     this.generateYears();
     this.initForm();
-    console.log('employeeType before request:', this.employeeType);
+    this.loadDrivers();
+    this.loadProductTargets();
     this.currentRole = this.jwtService.getDecodedToken().email;
+  }
+
+  // Геттер для удобного доступа к FormArray
+  get driversArray(): FormArray {
+    return this.invoiceForm.get('drivers') as FormArray;
+  }
+
+  initForm(): void {
+    this.invoiceForm = this.fb.group({
+      selectedMonth: [new Date().getMonth()],
+      selectedYear: [new Date().getFullYear()],
+      dateTime: ['', Validators.required],
+      directorType: [2],
+      productTargetId: [''],
+      drivers: this.fb.array([
+        this.createDriverFormGroup()
+      ])
+    }, { validators: dateRangeValidator() });
+
+    this.updateDateTime();
+  }
+
+  // Создание формы для одной записи водителя
+  createDriverFormGroup(): FormGroup {
+    return this.fb.group({
+      driverEmployeeId: ['', Validators.required],
+      amount: [0, [Validators.required, Validators.min(0)]]
+    });
+  }
+
+  // Добавление новой строки водителя
+  addDriverRow(): void {
+    this.driversArray.push(this.createDriverFormGroup());
+    this.cdr.detectChanges();
+  }
+
+  // Удаление строки водителя
+  removeDriverRow(index: number): void {
+    if (this.driversArray.length > 1) {
+      this.driversArray.removeAt(index);
+    }
+  }
+
+  // Расчет общей суммы
+  calculateTotalAmount(): number {
+    return this.driversArray.controls.reduce((total, control) => {
+      const amount = control.get('amount')?.value || 0;
+      return total + amount;
+    }, 0);
+  }
+
+  // Проверка на дублирование водителей
+  hasDuplicateDrivers(): boolean {
+    const driverIds = this.driversArray.controls
+      .map(control => control.get('driverEmployeeId')?.value)
+      .filter(id => id);
+
+    return new Set(driverIds).size !== driverIds.length;
+  }
+
+  loadDrivers(): void {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/DriverEmployee/Filter`, {
       filters: [{
@@ -127,16 +193,17 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       }),
     }).subscribe(
       (response: any) => {
-        console.log('employeeType', this.employeeType)
         const data = response.data;
-        this.driverOptions = data;
         this.driverOptions = data.map((employee: any) => ({
           ...employee,
           fullName: `${employee.surname || ''} ${employee.name || ''} ${employee.patronymic || ''}`.trim()
-        }))
+        }));
       }
     );
+  }
 
+  loadProductTargets(): void {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/ProductTarget/Filter`, {
       filters: [{
         field: 'ProductTargetCategory.Code',
@@ -154,11 +221,10 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         this.ProductTargetOptions = data;
       }
     );
-
   }
+
   generateYears() {
     const currentYear = new Date().getFullYear();
-    // Generate years from current year - 2 to current year + 2
     for (let i = currentYear - 2; i <= currentYear + 2; i++) {
       this.years.push(i);
     }
@@ -176,23 +242,27 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       const defaultDate = new Date(currentYear, selectedMonth, 15);
       const dateString = defaultDate.toISOString().split('T')[0];
 
-      input.value = dateString;
+      this.invoiceForm.get('selectedYear')?.setValue(dateString);
 
       setTimeout(() => {
-        if ('showPicker' in HTMLInputElement.prototype) {
-          input.showPicker();
-        } else {
-          input.focus();
+        if (document.activeElement === input) {
           input.click();
         }
-        setTimeout(() => {
-          if (!this.invoiceForm.get('selectedYear')?.value) {
-            input.value = '';
-          }
-        }, 100);
       }, 10);
-    } else {
-      this.showDatePicker(event);
+    }
+  }
+
+  onMonthYearChange() {
+    const selectedDate = this.invoiceForm.get('selectedYear')?.value;
+    if (selectedDate) {
+      const date = new Date(selectedDate);
+      const month = date.getMonth();
+      const year = date.getFullYear();
+
+      this.invoiceForm.patchValue({
+        selectedMonth: month,
+        dateTime: selectedDate
+      });
     }
   }
 
@@ -209,15 +279,12 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   }
 
   updateDateTime() {
-    // Получаем значения из формы
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
     const selectedYear = this.invoiceForm.get('selectedYear')?.value;
 
     if (selectedMonth === null || selectedYear === null) return;
 
-    // Создаем дату для первого дня выбранного месяца
     const dateTime = new Date(selectedYear, selectedMonth, 1, 0, 0, 0, 0);
-
     const formattedDateTime = this.formatDateToISO(dateTime);
 
     this.invoiceForm.patchValue({
@@ -225,16 +292,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     });
   }
 
-  onMonthYearChange() {
-    // this.updateDateTime();
-    const DateTime = this.invoiceForm.get('selectedYear')?.value;
-    this.invoiceForm.patchValue({
-      dateTime: DateTime
-    });
-  }
 
-
-  // Format date to ISO string without timezone shift
   private formatDateToISO(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -246,192 +304,56 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
   }
 
-
-  initForm(): void {
-    this.invoiceForm = this.fb.group({
-      // Добавьте эти контролы
-      selectedMonth: [new Date().getMonth()],
-      selectedYear: [new Date().getFullYear()],
-      dateTime: ['', Validators.required],
-      directorType: [2],
-      amount: [''],
-      driverEmployeeId: [''],
-      productTargetId: ['']
-    }, { validators: dateRangeValidator() });
-
-    // Подписка на изменения для вычисляемых полей
-    this.setupCalculations();
-
-    // Инициализация дат при создании формы
-    this.updateDateTime();
-  }
-
-
-  positiveOdometerValidator(control: AbstractControl): ValidationErrors | null {
-    const value = control.value;
-    return value < 0 ? { negativeOdometer: true } : null;
-  }
-
   fillFormWithInvoiceData(): void {
     if (!this.selectedInvoice) {
       console.warn('selectedInvoice is null or undefined');
       return;
     }
 
-    const odometerValue = this.selectedInvoice.endOdometer != null && this.selectedInvoice.beginOdometer != null
-      ? this.selectedInvoice.endOdometer - this.selectedInvoice.beginOdometer
-      : 0;
+    // Очищаем существующие записи
+    while (this.driversArray.length !== 0) {
+      this.driversArray.removeAt(0);
+    }
 
     // Заполняем форму данными из selectedInvoice
-    // this.invoiceForm.patchValue({
-    //   productTargetId: this.selectedInvoice.productTargetId || '',
-    //   beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
-    //   endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
-    //   workDays: this.selectedInvoice.workDays ?? 0,
-    //   beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
-    //   endOdometer: this.selectedInvoice.endOdometer ?? 0,
-    //   odometer: odometerValue,
-    //   loadedOdometer: this.selectedInvoice.loadedOdometer ?? 0,
-    //   emptyOdometer: this.selectedInvoice.emptyOdometer ?? 0,
-    //   grossCash: this.selectedInvoice.grossCash ?? 0,
-    //   grossNoNds: this.selectedInvoice.grossNoNds ?? 0,
-    //   grossNds: this.selectedInvoice.grossNds ?? 0,
-    //   // driverSalary: this.selectedInvoice.driverSalary ?? 0,
-    //   // officeSalary: this.selectedInvoice.officeSalary ?? 0,
-    //   fuelBegin: this.selectedInvoice.fuelBegin ?? 0,
-    //   fuelEnd: this.selectedInvoice.fuelEnd ?? 0,
-    //   fuelCount: this.selectedInvoice.fuelCount ?? 0,
-    //   fuelCost: this.selectedInvoice.fuelCost ?? 0,
-    //   fuelTotalCost: this.selectedInvoice.fuelTotalCost ?? 0,
-    //   driverEmployeeId: this.selectedInvoice.driver || ''
-    // });
-
-    console.log('Form filled with invoice data:', this.selectedInvoice);
-  }
-
-
-  setupCalculations(): void {
-    // Получаем контролы один раз
-    const beginOdometerControl = this.invoiceForm.get('beginOdometer');
-    const endOdometerControl = this.invoiceForm.get('endOdometer');
-    const fuelCountControl = this.invoiceForm.get('fuelCount');
-    const fuelCostControl = this.invoiceForm.get('fuelCost');
-    const odometerControl = this.invoiceForm.get('odometer');
-    const loadedOdometerControl = this.invoiceForm.get('loadedOdometer');
-    const emptyOdometerControl = this.invoiceForm.get('emptyOdometer');
-
-    // Проверяем существование контролов перед подпиской
-    if (beginOdometerControl && endOdometerControl) {
-      beginOdometerControl.valueChanges.subscribe(() => this.calculateOdometer());
-      endOdometerControl.valueChanges.subscribe(() => this.calculateOdometer());
-    }
-
-    if (fuelCountControl && fuelCostControl) {
-      fuelCountControl.valueChanges.subscribe(() => this.calculateFuelTotal());
-      fuelCostControl.valueChanges.subscribe(() => this.calculateFuelTotal());
-    }
-
-    if (odometerControl && loadedOdometerControl && emptyOdometerControl) {
-      odometerControl.valueChanges.subscribe(() => {
-        this.lastChangedField = 'odometer';
-        this.calculateOdometerParts();
+    if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
+      // Если данные приходят в виде массива водителей
+      this.selectedInvoice.drivers.forEach((driver: any) => {
+        this.driversArray.push(this.fb.group({
+          driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
+          amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
+        }));
       });
-      loadedOdometerControl.valueChanges.subscribe(() => {
-        this.lastChangedField = 'loadedOdometer';
-        this.calculateOdometerParts();
-      });
-      emptyOdometerControl.valueChanges.subscribe(() => {
-        this.lastChangedField = 'emptyOdometer';
-        this.calculateOdometerParts();
-      });
-    }
-  }
-
-  calculateOdometer(): void {
-    const beginControl = this.invoiceForm.get('beginOdometer');
-    const endControl = this.invoiceForm.get('endOdometer');
-    const odometerControl = this.invoiceForm.get('odometer');
-
-    if (beginControl && endControl && odometerControl) {
-      const begin = beginControl.value || 0;
-      const end = endControl.value || 0;
-      odometerControl.setValue(end - begin, { emitEvent: false });
-      odometerControl.updateValueAndValidity();
-    }
-  }
-
-
-  private calculateOdometerParts(): void {
-    const odometer = this.invoiceForm.get('odometer')?.value;
-    const loadedOdometer = this.invoiceForm.get('loadedOdometer')?.value;
-    const emptyOdometer = this.invoiceForm.get('emptyOdometer')?.value;
-
-    // Если пробег невалидный (0, отрицательный или не число) - очищаем зависимые поля
-    if (odometer === null || odometer === undefined || odometer <= 0) {
-      this.invoiceForm.get('loadedOdometer')?.setValue(null, { emitEvent: false });
-      this.invoiceForm.get('emptyOdometer')?.setValue(null, { emitEvent: false });
-      return;
+    } else {
+      // Для обратной совместимости с одиночной записью
+      this.driversArray.push(this.fb.group({
+        driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
+        amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
+      }));
     }
 
-    // Определяем, какое поле было изменено последним
-    const lastChangedField = this.getLastChangedField();
-
-    // Если изменили груженный пробег - пересчитываем пустой
-    if (lastChangedField === 'loadedOdometer' && loadedOdometer !== null) {
-      this.invoiceForm.get('emptyOdometer')?.setValue(odometer - loadedOdometer, { emitEvent: false });
-    }
-    // Если изменили пустой пробег - пересчитываем груженный
-    else if (lastChangedField === 'emptyOdometer' && emptyOdometer !== null) {
-      this.invoiceForm.get('loadedOdometer')?.setValue(odometer - emptyOdometer, { emitEvent: false });
-    }
-    // Проверяем корректность суммы
-    else if (loadedOdometer !== null && emptyOdometer !== null &&
-      (loadedOdometer + emptyOdometer) !== odometer) {
-      console.warn('Сумма груженного и пустого пробега не равна общему пробегу');
-    }
+    // Обновляем общие поля
+    this.invoiceForm.patchValue({
+      productTargetId: this.selectedInvoice.productTargetId || '',
+      selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
+      selectedYear: this.selectedInvoice.selectedYear || new Date().getFullYear(),
+      dateTime: this.selectedInvoice.dateTime || ''
+    });
   }
-
-  private lastChangedField: string | null = null;
-
-  // Метод для отслеживания последнего измененного поля
-  private getLastChangedField(): string | null {
-    return this.lastChangedField;
-  }
-
-
-  private calculateFuelTotal() {
-    const fuelBegin = this.invoiceForm.get('fuelBegin')?.value || 0;
-    const fuelEnd = this.invoiceForm.get('fuelEnd')?.value || 0;
-    const fuelCount = this.invoiceForm.get('fuelCount')?.value || 0;
-    const fuelCost = this.invoiceForm.get('fuelCost')?.value || 0;
-
-    // Формула: (Начало + Заправки - Конец) * Цена
-    const total = (fuelBegin + fuelCount - fuelEnd) * fuelCost;
-
-    // Устанавливаем рассчитанное значение
-    this.invoiceForm.get('fuelTotalCost')?.setValue(total, { emitEvent: false });
-  }
-
-  onVehicleChange(selectedValue: any): void {
-    console.log('Выбрано значение:', selectedValue);
-    this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
-  }
-
 
   onProductTargetChange(selectedValue: any): void {
     this.invoiceForm.get('productTargetId')?.setValue(selectedValue);
   }
 
-
-  onDriverChange(selectedValue: any): void {
-    console.log('Выбрано значение:', selectedValue);
-    this.invoiceForm.get('driverEmployeeId')?.setValue(selectedValue);
-  }
-
-
   saveData(callback?: (invoice: any) => void) {
-    console.log('this.invoiceForm.value', this.invoiceForm.value)
-    if (this.invoiceForm.valid) {
+    console.log('this.invoiceForm', this.invoiceForm)
+    if (this.invoiceForm.valid && this.driversArray.length > 0) {
+
+      // Проверка на дублирование водителей
+      if (this.hasDuplicateDrivers()) {
+        this.toastService.showError('Ошибка', 'Нельзя добавлять одного и того же водителя несколько раз');
+        return;
+      }
 
       let titlePopUp = '';
       let acceptLabel = '';
@@ -444,27 +366,15 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
         acceptLabel = 'Создать';
       }
 
-
       this.confirmPopupService.openConfirmDialog({
         title: '',
         message: titlePopUp,
         acceptLabel: acceptLabel,
         rejectLabel: 'Отмена',
         onAccept: () => {
-          console.log('Сохранение данных:', this.invoiceForm.value);
-          let data = this.invoiceForm.value;
-          if (this.data && this.data.id) {
-            data.id = this.data.id
-          }
-          delete data.selectedMonth
-          delete data.selectedYear
-          data.directorType = this.employeeType;
+          const formData = this.prepareFormData();
 
-          if (this.employeeType == 2) {
-            delete data.productTargetId;
-          }
-          // data.creatorId = localStorage.getItem('VXNlcklk')
-          this.driverSalaryService.setDriverSalary(data).subscribe({
+          this.driverSalaryService.setDriverSalary(formData).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
               this.toastService.showSuccess('Успешно', response.documentMetadata.message)
@@ -481,26 +391,63 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
           });
         }
       });
-
     } else {
       this.markAllAsTouched();
       console.error('Ошибка при сохранении документа валидация');
     }
-
   }
 
+  // Подготовка данных для отправки
+  prepareFormData(): any {
+    const formValue = this.invoiceForm.value;
+
+    const driversWithQuantity = formValue.drivers.map((driver: any) => ({
+      driverEmployeeId: driver.productTargetId,
+      amount: driver.amount,
+      quantity: 1
+    }));
+
+    const data: any = {
+      dateTime: formValue.dateTime,
+      directorType: this.employeeType,
+      // productTargetId: formValue.productTargetId,
+      productList: driversWithQuantity
+    };
+
+    if (this.data && this.data.id) {
+      data.id = this.data.id;
+    }
+
+    if (this.employeeType == 2) {
+      delete data.productTargetId;
+    }
+
+    return data;
+  }
 
   markAllAsTouched(): void {
+    // Помечаем как touched все контролы основной формы
     Object.values(this.invoiceForm.controls).forEach(control => {
       control.markAsTouched();
     });
-  }
 
+    // Помечаем как touched все контролы в FormArray
+    this.driversArray.controls.forEach((driverGroup: any) => {
+      Object.values(driverGroup.controls).forEach((control: any) => {
+        control.markAsTouched();
+      });
+    });
+  }
 
   onDialogClose(event: any = null) {
     this.selectedInvoice = null;
     this.showConfirmDialog = false;
     this.dialogVisible = false;
+    // Сбрасываем форму к одной строке при закрытии
+    while (this.driversArray.length !== 0) {
+      this.driversArray.removeAt(0);
+    }
+    this.driversArray.push(this.createDriverFormGroup());
   }
 
   showConfirmDialog: boolean = false;
@@ -516,16 +463,25 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     this.dialogVisible = true;
   }
 
-
   createNewInvoice(): void {
     this.newDoc = true;
-
     this.selectedInvoice = {};
     this.data = null;
     this.invoiceForm.reset();
+
+    // Сбрасываем FormArray к одной строке
+    while (this.driversArray.length !== 0) {
+      this.driversArray.removeAt(0);
+    }
+    this.driversArray.push(this.createDriverFormGroup());
+
+    // Устанавливаем значения по умолчанию
+    this.invoiceForm.patchValue({
+      selectedMonth: new Date().getMonth(),
+      selectedYear: new Date().getFullYear(),
+      directorType: 2
+    });
+
     this.dialogVisible = true;
   }
-
-
-
 }
