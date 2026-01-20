@@ -60,10 +60,11 @@ export const viewDataColumns = [
 
 export const totalInfoColumn = [
     { columnNum: 0, value: 'totalCount' },
-    { columnNum: 1, value: 'salaryTotalSum' },
-    { columnNum: 2, value: 'cashTotalSum' },
-    { columnNum: 3, value: 'noCasTotalSumh' },
-    { columnNum: 4, value: 'noNdsTotalSum' },
+    { columnNum: 1, value: 'officeSalaryTotalSum' },
+    { columnNum: 2, value: 'repairCashExpenseTotalSum' },
+    { columnNum: 3, value: 'repairNdsExpenseTotalSum' },
+    { columnNum: 4, value: 'repairNoNdsExpenseTotalSum' },
+    { columnNum: 5, value: 'summaryTotalSum' },
 ];
 
 export const oldTotalInfoColumn = [
