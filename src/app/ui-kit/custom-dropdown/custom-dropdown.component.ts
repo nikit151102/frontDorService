@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, HostListener, Input, Output, SimpleChanges } from '@angular/core';
 
 @Component({
   selector: 'app-custom-dropdown',
@@ -19,6 +19,16 @@ export class CustomDropdownComponent {
   isOpen = false; 
 
   constructor(private elementRef: ElementRef) {}
+  
+    ngOnChanges(changes: SimpleChanges) {
+    console.log('CustomDropdown ngOnChanges:', changes);
+    
+    if (changes['selected']) {
+      this.selected= changes['selected'].currentValue;
+    }
+    
+  }
+  
   
   toggleDropdown() {
     if (!this.disabled) {

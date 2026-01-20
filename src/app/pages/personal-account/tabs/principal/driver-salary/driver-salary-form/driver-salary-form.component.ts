@@ -433,7 +433,7 @@ fillFormWithInvoiceData(): void {
   }
 
   this.invoiceForm.patchValue({
-    'driverEmployeId':{'id':this.selectedInvoice.driverId}
+    'driverEmployeId': this.selectedInvoice.driverId
   })
 
   // Заполняем форму данными из selectedInvoice
