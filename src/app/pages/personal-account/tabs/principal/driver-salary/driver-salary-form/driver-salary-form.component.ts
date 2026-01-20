@@ -432,6 +432,9 @@ fillFormWithInvoiceData(): void {
     this.driversArray.removeAt(0);
   }
 
+  this.invoiceForm.patchValue({
+    'driverEmployeId':this.selectedInvoice.driverId
+  })
   // Заполняем форму данными из selectedInvoice
   // В ваших данных drivers нет, но есть productList с информацией о продуктах
   if (this.selectedInvoice.productList && Array.isArray(this.selectedInvoice.productList)) {
