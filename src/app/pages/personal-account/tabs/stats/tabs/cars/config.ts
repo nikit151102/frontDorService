@@ -29,7 +29,7 @@ export const columns = [
         header: 'Затраты',
         columns: [
             { field: 'repairCashExpense', fieldView: 'repairCashExpense', header: 'Нал', type: 'number', visible: true, width: '15%' },
-            { field: 'repairNdsExpense', fieldView: 'repairNdsExpense', header: 'Вал НДС', type: 'number', visible: true, width: '15%' },
+            { field: 'repairNdsExpense', fieldView: 'repairNdsExpense', header: 'Без Нал', type: 'number', visible: true, width: '15%' },
             { field: 'repairNoNdsExpense', fieldView: 'repairNoNdsExpense', header: 'Без НДС', type: 'number', visible: true, width: '15%' },
             { field: 'repairExpense', fieldView: 'repairExpense', header: 'Сумма', type: 'number', visible: true, width: '15%' },
 
@@ -53,7 +53,7 @@ export const viewDataColumns = [
     },
     { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП', type: 'number', visible: true, width: '15%' },
     { field: 'repairCashExpense', fieldView: 'repairCashExpense', header: 'Нал', type: 'number', visible: true, width: '15%' },
-    { field: 'repairNdsExpense', fieldView: 'repairNdsExpense', header: 'Вал НДС', type: 'number', visible: true, width: '15%' },
+    { field: 'repairNdsExpense', fieldView: 'repairNdsExpense', header: 'Без Нал', type: 'number', visible: true, width: '15%' },
     { field: 'repairNoNdsExpense', fieldView: 'repairNoNdsExpense', header: 'Без НДС', type: 'number', visible: true, width: '15%' },
     { field: 'repairExpense', fieldView: 'repairExpense', header: 'Сумма', type: 'number', visible: true, width: '15%' },];
 
