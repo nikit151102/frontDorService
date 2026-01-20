@@ -473,6 +473,7 @@ deleteItem(id: string) {
     console.log('invoice')
     this.invoiceService.getInvoiceById(invoice.id, 'api/CommercialWork/DocInvoice').subscribe((data: any) => {
       this.selectData = { ...data.data };
+      console.log('selectData',this.selectData)
       console.log('generalForm invoice', data.data)
       
     })
