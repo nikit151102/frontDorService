@@ -476,6 +476,8 @@ deleteItem(id: string) {
       console.log('generalForm invoice', data.data)
     })
 
+    this.selectData = invoice
+
   }
 
 
