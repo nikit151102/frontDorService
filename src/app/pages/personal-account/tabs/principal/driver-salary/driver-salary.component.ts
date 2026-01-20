@@ -471,10 +471,10 @@ deleteItem(id: string) {
 
   getInvoiceById(invoice: any) {
     console.log('invoice')
-    this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
-      this.selectData = { ...data.data };
-      console.log('generalForm invoice', data.data)
-    })
+    // this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
+    //   this.selectData = { ...data.data };
+    //   console.log('generalForm invoice', data.data)
+    // })
 
     this.selectData = invoice
 

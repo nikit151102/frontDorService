@@ -59,7 +59,7 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   selectedInvoice: any;
   isEdit: boolean = true;
   invoiceForm!: FormGroup;
-  dialogVisible = false;
+  @Input() dialogVisible = false;
   newDoc: boolean = true;
 
   // Mock data
@@ -110,6 +110,11 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     if (changes['config'] || changes['model']) {
       this.cdr.detectChanges();
     }
+    if (changes['dialogVisible']) {
+      this.selectedInvoice = this.data;
+      this.dialogVisible = true;
+    }
+
   }
 
   ngOnInit(): void {
@@ -339,20 +344,20 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     this.invoiceForm.get('driverEmployeId')?.setValue(data);
   }
 
-updateDateTime() {
-  const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-  const selectedDate = this.invoiceForm.get('selectedYear')?.value;
+  updateDateTime() {
+    const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+    const selectedDate = this.invoiceForm.get('selectedYear')?.value;
 
-  if (selectedMonth === null || selectedDate === null) return;
+    if (selectedMonth === null || selectedDate === null) return;
 
-  const date = new Date(selectedDate);
-  const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
-  const formattedDateTime = this.formatDateToISO(dateTime);
+    const date = new Date(selectedDate);
+    const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+    const formattedDateTime = this.formatDateToISO(dateTime);
 
-  this.invoiceForm.patchValue({
-    dateTime: formattedDateTime
-  });
-}
+    this.invoiceForm.patchValue({
+      dateTime: formattedDateTime
+    });
+  }
 
 
   private formatDateToISO(date: Date): string {
@@ -368,52 +373,52 @@ updateDateTime() {
 
 
   fillFormWithInvoiceData(): void {
-  if (!this.selectedInvoice) {
-    console.warn('selectedInvoice is null or undefined');
-    return;
-  }
+    if (!this.selectedInvoice) {
+      console.warn('selectedInvoice is null or undefined');
+      return;
+    }
 
-  // Очищаем существующие записи
-  while (this.driversArray.length !== 0) {
-    this.driversArray.removeAt(0);
-  }
+    // Очищаем существующие записи
+    while (this.driversArray.length !== 0) {
+      this.driversArray.removeAt(0);
+    }
 
-  // Заполняем форму данными из selectedInvoice
-  if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
-    this.selectedInvoice.drivers.forEach((driver: any) => {
+    // Заполняем форму данными из selectedInvoice
+    if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
+      this.selectedInvoice.drivers.forEach((driver: any) => {
+        this.driversArray.push(this.fb.group({
+          driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
+          amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
+        }));
+      });
+    } else {
       this.driversArray.push(this.fb.group({
-        driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
-        amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
+        driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
+        amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
       }));
-    });
-  } else {
-    this.driversArray.push(this.fb.group({
-      driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
-      amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
-    }));
-  }
+    }
 
-  // Обновляем общие поля
-  if (this.selectedInvoice.dateTime) {
-    const date = new Date(this.selectedInvoice.dateTime);
-    const month = date.getMonth();
-    const dateString = date.toISOString().split('T')[0];
+    // Обновляем общие поля
+    if (this.selectedInvoice.dateTime) {
+      const date = new Date(this.selectedInvoice.dateTime);
+      const month = date.getMonth();
+      const dateString = date.toISOString().split('T')[0];
 
-    this.invoiceForm.patchValue({
-      productTargetId: this.selectedInvoice.productTargetId || '',
-      selectedMonth: month,
-      selectedYear: dateString,
-      dateTime: this.selectedInvoice.dateTime
-    });
-  } else {
-    this.invoiceForm.patchValue({
-      productTargetId: this.selectedInvoice.productTargetId || '',
-      selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
-      selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
-      dateTime: this.selectedInvoice.dateTime || ''
-    });
+      this.invoiceForm.patchValue({
+        productTargetId: this.selectedInvoice.productTargetId || '',
+        selectedMonth: month,
+        selectedYear: dateString,
+        dateTime: this.selectedInvoice.dateTime
+      });
+    } else {
+      this.invoiceForm.patchValue({
+        productTargetId: this.selectedInvoice.productTargetId || '',
+        selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
+        selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
+        dateTime: this.selectedInvoice.dateTime || ''
+      });
+    }
   }
-}
 
 
 
@@ -540,29 +545,29 @@ updateDateTime() {
     this.dialogVisible = true;
   }
 
-createNewInvoice(): void {
-  this.newDoc = true;
-  this.selectedInvoice = {};
-  this.data = null;
-  this.invoiceForm.reset();
+  createNewInvoice(): void {
+    this.newDoc = true;
+    this.selectedInvoice = {};
+    this.data = null;
+    this.invoiceForm.reset();
 
-  // Сбрасываем FormArray к одной строке
-  while (this.driversArray.length !== 0) {
-    this.driversArray.removeAt(0);
+    // Сбрасываем FormArray к одной строке
+    while (this.driversArray.length !== 0) {
+      this.driversArray.removeAt(0);
+    }
+    this.driversArray.push(this.createDriverFormGroup());
+
+    // Устанавливаем значения по умолчанию - текущая дата
+    const currentDate = new Date();
+    const currentDateString = currentDate.toISOString().split('T')[0];
+
+    this.invoiceForm.patchValue({
+      selectedMonth: currentDate.getMonth(),
+      selectedYear: currentDateString,
+      directorType: 2,
+      dateTime: this.formatDateToISO(currentDate)
+    });
+
+    this.dialogVisible = true;
   }
-  this.driversArray.push(this.createDriverFormGroup());
-
-  // Устанавливаем значения по умолчанию - текущая дата
-  const currentDate = new Date();
-  const currentDateString = currentDate.toISOString().split('T')[0];
-  
-  this.invoiceForm.patchValue({
-    selectedMonth: currentDate.getMonth(),
-    selectedYear: currentDateString,
-    directorType: 2,
-    dateTime: this.formatDateToISO(currentDate)
-  });
-
-  this.dialogVisible = true;
-}
 }

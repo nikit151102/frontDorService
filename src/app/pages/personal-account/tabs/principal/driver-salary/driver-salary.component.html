@@ -1,6 +1,10 @@
-<div style=" display: flex; gap: 10px;">
-  <app-driver-salary-form [data]="selectData" [employeeType]="currentConfig.employeeType"
-    (create)="onCreate($event)"></app-driver-salary-form>
+<div style="display: flex; gap: 10px;">
+  <app-driver-salary-form 
+    [data]="selectData" 
+    [dialogVisible]="selectData ? true : false" 
+    [employeeType]="currentConfig.employeeType"
+    (create)="onCreate($event)">
+  </app-driver-salary-form>
 </div>
 
 
