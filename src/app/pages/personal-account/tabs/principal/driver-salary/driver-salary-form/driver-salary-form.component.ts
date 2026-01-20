@@ -207,12 +207,12 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     const token = localStorage.getItem('YXV0aFRva2Vu');
     this.http.post<any[]>(`${environment.apiUrl}/api/Entities/ProductTarget/Filter`, {
       filters: [
-      //   {
-      //   field: 'ProductTargetCategory.Code',
-      //   values: [1],
-      //   type: 2
-      // }
-    ], sorts: []
+        //   {
+        //   field: 'ProductTargetCategory.Code',
+        //   values: [1],
+        //   type: 2
+        // }
+      ], sorts: []
     }, {
       headers: new HttpHeaders({
         'Accept': 'application/json',
@@ -239,19 +239,66 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     event.preventDefault();
     const input = event.target as HTMLInputElement;
     const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-    const currentYear = new Date().getFullYear();
+    const selectedYear = this.invoiceForm.get('selectedYear')?.value;
 
-    if (selectedMonth) {
-      const defaultDate = new Date(currentYear, selectedMonth, 15);
+    if (selectedMonth !== null && selectedYear !== null) {
+      // Устанавливаем дату на 15-е число выбранного месяца для удобства
+      const defaultDate = new Date(selectedYear, selectedMonth, 15);
       const dateString = defaultDate.toISOString().split('T')[0];
 
       this.invoiceForm.get('selectedYear')?.setValue(dateString);
 
       setTimeout(() => {
-        if (document.activeElement === input) {
+        if ('showPicker' in HTMLInputElement.prototype) {
+          input.showPicker();
+        } else {
+          input.focus();
           input.click();
         }
       }, 10);
+    }
+  }
+
+  onDateChange(event: any) {
+    const selectedDate = event.target.value;
+    if (selectedDate) {
+      const date = new Date(selectedDate);
+      const month = date.getMonth();
+
+      // Обновляем выбранный месяц при изменении даты
+      this.invoiceForm.patchValue({
+        selectedMonth: month,
+        dateTime: this.formatDateToISO(date)
+      });
+
+      this.cdr.detectChanges();
+    }
+  }
+
+  onMonthChange() {
+    const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+    const selectedDate = this.invoiceForm.get('selectedYear')?.value;
+
+    if (selectedDate) {
+      // Если дата уже выбрана, обновляем месяц в этой дате
+      const date = new Date(selectedDate);
+      date.setMonth(selectedMonth);
+
+      const newDateString = date.toISOString().split('T')[0];
+      this.invoiceForm.patchValue({
+        selectedYear: newDateString,
+        dateTime: this.formatDateToISO(date)
+      });
+    } else {
+      // Если дата не выбрана, устанавливаем на первое число выбранного месяца
+      const currentYear = new Date().getFullYear();
+      const date = new Date(currentYear, selectedMonth, 1);
+      const dateString = date.toISOString().split('T')[0];
+
+      this.invoiceForm.patchValue({
+        selectedYear: dateString,
+        dateTime: this.formatDateToISO(date)
+      });
     }
   }
 
@@ -292,19 +339,20 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     this.invoiceForm.get('driverEmployeId')?.setValue(data);
   }
 
-  updateDateTime() {
-    const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-    const selectedYear = this.invoiceForm.get('selectedYear')?.value;
+updateDateTime() {
+  const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+  const selectedDate = this.invoiceForm.get('selectedYear')?.value;
 
-    if (selectedMonth === null || selectedYear === null) return;
+  if (selectedMonth === null || selectedDate === null) return;
 
-    const dateTime = new Date(selectedYear, selectedMonth, 1, 0, 0, 0, 0);
-    const formattedDateTime = this.formatDateToISO(dateTime);
+  const date = new Date(selectedDate);
+  const dateTime = new Date(date.getFullYear(), date.getMonth(), date.getDate(), 0, 0, 0, 0);
+  const formattedDateTime = this.formatDateToISO(dateTime);
 
-    this.invoiceForm.patchValue({
-      dateTime: formattedDateTime
-    });
-  }
+  this.invoiceForm.patchValue({
+    dateTime: formattedDateTime
+  });
+}
 
 
   private formatDateToISO(date: Date): string {
@@ -318,42 +366,56 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.000Z`;
   }
 
+
   fillFormWithInvoiceData(): void {
-    if (!this.selectedInvoice) {
-      console.warn('selectedInvoice is null or undefined');
-      return;
-    }
+  if (!this.selectedInvoice) {
+    console.warn('selectedInvoice is null or undefined');
+    return;
+  }
 
-    // Очищаем существующие записи
-    while (this.driversArray.length !== 0) {
-      this.driversArray.removeAt(0);
-    }
+  // Очищаем существующие записи
+  while (this.driversArray.length !== 0) {
+    this.driversArray.removeAt(0);
+  }
 
-    // Заполняем форму данными из selectedInvoice
-    if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
-      // Если данные приходят в виде массива водителей
-      this.selectedInvoice.drivers.forEach((driver: any) => {
-        this.driversArray.push(this.fb.group({
-          driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
-          amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
-        }));
-      });
-    } else {
-      // Для обратной совместимости с одиночной записью
+  // Заполняем форму данными из selectedInvoice
+  if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
+    this.selectedInvoice.drivers.forEach((driver: any) => {
       this.driversArray.push(this.fb.group({
-        driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
-        amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
+        driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
+        amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
       }));
-    }
+    });
+  } else {
+    this.driversArray.push(this.fb.group({
+      driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
+      amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
+    }));
+  }
 
-    // Обновляем общие поля
+  // Обновляем общие поля
+  if (this.selectedInvoice.dateTime) {
+    const date = new Date(this.selectedInvoice.dateTime);
+    const month = date.getMonth();
+    const dateString = date.toISOString().split('T')[0];
+
+    this.invoiceForm.patchValue({
+      productTargetId: this.selectedInvoice.productTargetId || '',
+      selectedMonth: month,
+      selectedYear: dateString,
+      dateTime: this.selectedInvoice.dateTime
+    });
+  } else {
     this.invoiceForm.patchValue({
       productTargetId: this.selectedInvoice.productTargetId || '',
       selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
-      selectedYear: this.selectedInvoice.selectedYear || new Date().getFullYear(),
+      selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
       dateTime: this.selectedInvoice.dateTime || ''
     });
   }
+}
+
+
 
   onProductTargetChange(selectedValue: any): void {
     this.invoiceForm.get('productTargetId')?.setValue(selectedValue);
@@ -478,25 +540,29 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     this.dialogVisible = true;
   }
 
-  createNewInvoice(): void {
-    this.newDoc = true;
-    this.selectedInvoice = {};
-    this.data = null;
-    this.invoiceForm.reset();
+createNewInvoice(): void {
+  this.newDoc = true;
+  this.selectedInvoice = {};
+  this.data = null;
+  this.invoiceForm.reset();
 
-    // Сбрасываем FormArray к одной строке
-    while (this.driversArray.length !== 0) {
-      this.driversArray.removeAt(0);
-    }
-    this.driversArray.push(this.createDriverFormGroup());
-
-    // Устанавливаем значения по умолчанию
-    this.invoiceForm.patchValue({
-      selectedMonth: new Date().getMonth(),
-      selectedYear: new Date().getFullYear(),
-      directorType: 2
-    });
-
-    this.dialogVisible = true;
+  // Сбрасываем FormArray к одной строке
+  while (this.driversArray.length !== 0) {
+    this.driversArray.removeAt(0);
   }
+  this.driversArray.push(this.createDriverFormGroup());
+
+  // Устанавливаем значения по умолчанию - текущая дата
+  const currentDate = new Date();
+  const currentDateString = currentDate.toISOString().split('T')[0];
+  
+  this.invoiceForm.patchValue({
+    selectedMonth: currentDate.getMonth(),
+    selectedYear: currentDateString,
+    directorType: 2,
+    dateTime: this.formatDateToISO(currentDate)
+  });
+
+  this.dialogVisible = true;
+}
 }

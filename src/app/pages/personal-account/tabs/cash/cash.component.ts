@@ -74,11 +74,11 @@ export class CashComponent implements OnInit {
         }
       ]
       : [
-        {
-          field: 'DocPaymentType',
-          values: [2, 3],
-          type: 1
-        },
+        // {
+        //   field: 'DocPaymentType',
+        //   values: [2, 3],
+        //   type: 1
+        // },
         {
           field: 'antonCashType',
           values: [cashType],

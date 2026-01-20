@@ -8,7 +8,7 @@
                 <div class="p-fluid p-formgrid p-grid">
 
                     <!-- Общие поля -->
-                    <div class="p-field p-col-12" >
+                    <div class="p-field p-col-12">
                         <label for="driverEmployeId">Сотрудник</label>
                         <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
                             [selected]="invoiceForm.get('driverEmployeId')?.value"
@@ -21,24 +21,25 @@
 
                     <!-- Месяц и год -->
                     <div class="p-field p-col-12 p-md-6">
+                        <label for="selectedYear">Дата</label>
+                        <input type="date" formControlName="selectedYear" id="selectedYear"
+                            (click)="showDatePickerWithMonth($event)" (change)="onDateChange($event)" #dateInput>
+                        <small
+                            *ngIf="invoiceForm.get('selectedYear')?.touched && invoiceForm.get('selectedYear')?.invalid"
+                            class="p-error">Это поле обязательно</small>
+                    </div>
+
+                    <!-- Обновляем селект месяца: -->
+                    <div class="p-field p-col-12 p-md-6">
                         <label for="selectedMonth">Месяц</label>
-                        <select class="modern-select" formControlName="selectedMonth" (change)="onMonthYearChange()"
-                            name="month">
+                        <select class="modern-select" formControlName="selectedMonth" id="selectedMonth"
+                            (change)="onMonthChange()">
                             <option *ngFor="let month of months" [value]="month.value">
                                 {{ month.name }}
                             </option>
                         </select>
                         <small
                             *ngIf="invoiceForm.get('selectedMonth')?.touched && invoiceForm.get('selectedMonth')?.invalid"
-                            class="p-error">Это поле обязательно</small>
-                    </div>
-
-                    <div class="p-field p-col-12 p-md-6">
-                        <label for="selectedYear">Дата</label>
-                        <input type="date" formControlName="selectedYear" (click)="showDatePickerWithMonth($event)"
-                            (focus)="showDatePickerWithMonth($event)" (change)="onMonthYearChange()" #dateInput>
-                        <small
-                            *ngIf="invoiceForm.get('selectedYear')?.touched && invoiceForm.get('selectedYear')?.invalid"
                             class="p-error">Это поле обязательно</small>
                     </div>
 
