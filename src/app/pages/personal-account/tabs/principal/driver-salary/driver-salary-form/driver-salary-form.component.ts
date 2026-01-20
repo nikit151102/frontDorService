@@ -112,7 +112,9 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     }
     if (changes['dialogVisible']) {
       this.selectedInvoice = this.data;
+      this.newDoc = false;
       this.dialogVisible = true;
+      this.fillFormWithInvoiceData();
     }
 
   }
