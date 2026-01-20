@@ -374,54 +374,117 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
   }
 
 
-  fillFormWithInvoiceData(): void {
-    if (!this.selectedInvoice) {
-      console.warn('selectedInvoice is null or undefined');
-      return;
-    }
+  // fillFormWithInvoiceData(): void {
+  //   if (!this.selectedInvoice) {
+  //     console.warn('selectedInvoice is null or undefined');
+  //     return;
+  //   }
 
-    // Очищаем существующие записи
-    while (this.driversArray.length !== 0) {
-      this.driversArray.removeAt(0);
-    }
+  //   // Очищаем существующие записи
+  //   while (this.driversArray.length !== 0) {
+  //     this.driversArray.removeAt(0);
+  //   }
 
-    // Заполняем форму данными из selectedInvoice
-    if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
-      this.selectedInvoice.drivers.forEach((driver: any) => {
-        this.driversArray.push(this.fb.group({
-          driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
-          amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
-        }));
-      });
-    } else {
-      this.driversArray.push(this.fb.group({
-        driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
-        amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
-      }));
-    }
+  //   // Заполняем форму данными из selectedInvoice
+  //   if (this.selectedInvoice.drivers && Array.isArray(this.selectedInvoice.drivers)) {
+  //     this.selectedInvoice.drivers.forEach((driver: any) => {
+  //       this.driversArray.push(this.fb.group({
+  //         driverEmployeeId: [driver.driverEmployeeId || '', Validators.required],
+  //         amount: [driver.amount || 0, [Validators.required, Validators.min(0)]]
+  //       }));
+  //     });
+  //   } else {
+  //     this.driversArray.push(this.fb.group({
+  //       driverEmployeeId: [this.selectedInvoice.driverEmployeeId || '', Validators.required],
+  //       amount: [this.selectedInvoice.amount || 0, [Validators.required, Validators.min(0)]]
+  //     }));
+  //   }
 
-    // Обновляем общие поля
-    if (this.selectedInvoice.dateTime) {
-      const date = new Date(this.selectedInvoice.dateTime);
-      const month = date.getMonth();
-      const dateString = date.toISOString().split('T')[0];
+  //   // Обновляем общие поля
+  //   if (this.selectedInvoice.dateTime) {
+  //     const date = new Date(this.selectedInvoice.dateTime);
+  //     const month = date.getMonth();
+  //     const dateString = date.toISOString().split('T')[0];
 
-      this.invoiceForm.patchValue({
-        productTargetId: this.selectedInvoice.productTargetId || '',
-        selectedMonth: month,
-        selectedYear: dateString,
-        dateTime: this.selectedInvoice.dateTime
-      });
-    } else {
-      this.invoiceForm.patchValue({
-        productTargetId: this.selectedInvoice.productTargetId || '',
-        selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
-        selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
-        dateTime: this.selectedInvoice.dateTime || ''
-      });
-    }
+  //     this.invoiceForm.patchValue({
+  //       productTargetId: this.selectedInvoice.productTargetId || '',
+  //       selectedMonth: month,
+  //       selectedYear: dateString,
+  //       dateTime: this.selectedInvoice.dateTime
+  //     });
+  //   } else {
+  //     this.invoiceForm.patchValue({
+  //       productTargetId: this.selectedInvoice.productTargetId || '',
+  //       selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
+  //       selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
+  //       dateTime: this.selectedInvoice.dateTime || ''
+  //     });
+  //   }
+  // }
+fillFormWithInvoiceData(): void {
+  if (!this.selectedInvoice) {
+    console.warn('selectedInvoice is null or undefined');
+    return;
   }
 
+  // Очищаем существующие записи
+  while (this.driversArray.length !== 0) {
+    this.driversArray.removeAt(0);
+  }
+
+  // Заполняем форму данными из selectedInvoice
+  // В ваших данных drivers нет, но есть productList с информацией о продуктах
+  if (this.selectedInvoice.productList && Array.isArray(this.selectedInvoice.productList)) {
+    this.selectedInvoice.productList.forEach((product: any) => {
+      // Проверяем структуру продукта - используем productTarget.id как driverEmployeeId
+      const driverEmployeeId = product.productTarget?.id || '';
+      const amount = product.amount || product.sumAmount || 0;
+      
+      this.driversArray.push(this.fb.group({
+        driverEmployeeId: [driverEmployeeId, Validators.required],
+        amount: [amount, [Validators.required, Validators.min(0)]]
+      }));
+    });
+  } else {
+    // Если нет productList, создаем одну запись с данными из других полей
+    const driverEmployeeId = this.selectedInvoice.productTargetId || '';
+    const amount = this.selectedInvoice.expenseSum || 0;
+    
+    this.driversArray.push(this.fb.group({
+      driverEmployeeId: [driverEmployeeId, Validators.required],
+      amount: [amount, [Validators.required, Validators.min(0)]]
+    }));
+  }
+
+  // Обновляем общие поля
+  if (this.selectedInvoice.dateTime) {
+    const date = new Date(this.selectedInvoice.dateTime);
+    const month = date.getMonth();
+    const year = date.getFullYear();
+    const dateString = date.toISOString().split('T')[0];
+
+    this.invoiceForm.patchValue({
+      // Устанавливаем productTargetId из первого продукта в списке или из productTargetId
+      productTargetId: this.selectedInvoice.productList?.[0]?.productTarget?.id 
+                      || this.selectedInvoice.productTargetId 
+                      || '',
+      driverEmployeId: this.selectedInvoice.driverEmployeId || '',
+      selectedMonth: month,
+      selectedYear: dateString,
+      dateTime: this.selectedInvoice.dateTime
+    });
+  } else {
+    this.invoiceForm.patchValue({
+      productTargetId: this.selectedInvoice.productList?.[0]?.productTarget?.id 
+                      || this.selectedInvoice.productTargetId 
+                      || '',
+      driverEmployeId: this.selectedInvoice.driverEmployeId || '',
+      selectedMonth: this.selectedInvoice.selectedMonth || new Date().getMonth(),
+      selectedYear: this.selectedInvoice.selectedYear || new Date().toISOString().split('T')[0],
+      dateTime: this.selectedInvoice.dateTime || ''
+    });
+  }
+}
 
 
   onProductTargetChange(selectedValue: any): void {
