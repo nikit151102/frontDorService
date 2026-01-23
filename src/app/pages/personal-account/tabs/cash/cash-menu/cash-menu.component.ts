@@ -17,6 +17,7 @@ export class CashMenuComponent implements OnInit {
   items: any[] = [
     { name: 'Величко Антон', access: 'AntonAccess', antonCashType: 1 },
     { name: 'Федореев Егор', access: 'EgorAccess', antonCashType: 3 },
+    { name: 'Дмитрий Замеров', access: 'DimaAccess', antonCashType: 5 }
     // { name: 'Антон', access: 'AntonAccess', antonCashType: 1 },
     // { name: 'Дима', access: 'DimaAccess', antonCashType: 5 },
     // { name: 'Дима база', access: 'DimaAccess', antonCashType: 2 },
