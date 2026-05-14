@@ -116,58 +116,56 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     }
   }
 
-updateDateTime() {
-  // Получаем значение месяца из формы
-  const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-  
-  // Если месяц не выбран, используем текущий месяц
-  if (selectedMonth === null || selectedMonth === undefined) {
-    console.log('Month is not selected, using current month');
-    return;
+  updateDateTime() {
+    // Получаем значение месяца и года из формы
+    const selectedYear = this.invoiceForm.get('selectedYear')?.value;
+    const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+
+    if (selectedYear === null || selectedYear === undefined ||
+      selectedMonth === null || selectedMonth === undefined) {
+      console.log('Year or month is not selected');
+      return;
+    }
+
+    // Создаем дату для последнего дня выбранного месяца текущего года
+    const lastDayOfMonth = new Date(selectedYear, selectedMonth + 1, 0);
+
+    // Устанавливаем время на конец дня (23:59:59.999)
+    lastDayOfMonth.setHours(0, 0, 0, 0);
+
+    console.log('lastDayOfMonth:', lastDayOfMonth);
+
+    const formattedDateTime = this.formatDateToISO(lastDayOfMonth);
+    console.log('formattedDateTime', formattedDateTime);
+
+    this.invoiceForm.patchValue({
+      dateTime: formattedDateTime
+    });
   }
 
-  // Всегда используем текущий год
-  const currentYear = new Date().getFullYear();
-  
-  console.log('selectedMonth:', selectedMonth, 'selectedYear:', currentYear);
+  // Если вам нужно установить время на конец дня (23:59:59.999)
+  private formatDateToISO(date: Date): string {
+    const year = date.getFullYear();
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const hours = date.getHours().toString().padStart(2, '0');
+    const minutes = date.getMinutes().toString().padStart(2, '0');
+    const seconds = date.getSeconds().toString().padStart(2, '0');
+    const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
 
-  // Создаем дату для последнего дня выбранного месяца текущего года
-  const lastDayOfMonth = new Date(currentYear, selectedMonth + 1, 0);
-  
-  // Устанавливаем время на конец дня (23:59:59.999)
-  lastDayOfMonth.setHours(0, 0, 0, 0);
-
-  console.log('lastDayOfMonth:', lastDayOfMonth);
-
-  const formattedDateTime = this.formatDateToISO(lastDayOfMonth);
-  console.log('formattedDateTime', formattedDateTime);
-
-  this.invoiceForm.patchValue({
-    dateTime: formattedDateTime
-  });
-}
-
-// Если вам нужно установить время на конец дня (23:59:59.999)
-private formatDateToISO(date: Date): string {
-  const year = date.getFullYear();
-  const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  const day = date.getDate().toString().padStart(2, '0');
-  const hours = date.getHours().toString().padStart(2, '0');
-  const minutes = date.getMinutes().toString().padStart(2, '0');
-  const seconds = date.getSeconds().toString().padStart(2, '0');
-  const milliseconds = date.getMilliseconds().toString().padStart(3, '0');
-
-  return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
-}
+    return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}.${milliseconds}Z`;
+  }
 
   onMonthYearChange() {
     this.updateDateTime();
   }
 
   initForm(): void {
+    const currentYear = new Date().getFullYear();
     this.invoiceForm = this.fb.group({
       dateTime: ['', Validators.required],// дата и время 
-      selectedMonth:[''],
+      selectedYear: [currentYear, Validators.required],
+      selectedMonth: [''],
       logisticsCash: [0, [Validators.required, Validators.max(1)]],// логист поле нал 
       logisticsNoNds: [0, [Validators.required, Validators.max(1)]],// логист поле без ндс
       repaitsCash: [0, [Validators.required, Validators.max(1)]],// ремонты : поле нал
