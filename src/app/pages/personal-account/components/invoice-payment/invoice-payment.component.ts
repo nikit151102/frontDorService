@@ -15,7 +15,7 @@ import { CacheReferenceService } from '../../../../services/cache-reference.serv
   imports: [CommonModule, CalendarModule, CustomInputNumberComponent, FormsModule, ReactiveFormsModule, CustomInputComponent],
   templateUrl: './invoice-payment.component.html',
   styleUrls: ['./invoice-payment.component.scss'],
-  
+
 })
 export class InvoicePaymentComponent implements OnInit {
   @Input() counterpartyId: string = '';
@@ -178,12 +178,14 @@ export class InvoicePaymentComponent implements OnInit {
   }
 
   parseDate(value: string): Date | null {
+    console.log('value', value)
     const parts = value.split('-');
     if (parts.length === 3) {
       const day = parseInt(parts[0], 10);
       const month = parseInt(parts[1], 10) - 1;
       const year = parseInt(parts[2], 10);
       const date = new Date(Date.UTC(year, month, day));
+      console.log('date', date)
       if (date.getDate() === day && date.getMonth() === month && date.getFullYear() === year) {
         return date;
       }
