@@ -128,7 +128,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
     }
 
     // Создаем дату для последнего дня выбранного месяца текущего года
-    const lastDayOfMonth = new Date(selectedYear, selectedMonth + 1, 0);
+    const lastDayOfMonth = new Date(Number(selectedYear), Number(selectedMonth) + 1, 0);
 
     // Устанавливаем время на конец дня (23:59:59.999)
     lastDayOfMonth.setHours(0, 0, 0, 0);
@@ -247,7 +247,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
             delete data.dateTime;
             data.selectedMonth = selectedMonth + 1
             if (selectedYear && selectedMonth) {
-              data.dateTime = new Date(selectedYear, selectedMonth - 1, 1);
+              data.dateTime = new Date(Number(selectedYear), Number(selectedMonth) - 1, 1);
             }
 
           }
