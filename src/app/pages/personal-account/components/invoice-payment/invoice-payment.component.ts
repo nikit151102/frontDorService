@@ -28,7 +28,7 @@ export class InvoicePaymentComponent implements OnInit {
   rejectLabel: string = 'Отмена';
   measurementUnit: any = [];
   productTarget: any = [];
-  dateTime: Date | undefined = undefined;
+  dateTime: Date | null = null;
   amount: number = 0;
   number: string = '';
 
@@ -135,7 +135,7 @@ export class InvoicePaymentComponent implements OnInit {
         this.invoicePaymentService.visibleModal(false)
         this.invoicesService.addItemToStart(data.documentMetadata.data);
         this.invoicesService.totalInfo = data.totalInfo;
-        this.dateTime = undefined;
+        this.dateTime = null;
         this.amount = 0;
         this.number = '';
       },
