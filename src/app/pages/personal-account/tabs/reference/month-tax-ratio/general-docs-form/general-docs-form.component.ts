@@ -241,7 +241,13 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
           let data = this.invoiceForm.value;
           if (this.data && this.data.id) {
             data.id = this.data.id
+            const selectedYear = this.invoiceForm.get('selectedYear')?.value;
+            const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+            if (selectedYear && selectedMonth) {
+              data.dateTime = new Date(selectedYear, selectedMonth - 1, 1);
+            }
           }
+
           this.generalFormService.savedoc(data).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
