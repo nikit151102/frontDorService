@@ -164,7 +164,6 @@ private formatDateToISO(date: Date): string {
     this.updateDateTime();
   }
 
-
   initForm(): void {
     this.invoiceForm = this.fb.group({
       dateTime: ['', Validators.required],// дата и время 
