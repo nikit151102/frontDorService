@@ -245,7 +245,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
             const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
             delete data.selectedMonth;
             delete data.dateTime;
-            data.selectedMonth = selectedMonth + 1
+            data.selectedMonth =  Number(selectedMonth) + 1
             if (selectedYear && selectedMonth) {
               data.dateTime = new Date(Number(selectedYear), Number(selectedMonth) - 1, 1);
             }
