@@ -12,16 +12,10 @@
         <div class="popup-body">
             <div class="form-field">
                 <label for="dateTime">Дата</label>
-            <p-calendar 
-        id="dateTime" 
-        [(ngModel)]="dateTime" 
-        [showTime]="false" 
-        dateFormat="dd.mm.yy"
-        inputStyleClass="modern-input" 
-        panelStyleClass="modern-calendar"
-        (onSelect)="onDateSelect($event)"
-        (onInput)="onManualDateInput($event)">
-    </p-calendar>
+                <p-calendar id="dateTime" [(ngModel)]="dateTime" [showTime]="false" dateFormat="dd.mm.yy"
+                    inputStyleClass="modern-input" panelStyleClass="modern-calendar"
+                    (onInput)="onDateInput($event)">
+                </p-calendar>
             </div>
 
             <div class="form-field amount-field">

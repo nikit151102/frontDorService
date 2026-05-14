@@ -193,35 +193,5 @@ export class InvoicePaymentComponent implements OnInit {
     return null;
   }
 
-  onDateSelect(event: any) {
-    if (event instanceof Date) {
-      this.dateTime = event;
-    } else if (event && event instanceof Date === false) {
-      this.dateTime = event.value || event;
-    }
-
-    // Убедимся, что дата валидна
-    if (this.dateTime && isNaN(this.dateTime.getTime())) {
-      this.dateTime = null;
-    }
-
-    this.cdr.detectChanges();
-  }
-
-  onManualDateInput(event: any) {
-    let value = event.target.value;
-    if (!value) {
-      this.dateTime = null;
-      return;
-    }
-
-    value = value.replace(/[,\.]/g, '-');
-    let date = this.parseDate(value);
-    if (date && !isNaN(date.getTime())) {
-      this.dateTime = date;
-    } else {
-      // Если дата невалидна, не обновляем this.dateTime
-      console.warn('Invalid date format:', value);
-    }
-  }
+  
 }
