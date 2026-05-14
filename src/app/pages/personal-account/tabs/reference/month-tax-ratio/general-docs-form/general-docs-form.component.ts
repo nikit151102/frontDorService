@@ -135,7 +135,7 @@ updateDateTime() {
   const lastDayOfMonth = new Date(currentYear, selectedMonth + 1, 0);
   
   // Устанавливаем время на конец дня (23:59:59.999)
-  lastDayOfMonth.setHours(23, 59, 59, 999);
+  lastDayOfMonth.setHours(0, 0, 0, 0);
 
   console.log('lastDayOfMonth:', lastDayOfMonth);
 
@@ -169,16 +169,16 @@ private formatDateToISO(date: Date): string {
     this.invoiceForm = this.fb.group({
       dateTime: ['', Validators.required],// дата и время 
       selectedMonth:[''],
-      logisticsCash: [0, Validators.required],// логист поле нал 
-      logisticsNoNds: [0, Validators.required],// логист поле без ндс
-      repaitsCash: [0, Validators.required],// ремонты : поле нал
-      repaitsNoNds: [0, Validators.required],// ремонты : поле без ндс
-      garageCash: [0],// гараж: поле нал
-      garageNoNds: [0],// гараж: поле без ндс
-      officeSalaryCash: [0, Validators.required],// зп офис: поле нал
-      driversSalaryCash: [0, Validators.required],// зп водители : поле нал
-      platonNoNds: [0, Validators.required],// Платон: поле без ндс
-      taxesNoNds: [0, Validators.required],// налоги:  поле без ндс
+      logisticsCash: [0, [Validators.required, Validators.max(1)]],// логист поле нал 
+      logisticsNoNds: [0, [Validators.required, Validators.max(1)]],// логист поле без ндс
+      repaitsCash: [0, [Validators.required, Validators.max(1)]],// ремонты : поле нал
+      repaitsNoNds: [0, [Validators.required, Validators.max(1)]],// ремонты : поле без ндс
+      garageCash: [0, [Validators.max(1)]],// гараж: поле нал
+      garageNoNds: [0, [Validators.max(1)]],// гараж: поле без ндс
+      officeSalaryCash: [0, [Validators.required, Validators.max(1)]],// зп офис: поле нал
+      driversSalaryCash: [0, [Validators.required, Validators.max(1)]],// зп водители : поле нал
+      platonNoNds: [0, [Validators.required, Validators.max(1)]],// Платон: поле без ндс
+      taxesNoNds: [0, [Validators.required, Validators.max(1)]],// налоги:  поле без ндс
     }, { validators: dateRangeValidator() });
 
     // Инициализация дат при создании формы
