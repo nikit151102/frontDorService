@@ -241,15 +241,15 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
           let data = this.invoiceForm.value;
           if (this.data && this.data.id) {
             data.id = this.data.id
-            const selectedYear = this.invoiceForm.get('selectedYear')?.value;
-            const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
-            delete data.selectedMonth;
-            delete data.dateTime;
-            data.selectedMonth =  Number(selectedMonth) + 1
-            if (selectedYear && selectedMonth) {
-              data.dateTime = new Date(Number(selectedYear), Number(selectedMonth) - 1, 1);
-            }
+          }
 
+          const selectedYear = this.invoiceForm.get('selectedYear')?.value;
+          const selectedMonth = this.invoiceForm.get('selectedMonth')?.value;
+          delete data.selectedMonth;
+          delete data.dateTime;
+          data.selectedMonth =  Number(selectedMonth) + 1
+          if (selectedYear && selectedMonth) {
+            data.dateTime = new Date(Number(selectedYear), Number(selectedMonth) + 1, 1);
           }
 
           this.generalFormService.savedoc(data).subscribe({
