@@ -50,10 +50,21 @@ export class InvoicesService {
     return this.dataSubject.value;
   }
 
-  addItemToStart(newItem: any) {
+addItemToStart(newItem: any) {
     const currentData = this.getActiveData();
+    
+    // 1. Создаём копию даты из строки
+    let datetime = new Date(newItem.dateTime);
+    
+    // 2. Вычитаем 1 день (метод setDate работает с днями месяца, но автоматически обрабатывает переход между месяцами)
+    datetime.setDate(datetime.getDate() - 1);
+    
+    // 3. Присваиваем изменённую дату обратно (в виде строки или объекта, как ожидает ваш код)
+    newItem.dateTime = datetime.toISOString(); // или просто оставьте как Date, если так нужно
+    
+    // 4. Добавляем элемент в начало списка
     this.dataSubject.next([newItem, ...currentData]);
-  }
+}
 
   updateActiveData(updatedData: any) {
     const currentData = this.getActiveData();

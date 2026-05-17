@@ -28,7 +28,7 @@ export class InvoicePaymentComponent implements OnInit {
   rejectLabel: string = 'Отмена';
   measurementUnit: any = [];
   productTarget: any = [];
-  dateTime: Date | null = null;
+  dateTime: any | null = null;
   amount: number = 0;
   number: string = '';
 
@@ -95,10 +95,9 @@ export class InvoicePaymentComponent implements OnInit {
     const typeValue = currentUrl.includes('/cash') ? 0 : 1;
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
 
-
     let data: any = {
       number: this.number,
-      dateTime: this.dateTime,
+      dateTime: new Date(this.dateTime.setDate(this.dateTime.getDate() + 1)),
       type: typeValue,
       docPaymentType: this.paymentType,
       productList: [{
@@ -110,7 +109,7 @@ export class InvoicePaymentComponent implements OnInit {
       }]
     };
 
-
+    console.log('dataaaa -------', data)
     if (typeValue === 0) {
       const antonCashFilter = this.invoicesService.defaultFilters.find(f => f.field === 'antonCashType');
 
@@ -168,15 +167,6 @@ export class InvoicePaymentComponent implements OnInit {
     }
   }
 
-  onDateInput(event: any) {
-    let value = event.target.value;
-    value = value.replace(/[,\.]/g, '-');
-    let date = this.parseDate(value);
-    if (date) {
-      this.dateTime = date;
-    }
-  }
-
   parseDate(value: string): Date | null {
     console.log('value', value)
     const parts = value.split('-');
@@ -193,5 +183,5 @@ export class InvoicePaymentComponent implements OnInit {
     return null;
   }
 
-  
+
 }
