@@ -27,7 +27,6 @@ import { Router } from '@angular/router';
 import { ButtonConfig } from '../../tabs/partners/invoices-content/button-config';
 import { taxes } from '../../../../services/data';
 import { PartnersService } from '../../tabs/partners/partners.service';
-import { PartnerMenuService } from '../partner-menu/partner-menu.service';
 import { FormatingDataService } from '../../../../services/formating-data.service';
 
 @Component({
@@ -48,7 +47,6 @@ import { FormatingDataService } from '../../../../services/formating-data.servic
     InvoicePaymentComponent,
     GeneralFormComponent,
     ScoreFormComponent
-    // SettingsComponent
   ],
   templateUrl: './invoices.component.html',
   styleUrl: './invoices.component.scss'
@@ -73,6 +71,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
   items: MenuItem[] | undefined;
   invoices: any;
   @ViewChild('tableContainer') tableContainer!: ElementRef<HTMLElement>;
+  
+  // Для массовых действий
+  selectedProducts: Set<string> = new Set<string>();
+  isProcessingBulkAction: boolean = false;
+  currentSelectionStatus: number | null = null;
+  
+  // Для попапа переключения статуса
+  showStatusSwitchPopup: boolean = false;
+  pendingProduct: any = null;
+  pendingStatusValue: number | null = null;
+  popupPosition: { top: number; left: number } = { top: 0, left: 0 };
 
   scrollToTop() {
     if (this.tableContainer && this.tableContainer.nativeElement) {
@@ -80,47 +89,39 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
-
   getTaxValue(tax: any) {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
   }
+  
   ngOnChanges(changes: SimpleChanges) {
-
     if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.invoicesService.currentPage = 0;
       this.invoicesService?.totalInfo?.totalPagesCount;
       this.loadInvoices(true);
-      console.log('loadInvoices defaultFilter')
-      console.log('counterpartyData', this.counterpartyData)
     }
     if (changes['counterpartyId']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
       this.invoicesService.endpoint = this.endpoint;
       this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
-      console.log('loadInvoices counterpartyId')
-      console.log('counterpartyData', this.counterpartyData)
+      this.clearSelection();
     }
-
     if (changes['currentFormField']) {
       this.loadInvoices(true);
-      console.log('loadInvoices buttonConfigs')
     }
     if (changes['buttonConfigs']) {
       this.buttonConfigs = this.buttonConfigs;
       this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
-      console.log('loadInvoices buttonConfigs')
     }
     if (changes['selectedComponent']) {
       this.invoicesService.currentPage = 0;
       this.loadInvoices(true);
     }
     this.partnersService.selectCounterpartyId = this.counterpartyId;
-    console.log('this.partnersService.selectCounterpartyId', this.partnersService.selectCounterpartyId)
   }
 
   selectedProduct: any;
@@ -132,7 +133,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
   constructor(private invoiceService: InvoicesContentService,
     private messageService: MessageService,
     private confirmPopupService: ConfirmPopupService,
-    // public productsService: ProductsService,
     private toastService: ToastService,
     public invoicesService: InvoicesService,
     private cdRef: ChangeDetectorRef,
@@ -145,18 +145,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     public formatingDataService: FormatingDataService) { }
 
   ngOnInit() {
-
     const currentUrl = this.router.url;
     this.typeValueRoute = currentUrl.includes('/cash') ? false : true;
-    console.log('this.invoicesService.counterpartyId', this.invoicesService.counterpartyId)
 
     this.idCurrentUser = localStorage.getItem('VXNlcklk')
     this.renderer.setStyle(this.el.nativeElement, '--table-width', this.tableWidth);
 
-    this.currentRole = this.jwtService.getDecodedToken().email; // 1- "Снабженец" 2- "Механик"  3-"Директор"
+    this.currentRole = this.jwtService.getDecodedToken().email;
 
     this.invoicesService.activData$.subscribe((data: any) => {
-      console.log('invoices', data)
       this.invoices = data;
       this.cdRef.detectChanges();
     })
@@ -195,6 +192,24 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
+  // Получение статуса продукта
+  getProductStatus(product: any): number {
+    return product.status !== undefined ? product.status : product.invoiceStatus;
+  }
+
+  // Проверка, доступна ли кнопка для данного статуса
+  isButtonAvailableForStatus(button: ButtonConfig, status: number | null): boolean {
+    if (status === null) return true;
+    
+    // Проверяем по condition в кнопке
+    if (button.condition) {
+      // Создаем фиктивный продукт с нужным статусом для проверки
+      const mockProduct = { status: status, invoiceStatus: status };
+      return button.condition(mockProduct, this.idCurrentUser);
+    }
+    return true;
+  }
+
   [key: string]: any;
   handleButtonClick(button: ButtonConfig, product: any) {
     if (button.action && typeof this[button.action] === 'function') {
@@ -209,6 +224,259 @@ export class InvoicesComponent implements OnChanges, OnInit {
     } else {
       console.error(`Action method '${button.action}' not found.`);
     }
+    this.cdRef.detectChanges();
+  }
+
+  // ==================== МАССОВЫЕ ДЕЙСТВИЯ ====================
+  
+  async executeBulkAction(button: ButtonConfig) {
+    if (this.isProcessingBulkAction) {
+      this.toastService.showError('Внимание', 'Дождитесь завершения предыдущей операции');
+      return;
+    }
+    
+    const selectedItems = this.invoices.filter((invoice: any) => 
+      this.selectedProducts.has(invoice.id)
+    );
+    
+    if (selectedItems.length === 0) return;
+    
+    // Подтверждение для массового действия
+    this.confirmPopupService.openConfirmDialog({
+      title: `Массовое действие: ${button.label}`,
+      message: `Вы уверены, что хотите выполнить "${button.label}" для ${selectedItems.length} записей со статусом "${this.getStatusLabel(this.currentSelectionStatus)}"?`,
+      acceptLabel: 'Выполнить',
+      rejectLabel: 'Отмена',
+      onAccept: async () => {
+        await this.processBulkAction(button, selectedItems);
+      }
+    });
+  }
+  
+  async processBulkAction(button: ButtonConfig, items: any[]) {
+    this.isProcessingBulkAction = true;
+    let successCount = 0;
+    let errorCount = 0;
+    const errors: string[] = [];
+    
+    this.toastService.showInfo('Выполнение', `Начинаю обработку ${items.length} записей...`);
+    
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      try {
+        await this.executeBulkSingleAction(button, item);
+        successCount++;
+        if ((i + 1) % 5 === 0 || i === items.length - 1) {
+          this.toastService.showInfo('Прогресс', `Обработано ${i + 1} из ${items.length}`);
+        }
+      } catch (error: any) {
+        errorCount++;
+        errors.push(`${item.number || item.id}: ${error.message || 'Ошибка'}`);
+        console.error(`Ошибка при обработке ${item.id}:`, error);
+      }
+    }
+    
+    this.isProcessingBulkAction = false;
+    
+    if (successCount > 0) {
+      this.toastService.showSuccess('Завершено', `Успешно обработано: ${successCount} из ${items.length} записей`);
+      this.clearSelection();
+      this.loadInvoices(true);
+    }
+    if (errorCount > 0) {
+      const errorMessage = errors.length > 3 ? `${errors.slice(0, 3).join(', ')} и ещё ${errors.length - 3} ошибок` : errors.join(', ');
+      this.toastService.showError('Ошибки', `Не удалось обработать ${errorCount} записей: ${errorMessage}`);
+    }
+  }
+  
+  private async executeBulkSingleAction(button: ButtonConfig, product: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const actionName = button.action;
+      
+      switch (actionName) {
+        case 'deleteInvoice':
+          this.bulkDeleteInvoice(product).then(resolve).catch(reject);
+          break;
+        case 'verificationInvoice':
+          if (button.status !== undefined) {
+            this.bulkVerificationInvoice(product, button.status).then(resolve).catch(reject);
+          } else {
+            reject(new Error('Не указан статус для верификации'));
+          }
+          break;
+        default:
+          if (typeof this[actionName] === 'function') {
+            try {
+              const result = this[actionName](product);
+              if (result instanceof Promise) {
+                result.then(resolve).catch(reject);
+              } else {
+                resolve(result);
+              }
+            } catch (error) {
+              reject(error);
+            }
+          } else {
+            reject(new Error(`Метод '${actionName}' не найден`));
+          }
+      }
+    });
+  }
+  
+  private async bulkDeleteInvoice(invoice: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      let endpoint = this.endpoint;
+      if (endpoint === '/api/CommercialWork/DocInvoice') {
+        endpoint = '/api/CommercialWork/DocInvoice';
+      }
+      
+      this.invoiceService.deleteInvoice(invoice, endpoint, this.invoicesService.defaultFilters).subscribe(
+        (response: any) => {
+          this.invoicesService.removeItemById(invoice.id);
+          resolve(response);
+        },
+        (error) => {
+          reject(error.error || error);
+        }
+      );
+    });
+  }
+  
+  private async bulkVerificationInvoice(invoice: any, status: any): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.invoiceService.sendingVerification(
+        this.transformToSecondFormat(invoice),
+        status,
+        this.endpoint
+      ).subscribe(
+        (response: any) => {
+          this.invoicesService.updateActiveData(response.data);
+          resolve(response);
+        },
+        (error) => {
+          reject(error.error || error);
+        }
+      );
+    });
+  }
+
+  // ==================== МЕТОДЫ ДЛЯ РАБОТЫ С ВЫДЕЛЕНИЕМ ====================
+  
+  toggleSelectionWithCheck(event: any, product: any) {
+    const isChecked = event.target.checked;
+    const productStatus = this.getProductStatus(product);
+    
+    // Если пытаемся выделить, но уже есть выделенные с другим статусом
+    if (isChecked && this.selectedProducts.size > 0 && this.currentSelectionStatus !== null && productStatus !== this.currentSelectionStatus) {
+      // Показываем попап
+      this.pendingProduct = product;
+      this.pendingStatusValue = productStatus;
+      this.showStatusSwitchPopup = true;
+      
+      // Получаем позицию чекбокса для попапа
+      const rect = event.target.getBoundingClientRect();
+      this.popupPosition = {
+        top: rect.top + window.scrollY - 10,
+        left: rect.right + window.scrollX + 10
+      };
+      
+      // Возвращаем чекбокс в исходное состояние
+      event.target.checked = false;
+      return;
+    }
+    
+    // Обычное выделение/снятие
+    if (isChecked) {
+      this.selectedProducts.add(product.id);
+      if (this.currentSelectionStatus === null) {
+        this.currentSelectionStatus = productStatus;
+      }
+    } else {
+      this.selectedProducts.delete(product.id);
+      if (this.selectedProducts.size === 0) {
+        this.currentSelectionStatus = null;
+      }
+    }
+    this.cdRef.detectChanges();
+  }
+  
+  // Переключиться на новый статус
+  switchToNewStatus() {
+    if (this.pendingStatusValue !== null) {
+      // Очищаем текущее выделение
+      this.selectedProducts.clear();
+      // Устанавливаем новый статус
+      this.currentSelectionStatus = this.pendingStatusValue;
+      // Выделяем все записи с новым статусом
+      this.invoices.forEach((product: any) => {
+        if (this.getProductStatus(product) === this.pendingStatusValue) {
+          this.selectedProducts.add(product.id);
+        }
+      });
+    }
+    this.showStatusSwitchPopup = false;
+    this.pendingProduct = null;
+    this.pendingStatusValue = null;
+    this.cdRef.detectChanges();
+  }
+  
+  // Отмена переключения
+  cancelStatusSwitch() {
+    this.showStatusSwitchPopup = false;
+    this.pendingProduct = null;
+    this.pendingStatusValue = null;
+  }
+  
+  toggleSelectAll(event: any) {
+    const isChecked = event.target.checked;
+    
+    if (isChecked) {
+      // Если нет выделенных - выделяем всё
+      if (this.selectedProducts.size === 0) {
+        this.invoices.forEach((product: any) => {
+          this.selectedProducts.add(product.id);
+        });
+        // Определяем статус для массового выделения (если все одного статуса)
+        const firstStatus = this.invoices.length > 0 ? this.getProductStatus(this.invoices[0]) : null;
+        const allSameStatus = this.invoices.every((p: any) => this.getProductStatus(p) === firstStatus);
+        this.currentSelectionStatus = allSameStatus ? firstStatus : null;
+      } else {
+        // Если уже есть выделенные - выделяем только записи с таким же статусом
+        this.invoices.forEach((product: any) => {
+          if (this.getProductStatus(product) === this.currentSelectionStatus) {
+            this.selectedProducts.add(product.id);
+          }
+        });
+      }
+    } else {
+      this.selectedProducts.clear();
+      this.currentSelectionStatus = null;
+    }
+    this.cdRef.detectChanges();
+  }
+  
+  isAllSelected(): boolean {
+    if (this.selectedProducts.size === 0) return false;
+    if (this.currentSelectionStatus !== null) {
+      const sameStatusItems = this.invoices.filter((p: any) => this.getProductStatus(p) === this.currentSelectionStatus);
+      return sameStatusItems.length > 0 && sameStatusItems.every((p: any) => this.selectedProducts.has(p.id));
+    }
+    return this.invoices?.length > 0 && this.invoices.every((product: any) => this.selectedProducts.has(product.id));
+  }
+  
+  isIndeterminate(): boolean {
+    const selectedCount = this.selectedProducts.size;
+    if (selectedCount === 0) return false;
+    if (this.currentSelectionStatus !== null) {
+      const sameStatusItems = this.invoices.filter((p: any) => this.getProductStatus(p) === this.currentSelectionStatus);
+      return selectedCount > 0 && selectedCount < sameStatusItems.length;
+    }
+    return selectedCount > 0 && selectedCount < (this.invoices?.length || 0);
+  }
+  
+  clearSelection() {
+    this.selectedProducts.clear();
+    this.currentSelectionStatus = null;
     this.cdRef.detectChanges();
   }
 
@@ -238,7 +506,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.scoreFormService.visibleModal(true);
   }
 
-
   updateColumnVisibility() {
     this.columns.forEach((col: any) => {
       col.visible = this.selectedColumns.includes(col.field);
@@ -248,7 +515,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
   isColumnVisible(column: any): boolean {
     return column.visible;
   }
-
 
   dataSelectScope: any;
 
@@ -288,12 +554,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
     { label: 'Проведено', value: 7, id: 7 }
   ];
 
-
-  getStatusLabel(value: number): string {
+  getStatusLabel(value: any): string {
     return this.statuses.find(status => status.value === value)?.label || 'Неизвестный статус';
   }
 
-  getStatusClass(value: number): string {
+  getStatusClass(value: any): string {
     switch (value) {
       case 0: return 'status-not-checked';
       case 1:
@@ -307,16 +572,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
-
-  // onActionClick(actionName: string, product: any) {
-  //   if (this.invoicesService && typeof this.productService[actionName] === 'function') {
-  //     this.productService[actionName](product);
-  //   } else {
-  //     console.error(`Method ${actionName} does not exist on ProductsService`);
-  //   }
-  // }
-
-
   formatNumber(value: any): number {
     const num = parseFloat(value);
     if (isNaN(num)) {
@@ -324,7 +579,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     return Math.round(num * 100) / 100;
   }
-
 
   updateInvoice(invoice: any) {
     this.selectInvoice = invoice;
@@ -336,6 +590,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     if (reset) {
       this.invoicesService.currentPage = 0;
       this.invoices = [];
+      this.clearSelection();
     }
 
     if (this.loading) return;
@@ -355,7 +610,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
             expenseSum: invoice.expenseSum?.toString().replace('.', ','),
             incomeSum: invoice.incomeSum?.toString().replace('.', ',')
           };
-
           return transformed;
         };
 
@@ -372,6 +626,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
 
         if (reset || this.invoicesService.currentPage === 0) {
           this.invoices = newInvoices;
+          this.clearSelection();
         } else {
           this.invoices = [...this.invoices, ...newInvoices];
         }
@@ -381,6 +636,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.invoicesService.totalPages = response.totalPages;
         this.invoicesService.currentPage++;
         this.loading = false;
+        this.cdRef.detectChanges();
       },
       (error) => {
         this.toastService.showError('Ошибка', 'Не удалось загрузить счета!');
@@ -398,71 +654,34 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
   }
 
-
-
-  deleteInvoice(invoiceId: any) {
+  deleteInvoice(invoice: any) {
     this.confirmPopupService.openConfirmDialog({
       title: 'Подтверждение удаления',
       message: 'Вы уверены, что хотите удалить счет-фактуру?',
       acceptLabel: 'Удалить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-        let endpoint;
-        if (endpoint != '/api/CommercialWork/DocInvoice') {
-          endpoint = this.endpoint;
-        } else {
+        let endpoint = this.endpoint;
+        if (endpoint === '/api/CommercialWork/DocInvoice') {
           endpoint = '/api/CommercialWork/DocInvoice';
-
         }
 
-        this.invoiceService.deleteInvoice(invoiceId, endpoint, this.invoicesService.defaultFilters).subscribe(
-          (invoice: any) => {
-            this.invoicesService.removeItemById(invoiceId.id);
-            this.invoicesService.totalInfo = invoice.totalInfo;
-            this.toastService.showSuccess('Удалено', invoice.message);
-
+        this.invoiceService.deleteInvoice(invoice, endpoint, this.invoicesService.defaultFilters).subscribe(
+          (response: any) => {
+            this.invoicesService.removeItemById(invoice.id);
+            this.invoicesService.totalInfo = response.totalInfo;
+            this.toastService.showSuccess('Удалено', response.message);
+            if (this.selectedProducts.has(invoice.id)) {
+              this.selectedProducts.delete(invoice.id);
+            }
           },
           (error) => {
-            this.toastService.showError('Ошибка', error.error.message);
+            this.toastService.showError('Ошибка', error.error?.message || 'Не удалось удалить');
           }
         );
       }
     });
   }
-
-  // verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
-  //   this.confirmPopupService.openConfirmDialog({
-  //     title: titlePopUp,
-  //     message: messagePopUp,
-  //     acceptLabel: 'Отправить',
-  //     rejectLabel: 'Отмена',
-  //     onAccept: () => {
-
-  //       this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((response: any) => {
-
-  //         const isFormValid = this.validateFormFields(response.data);
-
-  //         if ((isFormValid && this.modelForm) || !this.modelForm) {
-  //           this.invoiceService.sendingVerification(
-  //             this.transformToSecondFormat(invoice),
-  //             status,
-  //             this.endpoint
-  //           ).subscribe(
-  //             (verificationResponse: any) => {
-  //               this.invoicesService.updateActiveData(verificationResponse.data);
-  //             },
-  //             (error) => {
-  //               console.error('Error deleting invoice', error);
-  //               this.toastService.showError('Ошибка', error.error.message);
-  //             }
-  //           );
-  //         } else {
-  //           this.toastService.showError('Ошибка', 'Не все обязательные поля заполнены');
-  //         }
-  //       });
-  //     }
-  //   });
-  // }
 
   verificationInvoice(invoice: any, status: any, titlePopUp: any, messagePopUp: any) {
     this.confirmPopupService.openConfirmDialog({
@@ -471,7 +690,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
       acceptLabel: 'Отправить',
       rejectLabel: 'Отмена',
       onAccept: () => {
-
         this.invoiceService.sendingVerification(
           this.transformToSecondFormat(invoice),
           status,
@@ -479,70 +697,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
         ).subscribe(
           (verificationResponse: any) => {
             this.invoicesService.updateActiveData(verificationResponse.data);
+            this.toastService.showSuccess('Успешно', 'Статус обновлен');
           },
           (error) => {
-            console.error('Error deleting invoice', error);
-            this.toastService.showError('Ошибка', error.error.message);
+            console.error('Error verifying invoice', error);
+            this.toastService.showError('Ошибка', error.error?.message || 'Не удалось обновить статус');
           }
         );
       }
     });
-  }
-
-  validateFormFields(data: any): boolean {
-    for (const fieldPath of this.modelForm) {
-      const parts = fieldPath.split('.');
-      let current = data;
-      let isValid = true;
-
-      for (let i = 0; i < parts.length; i++) {
-        const part = parts[i];
-
-        if (current[part] === null || current[part] === undefined) {
-          console.warn(`Поле ${fieldPath} не заполнено (${part} отсутствует)`);
-          isValid = false;
-          break;
-        }
-
-        current = current[part];
-
-        if (Array.isArray(current) && i < parts.length - 1) {
-          const nextPart = parts[i + 1];
-          const allItemsValid = current.every(item =>
-            item[nextPart] !== null &&
-            item[nextPart] !== undefined &&
-            item[nextPart] !== ''
-          );
-
-          if (!allItemsValid) {
-            console.warn(`Поле ${fieldPath} не заполнено в одном из элементов массива`);
-            isValid = false;
-            break;
-          }
-
-          break;
-        }
-      }
-
-      if (isValid && !Array.isArray(current)) {
-        const value = current;
-        if (value === null || value === undefined || value === '') {
-          console.warn(`Поле ${fieldPath} не заполнено`);
-          isValid = false;
-        }
-
-        if (fieldPath.toLowerCase().includes('date') && isNaN(new Date(value).getTime())) {
-          console.warn(`Поле ${fieldPath} содержит невалидную дату`);
-          isValid = false;
-        }
-      }
-
-      if (!isValid) {
-        return false;
-      }
-    }
-
-    return true;
   }
 
   private transformToSecondFormat(source: any): any {
@@ -565,7 +728,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     };
   }
 
-
   private parseNumberWithComma(value: string | number | null | undefined): number | null {
     if (value === null || value === undefined) {
       return null;
@@ -578,18 +740,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
     return isNaN(parsed) ? null : parsed;
   }
 
-
   selectInvoiceId: any;
   selectData: any;
   isEditInvoice: boolean = false;
 
   getInvoiceById(invoice: any) {
-    console.log('invoice')
     this.invoiceService.getInvoiceById(invoice.id, this.endpoint).subscribe((data: any) => {
       if (data.data.docAccountType == 0) {
         if (this.generalForm) {
           this.selectData = { ...data.data };
-          console.log('generalForm invoice', data.data)
         } else {
           this.selectInvoiceId = { ...data.data.id };
           this.isEditInvoice = true;
@@ -598,21 +757,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
         this.isEditInvoice = true;
         this.selectInvoiceId = { ...data.data.id };
       } else {
-
         const currentUrl = this.router.url;
         let typeValueRoute = currentUrl.includes('/base') ? true : false;
 
         if (this.generalForm && typeValueRoute == true) {
           this.selectData = { ...data.data };
-          console.log('generalForm invoice', data.data)
         } else {
           this.editScopeData(data.data);
         }
       }
     })
-
   }
-
 
   dropdownVisible: { [key: string]: boolean } = {};
 
@@ -625,15 +780,13 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.cdRef.detectChanges();
   }
 
-
-
   createInvoiceFromAccount(product: any) {
     this.invoiceService.docInvoiceFromAccount(product.id).subscribe((data: any) => {
       this.getInvoiceById(data.documentMetadata.data)
     },
       (error) => {
-        console.error('Error deleting invoice', error);
-        this.toastService.showError('Ошибка', error.error.Message);
+        console.error('Error creating invoice', error);
+        this.toastService.showError('Ошибка', error.error?.Message || 'Не удалось создать счет');
       })
   }
 
@@ -668,7 +821,6 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.contextMenuY = posY;
   }
 
-
   closeAllMenus() {
     this.contextMenuVisible = false;
     this.dropdownVisible = {};
@@ -677,10 +829,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     const target = event.target as HTMLElement;
-
-    if (!target.closest('.context-menu') && !target.closest('.dropdown')) {
+    if (!target.closest('.context-menu') && !target.closest('.dropdown') && !target.closest('.status-switch-popup')) {
       this.closeAllMenus();
+      if (this.showStatusSwitchPopup) {
+        this.showStatusSwitchPopup = false;
+      }
     }
   }
-
 }

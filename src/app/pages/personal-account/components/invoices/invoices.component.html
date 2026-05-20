@@ -1,4 +1,4 @@
-<div style=" display: flex; gap: 10px; margin-bottom: 10px;">
+<div style="display: flex; gap: 10px; margin-bottom: 10px;">
   <ng-container *ngIf="!generalForm">
     <app-invoices-form [invoiceId]="selectInvoiceId" [counterpartyName]="counterpartyData?.fullName"
       [counterpartyId]="counterpartyId" [isEditInvoice]="isEditInvoice" [buttons]="getButtonSet()"
@@ -22,9 +22,38 @@
       </span>
     </button>
   </ng-container>
-
 </div>
 
+<!-- Панель массовых действий -->
+<div class="bulk-actions-bar" *ngIf="selectedProducts.size > 0 && !isProcessingBulkAction">
+  <div class="bulk-actions-info">
+    Выбрано: {{ selectedProducts.size }} записей
+    <span class="status-badge" [ngClass]="getStatusClass(currentSelectionStatus)">{{ getStatusLabel(currentSelectionStatus) }}</span>
+  </div>
+  <div class="bulk-actions-buttons">
+    <ng-container *ngFor="let button of getButtonSet()">
+      <button *ngIf="button.bulkAction !== false && isButtonAvailableForStatus(button, currentSelectionStatus)" 
+              class="btn btn-bulk-action" 
+              [ngClass]="button.class"
+              (click)="executeBulkAction(button)"
+              [title]="button.titlePopUp">
+        {{ button.label }}
+      </button>
+    </ng-container>
+    <button class="btn btn-clear-selection" (click)="clearSelection()">Снять выделение</button>
+  </div>
+</div>
+
+<!-- Индикатор выполнения массовой операции -->
+<div class="bulk-actions-bar bulk-processing" *ngIf="isProcessingBulkAction">
+  <div class="bulk-actions-info">
+    <div class="processing-spinner"></div>
+    <span>Выполнение массовой операции...</span>
+  </div>
+  <div class="bulk-actions-buttons">
+    <button class="btn btn-clear-selection" disabled>Обработка...</button>
+  </div>
+</div>
 
 <div class="table-wrapper">
   <div #tableContainer class="table-container" (scroll)="onScroll($event)"
@@ -32,6 +61,12 @@
     <table class="invoice-table">
       <thead>
         <tr class="header-row">
+          <th style="width: 40px; padding: 7px 10px; position: relative;">
+            <input type="checkbox" 
+                   [checked]="isAllSelected()" 
+                   [indeterminate]="isIndeterminate()"
+                   (change)="toggleSelectAll($event)">
+          </th>
           <ng-container *ngFor="let col of columns">
             <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
               <div
@@ -64,14 +99,20 @@
                   (sortChange)="invoicesService.onSortChange($event); scrollToTop()">
                 </app-uuid-search-filter-sort>
               </div>
-
             </th>
           </ng-container>
-        </tr>
       </thead>
       <tbody>
         <tr *ngFor="let product of invoices" class="invoice-row"
+          [class.selected-row]="selectedProducts.has(product.id)"
+          [class.disabled-row]="selectedProducts.size > 0 && getProductStatus(product) !== currentSelectionStatus && currentSelectionStatus !== null"
           (dblclick)="isEditInvoice = false; getInvoiceById(product)">
+          <td style="width: 40px; padding: 7px 10px; position: relative;">
+            <input type="checkbox" 
+                   [checked]="selectedProducts.has(product.id)"
+                   [disabled]="isProcessingBulkAction || (selectedProducts.size > 0 && getProductStatus(product) !== currentSelectionStatus && currentSelectionStatus !== null)"
+                   (change)="toggleSelectionWithCheck($event, product)">
+          </td>
           <ng-container *ngFor="let col of columns">
             <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
               (dblclick)="isEditInvoice = false; getInvoiceById(product)" (contextmenu)="onRightClick($event, product)"
@@ -124,10 +165,11 @@
               </td>
             </ng-container>
           </ng-container>
-        </tr>
+        <tr>
       </tbody>
       <tfoot>
         <tr class="footer-row">
+          <td style="width: 40px;"></td>
           <ng-container *ngFor="let col of columns; let i = index">
             <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
               <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
@@ -138,17 +180,13 @@
           </ng-container>
           <td></td>
           <td></td>
-        </tr>
       </tfoot>
     </table>
-
   </div>
 </div>
 
-
 <!-- Контекстное меню -->
 <div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
-
   <ng-container *ngFor="let button of getButtonSet()">
     <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
       [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
@@ -157,8 +195,29 @@
   </ng-container>
 </div>
 
-
-
 <app-invoice-payment [counterpartyId]="counterpartyId" [paymentType]="paymentType"
   [filters]="invoicesService.filterStatic"></app-invoice-payment>
 <app-score-form [counterpartyId]="counterpartyId" [data]="dataSelectScope"></app-score-form>
+
+<!-- Попап для переключения статуса -->
+<div class="status-switch-popup" *ngIf="showStatusSwitchPopup" 
+     [style.top.px]="popupPosition.top" 
+     [style.left.px]="popupPosition.left">
+  <div class="popup-content">
+    <div class="popup-icon">⚠️</div>
+    <div class="popup-text">
+      <strong>Разные статусы записей</strong>
+      <p>Вы пытаетесь выбрать запись со статусом <strong>{{ getStatusLabel(pendingStatusValue) }}</strong>,<br>
+      но уже выбраны записи со статусом <strong>{{ getStatusLabel(currentSelectionStatus) }}</strong>.</p>
+      <p class="popup-hint">Массовые операции доступны только для записей с одинаковым статусом.</p>
+    </div>
+    <div class="popup-actions">
+      <button class="btn-switch" (click)="switchToNewStatus()">
+        Выбрать все {{ getStatusLabel(pendingStatusValue) }}
+      </button>
+      <button class="btn-cancel" (click)="cancelStatusSwitch()">
+        Отмена
+      </button>
+    </div>
+  </div>
+</div>

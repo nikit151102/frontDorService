@@ -6,6 +6,7 @@ export interface ButtonConfig {
     status?: number;
     class: string;
     isEditData?: boolean;
+    bulkAction?: boolean;
     condition?: (product: any, idCurrentUser: any) => boolean;
 }
 

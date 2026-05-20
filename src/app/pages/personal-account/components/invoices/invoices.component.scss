@@ -763,3 +763,294 @@ tfoot td {
         --shadow-color: rgba(16, 185, 129, 0.5);
     }
 }
+
+
+.bulk-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  animation: slideDown 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+  .bulk-actions-info {
+    font-size: 14px;
+    font-weight: 500;
+  }
+  
+  .bulk-actions-buttons {
+    display: flex;
+    gap: 10px;
+    
+    .btn-bulk-action {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    .btn-clear-selection {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      background: transparent;
+      color: white;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.selected-row {
+  background-color: rgba(102, 126, 234, 0.08) !important;
+  transition: background-color 0.2s ease;
+}
+
+
+.bulk-actions-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 12px 20px;
+  border-radius: 12px;
+  margin-bottom: 15px;
+  animation: slideDown 0.3s ease-out;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  
+  .bulk-actions-info {
+    font-size: 14px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    
+    .status-badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 500;
+      background: rgba(255, 255, 255, 0.2);
+      
+      &.status-not-checked { background: rgba(255, 193, 7, 0.3); }
+      &.status-sent-for-check { background: rgba(23, 162, 184, 0.3); }
+      &.status-rejected { background: rgba(220, 53, 69, 0.3); }
+      &.status-approved { background: rgba(40, 167, 69, 0.3); }
+      &.status-deleted { background: rgba(108, 117, 125, 0.3); }
+      &.status-completed { background: rgba(0, 123, 255, 0.3); }
+    }
+  }
+  
+  .bulk-actions-buttons {
+    display: flex;
+    gap: 10px;
+    
+    .btn-bulk-action {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      background: rgba(255, 255, 255, 0.2);
+      color: white;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.3);
+        transform: translateY(-1px);
+      }
+      
+      &:active {
+        transform: translateY(0);
+      }
+    }
+    
+    .btn-clear-selection {
+      padding: 6px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      background: transparent;
+      color: white;
+      
+      &:hover {
+        background: rgba(255, 255, 255, 0.15);
+      }
+      
+      &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+    }
+  }
+  
+  &.bulk-processing {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    
+    .processing-spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.selected-row {
+  background-color: rgba(102, 126, 234, 0.08) !important;
+  transition: background-color 0.2s ease;
+}
+
+.disabled-row {
+  opacity: 0.5;
+  background-color: rgba(0, 0, 0, 0.02);
+}
+
+/* Попап переключения статуса */
+.status-switch-popup {
+  position: absolute;
+  z-index: 1000;
+  min-width: 320px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  animation: popupAppear 0.2s ease-out;
+  border: 1px solid #e0e0e0;
+  
+  .popup-content {
+    padding: 16px;
+    
+    .popup-icon {
+      font-size: 32px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+    
+    .popup-text {
+      text-align: center;
+      margin-bottom: 20px;
+      
+      strong {
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+      }
+      
+      p {
+        margin: 0 0 8px 0;
+        font-size: 14px;
+        color: #666;
+        line-height: 1.4;
+      }
+      
+      .popup-hint {
+        font-size: 12px;
+        color: #999;
+      }
+    }
+    
+    .popup-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      
+      button {
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        
+        &.btn-switch {
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          border: none;
+          color: white;
+          
+          &:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+          }
+        }
+        
+        &.btn-cancel {
+          background: white;
+          border: 1px solid #ddd;
+          color: #666;
+          
+          &:hover {
+            background: #f5f5f5;
+          }
+        }
+      }
+    }
+  }
+}
+
+@keyframes popupAppear {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
