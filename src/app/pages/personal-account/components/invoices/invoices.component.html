@@ -62,10 +62,13 @@
       <thead>
         <tr class="header-row">
           <th style="width: 40px; padding: 7px 10px; position: relative;">
-            <input type="checkbox" 
+            <ng-container *ngIf="selectedProducts.size > 0">
+         <input type="checkbox" 
                    [checked]="isAllSelected()" 
                    [indeterminate]="isIndeterminate()"
                    (change)="toggleSelectAll($event)">
+            </ng-container>
+   
           </th>
           <ng-container *ngFor="let col of columns">
             <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
