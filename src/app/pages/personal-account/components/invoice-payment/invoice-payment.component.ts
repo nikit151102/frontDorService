@@ -8,6 +8,7 @@ import { InvoicesService } from '../invoices/invoices.service';
 import { Router } from '@angular/router';
 import { CustomInputComponent } from '../../../../ui-kit/custom-input/custom-input.component';
 import { CacheReferenceService } from '../../../../services/cache-reference.service';
+import { PrimeNG } from 'primeng/config';
 
 @Component({
   selector: 'app-invoice-payment',
@@ -37,7 +38,8 @@ export class InvoicePaymentComponent implements OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private invoicesService: InvoicesService,
     private router: Router,
-    private cacheService: CacheReferenceService
+    private cacheService: CacheReferenceService,
+    private primeng: PrimeNG
   ) { }
 
   ngOnInit() {
@@ -49,6 +51,13 @@ export class InvoicePaymentComponent implements OnInit {
 
     this.loadDataWithCache('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
     this.loadDataWithCache('/api/Entities/ProductTarget/Filter', 'productTarget');
+
+    this.primeng.setTranslation({
+      firstDayOfWeek: 1,
+      dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+    });
   }
 
   // Метод с кэшированием

@@ -8,27 +8,30 @@
 
                 <form [formGroup]="invoiceForm" class="form-container">
                     <div class="p-fluid p-formgrid p-grid">
-                        <div class="p-field p-col-12 p-md-6" style="width: 150px;">
-                            <label for="selectedYear">Год</label>
-                            <select class="modern-select" formControlName="selectedYear" (change)="onMonthYearChange()"
-                                name="year">
-                                <option *ngFor="let year of years" [value]="year">
-                                    {{ year }}
-                                </option>
-                            </select>
+                        <div class="odometer-block">
+                            <div class="p-field p-col-12 p-md-6" style="width: 150px;">
+                                <label for="selectedYear">Год</label>
+                                <select class="modern-select" formControlName="selectedYear"
+                                    (change)="onMonthYearChange()" name="year">
+                                    <option *ngFor="let year of years" [value]="year">
+                                        {{ year }}
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6" style="width: 150px;">
+                                <label for="beginDateTime">Месяц</label>
+                                <select class="modern-select" formControlName="selectedMonth"
+                                    (change)="onMonthYearChange()" name="month">
+                                    <option *ngFor="let month of months" [value]="month.value">
+                                        {{ month.name }}
+                                    </option>
+                                </select>
+                                <small
+                                    *ngIf="invoiceForm.get('beginDateTime')?.touched && invoiceForm.get('beginDateTime')?.invalid"
+                                    class="p-error">Это поле обязательно</small>
+                            </div>
                         </div>
-                        <div class="p-field p-col-12 p-md-6" style="width: 150px;">
-                            <label for="beginDateTime">Месяц</label>
-                            <select class="modern-select" formControlName="selectedMonth" (change)="onMonthYearChange()"
-                                name="month">
-                                <option *ngFor="let month of months" [value]="month.value">
-                                    {{ month.name }}
-                                </option>
-                            </select>
-                            <small
-                                *ngIf="invoiceForm.get('beginDateTime')?.touched && invoiceForm.get('beginDateTime')?.invalid"
-                                class="p-error">Это поле обязательно</small>
-                        </div>
+
 
                         <div class="p-col-12">
                             <h4>логист</h4>

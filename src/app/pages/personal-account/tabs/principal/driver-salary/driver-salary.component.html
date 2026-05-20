@@ -103,15 +103,32 @@
               </td>
             </ng-container>
 
-          
+
 
           </ng-container>
-            <ng-container *ngIf="currentRole == 1">
-              <td>
-                 <button class="btn btn-details" style="color: #101010;"
-                    (click)="deleteItem(product.id)">Удалить</button>
-              </td>
-            </ng-container>
+          <ng-container *ngIf="currentRole == 1">
+            <td>
+              <!-- <button class="btn btn-details" style="color: #101010;"
+                    (click)="deleteItem(product.id)">Удалить</button> -->
+
+              <div class="dropdown">
+                <button class="btn btn-dropdown" style="color: #101010;" (click)="toggleDropdown(product.id)">⋮</button>
+                <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
+                  <!-- <ng-container *ngFor="let button of getButtonSet()">
+                      <button class="btn btn-details"
+                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
+                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
+                        [title]="button.titlePopUp">
+                        {{ button.label }}
+                      </button>
+                    </ng-container> -->
+                  <button *ngIf="currentRole == 1" class="btn btn-details" (click)="deleteItem(product.id)">
+                    удалить
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
         </tr>
       </tbody>
       <tfoot>

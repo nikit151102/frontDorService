@@ -8,6 +8,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { CustomInputComponent } from '../../../../../../ui-kit/custom-input-auth/custom-input.component';
 import { CustomInputNumberComponent } from '../../../../../../ui-kit/custom-input-number/custom-input-number.component';
+import { PrimeNG } from 'primeng/config';
 
 @Component({
   selector: 'app-payment-form',
@@ -15,7 +16,7 @@ import { CustomInputNumberComponent } from '../../../../../../ui-kit/custom-inpu
   templateUrl: './payment-form.component.html',
   styleUrl: './payment-form.component.scss'
 })
-export class PaymentFormComponent  implements OnInit {
+export class PaymentFormComponent implements OnInit {
   visible: boolean = false;
   title: string = 'Оплата';
   message: string = '';
@@ -32,7 +33,8 @@ export class PaymentFormComponent  implements OnInit {
     public invoicePaymentService: InvoicePaymentService,
     private invoicesService: InvoicesService,
     private router: Router,
-    private cacheService: CacheReferenceService
+    private cacheService: CacheReferenceService,
+    private primeng: PrimeNG
   ) { }
 
   ngOnInit() {
@@ -44,6 +46,13 @@ export class PaymentFormComponent  implements OnInit {
 
     this.loadDataWithCache('/api/Entities/MeasurementUnit/Filter', 'measurementUnit');
     this.loadDataWithCache('/api/Entities/ProductTarget/Filter', 'productTarget');
+
+    this.primeng.setTranslation({
+      firstDayOfWeek: 1, 
+      dayNamesMin: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      dayNamesShort: ['Вс', 'Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб'],
+      dayNames: ['Воскресенье', 'Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота']
+    });
   }
 
   // Метод с кэшированием
@@ -90,7 +99,12 @@ export class PaymentFormComponent  implements OnInit {
     const typeValue = currentUrl.includes('/cash') ? 0 : 1;
     const unitPieces = this.measurementUnit.find((unit: any) => unit.name === 'Штуки');
 
-
+      if (this.dateTime) {
+        const newDate = new Date(this.dateTime);
+        newDate.setDate(newDate.getDate() + 1);
+        this.dateTime = newDate;
+    }
+    
     let data: any = {
       number: this.number,
       dateTime: this.dateTime,
@@ -111,7 +125,7 @@ export class PaymentFormComponent  implements OnInit {
 
     this.invoicePaymentService.setPayment({
       queryDto: {
-        filters: [{"field":"DocPaymentType","values":[4],"type":1},{"field":"antonCashType","values":[6],"type":1},{"field":"Director2Type","values":[1,2,3,4,5],"type":1}],
+        filters: [{ "field": "DocPaymentType", "values": [4], "type": 1 }, { "field": "antonCashType", "values": [6], "type": 1 }, { "field": "Director2Type", "values": [1, 2, 3, 4, 5], "type": 1 }],
         sorts: []
       },
       entityDto: data

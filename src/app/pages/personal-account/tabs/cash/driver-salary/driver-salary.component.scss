@@ -654,11 +654,10 @@ tfoot td {
 
 
 .modern-pay-button {
-    --primary-color: #10b981;
+     --primary-color: #10b981;
     --hover-color: #059669;
     --active-color: #047857;
     --shadow-color: rgba(16, 185, 129, 0.3);
-
     position: relative;
     height: 35px;
     font-size: 13px;
@@ -675,8 +674,7 @@ tfoot td {
     justify-content: center;
     gap: 10px;
     overflow: hidden;
-    box-shadow: 0 4px 6px -1px var(--shadow-color),
-        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 6px -1px var(--shadow-color), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
     &::before {
         content: '';
