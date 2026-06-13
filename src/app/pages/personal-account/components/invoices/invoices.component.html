@@ -32,7 +32,7 @@
   </div>
   <div class="bulk-actions-buttons">
     <ng-container *ngFor="let button of getButtonSet()">
-      <button *ngIf="button.bulkAction !== false && isButtonAvailableForStatus(button, currentSelectionStatus)" 
+      <button *ngIf="button.bulkAction !== false && isButtonAvailableForStatus(button, currentSelectionStatus) && button.label != 'Изменить'" 
               class="btn btn-bulk-action" 
               [ngClass]="button.class"
               (click)="executeBulkAction(button)"
