@@ -11,6 +11,7 @@ import { SupplierComponent } from './supplier/supplier.component';
 import { DimaBaseComponent } from './dimaBase/dima.component';
 import { CashMenuService } from './cash-menu/cash-menu.service';
 import { DriverSalaryComponent } from './driver-salary/driver-salary.component';
+import { PaymentAccountComponent } from './payment-account/payment-account.component';
 
 enum CashType {
   MECHANIC = 'Механик',
@@ -24,7 +25,7 @@ enum CashType {
 
 @Component({
   selector: 'app-cash',
-  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent, DimaBaseComponent, DriverSalaryComponent],
+  imports: [CommonModule, MechanicComponent, CashMenuComponent, AntonComponent, DimaComponent, EgorComponent, SupplierComponent, DimaBaseComponent, DriverSalaryComponent, PaymentAccountComponent],
   templateUrl: './cash.component.html',
   styleUrl: './cash.component.scss'
 })
@@ -45,6 +46,7 @@ export class CashComponent implements OnInit {
       case 4: return CashType.SUPPLIER;
       case 5: return CashType.DIMA;
       case 6: return 'Директор';
+      case 7: return 'Директор';
       default: return 'Неизвестная вкладка';
     }
   }
