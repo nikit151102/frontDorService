@@ -8,6 +8,7 @@ import { Subscription } from 'rxjs';
 import { CacheReferenceService } from '../../../../services/cache-reference.service';
 import { ToastService } from '../../../../services/toast.service';
 import { SessionsComponent } from './sessions/sessions.component';
+import { FormatingDataService } from '../../../../services/formating-data.service';
 
 interface CustomMenuItem {
   label: string;
@@ -63,6 +64,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
   menuActive: Boolean = false;
 
   private notificationSubscription!: Subscription;
+  metrics: any[] = []
 
   constructor(private activatedRoute: ActivatedRoute,
     public jwtService: JwtService, private router: Router,
@@ -71,6 +73,7 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     private navMenuService: NavMenuService,
     private cacheService: CacheReferenceService,
     private toastService: ToastService,
+    public formatingDataService: FormatingDataService
 
   ) { }
 
@@ -95,6 +98,16 @@ export class NavMenuComponent implements OnInit, OnDestroy {
     });
     this.notifications = this.navMenuService.getNotifications();
     console.log('notifications', this.notifications)
+
+
+    this.navMenuService.getFinanceAnalytics().subscribe((data: any) => {
+      console.log('data', data)
+      this.metrics = [
+        { label: 'Наличные', value: data.documentMetadata.data.cashBalance, color: '#0f172a' },
+        { label: 'Расчётный счёт', value: data.documentMetadata.data.paymentAccountBalance, color: '#0f172a' }
+      ];
+      this.cdr.detectChanges();
+    })
   }
 
   toggleMenu() {

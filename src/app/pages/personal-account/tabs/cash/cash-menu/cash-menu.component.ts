@@ -22,7 +22,7 @@ export class CashMenuComponent implements OnInit {
     // { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
     { name: 'Снабженец', access: '', antonCashType: 4 },
     { name: 'Директор', access: 'Director2Access', antonCashType: 6 },
-    { name: 'Расчетный счет', access: 'Director2Access', antonCashType: 5 },
+    { name: 'Расчетный счет', access: 'Director2Access', antonCashType: 7 },
 
   ];
   // items: any[] = [

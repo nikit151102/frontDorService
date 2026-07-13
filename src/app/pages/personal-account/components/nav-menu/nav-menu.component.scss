@@ -273,3 +273,49 @@
         width: 100%;
     }
 }
+
+
+.metrics {
+  display: inline-flex;
+  gap: 2px;
+  background: #f1f3f5;
+  border-radius: 12px;
+  padding: 2px;
+  width: fit-content;
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  padding: 5px 10px;
+  background: #ffffff;
+  border-radius: 10px;
+  min-width: 140px;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: #fafbfc;
+  }
+
+  &__label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    line-height: 1;
+  }
+
+  &__value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
+    font-variant-numeric: tabular-nums;
+    color: #0f172a;
+  }
+}

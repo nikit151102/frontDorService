@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../../../../environment';
-import { BehaviorSubject, Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NavMenuService {
 
-  constructor() { }
+  constructor(private http: HttpClient) { }
 
   private socket!: WebSocket;
   private notificationsSubject = new BehaviorSubject<any>(null);
@@ -31,7 +32,7 @@ export class NavMenuService {
       this.socket.send(JSON.stringify({ action: "GetInitialData" }));
     };
 
-    this.socket.onmessage = (event) => {    
+    this.socket.onmessage = (event) => {
       try {
         const data = JSON.parse(event.data);
         this.notificationsSubject.next(data);
@@ -40,7 +41,7 @@ export class NavMenuService {
         console.warn("Received non-JSON message:", event.data);
       }
     };
-    
+
 
     this.socket.onerror = (error) => {
       console.error('WebSocket error:', error);
@@ -55,5 +56,18 @@ export class NavMenuService {
       this.socket.close();
     }
   }
+
+  getFinanceAnalytics(): Observable<any> {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
+    return this.http.post(`${environment.apiUrl}/api/Director/FinanceAnalytics`, {},
+      {
+        headers: new HttpHeaders({
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }),
+      }
+    );
+  }
+
 
 }

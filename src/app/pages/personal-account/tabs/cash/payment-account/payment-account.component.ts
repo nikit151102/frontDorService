@@ -15,9 +15,9 @@ import { InvoicePaymentService } from '../../../components/invoice-payment/invoi
 import { ScoreFormService } from '../../../components/score-form/score-form.service';
 import { InvoicesContentService } from '../../partners/invoices-content/invoices-content.service';
 import { DriverSalaryService } from '../driver-salary/driver-salary.service';
-import { GeneralDocsFormComponent } from '../driver-salary/general-docs-form/general-docs-form.component';
-import { PaymentFormComponent } from '../driver-salary/payment-form/payment-form.component';
 import { ButtonConfig, BUTTON_SETS } from '../mechanic/button-config';
+import { GeneralDocsFormComponent } from './general-docs-form/general-docs-form.component';
+import { PaymentFormComponent } from './payment-form/payment-form.component';
 
 @Component({
   selector: 'app-payment-account',
@@ -135,8 +135,8 @@ export class PaymentAccountComponent implements OnInit {
     this.driverSalaryService.defaultFilters = [];
 
     this.driverSalaryService.defaultFilters = [
-      { field: 'DocPaymentType', values: [7], type: 1 },
-      { field: 'antonCashType', values: [5], type: 1 },
+      { field: 'DocPaymentType', values: [5], type: 1 },
+      { field: 'antonCashType', values: [7], type: 1 },
       {
         field: 'Director2Type',
         values: [

@@ -44,9 +44,9 @@ export class CashComponent implements OnInit {
       case 2: return CashType.DIMA_BASE;
       case 3: return CashType.EGOR;
       case 4: return CashType.SUPPLIER;
-      case 5: return CashType.DIMA;
+      case 5: return 'Расчетный счет';
       case 6: return 'Директор';
-      case 7: return 'Директор';
+      case 7: return 'Расчетный счет';
       default: return 'Неизвестная вкладка';
     }
   }

@@ -4,38 +4,47 @@
         <!-- <div class="navbar-brand">
             <span>YourLogo</span>
         </div> -->
-        
+
         <!-- Бургер-меню для мобильных -->
         <button class="burger-menu" (click)="toggleMenu()" aria-label="Toggle menu">
             <span></span>
             <span></span>
             <span></span>
         </button>
-        
+
         <!-- Основное меню -->
         <nav class="nav-menu" [class.active]="menuActive">
             <ul class="nav-list">
                 <li *ngFor="let item of items" class="nav-item">
-                    <button class="nav-button" (click)="execute(item.commandName || '')" [disabled]="!hasAccess(item.access)">
+                    <button class="nav-button" (click)="execute(item.commandName || '')"
+                        [disabled]="!hasAccess(item.access)">
                         {{ item.label }}
-                        
+
                         <!-- Бейдж уведомлений -->
                         <span *ngIf="shouldShowNotification(item.notifyKey)" class="notification-badge"
                             [ngClass]="getNotificationClass(item.notifyKey)"
-                            (mouseenter)="showTooltip(item.notifyKey, $event)" 
-                            (mouseleave)="hideTooltip()">
+                            (mouseenter)="showTooltip(item.notifyKey, $event)" (mouseleave)="hideTooltip()">
                             {{ getNotificationCount(item.notifyKey) }}
                         </span>
                     </button>
                 </li>
             </ul>
-            
+
             <!-- Управляющие кнопки -->
             <div class="nav-controls">
+                <div class="metrics">
+                    <div class="metric" *ngFor="let item of metrics">
+                        <span class="metric__label">{{ item.label }}</span>
+                        <span class="metric__value" [style.color]="item.color">
+                            {{ formatingDataService.formatisNumber(item.value) }}
+                        </span>
+                    </div>
+                </div>
+
                 <ng-container *ngIf="jwtService.getDecodedToken().email == 1">
                     <app-sessions></app-sessions>
                 </ng-container>
-                
+
                 <button class="control-button refresh" (click)="refreshReference()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M23 4v6h-6M1 20v-6h6"></path>
@@ -43,7 +52,7 @@
                     </svg>
                     Обновить
                 </button>
-                
+
                 <button class="control-button exit" (click)="execute('exit')">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
                         <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -54,7 +63,7 @@
                 </button>
             </div>
         </nav>
-        
+
         <!-- Всплывающая подсказка -->
         <div class="tooltip" *ngIf="tooltipVisible" [style.top.px]="tooltipY" [style.left.px]="tooltipX">
             <p *ngIf="tooltipData?.notDeliveredCount">Непрочитанных: {{ tooltipData?.notDeliveredCount }}</p>
