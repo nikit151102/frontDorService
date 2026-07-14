@@ -39,6 +39,10 @@ const routes: Routes = [
       {
         path: 'stats', loadChildren: () => import('./tabs/stats/director.module').then(m => m.DirectorModule)
       },
+      {
+        path: 'warehouse', loadChildren: () => import('./tabs/warehouse/warehouse-routing.module').then(m => m.WarehouseRoutingModule)
+      },
+
 
     ]
   }

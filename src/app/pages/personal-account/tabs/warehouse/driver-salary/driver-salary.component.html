@@ -1,0 +1,163 @@
+<div style=" display: flex; gap: 10px;">
+  <app-driver-salary-form [data]="selectData"
+    (create)="onCreate($event)"></app-driver-salary-form>
+</div>
+
+
+<div class="table-wrapper">
+  <div #tableContainer class="table-container" (scroll)="onScroll($event)"
+    [style.height]="'calc(100vh - ' + heightContainer + ')'">
+    <table class="invoice-table">
+      <thead>
+        <tr class="header-row">
+          <ng-container *ngFor="let col of columns">
+            <th *ngIf="isColumnVisible(col)" [style.width]="col.width" style="padding: 7px 15px;">
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 13px; width: 100%;">
+                {{ col.header }}
+
+                <app-search-filter-sort *ngIf="col.type === 'string'" [filterField]="col.field" [filterType]="1"
+                  [searchField]="col.searchField"
+                  (filterChange)="driverSalaryService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="driverSalaryService.onSortChange($event); scrollToTop()">
+                </app-search-filter-sort>
+                <app-date-filter *ngIf="col.type === 'date'" [filterField]="col.field"
+                  (filterChange)="driverSalaryService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="driverSalaryService.onSortChange($event); scrollToTop()">
+                </app-date-filter>
+                <app-number-filter *ngIf="col.type === 'number'" [filterField]="col.field"
+                  (filterChange)="driverSalaryService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="driverSalaryService.onSortChange($event); scrollToTop()">
+                </app-number-filter>
+                <app-uuid-search-filter-sort *ngIf="col.type === 'uuid'" [apiEndpoint]="col.endpoint"
+                  [fieldNames]="'name'" [enam]="null" [Field]="col.field" [filterType]="col.filterType"
+                  [searchField]="col.searchField"
+                  (filterChange)="driverSalaryService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="driverSalaryService.onSortChange($event); scrollToTop()">
+                </app-uuid-search-filter-sort>
+                <app-uuid-search-filter-sort *ngIf="col.type === 'enam'" [fieldNames]="'label'" [enam]="statuses"
+                  [Field]="col.field" [filterType]="1"
+                  (filterChange)="driverSalaryService.onFilterChange($event); scrollToTop()"
+                  (sortChange)="driverSalaryService.onSortChange($event); scrollToTop()">
+                </app-uuid-search-filter-sort>
+              </div>
+
+            </th>
+          </ng-container>
+
+
+          <ng-container *ngIf="currentRole == 1">
+            <th>Действия</th>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of invoices" class="invoice-row"
+          (dblclick)="isEditInvoice = false; getInvoiceById(product)">
+          <ng-container *ngFor="let col of columns">
+
+            <td *ngIf="isColumnVisible(col) && col.type != 'actions'" class="invoice-cell"
+              (dblclick)="isEditInvoice = false; getInvoiceById(product)" (contextmenu)="onRightClick($event, product)"
+              [style.width]="col.width">
+              <ng-container
+                *ngIf="(col.fieldView === 'dateTime' || col.fieldView === 'date' || col.fieldView ==='beginDateTime' || col.fieldView ==='endDateTime'); else normalField">
+                {{ product[col.fieldView] | date: 'dd-MM-yyyy' }}
+              </ng-container>
+              <ng-template #normalField>
+                <ng-container *ngIf="col.fieldView === 'number'">
+                  {{product[col.fieldView]}}
+                </ng-container>
+                <span *ngIf="col.fieldView === 'status'" [ngClass]="getStatusClass(product[col.fieldView])"
+                  class="status-tag">
+                  {{ getStatusLabel(product[col.fieldView]) }}
+                </span>
+                <span *ngIf="col.fieldView === 'paymentType' ">
+                  {{ transform(product[col.fieldView]) }}
+                </span>
+                <ng-container *ngIf="col.type == 'number'">
+                  {{formatingDataService.formatisNumber(product[col.fieldView])}}
+                </ng-container>
+                <span
+                  *ngIf="col.type != 'number' && col.fieldView !== 'number' && col.fieldView !== 'invoiceStatus' && col.fieldView !== 'status' && col.fieldView !== 'paymentType'">
+                  {{ product[col.fieldView] }}
+                </span>
+              </ng-template>
+            </td>
+
+            <ng-container *ngIf="col.type === 'actions'">
+              <td class="invoice-cell actions-cell">
+                <div class="dropdown">
+                  <button class="btn btn-dropdown" style="color: #101010;"
+                    (click)="toggleDropdown(product.id)">⋮</button>
+                  <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
+                    <ng-container *ngFor="let button of getButtonSet()">
+                      <button class="btn btn-details"
+                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
+                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
+                        [title]="button.titlePopUp">
+                        {{ button.label }}
+                      </button>
+                    </ng-container>
+                  </div>
+                </div>
+              </td>
+            </ng-container>
+
+
+
+          </ng-container>
+          <ng-container *ngIf="currentRole == 1">
+            <td>
+              <!-- <button class="btn btn-details" style="color: #101010;"
+                    (click)="deleteItem(product.id)">Удалить</button> -->
+
+              <div class="dropdown">
+                <button class="btn btn-dropdown" style="color: #101010;" (click)="toggleDropdown(product.id)">⋮</button>
+                <div class="dropdown-menu" [ngClass]="{'show': dropdownVisible[product.id]}">
+                  <!-- <ng-container *ngFor="let button of getButtonSet()">
+                      <button class="btn btn-details"
+                        *ngIf="button.condition ? button.condition(product, idCurrentUser) : true"
+                        [ngClass]="button.class" (click)="handleButtonClick(button, product)"
+                        [title]="button.titlePopUp">
+                        {{ button.label }}
+                      </button>
+                    </ng-container> -->
+                  <button *ngIf="currentRole == 1" class="btn btn-details" (click)="selectItem(product)">
+                    Списать 
+                  </button>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr class="footer-row">
+          <ng-container *ngFor="let col of columns; let i = index">
+            <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
+              <ng-container *ngIf="getTotalValue(i) !== null; else emptyCell">
+                {{ formatingDataService.formatisNumber(getTotalValue(i)) }}
+              </ng-container>
+              <ng-template #emptyCell></ng-template>
+            </td>
+          </ng-container>
+          <td></td>
+          <td></td>
+        </tr>
+      </tfoot>
+    </table>
+
+  </div>
+</div>
+
+
+<!-- Контекстное меню -->
+<!-- <div *ngIf="contextMenuVisible" class="context-menu" [style.top.px]="contextMenuY" [style.left.px]="contextMenuX">
+
+  <ng-container *ngFor="let button of getButtonSet()">
+    <button class="btn btn-details" *ngIf="button.condition ? button.condition(selectedProduct, idCurrentUser) : true"
+      [ngClass]="button.class" (click)="handleButtonClick(button, selectedProduct)" [title]="button.titlePopUp">
+      {{ button.label }}
+    </button>
+  </ng-container>
+</div> -->

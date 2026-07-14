@@ -1,0 +1,131 @@
+/* Основной контейнер */
+div[style*="position: relative"] {
+    position: relative;
+    min-width: 60px;
+}
+
+/* Стиль для списка контрагентов */
+.counterparties-list {
+    width: 225px;
+    background: #ffffff;
+    margin-left: 25px;
+    padding: 16px;
+    border-radius: 16px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    position: relative;
+    overflow: hidden;
+    border: 1px solid #f0f0f0;
+    margin-top: 10px;
+}
+
+/* Стили для кнопки переключения */
+.toggle-visibility-btn {
+    position: absolute;
+    right: 0;
+    top: 1px;
+    background: #f9f9f9;
+    border: none;
+    border-radius: 20px;
+    padding: 12px;
+    cursor: pointer;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    z-index: 9999;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toggle-visibility-btn:hover {
+    background: #e0e0e0;
+}
+
+.toggle-visibility-btn.checked {
+    margin-top: 12px;
+    right: -6px;
+}
+
+/* Стиль стрелки */
+.custom-arrow {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-right: 2px solid rgb(0 0 0);
+    border-bottom: 2px solid rgb(0 0 0);
+    transform: rotate(-45deg);
+    transition: transform 0.3s ease;
+    margin-left: 3px;
+}
+
+.custom-arrow.rotated {
+    transform: rotate(135deg);
+}
+
+/* Стили для списка */
+ul {
+    list-style: none;
+    padding: 0;
+    overflow-y: scroll;
+    height: calc(100vh - 290px);
+    overflow-x: hidden;
+    direction: rtl;
+}
+
+ul::-webkit-scrollbar {
+    width: 12px;
+}
+
+ul::-webkit-scrollbar-track {
+    background: rgb(240, 240, 240);
+}
+
+ul::-webkit-scrollbar-thumb {
+    background-color: rgb(219, 219, 252);
+    border-radius: 20px;
+    border: 3px solid rgb(255, 255, 255);
+}
+
+li {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    color: #101010;
+    margin-bottom: 10px;
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    border: 1px solid #f0f0f0;
+}
+
+li:hover {
+    transform: translateX(5px);
+}
+
+li span.active {
+    font-weight: bold;
+    color: #5c6bc0;
+}
+
+/* Стили для неактивных элементов */
+li.disabled {
+    pointer-events: none;
+    background-color: #f0f0f0;
+    opacity: 0.6;
+}
+
+.counterparty-item {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    flex-direction: row-reverse;
+    justify-content: space-between;
+}
+
+.counterparty-item.disabled {
+    opacity: 0.6;
+}

@@ -1,0 +1,101 @@
+<!-- <button pButton [label]="label" icon="pi pi-plus" (click)="createNewInvoice()" style="color: white;"></button> -->
+
+<ng-container *ngIf="selectedInvoice">
+    <p-dialog [(visible)]="dialogVisible" [modal]="true" [closable]="true" (onHide)="onDialogClose()">
+        <div class="form-container">
+            <div class="p-fluid p-formgrid p-grid">
+
+                <form [formGroup]="invoiceForm" class="form-container">
+                    <div class="p-fluid p-formgrid p-grid">
+
+
+                        <!-- Транспортное средство -->
+                        <!-- <div class="p-field p-col-12" *ngIf="employeeType == 1">
+                            <label for="driverEmployeeId">Водитель</label>
+                            <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
+                                [selected]="invoiceForm.get('driverEmployeeId')?.value"
+                                (selectedChange)="onVehicleChange($event)">
+                            </app-custom-dropdown>
+                            <small
+                                *ngIf="invoiceForm.get('driverEmployeeId')?.touched && invoiceForm.get('driverEmployeeId')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div> -->
+                        <div class="p-field p-col-12" *ngIf="employeeType == 1 || 6">
+                            <label for="productTargetId">Назначение</label>
+                            <app-custom-dropdown [options]="ProductTargetOptions" optionLabel="name" optionValue="id"
+                                [selected]="invoiceForm.get('productTargetId')?.value"
+                                (selectedChange)="onProductTargetChange($event)">
+                            </app-custom-dropdown>
+                            <small
+                                *ngIf="invoiceForm.get('productTargetId')?.touched && invoiceForm.get('driverEmployeeId')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div>
+
+
+                        <!-- <div class="p-field p-col-12" *ngIf="employeeType == 2">
+                            <label for="driverEmployeeId">Сотрудник</label>
+                            <app-custom-dropdown [options]="driverOptions" optionLabel="fullName" optionValue="id"
+                                [selected]="invoiceForm.get('driverEmployeeId')?.value"
+                                (selectedChange)="onVehicleChange($event)">
+                            </app-custom-dropdown>
+                            <small
+                                *ngIf="invoiceForm.get('driverEmployeeId')?.touched && invoiceForm.get('driverEmployeeId')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div> -->
+
+                        <!-- <div class="p-field p-col-12 p-md-6">
+                            <label for="beginDateTime">Месяц</label>
+                            <select class="modern-select" formControlName="selectedMonth" (change)="onMonthYearChange()"
+                                name="month">
+                                <option *ngFor="let month of months" [value]="month.value">
+                                    {{ month.name }}
+                                </option>
+                            </select>
+                            <small
+                                *ngIf="invoiceForm.get('beginDateTime')?.touched && invoiceForm.get('beginDateTime')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div> 
+                        <div class="p-field p-col-12 p-md-6">
+                            <label for="endDateTime">Дата</label>
+                            <input type="date" formControlName="selectedYear" (click)="showDatePickerWithMonth($event)"
+                                (focus)="showDatePickerWithMonth($event)" (change)="onMonthYearChange()" #dateInput>
+             
+                            <small
+                                *ngIf="invoiceForm.get('endDateTime')?.touched && invoiceForm.get('endDateTime')?.invalid"
+                                class="p-error">Это поле обязательно</small>
+                        </div>-->
+
+                        <div class="p-field p-col-12 p-md-4">
+                            <label for="amount">Количество</label>
+                            <app-custom-input-number formControlName="quantity" [min]="0" [max]="maxQuantity">
+                            </app-custom-input-number>
+                            <small *ngIf="invoiceForm.get('quantity')?.touched"
+                                class="p-error">Некорректное значение</small>
+                        </div>
+                       <div class="p-field p-col-12 p-md-4">
+                            <label for="amount">Комментарий</label>
+                            <app-custom-input formControlName="comment">
+                            </app-custom-input>
+                        </div>
+
+
+
+                    </div>
+                </form>
+
+            </div>
+            <p-footer>
+                <button pButton label="Сохранить" (click)="saveData()">
+                </button>
+
+                <button pButton label="Отмена" (click)="onDialogClose()" class="p-button-secondary">
+                </button>
+            </p-footer>
+        </div>
+    </p-dialog>
+</ng-container>
+
+<p-confirmDialog></p-confirmDialog>
+
+<app-unsaved-changes-dialog *ngIf=" showConfirmDialog" (confirmClose)="confirmCloseDialog()"
+    (cancelClose)="hideConfirmDialog()"></app-unsaved-changes-dialog>
