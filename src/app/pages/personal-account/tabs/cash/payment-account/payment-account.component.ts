@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnInit, Output, Renderer2, ViewChild } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { MessageService, MenuItem } from 'primeng/api';
 import { ConfirmPopupService } from '../../../../../components/confirm-popup/confirm-popup.service';
@@ -45,7 +45,10 @@ export class PaymentAccountComponent implements OnInit {
   @Input() defaultFilter: any;
   @Input() selectedComponent: string = '';
   @Input() modelForm: any;
-  @Input() heightContainer: string = '280px'
+  @Input() heightContainer: string = '300px'
+
+  @Output() totalInfo = new EventEmitter<any>()
+
   currentConfig: any;
 
   employeeType: Number = 1;
@@ -341,7 +344,7 @@ export class PaymentAccountComponent implements OnInit {
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         }
-
+        this.totalInfo.emit(response.totalInfo);
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.driverSalaryService.totalRecords = response.totalInfo?.totalPagesCount * this.driverSalaryService.pageSize;
         }

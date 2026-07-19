@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
@@ -17,6 +17,11 @@ import { CacheReferenceService } from '../../../../../services/cache-reference.s
 })
 export class AntonComponent implements OnInit {
 
+  @Output() totalInfo = new EventEmitter<any>()
+  getTotalInfo(data: any) {
+    this.totalInfo.emit(data);
+  }
+
   constructor(private generalFormService: GeneralFormService,
     private antonService: AntonService,
     private jwtService: JwtService,
@@ -25,7 +30,7 @@ export class AntonComponent implements OnInit {
   paymentType: number = 2;
   columnsInvoices = [
     { field: 'dateTime', header: 'Дата', type: 'date', visible: true, width: '150px' },
-    { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true,width: `clamp(100px, 100%, 400px)`, endpoint: '/api/Entities/ProductTarget/Filter' },
+    { field: 'productTarget', fieldView: 'productTarget', filterType: 10, searchField: 'productTarget.Name', header: 'Назначение', type: 'uuid', visible: true, width: `clamp(100px, 100%, 400px)`, endpoint: '/api/Entities/ProductTarget/Filter' },
     { field: 'name', header: 'Наименование', type: 'string', visible: true, width: `clamp(100px, 100%, 400px)`, isFilter: false },
     { field: 'manufacturer', fieldView: 'manufacturer', header: 'Поставщик', type: 'string', visible: true, width: `clamp(100px, 100%, 400px)`, isFilter: false },
     { field: 'expenseSum', header: 'Приход', type: 'number', visible: true, width: '150px' },

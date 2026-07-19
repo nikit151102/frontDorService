@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
@@ -17,6 +17,10 @@ import { CacheReferenceService } from '../../../../../services/cache-reference.s
 })
 export class DimaBaseComponent implements OnInit {
 
+  @Output() totalInfo = new EventEmitter<any>()
+  getTotalInfo(data: any) {
+    this.totalInfo.emit(data);
+  }
   constructor(private generalFormService: GeneralFormService,
     private dimaService: DimaService,
     private jwtService: JwtService,

@@ -32,6 +32,7 @@ enum CashType {
 export class CashComponent implements OnInit {
 
 
+  totalInfo: any
   selectedCashType: number | null = null;
   titleTab: string = '';
   contentWidth: any;
@@ -107,5 +108,9 @@ export class CashComponent implements OnInit {
   }
 
 
+  getTotalInfo(data: any) {
+    this.totalInfo = data;
+    console.log('vdsvdevdvd --------------------',data)
+  }
 
 }

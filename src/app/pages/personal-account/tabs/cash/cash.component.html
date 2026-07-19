@@ -4,16 +4,64 @@
 
   <!-- Правая часть -->
   <div class="right-content" [style.width]="contentWidth">
-    <span style="color: #101010c7; font-size: 20px;">Касса <ng-container *ngIf="selectedCashType != null"> > {{ getTitleTab() }} </ng-container> </span>
+    <div class="dashboard-container">
+      <div class="dashboard-header">
+        <div class="title-section">
+          <h2 class="dashboard-title"> Касса <ng-container *ngIf="selectedCashType != null"> > {{ getTitleTab() }}
+            </ng-container></h2>
+          <!-- <div class="menu-tabs">
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'invoices'}"
+                (click)="showComponent('invoices')">
+                <span>Фактуры</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'products'}"
+                (click)="showComponent('products')">
+                <span>Товары</span>
+                <div class="tab-indicator"></div>
+            </button>
+        </div> -->
+        </div>
+
+        <div class="financial-cards">
+          <div class="financial-card" *ngIf="totalInfo?.totalCount">
+            <div class="card-value count">{{totalInfo.totalCount}}</div>
+            <div class="card-label">Записей</div>
+          </div>
+
+          <div class="financial-card" *ngIf="totalInfo?.totalIncomeSum">
+            <div class="card-value income">{{totalInfo.totalIncomeSum | number:'1.2-2'}}</div>
+            <div class="card-label">Приход</div>
+          </div>
+
+          <div class="financial-card" *ngIf="totalInfo?.totalExpenseSum">
+            <div class="card-value expense">{{totalInfo.totalExpenseSum | number:'1.2-2'}}</div>
+            <div class="card-label">Расход</div>
+          </div>
+
+          <!-- <div class="financial-card" *ngIf="partnerSaldoData?.totalSaldo">
+                <div class="card-value" [ngClass]="{
+                    'negative': counterpartyData.partnerSaldoData.totalSaldo < 0,
+                    'positive': counterpartyData.partnerSaldoData.totalSaldo >= 0
+                }">
+                    {{counterpartyData.partnerSaldoData.totalSaldo | number:'1.2-2'}}
+                </div>
+                <div class="card-label">Сальдо</div>
+            </div> -->
+        </div>
+      </div>
+    </div>
+
+
     <ng-container [ngSwitch]="selectedCashType">
-      <app-mechanic *ngSwitchCase="0"></app-mechanic> <!-- Механик -->
-      <app-anton *ngSwitchCase="1"></app-anton> <!-- Антон -->
-      <app-dima-base *ngSwitchCase="2"></app-dima-base> <!-- Дима база -->
-      <app-egor *ngSwitchCase="3"></app-egor> <!-- Егор -->
-      <app-supplier *ngSwitchCase="4"></app-supplier> <!-- Снабженец -->
+      <app-mechanic *ngSwitchCase="0" (totalInfo)="getTotalInfo($event)"></app-mechanic> <!-- Механик -->
+      <app-anton *ngSwitchCase="1" (totalInfo)="getTotalInfo($event)"></app-anton> <!-- Антон -->
+      <app-dima-base *ngSwitchCase="2" (totalInfo)="getTotalInfo($event)"></app-dima-base> <!-- Дима база -->
+      <app-egor *ngSwitchCase="3" (totalInfo)="getTotalInfo($event)"></app-egor> <!-- Егор -->
+      <app-supplier *ngSwitchCase="4" (totalInfo)="getTotalInfo($event)"></app-supplier> <!-- Снабженец -->
       <!-- <app-dima *ngSwitchCase="5"></app-dima>  --> <!-- Дима -->
-      <app-driver-salary *ngSwitchCase="6"></app-driver-salary>
-      <app-payment-account *ngSwitchCase="7"></app-payment-account>
+      <app-driver-salary *ngSwitchCase="6" (totalInfo)="getTotalInfo($event)"></app-driver-salary>
+      <app-payment-account *ngSwitchCase="7" (totalInfo)="getTotalInfo($event)"></app-payment-account>
     </ng-container>
   </div>
 </div>

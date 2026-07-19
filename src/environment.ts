@@ -1,7 +1,7 @@
 export const environment = {
-    apiUrl: 'https://localhost:5711',
+    // apiUrl: 'https://localhost:5711',
     //apiUrl: 'https://localhost:5001',
-    // apiUrl: 'https://hanagyan.ru/api2',
+    apiUrl: 'https://hanagyan.ru/api2',
     // apiUrl: 'https://dorservice.actual:5711',
     // apiUrl: 'https://vm-a4fdd9dc.na4u.ru:5711',
     token: 'YXV0aFRva2Vu',

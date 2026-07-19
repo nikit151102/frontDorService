@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DateFilterSortComponent } from '../../../../../components/fields/date-filter/date-filter.component';
 import { NumberFilterComponent } from '../../../../../components/fields/number-filter/number-filter.component';
@@ -36,6 +36,7 @@ import { InvoicePaymentService } from '../../../components/invoice-payment/invoi
   styleUrl: './driver-salary.component.scss'
 })
 export class DriverSalaryComponent implements OnInit {
+
   @Input() tableWidth: string = 'calc(100vw - 336px)';
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
@@ -47,7 +48,10 @@ export class DriverSalaryComponent implements OnInit {
   @Input() defaultFilter: any;
   @Input() selectedComponent: string = '';
   @Input() modelForm: any;
-  @Input() heightContainer: string = '280px'
+  @Input() heightContainer: string = '300px'
+
+  @Output() totalInfo = new EventEmitter<any>()
+
   currentConfig: any;
 
   employeeType: Number = 1;
@@ -326,6 +330,7 @@ export class DriverSalaryComponent implements OnInit {
       this.driverSalaryService.pageSize
     ).subscribe(
       (response) => {
+
         const mapInvoice = (invoice: any) => {
           const transformed = {
             ...invoice,
@@ -344,7 +349,7 @@ export class DriverSalaryComponent implements OnInit {
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         }
-
+        this.totalInfo.emit(response.totalInfo);
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.driverSalaryService.totalRecords = response.totalInfo?.totalPagesCount * this.driverSalaryService.pageSize;
         }

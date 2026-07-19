@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostBinding, HostListener, Input, OnChanges, OnInit, Output, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MenuItem, MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
@@ -67,16 +67,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
   @Input() modelForm: any;
   @Input() heightContainer: string = '280px'
 
+  @Output() totalInfo = new EventEmitter<any>()
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
   @ViewChild('tableContainer') tableContainer!: ElementRef<HTMLElement>;
-  
+
   // Для массовых действий
   selectedProducts: Set<string> = new Set<string>();
   isProcessingBulkAction: boolean = false;
   currentSelectionStatus: number | null = null;
-  
+
   // Для попапа переключения статуса
   showStatusSwitchPopup: boolean = false;
   pendingProduct: any = null;
@@ -93,7 +94,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     const foundTax = taxes.find((item: any) => item.value === tax);
     return foundTax ? foundTax.label : '';
   }
-  
+
   ngOnChanges(changes: SimpleChanges) {
     if (changes['defaultFilter']) {
       this.invoicesService.counterpartyId = this.counterpartyId;
@@ -200,7 +201,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
   // Проверка, доступна ли кнопка для данного статуса
   isButtonAvailableForStatus(button: ButtonConfig, status: number | null): boolean {
     if (status === null) return true;
-    
+
     // Проверяем по condition в кнопке
     if (button.condition) {
       // Создаем фиктивный продукт с нужным статусом для проверки
@@ -228,19 +229,19 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   // ==================== МАССОВЫЕ ДЕЙСТВИЯ ====================
-  
+
   async executeBulkAction(button: ButtonConfig) {
     if (this.isProcessingBulkAction) {
       this.toastService.showError('Внимание', 'Дождитесь завершения предыдущей операции');
       return;
     }
-    
-    const selectedItems = this.invoices.filter((invoice: any) => 
+
+    const selectedItems = this.invoices.filter((invoice: any) =>
       this.selectedProducts.has(invoice.id)
     );
-    
+
     if (selectedItems.length === 0) return;
-    
+
     // Подтверждение для массового действия
     this.confirmPopupService.openConfirmDialog({
       title: `Массовое действие: ${button.label}`,
@@ -252,15 +253,15 @@ export class InvoicesComponent implements OnChanges, OnInit {
       }
     });
   }
-  
+
   async processBulkAction(button: ButtonConfig, items: any[]) {
     this.isProcessingBulkAction = true;
     let successCount = 0;
     let errorCount = 0;
     const errors: string[] = [];
-    
+
     this.toastService.showInfo('Выполнение', `Начинаю обработку ${items.length} записей...`);
-    
+
     for (let i = 0; i < items.length; i++) {
       const item = items[i];
       try {
@@ -275,9 +276,9 @@ export class InvoicesComponent implements OnChanges, OnInit {
         console.error(`Ошибка при обработке ${item.id}:`, error);
       }
     }
-    
+
     this.isProcessingBulkAction = false;
-    
+
     if (successCount > 0) {
       this.toastService.showSuccess('Завершено', `Успешно обработано: ${successCount} из ${items.length} записей`);
       this.clearSelection();
@@ -288,11 +289,11 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.toastService.showError('Ошибки', `Не удалось обработать ${errorCount} записей: ${errorMessage}`);
     }
   }
-  
+
   private async executeBulkSingleAction(button: ButtonConfig, product: any): Promise<any> {
     return new Promise((resolve, reject) => {
       const actionName = button.action;
-      
+
       switch (actionName) {
         case 'deleteInvoice':
           this.bulkDeleteInvoice(product).then(resolve).catch(reject);
@@ -322,14 +323,14 @@ export class InvoicesComponent implements OnChanges, OnInit {
       }
     });
   }
-  
+
   private async bulkDeleteInvoice(invoice: any): Promise<any> {
     return new Promise((resolve, reject) => {
       let endpoint = this.endpoint;
       if (endpoint === '/api/CommercialWork/DocInvoice') {
         endpoint = '/api/CommercialWork/DocInvoice';
       }
-      
+
       this.invoiceService.deleteInvoice(invoice, endpoint, this.invoicesService.defaultFilters).subscribe(
         (response: any) => {
           this.invoicesService.removeItemById(invoice.id);
@@ -341,7 +342,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       );
     });
   }
-  
+
   private async bulkVerificationInvoice(invoice: any, status: any): Promise<any> {
     return new Promise((resolve, reject) => {
       this.invoiceService.sendingVerification(
@@ -361,30 +362,30 @@ export class InvoicesComponent implements OnChanges, OnInit {
   }
 
   // ==================== МЕТОДЫ ДЛЯ РАБОТЫ С ВЫДЕЛЕНИЕМ ====================
-  
+
   toggleSelectionWithCheck(event: any, product: any) {
     const isChecked = event.target.checked;
     const productStatus = this.getProductStatus(product);
-    
+
     // Если пытаемся выделить, но уже есть выделенные с другим статусом
     if (isChecked && this.selectedProducts.size > 0 && this.currentSelectionStatus !== null && productStatus !== this.currentSelectionStatus) {
       // Показываем попап
       this.pendingProduct = product;
       this.pendingStatusValue = productStatus;
       this.showStatusSwitchPopup = true;
-      
+
       // Получаем позицию чекбокса для попапа
       const rect = event.target.getBoundingClientRect();
       this.popupPosition = {
         top: rect.top + window.scrollY - 10,
         left: rect.right + window.scrollX + 10
       };
-      
+
       // Возвращаем чекбокс в исходное состояние
       event.target.checked = false;
       return;
     }
-    
+
     // Обычное выделение/снятие
     if (isChecked) {
       this.selectedProducts.add(product.id);
@@ -399,7 +400,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     this.cdRef.detectChanges();
   }
-  
+
   // Переключиться на новый статус
   switchToNewStatus() {
     if (this.pendingStatusValue !== null) {
@@ -419,17 +420,17 @@ export class InvoicesComponent implements OnChanges, OnInit {
     this.pendingStatusValue = null;
     this.cdRef.detectChanges();
   }
-  
+
   // Отмена переключения
   cancelStatusSwitch() {
     this.showStatusSwitchPopup = false;
     this.pendingProduct = null;
     this.pendingStatusValue = null;
   }
-  
+
   toggleSelectAll(event: any) {
     const isChecked = event.target.checked;
-    
+
     if (isChecked) {
       // Если нет выделенных - выделяем всё
       if (this.selectedProducts.size === 0) {
@@ -454,7 +455,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     this.cdRef.detectChanges();
   }
-  
+
   isAllSelected(): boolean {
     if (this.selectedProducts.size === 0) return false;
     if (this.currentSelectionStatus !== null) {
@@ -463,7 +464,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     return this.invoices?.length > 0 && this.invoices.every((product: any) => this.selectedProducts.has(product.id));
   }
-  
+
   isIndeterminate(): boolean {
     const selectedCount = this.selectedProducts.size;
     if (selectedCount === 0) return false;
@@ -473,7 +474,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
     }
     return selectedCount > 0 && selectedCount < (this.invoices?.length || 0);
   }
-  
+
   clearSelection() {
     this.selectedProducts.clear();
     this.currentSelectionStatus = null;
@@ -604,6 +605,7 @@ export class InvoicesComponent implements OnChanges, OnInit {
       this.invoicesService.pageSize
     ).subscribe(
       (response) => {
+
         const mapInvoice = (invoice: any) => {
           const transformed = {
             ...invoice,
@@ -619,6 +621,8 @@ export class InvoicesComponent implements OnChanges, OnInit {
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         }
+
+        this.totalInfo.emit(response.totalInfo);
 
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.invoicesService.totalRecords = response.totalInfo?.totalPagesCount * this.invoicesService.pageSize;

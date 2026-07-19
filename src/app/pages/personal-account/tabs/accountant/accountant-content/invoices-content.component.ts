@@ -18,7 +18,7 @@ export class InvoicesContentComponent implements OnInit, OnChanges {
   selectedComponent: string = 'invoices';
 
   constructor(private jwtService: JwtService,
-    private invoicesService: InvoicesService
+    public invoicesService: InvoicesService
   ) { }
 
   ngOnInit(): void {

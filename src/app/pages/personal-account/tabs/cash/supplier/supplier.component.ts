@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { JwtService } from '../../../../../services/jwt.service';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
 import { InvoicesService } from '../../../components/invoices/invoices.service';
@@ -16,6 +16,11 @@ import { CacheReferenceService } from '../../../../../services/cache-reference.s
   styleUrl: './supplier.component.scss'
 })
 export class SupplierComponent implements OnInit {
+
+  @Output() totalInfo = new EventEmitter<any>()
+  getTotalInfo(data: any) {
+    this.totalInfo.emit(data);
+  }
 
   constructor(private generalFormService: GeneralFormService,
     private supplierService: SupplierService,

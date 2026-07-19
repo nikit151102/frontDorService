@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { InvoicesComponent } from '../../../components/invoices/invoices.component';
 import { BUTTON_SETS } from './button-config';
 import { GeneralFormService } from '../../../components/generalForm/general-form.service';
@@ -16,6 +16,11 @@ import { CacheReferenceService } from '../../../../../services/cache-reference.s
   styleUrl: './mechanic.component.scss'
 })
 export class MechanicComponent implements OnInit {
+
+  @Output() totalInfo = new EventEmitter<any>()
+  getTotalInfo(data: any) {
+    this.totalInfo.emit(data);
+  }
 
   constructor(private generalFormService: GeneralFormService,
     private mechanicActionsService: MechanicActionsService,
@@ -93,6 +98,7 @@ export class MechanicComponent implements OnInit {
       const data = await this.loadData(apiEndpoint);
       // 3. Сохраняем в кэш (TTL 1 час)
       this.cacheService.set(apiEndpoint, data.data, 60 * 60 * 1000);
+
       return data.data;
     } catch (error) {
       console.error('Ошибка при загрузке данных:', error);
@@ -115,4 +121,6 @@ export class MechanicComponent implements OnInit {
   getButtonConfigs() {
     return BUTTON_SETS;
   }
+
+
 }
