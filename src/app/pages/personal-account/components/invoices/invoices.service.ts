@@ -57,7 +57,7 @@ addItemToStart(newItem: any) {
     let datetime = new Date(newItem.dateTime);
     
     // 2. Вычитаем 1 день (метод setDate работает с днями месяца, но автоматически обрабатывает переход между месяцами)
-    datetime.setDate(datetime.getDate() - 1);
+    datetime.setDate(datetime.getDate());
     
     // 3. Присваиваем изменённую дату обратно (в виде строки или объекта, как ожидает ваш код)
     newItem.dateTime = datetime.toISOString(); // или просто оставьте как Date, если так нужно
