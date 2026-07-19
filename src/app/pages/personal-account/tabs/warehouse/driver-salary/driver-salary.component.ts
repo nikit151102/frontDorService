@@ -143,15 +143,11 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
 
           // Полностью заменяем фильтры (не добавляем, а заменяем)
           this.driverSalaryService.defaultFilters = [
-            { field: 'DocPaymentType', values: [4], type: 1 },
-            { field: 'antonCashType', values: [6], type: 1 },
-            {
-              field: 'Director2Type',
-              values: [
-                this.currentConfig.employeeType
-              ],
-              type: 1
-            }
+            // { field: 'productTarget.Code', values: [12], type: 2 },
+            {field:'DocInvoice.Partner.Type',values:[0,1,5],type:1},
+            {field:'ManagerDocType',values:[0],type:1},
+            {field:'DocInvoice.DocAccountType',values:[0],type:1},
+            {field:'DocInvoice.DocPaymentType',values:[0],type:1}
           ];
 
           console.log('Filters after update:', this.driverSalaryService.defaultFilters);
@@ -167,7 +163,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     this.loadData(true);
   }
 
-  selectItem(item: any){
+  selectItem(item: any) {
     this.selectData = item;
   }
 
@@ -387,27 +383,27 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     );
   }
 
-deleteItem(id: string) {
-  const token = localStorage.getItem('YXV0aFRva2Vu');
+  deleteItem(id: string) {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
 
-  this.http.delete(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
-    headers: new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
-    })
-  }).subscribe(
-    (response: any) => {
-      const index = this.invoices.findIndex((item: any) => item.id === id);
-      if (index !== -1) {
-        this.invoices.splice(index, 1);
+    this.http.delete(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    }).subscribe(
+      (response: any) => {
+        const index = this.invoices.findIndex((item: any) => item.id === id);
+        if (index !== -1) {
+          this.invoices.splice(index, 1);
+        }
+        this.invoices = [...this.invoices];
+      },
+      (error) => {
+        console.error('Ошибка при удалении:', error);
       }
-      this.invoices = [...this.invoices];
-    },
-    (error) => {
-      console.error('Ошибка при удалении:', error);
-    }
-  );
-}
+    );
+  }
 
 
   onScroll(event: any) {

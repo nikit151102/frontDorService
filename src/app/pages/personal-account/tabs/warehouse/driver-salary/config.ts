@@ -7,7 +7,7 @@ export const columnsProducts = [
     { field: 'DocInvoice.Number', fieldView: 'docInvoice', header: 'Номер фактуры', type: 'string', visible: true, width: '10%', isFilter: false },
     { field: 'DocInvoice.DateTime', fieldView: 'dateTime', header: 'Дата фактуры', type: 'date', visible: true, width: '13%' },
     { field: 'DocInvoice.Status', fieldView: 'docInvoiceStatus', header: 'Статус фактуры', type: 'enam', visible: true, width: '16%' },
-    { field: 'DocInvoice.CreatorName', fieldView: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '16%' },
+    // { field: 'DocInvoice.CreatorName', fieldView: 'creatorName', header: 'Создатель', type: 'string', visible: true, width: '16%' },
 ];
 
 

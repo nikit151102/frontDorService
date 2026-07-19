@@ -330,8 +330,8 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
       let acceptLabel = '';
 
       if (this.selectedInvoice && this.selectedInvoice.id) {
-        titlePopUp = 'Вы действительно хотите обновить данные?';
-        acceptLabel = 'Обновить';
+        titlePopUp = 'Подтвердите списание товара';
+        acceptLabel = 'Подтвердить';
       } else {
         titlePopUp = 'Вы действительно хотите создать документ?';
         acceptLabel = 'Создать';
@@ -352,9 +352,15 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
           delete data.driverEmployeeId
           delete data.amount
 
-          console.log('data---', data)
-
-
+          this.invoiceForm.patchValue(
+            {
+              amount: [''],
+              driverEmployeeId: [''],
+              productTargetId: [''],
+              quantity: [0],
+              comment: ['']
+            }
+          )
           // data.creatorId = localStorage.getItem('VXNlcklk')
           this.driverSalaryService.setSpend(data).subscribe({
             next: (response) => {
