@@ -48,9 +48,9 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
   @Input() defaultFilter: any;
   @Input() selectedComponent: string = '';
   @Input() modelForm: any;
-  @Input() heightContainer: string = '280px'
+  @Input() heightContainer: string = '300px'
   currentConfig: any;
-
+  totalInfo: any;
   employeeType: Number = 1;
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -360,6 +360,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
           newInvoices = response.data.map(mapInvoice);
         }
 
+        this.totalInfo = response.totalInfo;
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.driverSalaryService.totalRecords = response.totalInfo?.totalPagesCount * this.driverSalaryService.pageSize;
         }
@@ -383,27 +384,27 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
     );
   }
 
-deleteItem(id: string) {
-  const token = localStorage.getItem('YXV0aFRva2Vu');
+  deleteItem(id: string) {
+    const token = localStorage.getItem('YXV0aFRva2Vu');
 
-  this.http.delete(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
-    headers: new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${token}`
-    })
-  }).subscribe(
-    (response: any) => {
-      const index = this.invoices.findIndex((item: any) => item.id === id);
-      if (index !== -1) {
-        this.invoices.splice(index, 1);
+    this.http.delete(`${environment.apiUrl}/api/CommercialWork/DocInvoice/${id}`, {
+      headers: new HttpHeaders({
+        'Accept': 'application/json',
+        'Authorization': `Bearer ${token}`
+      })
+    }).subscribe(
+      (response: any) => {
+        const index = this.invoices.findIndex((item: any) => item.id === id);
+        if (index !== -1) {
+          this.invoices.splice(index, 1);
+        }
+        this.invoices = [...this.invoices];
+      },
+      (error) => {
+        console.error('Ошибка при удалении:', error);
       }
-      this.invoices = [...this.invoices];
-    },
-    (error) => {
-      console.error('Ошибка при удалении:', error);
-    }
-  );
-}
+    );
+  }
 
 
   onScroll(event: any) {

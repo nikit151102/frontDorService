@@ -51,6 +51,7 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
   @Input() modelForm: any;
   @Input() heightContainer: string = '280px'
 
+  totalInfo: any;
   selectInvoice: any;
   items: MenuItem[] | undefined;
   invoices: any;
@@ -337,7 +338,8 @@ export class GeneralDocsComponent implements OnChanges, OnInit {
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         }
-
+        
+        this.totalInfo = response.totalInfo;
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.generalDocsService.totalRecords = response.totalInfo?.totalPagesCount * this.generalDocsService.pageSize;
         }

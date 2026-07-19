@@ -37,6 +37,8 @@ import { environment } from '../../../../../../environment';
   styleUrl: './driver-salary.component.scss'
 })
 export class DriverSalaryComponent implements OnChanges, OnInit {
+
+
   @Input() tableWidth: string = 'calc(100vw - 336px)';
   @Input() counterpartyData: any = {};
   @Input() endpoint: any;
@@ -51,6 +53,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
   @Input() heightContainer: string = '280px'
   currentConfig: any;
 
+  totalInfo: any;
   employeeType: Number = 1;
   selectInvoice: any;
   items: MenuItem[] | undefined;
@@ -144,10 +147,10 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
           // Полностью заменяем фильтры (не добавляем, а заменяем)
           this.driverSalaryService.defaultFilters = [
             // { field: 'productTarget.Code', values: [12], type: 2 },
-            {field:'DocInvoice.Partner.Type',values:[0,1,5],type:1},
-            {field:'ManagerDocType',values:[0],type:1},
-            {field:'DocInvoice.DocAccountType',values:[0],type:1},
-            {field:'DocInvoice.DocPaymentType',values:[0],type:1}
+            { field: 'DocInvoice.Partner.Type', values: [0, 1, 5], type: 1 },
+            { field: 'ManagerDocType', values: [0], type: 1 },
+            { field: 'DocInvoice.DocAccountType', values: [0], type: 1 },
+            { field: 'DocInvoice.DocPaymentType', values: [0], type: 1 }
           ];
 
           console.log('Filters after update:', this.driverSalaryService.defaultFilters);
@@ -360,6 +363,7 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
           newInvoices = response.data.map(mapInvoice);
         }
 
+        this.totalInfo = response.totalInfo;
         if (response.totalInfo && response.totalInfo?.totalPagesCount) {
           this.driverSalaryService.totalRecords = response.totalInfo?.totalPagesCount * this.driverSalaryService.pageSize;
         }

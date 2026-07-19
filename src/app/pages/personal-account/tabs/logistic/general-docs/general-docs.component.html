@@ -1,3 +1,55 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="title-section">
+      <h2 class="dashboard-title"> Склад > Машины</h2>
+      <!-- <div class="menu-tabs">
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'invoices'}"
+                (click)="showComponent('invoices')">
+                <span>Фактуры</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'products'}"
+                (click)="showComponent('products')">
+                <span>Товары</span>
+                <div class="tab-indicator"></div>
+            </button>
+        </div> -->
+    </div>
+
+    <div class="financial-cards">
+      <div class="financial-card" *ngIf="totalInfo?.totalCount">
+        <div class="card-value count">{{totalInfo.totalCount}}</div>
+        <div class="card-label">Записей</div>
+      </div>
+
+      <div class="financial-card" *ngIf="totalInfo?.totalDifferentOdometer">
+        <div class="card-value income">{{totalInfo.totalDifferentOdometer | number:'1.2-2'}}</div>
+        <div class="card-label">Разница (км) </div>
+      </div>
+
+      <div class="financial-card" *ngIf="totalInfo?.totalGrossSum">
+        <div class="card-value expense">{{totalInfo.totalGrossSum | number:'1.2-2'}}</div>
+        <div class="card-label">Вал</div>
+      </div>
+  
+      <div class="financial-card" *ngIf="totalInfo?.totalKilometerCost">
+        <div class="card-value expense">{{totalInfo.totalKilometerCost | number:'1.2-2'}}</div>
+        <div class="card-label">Вал/км</div>
+      </div>
+
+      <!-- <div class="financial-card" *ngIf="partnerSaldoData?.totalSaldo">
+                <div class="card-value" [ngClass]="{
+                    'negative': counterpartyData.partnerSaldoData.totalSaldo < 0,
+                    'positive': counterpartyData.partnerSaldoData.totalSaldo >= 0
+                }">
+                    {{counterpartyData.partnerSaldoData.totalSaldo | number:'1.2-2'}}
+                </div>
+                <div class="card-label">Сальдо</div>
+            </div> -->
+    </div>
+  </div>
+</div>
+
 <div style=" display: flex; gap: 10px;">
 
   <app-general-docs-form [data]="selectData"></app-general-docs-form>

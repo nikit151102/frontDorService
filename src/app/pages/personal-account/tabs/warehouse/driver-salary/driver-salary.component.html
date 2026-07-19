@@ -1,6 +1,52 @@
+<div class="dashboard-container">
+  <div class="dashboard-header">
+    <div class="title-section">
+      <h2 class="dashboard-title"> Склад > Товары</h2>
+      <!-- <div class="menu-tabs">
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'invoices'}"
+                (click)="showComponent('invoices')">
+                <span>Фактуры</span>
+                <div class="tab-indicator"></div>
+            </button>
+            <button class="menu-tab" [ngClass]="{'active': selectedComponent === 'products'}"
+                (click)="showComponent('products')">
+                <span>Товары</span>
+                <div class="tab-indicator"></div>
+            </button>
+        </div> -->
+    </div>
+
+    <div class="financial-cards">
+      <div class="financial-card" *ngIf="totalInfo?.totalCount">
+        <div class="card-value count">{{totalInfo.totalCount}}</div>
+        <div class="card-label">Записей</div>
+      </div>
+
+      <div class="financial-card" *ngIf="totalInfo?.totalIncomeSum">
+        <div class="card-value income">{{totalInfo.totalIncomeSum | number:'1.2-2'}}</div>
+        <div class="card-label">Приход</div>
+      </div>
+
+      <div class="financial-card" *ngIf="totalInfo?.totalExpenseSum">
+        <div class="card-value expense">{{totalInfo.totalExpenseSum | number:'1.2-2'}}</div>
+        <div class="card-label">Расход</div>
+      </div>
+
+      <!-- <div class="financial-card" *ngIf="partnerSaldoData?.totalSaldo">
+                <div class="card-value" [ngClass]="{
+                    'negative': counterpartyData.partnerSaldoData.totalSaldo < 0,
+                    'positive': counterpartyData.partnerSaldoData.totalSaldo >= 0
+                }">
+                    {{counterpartyData.partnerSaldoData.totalSaldo | number:'1.2-2'}}
+                </div>
+                <div class="card-label">Сальдо</div>
+            </div> -->
+    </div>
+  </div>
+</div>
+
 <div style=" display: flex; gap: 10px;">
-  <app-driver-salary-form [data]="selectData"
-    (create)="onCreate($event)"></app-driver-salary-form>
+  <app-driver-salary-form [data]="selectData" (create)="onCreate($event)"></app-driver-salary-form>
 </div>
 
 
@@ -74,7 +120,7 @@
                 <span *ngIf="col.fieldView === 'paymentType' ">
                   {{ transform(product[col.fieldView]) }}
                 </span>
-                <ng-container *ngIf="col.type == 'number'"> 
+                <ng-container *ngIf="col.type == 'number'">
                   {{formatingDataService.formatisNumber(product[col.fieldView])}}
                 </ng-container>
                 <span
@@ -123,7 +169,7 @@
                       </button>
                     </ng-container> -->
                   <button *ngIf="currentRole == 1" class="btn btn-details" (click)="selectItem(product)">
-                    Списать 
+                    Списать
                   </button>
                 </div>
               </div>
