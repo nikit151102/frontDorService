@@ -146,11 +146,12 @@ export class DriverSalaryComponent implements OnChanges, OnInit {
 
           // Полностью заменяем фильтры (не добавляем, а заменяем)
           this.driverSalaryService.defaultFilters = [
-            // { field: 'productTarget.Code', values: [12], type: 2 },
-            { field: 'DocInvoice.Partner.Type', values: [0, 1, 5], type: 1 },
-            { field: 'ManagerDocType', values: [0], type: 1 },
-            { field: 'DocInvoice.DocAccountType', values: [0], type: 1 },
-            { field: 'DocInvoice.DocPaymentType', values: [0], type: 1 }
+
+            { field: 'productTargetId', values: ["b3f69747-e5d3-4515-ed42-08dd7111f3a7"], type: 10 },
+            {field:'DocInvoice.Partner.Type',values:[0,1,5],type:1},
+            {field:'ManagerDocType',values:[0],type:1},
+            {field:'DocInvoice.DocAccountType',values:[0],type:1},
+            {field:'DocInvoice.DocPaymentType',values:[0],type:1}
           ];
 
           console.log('Filters after update:', this.driverSalaryService.defaultFilters);
