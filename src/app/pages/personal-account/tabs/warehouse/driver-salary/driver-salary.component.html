@@ -74,7 +74,7 @@
                 <span *ngIf="col.fieldView === 'paymentType' ">
                   {{ transform(product[col.fieldView]) }}
                 </span>
-                <ng-container *ngIf="col.type == 'number'">
+                <ng-container *ngIf="col.type == 'number'"> 
                   {{formatingDataService.formatisNumber(product[col.fieldView])}}
                 </ng-container>
                 <span

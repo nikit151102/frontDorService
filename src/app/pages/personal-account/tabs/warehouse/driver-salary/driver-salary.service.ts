@@ -174,9 +174,7 @@ export class DriverSalaryService {
     this.queryData.pageSize = pageSize;
   }
 
-  let url = this.endpointGetData 
-    ? `${environment.apiUrl}${this.endpointGetData}`
-    : `${environment.apiUrl}${this.endpoint}`;
+  let url = `${environment.apiUrl}/api/CommercialWork/Product/Filter/00000000-0000-0000-0000-000000000000`;
     
   console.log('Final filters in getData:', this.queryData.filters);
     
