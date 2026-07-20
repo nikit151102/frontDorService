@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, FormGroup, FormBuilder, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
@@ -78,7 +78,8 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
     private fb: FormBuilder,
     private jwtService: JwtService,
     private confirmPopupService: ConfirmPopupService,
-    private http: HttpClient
+    private http: HttpClient,
+    private datePipe: DatePipe
   ) { }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -352,16 +353,20 @@ export class DriverSalaryFormComponent implements OnInit, OnChanges {
           delete data.driverEmployeeId
           delete data.amount
 
+          const now = new Date();
+          const formattedDate = this.datePipe.transform(now, 'dd.MM.yyyy') || ''
+
           this.invoiceForm.patchValue(
             {
               amount: [''],
               driverEmployeeId: [''],
               productTargetId: [''],
               quantity: [0],
-              comment: ['']
+              comment: [''],
+              debitDateTime: formattedDate
             }
           )
-          // data.creatorId = localStorage.getItem('VXNlcklk')
+          // data.creatorId = localStosetSpendrage.getItem('VXNlcklk')
           this.driverSalaryService.setSpend(data).subscribe({
             next: (response) => {
               console.log('Документ успешно сохранен', response);
