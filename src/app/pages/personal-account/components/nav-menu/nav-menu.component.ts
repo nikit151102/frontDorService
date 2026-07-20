@@ -170,18 +170,18 @@ export class NavMenuComponent implements OnInit, OnDestroy {
 
 
   execute(commandName: string) {
-    if (commandName == 'exit') {
+    if (commandName === 'exit') {
       this.router.navigate(['/']);
       this.tokenService.clearToken();
       window.history.pushState(null, '', '/');
       this.cacheService.clear();
     } else {
-      this.activatedRoute.paramMap.subscribe(params => {
-        const id = params.get('id');
-        if (id) {
-          this.router.navigate([`${id}/${commandName}`]);
-        }
-      });
+      const id = this.activatedRoute.snapshot.paramMap.get('id');
+      if (id) {
+        this.router.navigate([`/${id}/${commandName}`]);
+      } else {
+        this.router.navigate([`/${commandName}`]);
+      }
     }
   }
 
