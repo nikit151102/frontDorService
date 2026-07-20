@@ -32,7 +32,7 @@
                 <div class="card-label">Расход</div>
             </div>
 
-            <div class="financial-card" *ngIf="counterpartyData.partnerSaldoData?.totalSaldo">
+            <div class="financial-card" *ngIf="counterpartyData?.partnerSaldoData?.totalSaldo">
                 <div class="card-value" [ngClass]="{
                     'negative': counterpartyData.partnerSaldoData.totalSaldo < 0,
                     'positive': counterpartyData.partnerSaldoData.totalSaldo >= 0
