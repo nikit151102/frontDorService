@@ -1,10 +1,10 @@
 <div class="custom-input-number" [class.disabled]="disabled">
     <input 
-    type="text" 
-    [value]="getFormattedValue()"
-    (input)="handleInput($event)" 
-    (keypress)="preventNonNumeric($event)" 
-    [disabled]="disabled"
-    [readonly]="disabled" />
+      type="text" 
+      [value]="displayValue"
+      (input)="handleInput($event)" 
+      (keypress)="preventNonNumeric($event)" 
+      (blur)="displayValue = getFormattedValue()" 
+      [disabled]="disabled"
+      [readonly]="disabled" />
 </div>
-

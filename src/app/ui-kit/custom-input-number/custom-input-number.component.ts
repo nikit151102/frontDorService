@@ -21,12 +21,12 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
   @Output() valueChange = new EventEmitter<number>();
 
   value: number = 0;
+  displayValue: string = '0'; // Свойство для привязки к шаблону
+
   onTouched: () => void = () => { };
   onChange: (value: number) => void = () => { };
 
   ngOnChanges(changes: SimpleChanges): void {
-    // Если минимальное или максимальное значение изменилось динамически, 
-    // сразу приводим текущее значение к допустимому диапазону
     if (changes['min'] || changes['max']) {
       this.clampValue();
     }
@@ -56,6 +56,7 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
       this.onChange(this.value);
       this.valueChange.emit(this.value);
     }
+    this.displayValue = this.getFormattedValue();
   }
 
   handleInput(event: any) {
@@ -64,26 +65,32 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     // Если поле очистили полностью
     if (!newValue) {
       this.value = 0;
+      this.displayValue = '0';
       this.onChange(this.value);
       this.valueChange.emit(this.value);
       event.target.value = '0';
       return;
     }
 
-    if (newValue === ',' || newValue === '.') {
-      newValue = '0,';
-    }
-    
     // Унифицируем разделитель и удаляем все лишние символы
     newValue = newValue.replace('.', ',');
     newValue = newValue.replace(/[^0-9,]/g, '');
     
-    // Оставляем только одну запятую
-    const commaCount = newValue.split(',').length - 1;
-    if (commaCount > 1) {
-      newValue = newValue.substring(0, newValue.indexOf(',') + newValue.substring(newValue.indexOf(',')).replace(/,/g, '').length);
+    // Оставляем только одну запятую (простая и надежная замена сложному substring)
+    const parts = newValue.split(',');
+    if (parts.length > 2) {
+      newValue = parts[0] + ',' + parts.slice(1).join('');
+    }
+
+    // Если введена только запятая, добавляем ноль в начале
+    if (newValue === ',') {
+      newValue = '0,';
     }
     
+    // Проверяем, заканчивается ли строка на запятую (пользователь в процессе ввода дробной части)
+    const endsWithComma = newValue.endsWith(',');
+    
+    // Преобразуем в число
     let numericValue = newValue ? parseFloat(newValue.replace(',', '.')) : 0;
     
     // Ограничиваем значение минимальным и максимальным порогом
@@ -93,7 +100,17 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     this.onChange(this.value);
     this.valueChange.emit(this.value);
 
-    event.target.value = this.getFormattedValue();
+    // Форматируем для отображения
+    this.displayValue = this.getFormattedValue();
+    
+    // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если пользователь ввел запятую в конце, 
+    // а форматирование её убрало (например, "1," превратилось в "1"),
+    // возвращаем запятую, чтобы позволить продолжить ввод дробной части
+    if (endsWithComma && !this.displayValue.includes(',')) {
+      this.displayValue += ',';
+    }
+
+    event.target.value = this.displayValue;
   }
 
   preventNonNumeric(event: KeyboardEvent) {
@@ -105,6 +122,7 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
 
     const inputElement = event.target as HTMLInputElement;
 
+    // Запрещаем ввод второй запятой/точки
     if ((event.key === ',' || event.key === '.') && inputElement) {
       if (inputElement.value.indexOf(',') !== -1) {
         event.preventDefault();
