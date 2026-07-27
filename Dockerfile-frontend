@@ -14,4 +14,5 @@ RUN npm run build -- --configuration=production --base-href=/
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+# Команда для запуска Angular приложения с использованием ng serve
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "8020"]
