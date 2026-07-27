@@ -20,4 +20,4 @@ COPY . .
 EXPOSE 80
 
 # Команда для запуска Angular приложения с использованием ng serve
-CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "8020"]
+CMD ["ng", "serve", "--host", "0.0.0.0", "--port", "8020", "--no-cache"]
