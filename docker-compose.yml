@@ -1,15 +1,18 @@
 services:
+
   frontend:
     container_name: frontend_dorservice
     build:
       context: ./
       dockerfile: Dockerfile-frontend
     ports:
-      - 8020:8020  # Порт внутри контейнера 80 (nginx)
+      - 8020:8020
     networks:
       - dorservice
-    # Убираем volumes, они не нужны для production сборки
-
+    
+  
 networks:
   dorservice:
     external: true
+
+    
