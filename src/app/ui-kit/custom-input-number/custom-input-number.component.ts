@@ -59,9 +59,10 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     this.displayValue = this.getFormattedValue();
   }
 
+
   handleInput(event: any) {
     let newValue = event.target.value;
-    
+
     // Если поле очистили полностью
     if (!newValue) {
       this.value = 0;
@@ -75,7 +76,7 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     // Унифицируем разделитель и удаляем все лишние символы
     newValue = newValue.replace('.', ',');
     newValue = newValue.replace(/[^0-9,]/g, '');
-    
+
     // Оставляем только одну запятую (простая и надежная замена сложному substring)
     const parts = newValue.split(',');
     if (parts.length > 2) {
@@ -86,32 +87,21 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     if (newValue === ',') {
       newValue = '0,';
     }
-    
-    // Проверяем, заканчивается ли строка на запятую (пользователь в процессе ввода дробной части)
-    const endsWithComma = newValue.endsWith(',');
-    
+
     // Преобразуем в число
     let numericValue = newValue ? parseFloat(newValue.replace(',', '.')) : 0;
-    
+
     // Ограничиваем значение минимальным и максимальным порогом
-    numericValue = Math.max(this.min, Math.min(this.max, numericValue));
-    
+    numericValue = Math.max(this.min, Math.min(this.max, isNaN(numericValue) ? 0 : numericValue));
+
     this.value = numericValue;
     this.onChange(this.value);
     this.valueChange.emit(this.value);
-
-    // Форматируем для отображения
-    this.displayValue = this.getFormattedValue();
     
-    // КЛЮЧЕВОЕ ИСПРАВЛЕНИЕ: если пользователь ввел запятую в конце, 
-    // а форматирование её убрало (например, "1," превратилось в "1"),
-    // возвращаем запятую, чтобы позволить продолжить ввод дробной части
-    if (endsWithComma && !this.displayValue.includes(',')) {
-      this.displayValue += ',';
-    }
-
+    this.displayValue = newValue;
     event.target.value = this.displayValue;
   }
+
 
   preventNonNumeric(event: KeyboardEvent) {
     const allowedKeys = ['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete', 'Home', 'End'];
