@@ -62,7 +62,7 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
 
   handleInput(event: any) {
     let newValue = event.target.value;
-
+    
     // Если поле очистили полностью
     if (!newValue) {
       this.value = 0;
@@ -76,28 +76,38 @@ export class CustomInputNumberComponent implements ControlValueAccessor, OnChang
     // Унифицируем разделитель и удаляем все лишние символы
     newValue = newValue.replace('.', ',');
     newValue = newValue.replace(/[^0-9,]/g, '');
-
-    // Оставляем только одну запятую (простая и надежная замена сложному substring)
+    
+    // Оставляем только одну запятую
     const parts = newValue.split(',');
     if (parts.length > 2) {
       newValue = parts[0] + ',' + parts.slice(1).join('');
     }
 
+    // Разделяем на целую и дробную части для точной обработки
+    const currentParts = newValue.split(',');
+    
+    // 1. Удаляем ведущие нули в целой части, но оставляем один '0', если часть пустая или состоит только из нулей
+    currentParts[0] = currentParts[0].replace(/^0+/, '') || '0';
+    
+    // 2. Собираем строку обратно (дробная часть остается нетронутой, включая нули!)
+    newValue = currentParts.length > 1 ? currentParts[0] + ',' + currentParts[1] : currentParts[0];
+
     // Если введена только запятая, добавляем ноль в начале
     if (newValue === ',') {
       newValue = '0,';
     }
-
-    // Преобразуем в число
+    
+    // Преобразуем в число для внутренней логики и валидации
     let numericValue = newValue ? parseFloat(newValue.replace(',', '.')) : 0;
-
+    
     // Ограничиваем значение минимальным и максимальным порогом
     numericValue = Math.max(this.min, Math.min(this.max, isNaN(numericValue) ? 0 : numericValue));
-
+    
     this.value = numericValue;
     this.onChange(this.value);
     this.valueChange.emit(this.value);
-    
+
+    // Присваиваем очищенное значение (ведущие нули удалены, нули после запятой сохранены)
     this.displayValue = newValue;
     event.target.value = this.displayValue;
   }
