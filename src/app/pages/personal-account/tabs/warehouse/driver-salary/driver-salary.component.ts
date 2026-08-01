@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { ChangeDetectorRef, Component, ElementRef, HostBinding, HostListener, Input, OnChanges, OnInit, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { MenuItem, MessageService } from 'primeng/api';
 import { DateFilterSortComponent } from '../../../../../components/fields/date-filter/date-filter.component';
@@ -25,7 +25,7 @@ import { environment } from '../../../../../../environment';
 
 @Component({
   selector: 'app-driver-salary',
-  providers: [MessageService],
+  providers: [MessageService, DatePipe],
   imports: [CommonModule,
     SearchFilterSortComponent,
     DateFilterSortComponent,
