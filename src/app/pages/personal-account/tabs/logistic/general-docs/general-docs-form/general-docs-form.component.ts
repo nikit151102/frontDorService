@@ -169,7 +169,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
 
       productTargetId: ['', Validators.required],
       dateTime: ['', Validators.required],
-      // workDays: ['', Validators.required],
+      workDays: ['', Validators.required],
       beginOdometer: [0, [Validators.required, Validators.min(0)]],
       endOdometer: [0, [Validators.required, Validators.min(0)]],
       odometer: [{ value: 0, disabled: true }],
@@ -217,7 +217,7 @@ export class GeneralDocsFormComponent implements OnInit, OnChanges {
       productTargetId: this.selectedInvoice.productTargetId || '',
       beginDateTime: this.selectedInvoice.beginDateTime ? new Date(this.selectedInvoice.beginDateTime) : null,
       endDateTime: this.selectedInvoice.endDateTime ? new Date(this.selectedInvoice.endDateTime) : null,
-      // workDays: this.selectedInvoice.workDays ?? 0,
+      workDays: this.selectedInvoice.workDays ?? 0,
       beginOdometer: this.selectedInvoice.beginOdometer ?? 0,
       endOdometer: this.selectedInvoice.endOdometer ?? 0,
       odometer: odometerValue,
