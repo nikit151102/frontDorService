@@ -7,10 +7,19 @@ export class FormatingDataService {
 
   constructor() { }
 
-    formatisNumber(value: any): string {
-    const numericValue = typeof value === 'string'
-      ? parseFloat(value.replace(',', '.'))
-      : Number(value);
+  formatisNumber(value: any): string {
+    if (typeof value === 'string') {
+      if (value.trim() === '') return value;
+      const parsedValue = Number(value.replace(',', '.'));
+
+      if (isNaN(parsedValue)) {
+        return value;
+      }
+
+      value = parsedValue;
+    }
+
+    const numericValue = Number(value);
 
     if (isNaN(numericValue)) return '0';
 
@@ -26,5 +35,5 @@ export class FormatingDataService {
         : formatted;
     }
   }
-  
+
 }
