@@ -20,7 +20,7 @@ export class CashMenuComponent implements OnInit {
     // { name: 'Дима', access: 'DimaAccess', antonCashType: 5 },
     // { name: 'Дима база', access: 'DimaAccess', antonCashType: 2 },
     // { name: 'Егор', access: 'EgorAccess', antonCashType: 3 },
-    { name: 'Снабженец', access: '', antonCashType: 4 },
+    { name: 'Снабженец', access: 'SupplierAccess', antonCashType: 4 },
     { name: 'Директор', access: 'Director2Access', antonCashType: 6 },
     { name: 'Расчетный счет', access: 'Director2Access', antonCashType: 7 },
 

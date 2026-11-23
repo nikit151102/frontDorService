@@ -106,6 +106,12 @@
             </tbody>
 
             <tfoot>
+
+                <tr style="  position: sticky; bottom: 0;">
+                    <td *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12]">
+                        {{ formatingDataService.formatisNumber(getOldTotalValue(i)) }}
+                    </td>
+                </tr>
                 <tr style="  position: sticky; bottom: 27px;">
                     <!-- <ng-container *ngFor="let col of columns; let i = index">
                         <td *ngIf="isColumnVisible(col)" class="total-cell" [style.width]="col.width">
@@ -121,11 +127,6 @@
                         {{ formatingDataService.formatisNumber(getTotalValue(index)) }}
                     </td>
 
-                </tr>
-                <tr style="  position: sticky; bottom: 0;">
-                        <td *ngFor="let i of [0,1,2,3,4,5,6,7,8,9,10,11,12]">
-                        {{ formatingDataService.formatisNumber(getOldTotalValue(i)) }}
-                    </td>
                 </tr>
             </tfoot>
         </table>
