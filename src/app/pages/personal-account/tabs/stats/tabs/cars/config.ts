@@ -125,8 +125,8 @@ export const totalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: 'summaryTaxNotIncludeTotalSum' },
-    { columnNum: 14, value: '' }
+    { columnNum: 13, value: 'summaryTotalSum' },
+    { columnNum: 14, value: 'summaryTaxNotIncludeTotalSum' }
 ];
 
 export const oldTotalInfoColumn = [
@@ -143,7 +143,7 @@ export const oldTotalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: '' },
-    { columnNum: 14, value: 'summaryTotalSum' }
+    { columnNum: 13, value: 'summaryTotalSum' },
+    { columnNum: 14, value: 'summaryTaxNotIncludeTotalSum' }
 
 ];
