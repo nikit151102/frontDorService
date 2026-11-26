@@ -20,23 +20,24 @@ export const columns = [
     {
         header: 'Вал',
         columns: [
-   { field: 'daysCount', fieldView: 'daysCount', header: 'Дни', type: 'number', visible: true, width: '5%' },
-    { field: 'odometerSumKm', fieldView: 'odometerSumKm', header: 'Км', type: 'number', visible: true, width: '5%' },
-    { field: 'grossSum', fieldView: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '5%' },
-    { field: 'kmCost', fieldView: 'kmCost', header: 'Вал км', type: 'number', visible: true, width: '5%' },
-    { field: 'repairExpense', fieldView: 'repairExpense', header: 'Ремонты', type: 'number', visible: true, width: '5%' },
-    { field: 'fuelExpense', fieldView: 'fuelExpense', header: 'Топливо', type: 'number', visible: true, width: '12%' },
-    { field: 'fuelCost', fieldView: 'fuelCost', header: 'Цена', type: 'number', visible: true, width: '12%' },
-    { field: 'fuelCostPerKm', fieldView: 'fuelCostPerKm', header: 'Цена км', type: 'number', visible: true, width: '12%' },
-    { field: 'garageExpense', fieldView: 'garageExpense', header: 'Гараж', type: 'number', visible: true, width: '10%' },
-    { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП офис', type: 'number', visible: true, width: '10%' },
-    { field: 'driverSalary', fieldView: 'driverSalary', header: 'ЗП водители', type: 'number', visible: true, width: '10%' },
-    { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' }, 
-    { field: 'summary', fieldView: 'summary', header: 'Итог', type: 'number', visible: true, width: '10%' }
+            { field: 'daysCount', fieldView: 'daysCount', header: 'Дни', type: 'number', visible: true, width: '5%' },
+            { field: 'odometerSumKm', fieldView: 'odometerSumKm', header: 'Км', type: 'number', visible: true, width: '5%' },
+            { field: 'grossSum', fieldView: 'grossSum', header: 'Вал', type: 'number', visible: true, width: '5%' },
+            { field: 'kmCost', fieldView: 'kmCost', header: 'Вал км', type: 'number', visible: true, width: '5%' },
+            { field: 'repairExpense', fieldView: 'repairExpense', header: 'Ремонты', type: 'number', visible: true, width: '5%' },
+            { field: 'fuelExpense', fieldView: 'fuelExpense', header: 'Топливо', type: 'number', visible: true, width: '12%' },
+            { field: 'fuelCost', fieldView: 'fuelCost', header: 'Цена', type: 'number', visible: true, width: '12%' },
+            { field: 'fuelCostPerKm', fieldView: 'fuelCostPerKm', header: 'Цена км', type: 'number', visible: true, width: '12%' },
+            { field: 'garageExpense', fieldView: 'garageExpense', header: 'Гараж', type: 'number', visible: true, width: '10%' },
+            { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП офис', type: 'number', visible: true, width: '10%' },
+            { field: 'driverSalary', fieldView: 'driverSalary', header: 'ЗП водители', type: 'number', visible: true, width: '10%' },
+            { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' },
+            { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог', type: 'number', visible: true, width: '10%' },
+            { field: 'summary', fieldView: 'summary', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
         ],
         visible: true,
         width: '10%'
-    }
+    },
     // {
     //     header: 'Ремонт',
     //     columns: [
@@ -105,12 +106,13 @@ export const viewDataColumns = [
     { field: 'garageExpense', fieldView: 'garageExpense', header: 'Гараж', type: 'number', visible: true, width: '10%' },
     { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП офис', type: 'number', visible: true, width: '10%' },
     { field: 'driverSalary', fieldView: 'driverSalary', header: 'ЗП водители', type: 'number', visible: true, width: '10%' },
-    { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' }, 
-    { field: 'summary', fieldView: 'summary', header: 'Итог', type: 'number', visible: true, width: '10%' }
+    { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' },
+    { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог', type: 'number', visible: true, width: '10%' },
+    { field: 'summary', fieldView: 'summary', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
 ];
 
 export const totalInfoColumn = [
-    { columnNum: 0, value: 'statisticsName' }, // назначение тут мжно менять, вместо кол-ва
+    { columnNum: 0, value: 'statisticsName' },
     { columnNum: 1, value: 'totalDaysCount' },
     { columnNum: 2, value: 'totalOdometerSum' },
     { columnNum: 3, value: 'grossTotalSum' },
@@ -123,15 +125,15 @@ export const totalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: 'summaryTotalSum' },
-    // { columnNum: 14, value: 'totalCount' }
+    { columnNum: 13, value: 'summaryTaxNotIncludeTotalSum' },
+    { columnNum: 14, value: '' }
 ];
 
 export const oldTotalInfoColumn = [
     { columnNum: 0, value: 'statisticsName' },
     { columnNum: 1, value: 'totalDaysCount' },
     { columnNum: 2, value: 'totalOdometerSum' },
-    { columnNum: 3, value: 'grossTotalSum' }, 
+    { columnNum: 3, value: 'grossTotalSum' },
     { columnNum: 4, value: 'kmCostTotalSum' },
     { columnNum: 5, value: 'repairExpense' },
     { columnNum: 6, value: 'fuelExpenseTotalSum' },
@@ -141,6 +143,7 @@ export const oldTotalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: 'summaryTotalSum' },
-    // { columnNum: 14, value: 'totalCount' }
+    { columnNum: 13, value: '' },
+    { columnNum: 14, value: 'summaryTotalSum' }
+
 ];

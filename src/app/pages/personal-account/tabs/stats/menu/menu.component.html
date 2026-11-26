@@ -22,7 +22,7 @@
               <!-- Информация о выбранном периоде -->
       <div class="period-info" *ngIf="currentPeriod">
         <h4>Выбранный период:</h4>
-        <p>Тип: {{ getPeriodTypeLabel() }}</p>
+        <!-- <p>Тип: {{ getPeriodTypeLabel() }}</p> -->
         <p>Даты: {{ currentPeriod.startDate | date:'dd.MM.yyyy' }} - {{ currentPeriod.endDate | date:'dd.MM.yyyy' }}</p>
       </div>
       <!-- Выбор года -->

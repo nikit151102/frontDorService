@@ -22,10 +22,14 @@ export class DirectorComponent implements OnInit {
 
   ngOnInit(): void {
     this.directorService.setSomeVariable(true);
-    this.directorService.someVariable$.subscribe((value: any) => {
-      this.contentWidth = value
-        ? 'calc(100% - 290px)'
-        : 'calc(100% - 120px)';
+    // this.directorService.someVariable$.subscribe((value: any) => {
+    //   this.contentWidth = value
+    //     ? 'calc(100% - 290px)'
+    //     : 'calc(100% - 120px)';
+    // });
+
+        this.directorService.someVariable$.subscribe((value: any) => {
+      this.contentWidth = 'calc(100%)';
     });
 
     // this.directorService.connectToWebSocket();

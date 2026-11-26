@@ -94,8 +94,8 @@ export class CarsComponent implements OnInit {
         };
 
         let newInvoices = [];
-        if (response.documentMetadataTaxInclude && response.documentMetadataTaxInclude.data) {
-          newInvoices = response.documentMetadataTaxInclude.data.map(mapInvoice);
+        if (response.documentMetadata && response.documentMetadata.data) {
+          newInvoices = response.documentMetadata.data.map(mapInvoice);
         } else if (response.data) {
           newInvoices = response.data.map(mapInvoice);
         } ``
