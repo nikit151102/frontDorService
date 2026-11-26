@@ -32,8 +32,8 @@ export const columns = [
             { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП офис', type: 'number', visible: true, width: '10%' },
             { field: 'driverSalary', fieldView: 'driverSalary', header: 'ЗП водители', type: 'number', visible: true, width: '10%' },
             { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' },
-            { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог', type: 'number', visible: true, width: '10%' },
-            { field: 'summary', fieldView: 'summary', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
+            { field: 'summary', fieldView: 'summary', header: 'Итог', type: 'number', visible: true, width: '10%' },
+            { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
         ],
         visible: true,
         width: '10%'
@@ -107,8 +107,8 @@ export const viewDataColumns = [
     { field: 'officeSalary', fieldView: 'officeSalary', header: 'ЗП офис', type: 'number', visible: true, width: '10%' },
     { field: 'driverSalary', fieldView: 'driverSalary', header: 'ЗП водители', type: 'number', visible: true, width: '10%' },
     { field: 'taxSum', fieldView: 'taxSum', header: 'Налоги', type: 'number', visible: true, width: '5%' },
-    { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог', type: 'number', visible: true, width: '10%' },
-    { field: 'summary', fieldView: 'summary', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
+    { field: 'summary', fieldView: 'summary', header: 'Итог', type: 'number', visible: true, width: '10%' },
+    { field: 'summaryTaxNotInclude', fieldView: 'summaryTaxNotInclude', header: 'Итог коэффициент', type: 'number', visible: true, width: '10%' },
 ];
 
 export const totalInfoColumn = [
@@ -125,8 +125,8 @@ export const totalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: 'summaryTotalSum' },
-    { columnNum: 14, value: 'summaryTaxNotIncludeTotalSum' }
+    { columnNum: 13, value: '' },
+    { columnNum: 14, value: 'summaryTotalSum' }
 ];
 
 export const oldTotalInfoColumn = [
@@ -143,7 +143,7 @@ export const oldTotalInfoColumn = [
     { columnNum: 10, value: 'officeSalaryTotalSum' },
     { columnNum: 11, value: 'driverSalaryTotalSum' },
     { columnNum: 12, value: 'taxTotalSum' },
-    { columnNum: 13, value: 'summaryTotalSum' },
-    { columnNum: 14, value: 'summaryTaxNotIncludeTotalSum' }
+    { columnNum: 13, value: 'summaryTaxNotIncludeTotalSum' },
+    { columnNum: 14, value: '' }
 
 ];
